@@ -1,0 +1,123 @@
+// Pure-CSS flowing liquid gradient. Big reddish radial blobs, heavily blurred,
+// drifting + morphing on keyframes so they bleed into each other. Fixed to the
+// viewport so it fills the whole first screen (behind the nav) with no seam.
+// No WebGL, no reduced-motion gate — this WILL move.
+
+.field {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+:global([data-theme="dark"]) .field {
+  background: #0a0a0f;
+  --b1: rgba(255, 77, 77, 0.6);
+  --b2: rgba(200, 30, 74, 0.6);
+  --b3: rgba(255, 120, 71, 0.55);
+  --b4: rgba(157, 23, 77, 0.5);
+}
+:global([data-theme="light"]) .field {
+  background: #f5f6f8;
+  --b1: rgba(255, 120, 120, 0.4);
+  --b2: rgba(244, 140, 160, 0.36);
+  --b3: rgba(255, 170, 140, 0.34);
+  --b4: rgba(240, 150, 170, 0.3);
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  will-change: transform;
+}
+.b1 {
+  width: 60vw;
+  height: 60vw;
+  top: -10%;
+  left: -8%;
+  background: radial-gradient(circle, var(--b1), transparent 68%);
+  animation: flow1 9s ease-in-out infinite;
+}
+.b2 {
+  width: 65vw;
+  height: 65vw;
+  top: 5%;
+  right: -12%;
+  background: radial-gradient(circle, var(--b2), transparent 68%);
+  animation: flow2 11s ease-in-out infinite;
+}
+.b3 {
+  width: 55vw;
+  height: 55vw;
+  bottom: -15%;
+  left: 22%;
+  background: radial-gradient(circle, var(--b3), transparent 68%);
+  animation: flow3 8s ease-in-out infinite;
+}
+.b4 {
+  width: 45vw;
+  height: 45vw;
+  top: 25%;
+  left: 30%;
+  background: radial-gradient(circle, var(--b4), transparent 68%);
+  animation: flow4 13s ease-in-out infinite;
+}
+
+@keyframes flow1 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(14vw, 10vh) scale(1.2);
+  }
+  66% {
+    transform: translate(-8vw, 6vh) scale(0.85);
+  }
+}
+@keyframes flow2 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-12vw, 8vh) scale(0.9);
+  }
+  66% {
+    transform: translate(6vw, -10vh) scale(1.15);
+  }
+}
+@keyframes flow3 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(10vw, -12vh) scale(1.25);
+  }
+}
+@keyframes flow4 {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  40% {
+    transform: translate(-14vw, -8vh) scale(1.1);
+  }
+  70% {
+    transform: translate(10vw, 8vh) scale(0.9);
+  }
+}
+
+// Scrim under the hero text so it stays readable over the flowing colour.
+.scrim {
+  position: absolute;
+  inset: 0;
+}
+:global([data-theme="dark"]) .scrim {
+  background: radial-gradient(62% 46% at 50% 44%, rgba(0, 0, 0, 0.5), transparent 76%);
+}
+:global([data-theme="light"]) .scrim {
+  background: radial-gradient(62% 46% at 50% 44%, rgba(245, 246, 248, 0.6), transparent 76%);
+}
