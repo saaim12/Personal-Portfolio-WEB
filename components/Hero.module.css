@@ -1,0 +1,127 @@
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: clamp(120px, 20vh, 220px);
+  padding-bottom: clamp(80px, 14vh, 160px);
+  overflow: hidden;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  max-width: 15ch;
+}
+
+.marker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--dim);
+  margin-bottom: 28px;
+}
+
+.headline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(44px, 10vw, 120px);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  /* Optical margin: bleed into the left edge. */
+  margin-left: -0.04em;
+  max-width: 14ch;
+}
+
+.line {
+  display: block;
+}
+
+/* Mask clips the word as it rises from below for a clean reveal. */
+.wordMask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding: 0 0.06em;
+  margin: 0 -0.06em;
+}
+.word {
+  display: inline-block;
+  will-change: transform, filter, opacity;
+}
+
+.subline {
+  margin-top: 34px;
+  max-width: 46ch;
+  font-size: clamp(16px, 1.4vw, 18px);
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.ctas {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 15px 30px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+.cta:first-child {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+.cta:hover {
+  border-color: var(--text);
+}
+.cta:first-child:hover {
+  background: #fff;
+}
+
+.tags {
+  margin-top: 44px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  list-style: none;
+  max-width: 40ch;
+}
+.tag {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.scrollHint {
+  position: absolute;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+  .content {
+    max-width: none;
+  }
+}
