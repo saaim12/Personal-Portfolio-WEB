@@ -54,12 +54,10 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ structure, about }) =
             <Flex
               cursor="interactive"
               className={styles.hover}
-              gap="8"
               vertical="center"
               onClick={() => scrollTo(section.title, 80)}
             >
-              <Flex height="1" minWidth="16" background="neutral-strong"></Flex>
-              <Text>{section.title}</Text>
+              <Text className={styles.tocLink}>{section.title}</Text>
             </Flex>
             {about.tableOfContent.subItems && (
               <>
@@ -69,13 +67,11 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ structure, about }) =
                     key={itemIndex}
                     style={{ cursor: "pointer" }}
                     className={styles.hover}
-                    gap="12"
                     paddingLeft="24"
                     vertical="center"
                     onClick={() => scrollTo(item, 80)}
                   >
-                    <Flex height="1" minWidth="8" background="neutral-strong"></Flex>
-                    <Text>{item}</Text>
+                    <Text className={styles.tocLink}>{item}</Text>
                   </Flex>
                 ))}
               </>

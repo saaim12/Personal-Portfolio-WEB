@@ -1,29 +1,39 @@
 ---
 title: "Autoencoder compression for edge devices"
-publishedAt: "2025-08-01"
-summary: "Autoencoder compressing sensor data for lightweight edge-device communication."
+publishedAt: "2025-11-15"
+summary: "Autoencoder that compresses sensor data on microcontrollers (TF Lite Micro), with a Flask decoder API on AWS EC2 + S3 handling encoded payloads."
 tags:
-  - "TensorFlow Lite"
-  - "Autoencoder"
-  - "Flask"
-  - "AWS EC2"
+  - "Edge ML"
+  - "TensorFlow"
+  - "AWS"
 images: []
+link: "https://github.com/saaim12"
 team:
   - name: "Saaim Abdullah"
-    role: "Backend & Data Engineer"
+    role: "ML / cloud engineer"
     avatar: "/images/avatar.png"
-    linkedIn: "https://linkedin.com/in/saaim-abdullah"
+    linkedIn: "https://www.linkedin.com/in/saaim-abdullah/"
 ---
 
 ## Overview
 
-Developed an autoencoder to compress and reconstruct sensor data for lightweight
-edge-device communication, tuning latent-vector size for a compact representation.
-Converted the encoder for microcontroller-side inference and exposed the decoder
-through a Flask API on AWS EC2 with S3 integration for encoded-payload handling.
+Edge devices often can't afford to ship raw sensor data over the network.
+This project trains an autoencoder to compress and reconstruct sensor
+readings, tuning the latent-vector size for the smallest representation that
+still reconstructs cleanly.
 
-**Tech:** Python · TensorFlow · TensorFlow Lite Micro · Flask · AWS (EC2, S3)
+The encoder was converted to run on-device with TensorFlow Lite Micro
+(microcontroller-side inference), while the decoder lives behind a Flask API
+on AWS EC2, with S3 handling encoded payload storage.
+
+## Highlights
+
+- Autoencoder tuned for compact latent representation of sensor data
+- Microcontroller-side inference via TensorFlow Lite Micro
+- Decoder exposed as a Flask API on AWS EC2 with S3 integration
+
+**Stack:** Python · TensorFlow · TF Lite Micro · Flask · AWS (EC2, S3)
 
 ## Links
 
-- GitHub — [ADD]
+- Code: [github.com/saaim12](https://github.com/saaim12)

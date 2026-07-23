@@ -96,7 +96,7 @@ export default function About() {
             <Avatar src={person.avatar} size="xl" />
             <Row gap="8" vertical="center">
               <Icon onBackground="accent-weak" name="globe" />
-              {person.location}
+              {person.city ?? person.location}
             </Row>
             {person.languages && person.languages.length > 0 && (
               <Row wrap gap="8">
@@ -172,6 +172,7 @@ export default function About() {
                         <Row s={{ hide: true }}>
                           <Button
                             key={item.name}
+                            className={`socialBtn socialBtn-${item.name.toLowerCase()}`}
                             href={item.link}
                             prefixIcon={item.icon}
                             label={item.name}
@@ -184,6 +185,7 @@ export default function About() {
                           <IconButton
                             size="l"
                             key={`${item.name}-icon`}
+                            className={`socialBtn socialBtn-${item.name.toLowerCase()}`}
                             href={item.link}
                             icon={item.icon}
                             variant="secondary"
@@ -209,7 +211,15 @@ export default function About() {
               </Heading>
               <Column fillWidth gap="l" marginBottom="40">
                 {about.work.experiences.map((experience, index) => (
-                  <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
+                  <Column
+                    key={`${experience.company}-${experience.role}-${index}`}
+                    className="glassCard"
+                    fillWidth
+                    padding="24"
+                    background="surface"
+                    border="neutral-alpha-weak"
+                    radius="l"
+                  >
                     <Row fillWidth horizontal="between" vertical="end" marginBottom="4">
                       <Text id={experience.company} variant="heading-strong-l">
                         {experience.company}
@@ -268,7 +278,16 @@ export default function About() {
               </Heading>
               <Column fillWidth gap="l" marginBottom="40">
                 {about.studies.institutions.map((institution, index) => (
-                  <Column key={`${institution.name}-${index}`} fillWidth gap="4">
+                  <Column
+                    key={`${institution.name}-${index}`}
+                    className="glassCard"
+                    fillWidth
+                    gap="8"
+                    padding="24"
+                    background="surface"
+                    border="neutral-alpha-weak"
+                    radius="l"
+                  >
                     <Text id={institution.name} variant="heading-strong-l">
                       {institution.name}
                     </Text>
@@ -291,10 +310,19 @@ export default function About() {
               >
                 {about.technical.title}
               </Heading>
-              <Column fillWidth gap="l">
+              <div className="skillGrid">
                 {about.technical.skills.map((skill, index) => (
-                  <Column key={`${skill}-${index}`} fillWidth gap="4">
-                    <Text id={skill.title} variant="heading-strong-l">
+                  <Column
+                    key={`${skill.title}-${index}`}
+                    className="glassCard"
+                    fillWidth
+                    gap="8"
+                    padding="20"
+                    background="surface"
+                    border="neutral-alpha-weak"
+                    radius="l"
+                  >
+                    <Text id={skill.title} variant="heading-strong-m" onBackground="brand-weak">
                       {skill.title}
                     </Text>
                     <Text variant="body-default-m" onBackground="neutral-weak">
@@ -332,7 +360,7 @@ export default function About() {
                     )}
                   </Column>
                 ))}
-              </Column>
+              </div>
             </>
           )}
         </Column>

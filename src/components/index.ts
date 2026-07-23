@@ -1,13 +1,13 @@
 export { Header } from "@/components/Header";
-export { Mailchimp } from "@/components/Mailchimp";
 export { ProjectCard } from "@/components/ProjectCard";
 export { HeadingLink } from "@/components/HeadingLink";
-export { RouteGuard } from "@/components/RouteGuard";
 export { Providers } from "@/components/Providers";
 export { ScrollToHash } from "@/components/ScrollToHash";
-export { ThemeToggle } from "@/components/ThemeToggle";
 export { Reveal } from "@/components/Reveal";
 export { HeroHeadline } from "@/components/HeroHeadline";
-export { MagneticButton } from "@/components/MagneticButton";
 export { LiquidGradientHero } from "@/components/LiquidGradientHero";
+export { Services } from "@/components/Services";
+export { TiltCard } from "@/components/TiltCard";
+export { GradientButton } from "@/components/GradientButton";
+export { Contact } from "@/components/Contact";
 export { CustomMDX } from "@/components/mdx";

@@ -123,3 +123,293 @@ body {
     transition: none;
   }
 }
+/* ── Service / capability card grid ─── responsive, equal-height cards with
+   an elite hover lift + accent glow. Reduced-motion opts out of transforms. */
+.serviceGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 20px;
+  width: 100%;
+}
+/* ── Tilt card (Uiverse-style 3D tilt) ───────────────────────────────────
+   A thin gradient frame wraps a near-black face (text stays crisp), with a
+   soft blurred glow of the same gradient behind. Each card gets its own
+   gradient via --grad-start/--grad-end; the title + icon tint to a lightened
+   version (--tint) so the text reads as part of that card's color.
+   The tilt is pure CSS: a 5×5 grid of invisible cells over the face, and
+   `.tiltCard:has(.tr-N:hover)` rotates toward the hovered region. */
+.tiltCard {
+  position: relative;
+  height: 100%;
+  perspective: 900px;
+  /* Lightened tint of this card's gradient — used for title/icon/tags. */
+  --tint: color-mix(in srgb, var(--grad-start, #22d3ee) 55%, #ffffff);
+}
+/* The rotating element (also the link, when a card is clickable). */
+.tiltInner {
+  position: relative;
+  display: block;
+  height: 100%;
+  padding: 1.5px; /* gradient frame thickness */
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+  transform-style: preserve-3d;
+  transition: transform 0.25s ease, filter 0.3s ease;
+  will-change: transform;
+  text-decoration: none;
+}
+/* Blurred glow behind the card. */
+.tiltInner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
+  transform: translateZ(-1px) scale(0.9);
+  filter: blur(26px);
+  opacity: 0.35;
+  z-index: -1;
+  transition: filter 0.4s ease, opacity 0.4s ease;
+}
+/* Near-black readable face with a faint wash of the card's start color. */
+.tiltFace {
+  position: relative;
+  height: 100%;
+  border-radius: 16.5px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 120% at 0% 0%, color-mix(in srgb, var(--grad-start) 22%, transparent), transparent 55%),
+    #0b0b12;
+}
+/* Invisible 5×5 hover grid over the whole face. */
+.tiltTrack {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+}
+.tiltCard:hover .tiltInner {
+  filter: brightness(1.08);
+}
+.tiltCard:hover .tiltInner::after {
+  filter: blur(34px);
+  opacity: 0.6;
+}
+
+/* Card content helpers (used by Services + project cards). */
+.tiltBody {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+  min-height: 200px;
+  padding: 24px;
+}
+.tiltIcon {
+  display: inline-flex;
+  font-size: 1.9rem;
+  line-height: 1;
+  color: var(--tint);
+}
+.tiltTitle {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--tint);
+}
+.tiltDesc {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.tiltTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tiltTag {
+  font-size: 0.7rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: var(--tint);
+  background: color-mix(in srgb, var(--grad-start) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--grad-start) 30%, transparent);
+}
+.tiltMore {
+  margin-top: auto;
+  padding-top: 4px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--tint);
+}
+
+/* 25 mouse-region tilts — rows tilt X (12→-12deg), cols tilt Y (-8→8deg). */
+.tiltCard:has(.tr-1:hover) .tiltInner { transform: rotateX(12deg) rotateY(-8deg); }
+.tiltCard:has(.tr-2:hover) .tiltInner { transform: rotateX(12deg) rotateY(-4deg); }
+.tiltCard:has(.tr-3:hover) .tiltInner { transform: rotateX(12deg) rotateY(0deg); }
+.tiltCard:has(.tr-4:hover) .tiltInner { transform: rotateX(12deg) rotateY(4deg); }
+.tiltCard:has(.tr-5:hover) .tiltInner { transform: rotateX(12deg) rotateY(8deg); }
+.tiltCard:has(.tr-6:hover) .tiltInner { transform: rotateX(6deg) rotateY(-8deg); }
+.tiltCard:has(.tr-7:hover) .tiltInner { transform: rotateX(6deg) rotateY(-4deg); }
+.tiltCard:has(.tr-8:hover) .tiltInner { transform: rotateX(6deg) rotateY(0deg); }
+.tiltCard:has(.tr-9:hover) .tiltInner { transform: rotateX(6deg) rotateY(4deg); }
+.tiltCard:has(.tr-10:hover) .tiltInner { transform: rotateX(6deg) rotateY(8deg); }
+.tiltCard:has(.tr-11:hover) .tiltInner { transform: rotateX(0deg) rotateY(-8deg); }
+.tiltCard:has(.tr-12:hover) .tiltInner { transform: rotateX(0deg) rotateY(-4deg); }
+.tiltCard:has(.tr-13:hover) .tiltInner { transform: rotateX(0deg) rotateY(0deg); }
+.tiltCard:has(.tr-14:hover) .tiltInner { transform: rotateX(0deg) rotateY(4deg); }
+.tiltCard:has(.tr-15:hover) .tiltInner { transform: rotateX(0deg) rotateY(8deg); }
+.tiltCard:has(.tr-16:hover) .tiltInner { transform: rotateX(-6deg) rotateY(-8deg); }
+.tiltCard:has(.tr-17:hover) .tiltInner { transform: rotateX(-6deg) rotateY(-4deg); }
+.tiltCard:has(.tr-18:hover) .tiltInner { transform: rotateX(-6deg) rotateY(0deg); }
+.tiltCard:has(.tr-19:hover) .tiltInner { transform: rotateX(-6deg) rotateY(4deg); }
+.tiltCard:has(.tr-20:hover) .tiltInner { transform: rotateX(-6deg) rotateY(8deg); }
+.tiltCard:has(.tr-21:hover) .tiltInner { transform: rotateX(-12deg) rotateY(-8deg); }
+.tiltCard:has(.tr-22:hover) .tiltInner { transform: rotateX(-12deg) rotateY(-4deg); }
+.tiltCard:has(.tr-23:hover) .tiltInner { transform: rotateX(-12deg) rotateY(0deg); }
+.tiltCard:has(.tr-24:hover) .tiltInner { transform: rotateX(-12deg) rotateY(4deg); }
+.tiltCard:has(.tr-25:hover) .tiltInner { transform: rotateX(-12deg) rotateY(8deg); }
+
+/* Touch devices: the tilt is janky without a real pointer — drop it. */
+@media (hover: none) {
+  .tiltTrack { display: none; }
+}
+/* Reduced motion: keep the gradient + glow, kill the rotation. */
+@media (prefers-reduced-motion: reduce) {
+  .tiltInner { transform: none !important; transition: filter 0.3s ease; }
+}
+
+/* ── Elite button hover ─── premium light-sweep + cyan glow-lift.
+   Applied via className="eliteBtn" on key CTAs. Respects reduced motion. */
+.eliteBtn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.28s ease, filter 0.28s ease;
+}
+.eliteBtn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.35) 48%,
+    transparent 76%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.eliteBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 34px -10px rgba(34, 211, 238, 0.55);
+  filter: brightness(1.05);
+}
+.eliteBtn:hover::after {
+  transform: translateX(120%);
+}
+.eliteBtn:active {
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .eliteBtn {
+    transition: box-shadow 0.2s ease;
+  }
+  .eliteBtn:hover {
+    transform: none;
+  }
+  .eliteBtn::after {
+    display: none;
+  }
+}
+
+/* ── Mobile responsiveness safety net ─── tighten section padding and
+   headline sizing on small screens so nothing overflows or crowds. */
+@media (max-width: 640px) {
+  .serviceGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* ── Branded social buttons ─── each carries its own accent via --sc and lights
+   up on hover with a colored glow + lift + border tint. */
+.socialBtn {
+  position: relative;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.socialBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px -10px var(--sc, #22d3ee);
+  border-color: var(--sc, #22d3ee) !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .socialBtn:hover {
+    transform: none;
+  }
+}
+
+/* ── Glass card with hover lighting ─── used for About experience / studies /
+   skills. Subtle surface that lifts and glows cyan on hover. */
+.glassCard {
+  position: relative;
+  border-radius: 14px;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease, border-color 0.35s ease;
+  will-change: transform;
+}
+.glassCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(34, 211, 238, 0.6), transparent 45%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.glassCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 44px -24px rgba(34, 211, 238, 0.55);
+}
+.glassCard:hover::before {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .glassCard {
+    transition: box-shadow 0.3s ease;
+  }
+  .glassCard:hover {
+    transform: none;
+  }
+}
+
+/* Skills grid on the About page */
+.skillGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 16px;
+  width: 100%;
+}
+
+/* Per-platform accent colors for social buttons */
+.socialBtn-github { --sc: #e5e7eb; }
+.socialBtn-linkedin { --sc: #0a66c2; }
+.socialBtn-upwork { --sc: #14a800; }
+.socialBtn-whatsapp { --sc: #25d366; }
+.socialBtn-medium { --sc: #e5e7eb; }
+.socialBtn-email { --sc: #22d3ee; }

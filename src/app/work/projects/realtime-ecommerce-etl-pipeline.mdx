@@ -1,0 +1,45 @@
+---
+title: "Real-time e-commerce ETL pipeline"
+publishedAt: "2026-06-20"
+summary: "Streaming medallion-architecture pipeline: Kafka orders → PySpark Structured Streaming → bronze/silver/gold layers → star-schema warehouse, orchestrated with Airflow."
+tags:
+  - "Data engineering"
+  - "Kafka"
+  - "PySpark"
+  - "Airflow"
+images:
+  - "/images/projects/etl-diagram.png"
+link: "https://github.com/saaim12/etl_pipeline"
+team:
+  - name: "Saaim Abdullah"
+    role: "Data engineer"
+    avatar: "/images/avatar.png"
+    linkedIn: "https://www.linkedin.com/in/saaim-abdullah/"
+---
+
+## Overview
+
+A production-style streaming data platform that moves live e-commerce orders
+from Kafka into an analytics-ready warehouse using the medallion
+(bronze/silver/gold) architecture.
+
+Orders published to Kafka land in a Parquet bronze layer on S3-compatible
+storage via PySpark Structured Streaming. Batch stages clean and standardize
+the data into silver, then model a gold star schema, customer, product, and
+date dimensions around a central sales fact table, ready for BI and ML
+workloads.
+
+## Highlights
+
+- Real-time ingestion with Kafka + PySpark Structured Streaming
+- Medallion architecture on S3-compatible object storage (Parquet)
+- Gold star schema modeled for analytics (facts + dimensions)
+- Batch stages orchestrated with an Airflow DAG, all running on Docker Compose
+- Postgres as the serving warehouse
+
+**Stack:** Kafka · PySpark · Airflow · Postgres · Docker Compose
+
+## Links
+
+- Code: [github.com/saaim12/etl_pipeline](https://github.com/saaim12/etl_pipeline)
+- Write-up: [Building a real-time e-commerce ETL pipeline with Kafka, Spark and Airflow](https://medium.com/@saymmalik08/building-a-real-time-e-commerce-etl-pipeline-with-kafka-spark-and-airflow-2baa9090ab3e)

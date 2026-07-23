@@ -1,0 +1,67 @@
+/* Outline button with a skewed fill sweep on hover (Uiverse.io by vikiWayne).
+   Color comes in via --btn-color; the lighter outline + shadow are derived. */
+
+.button {
+  --btn-color-light: color-mix(in srgb, var(--btn-color, #dc2626) 60%, #ffffff);
+  --btn-shadow: color-mix(in srgb, var(--btn-color, #dc2626) 70%, #000000);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  isolation: isolate;
+  overflow: hidden;
+
+  padding: 1em 2em;
+  border: none;
+  border-radius: 5px;
+  outline: 2px solid var(--btn-color, #dc2626);
+
+  background: transparent;
+  color: var(--btn-color, #dc2626);
+  font-family: var(--font-body, "Inter", sans-serif);
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 1000ms;
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  left: -50px;
+  top: 0;
+  width: 0;
+  height: 100%;
+  background-color: var(--btn-color, #dc2626);
+  transform: skewX(45deg);
+  z-index: -1;
+  transition: width 1000ms;
+}
+
+.button:hover {
+  color: #ffffff;
+  transform: scale(1.1);
+  outline: 2px solid var(--btn-color-light);
+  box-shadow: 4px 5px 17px -4px var(--btn-shadow);
+}
+
+.button:hover::before {
+  width: 250%;
+}
+
+/* Reduced motion: keep the fill + color change, drop the scale/long sweep. */
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: color 0.3s ease, outline-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .button::before {
+    transition: width 0.3s ease;
+  }
+  .button:hover {
+    transform: none;
+  }
+}

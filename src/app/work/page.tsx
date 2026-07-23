@@ -1,4 +1,4 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
+import { Button, Column, Heading, Row, Text, Meta, Schema } from "@once-ui-system/core";
 import { baseURL, about, person, work } from "@/resources";
 import { Projects } from "@/components/work/Projects";
 import { Reveal } from "@/components";
@@ -34,6 +34,46 @@ export default function Work() {
       </Heading>
       <Reveal>
         <Projects />
+      </Reveal>
+
+      <Reveal delay={0.1}>
+        <Column
+          fillWidth
+          marginTop="xl"
+          padding="40"
+          gap="16"
+          radius="l"
+          border="neutral-alpha-weak"
+          background="surface"
+          horizontal="center"
+          align="center"
+        >
+          <Heading as="h2" variant="heading-strong-l" align="center">
+            Engineering write-ups
+          </Heading>
+          <Text
+            onBackground="neutral-weak"
+            variant="body-default-l"
+            align="center"
+            wrap="balance"
+          >
+            I write about how I build these systems architecture decisions, the
+            hard parts, and what I'd do differently on Medium.
+          </Text>
+          <Row gap="12" wrap horizontal="center">
+            <Button
+              className="eliteBtn"
+              href="https://medium.com/@saymmalik08"
+              prefixIcon="medium"
+              variant="secondary"
+              size="m"
+              data-border="rounded"
+              arrowIcon
+            >
+              Read my articles on Medium
+            </Button>
+          </Row>
+        </Column>
       </Reveal>
     </Column>
   );

@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Button,
   Column,
   IconButton,
   RevealFx,
@@ -10,7 +9,13 @@ import {
   Meta,
 } from "@once-ui-system/core";
 import { home, about, person, social, baseURL } from "@/resources";
-import { HeroHeadline, MagneticButton, LiquidGradientHero } from "@/components";
+import {
+  HeroHeadline,
+  LiquidGradientHero,
+  Services,
+  Contact,
+  GradientButton,
+} from "@/components";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -65,19 +70,11 @@ export default function Home() {
           </RevealFx>
 
           <RevealFx delay={0.4} horizontal="center">
-            <MagneticButton>
-              <Button
-                id="about"
-                data-border="rounded"
-                href={about.path}
-                variant="secondary"
-                size="m"
-                weight="default"
-                arrowIcon
-              >
-                {about.title}
-              </Button>
-            </MagneticButton>
+            <Row gap="16" wrap horizontal="center" vertical="center">
+              <GradientButton label="Book a call" href={home.cta.href} external color="#dc2626" />
+              <GradientButton label="About me" href={about.path} color="#b91c1c" />
+              <GradientButton label="Resume" href="/SaaimCV.pdf" external color="#ef4444" />
+            </Row>
           </RevealFx>
 
           <RevealFx delay={0.5} horizontal="center">
@@ -99,6 +96,10 @@ export default function Home() {
           </RevealFx>
         </Column>
       </div>
+
+      <Services />
+
+      <Contact />
     </Column>
   );
 }

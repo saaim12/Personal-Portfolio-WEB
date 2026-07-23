@@ -23,8 +23,10 @@ export type Person = {
   avatar: string;
   /** Email address */
   email: string;
-  /** IANA time zone location */
+  /** IANA time zone location (used for the live clock) */
   location: IANATimeZone;
+  /** Human-friendly city shown in the UI, e.g. 'Lahore, Pakistan' */
+  city?: string;
   /** Languages spoken */
   languages?: string[];
   /**
@@ -33,19 +35,6 @@ export type Person = {
    * See: https://www.iana.org/assignments/language-subtag-registry
    */
   locale?: string;
-};
-
-/**
- * Newsletter Section
- * @description The below information will be displayed on the Home page in Newsletter block
- */
-export type Newsletter = {
-  /** Whether to display the newsletter section */
-  display: boolean;
-  /** Title of the newsletter   */
-  title: React.ReactNode;
-  /** Description of the newsletter */
-  description: React.ReactNode;
 };
 
 /**
@@ -107,6 +96,22 @@ export interface Home extends BasePageConfig {
   };
   /** The sub text which appears below the headline */
   subline: React.ReactNode;
+  /** Primary call-to-action button in the hero (e.g. WhatsApp / book a call) */
+  cta: {
+    label: string;
+    /** External link (wa.me / cal.com / mailto) or internal path */
+    href: string;
+  };
+  /** Services block shown on the home page */
+  services: {
+    display: boolean;
+    title: string;
+    items: Array<{
+      icon?: IconName;
+      title: string;
+      description: React.ReactNode;
+    }>;
+  };
 }
 
 /**
@@ -218,29 +223,7 @@ export interface About extends BasePageConfig {
 }
 
 /**
- * Blog page configuration.
- * @description Configuration for the Blog page, including metadata and navigation label.
- */
-export interface Blog extends BasePageConfig {}
-
-/**
  * Work/projects page configuration.
  * @description Configuration for the Work/Projects page, including metadata and navigation label.
  */
 export interface Work extends BasePageConfig {}
-
-/**
- * Gallery page configuration.
- * @description Configuration for the Gallery page, including metadata, navigation label, and image list.
- */
-export interface Gallery extends BasePageConfig {
-  /** List of images in the gallery */
-  images: Array<{
-    /** Image source path */
-    src: string;
-    /** Image alt text */
-    alt: string;
-    /** Image orientation (horizontal/vertical) */
-    orientation: string;
-  }>;
-}

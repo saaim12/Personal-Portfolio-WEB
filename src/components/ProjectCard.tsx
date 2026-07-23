@@ -1,54 +1,38 @@
-import styles from "./ProjectCard.module.scss";
+import { TiltCard } from "@/components";
 
 interface ProjectCardProps {
   href: string;
   title: string;
-  content: string;
   description: string;
   tags?: string[];
-  link: string;
+  /** Picks this card's gradient from the TiltCard palette. */
+  index?: number;
 }
 
-// No image. Collapsed shows title + tech tags; hover/focus opens the detail
-// panel with the explanation and links. (CSS handles the reveal — see the
-// module; touch devices show it by default.)
+// Clickable tilt card → the case study. Title/tags tint to the card's gradient.
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   href,
   title,
-  content,
   description,
   tags = [],
-  link,
+  index = 0,
 }) => {
   return (
-    <div className={styles.card} tabIndex={0}>
-      {title && <h3 className={styles.title}>{title}</h3>}
-      {tags.length > 0 && (
-        <div className={styles.tags}>
-          {tags.map((t) => (
-            <span key={t} className={styles.tag}>
-              {t}
-            </span>
-          ))}
-        </div>
-      )}
-      <div className={styles.detail}>
-        <div className={styles.detailInner}>
-          {description?.trim() && <p className={styles.desc}>{description}</p>}
-          <div className={styles.links}>
-            {content?.trim() && (
-              <a className={styles.link} href={href}>
-                Read case study →
-              </a>
-            )}
-            {link && (
-              <a className={styles.link} href={link} target="_blank" rel="noopener noreferrer">
-                View project ↗
-              </a>
-            )}
+    <TiltCard index={index} href={href} ariaLabel={`${title} — read case study`}>
+      <div className="tiltBody">
+        {title && <h3 className="tiltTitle">{title}</h3>}
+        {tags.length > 0 && (
+          <div className="tiltTags">
+            {tags.map((t) => (
+              <span key={t} className="tiltTag">
+                {t}
+              </span>
+            ))}
           </div>
-        </div>
+        )}
+        {description?.trim() && <p className="tiltDesc">{description}</p>}
+        <span className="tiltMore">Read case study →</span>
       </div>
-    </div>
+    </TiltCard>
   );
 };

@@ -27,15 +27,14 @@ export function Projects({ range, exclude }: ProjectsProps) {
     // Responsive grid: cards wrap — 1-up on phones, 2-up once there's room
     // (each cell is min ~20rem). No fixed columns, so nothing overflows.
     <Row fillWidth gap="l" marginBottom="40" wrap vertical="start">
-      {displayedProjects.map((post) => (
+      {displayedProjects.map((post, i) => (
         <Column key={post.slug} flex={1} minWidth={20}>
           <ProjectCard
+            index={i}
             href={`/work/${post.slug}`}
             title={post.metadata.title}
             description={post.metadata.summary}
-            content={post.content}
             tags={post.metadata.tags}
-            link={post.metadata.link || ""}
           />
         </Column>
       ))}

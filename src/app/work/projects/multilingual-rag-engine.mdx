@@ -1,0 +1,40 @@
+---
+title: "Multilingual, multi-tenant RAG engine"
+publishedAt: "2026-05-10"
+summary: "Production-style RAG backend with tenant-isolated retrieval, local multilingual embeddings, and grounded generation, Django + PostgreSQL 18."
+tags:
+  - "RAG / AI"
+  - "Django"
+  - "PostgreSQL"
+images: []
+link: "https://github.com/saaim12/multilingual-multitenant-rag"
+team:
+  - name: "Saaim Abdullah"
+    role: "Backend engineer"
+    avatar: "/images/avatar.png"
+    linkedIn: "https://www.linkedin.com/in/saaim-abdullah/"
+---
+
+## Overview
+
+A retrieval-augmented generation backend built for a localization Q&A
+service, designed the way you'd run it in production: multiple tenants on one
+deployment, each with fully isolated retrieval, so one customer's documents
+never leak into another's answers.
+
+Embeddings run locally (no third-party embedding API), supporting multiple
+languages, and generation is grounded strictly in retrieved context.
+
+## Highlights
+
+- Tenant-isolated retrieval on Django + PostgreSQL 18
+- Local multilingual embeddings, no external embedding costs or data exposure
+- Grounded generation for a localization Q&A use case
+- Setup, database friction, and fixes documented in a companion Medium article
+
+**Stack:** Django · PostgreSQL 18 · local embeddings · RAG
+
+## Links
+
+- Code: [github.com/saaim12/multilingual-multitenant-rag](https://github.com/saaim12/multilingual-multitenant-rag)
+- Write-up: [Building a multilingual, multi-tenant RAG engine in Django](https://medium.com/@saymmalik08/building-a-multilingual-multi-tenant-rag-engine-in-django-c975aecf599a)
