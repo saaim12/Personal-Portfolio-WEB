@@ -14,7 +14,40 @@ import {
   SpacingToken,
 } from "@once-ui-system/core";
 import { Header, Providers } from "@/components";
-import { baseURL, effects, fonts, style, dataStyle, home, person } from "@/resources";
+import { baseURL, effects, fonts, style, dataStyle, home, person, social } from "@/resources";
+
+// Person structured data (JSON-LD). Helps Google associate the name
+// "Saaim Abdullah" with the role and skills, and link the social profiles.
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: person.name,
+  url: baseURL,
+  image: `${baseURL}${person.avatar}`,
+  jobTitle: "Software Engineer (Backend, Data & Cloud)",
+  description: home.description,
+  email: person.email,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Lahore",
+    addressCountry: "PK",
+  },
+  sameAs: social.filter((s) => s.name !== "Email").map((s) => s.link),
+  knowsAbout: [
+    "Backend Engineering",
+    "Data Engineering",
+    "REST API Design",
+    "AWS Cloud",
+    "Apache Kafka",
+    "Apache Spark",
+    "Apache Airflow",
+    "ETL Pipelines",
+    "Django",
+    "Next.js",
+    "Machine Learning",
+    "Retrieval-Augmented Generation",
+  ],
+};
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
@@ -83,6 +116,10 @@ export default async function RootLayout({
               })();
             `,
           }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
       </head>
       <Providers>
