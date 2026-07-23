@@ -1,4 +1,4 @@
-# saaim.online — Personal Portfolio
+# saaim.site — Personal Portfolio
 
 Portfolio of **Saaim Abdullah** — web developer, backend & data engineer.
 
@@ -17,7 +17,7 @@ npm run dev
 npm run build
 ```
 
-Deployed on Vercel, domain: [saaim.online](https://saaim.online).
+Deployed on Vercel, domain: [saaim.site](https://saaim.site).
 
 ## Content
 

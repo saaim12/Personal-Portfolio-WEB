@@ -8,7 +8,7 @@ import {
 } from "@/types";
 
 // IMPORTANT: Replace with your own domain address - it's used for SEO in meta tags and schema
-const baseURL: string = "https://saaim.online";
+const baseURL: string = "https://saaim.site";
 
 const routes: RoutesConfig = {
   "/": true,
