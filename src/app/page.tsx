@@ -84,6 +84,7 @@ export default function Home() {
                   item.link && (
                     <IconButton
                       key={item.name}
+                      className={`heroSocial socialBtn-${item.name.toLowerCase()}`}
                       href={item.link}
                       icon={item.icon}
                       tooltip={item.name}

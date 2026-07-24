@@ -14,7 +14,6 @@ export function LiquidGradientHero() {
       <div className={`${styles.blob} ${styles.b1}`} />
       <div className={`${styles.blob} ${styles.b2}`} />
       <div className={`${styles.blob} ${styles.b3}`} />
-      <div className={`${styles.blob} ${styles.b4}`} />
       <div className={styles.scrim} />
     </div>
   );

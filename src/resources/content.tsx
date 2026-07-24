@@ -5,7 +5,7 @@ const person: Person = {
   firstName: "Saaim",
   lastName: "Abdullah",
   name: `Saaim Abdullah`,
-  role: "Software engineer · Web, backend, data & AI",
+  role: "Backend, Data & AWS Cloud Engineer",
   avatar: "/images/avatar.png",
   email: "saaim.abdullah.work@gmail.com",
   location: "Asia/Karachi", // IANA time zone (used for the clock). Display city is set separately below.
@@ -63,8 +63,8 @@ const home: Home = {
   path: "/",
   image: "/images/og/home.jpg",
   label: "Home",
-  title: `${person.name}: Software engineer for web, backend, data & AI`,
-  description: `I design and ship complete software products: high-converting websites, web apps, backend systems, data platforms, and AI features.`,
+  title: `${person.name}: Backend, Data & Cloud Engineer | Django, AWS, ETL, Next.js`,
+  description: `Saaim Abdullah — backend, data & cloud engineer. I build production Django/DRF APIs, event-driven ETL pipelines (Kafka, Spark, Airflow), end-to-end AWS infrastructure (Lambda, ECS, RDS, Redshift), high-converting Next.js websites, and AI features like RAG and recommender systems.`,
   headline: "Software that turns visitors into customers.",
   featured: {
     display: true,
@@ -126,9 +126,9 @@ const home: Home = {
       },
       {
         icon: "arrowUpRight",
-        title: "Cloud & DevOps",
+        title: "AWS Cloud & DevOps",
         description:
-          "AWS architecture, Docker, and CI/CD. Deployed, monitored, secure, and built to grow with your business.",
+          "End-to-end AWS infrastructure — Lambda, EC2, ECS/Fargate, RDS, S3, Redshift, VPC, IAM — with Docker and CI/CD. Deployed, monitored, secure, and built to scale.",
       },
     ],
   },
@@ -286,6 +286,9 @@ const about: About = {
         name: "Certifications",
         description: (
           <>
+            AWS Certified Solutions Architect – Associate · Amazon Web Services (in
+            progress, 2026)
+            <br />
             AWS Cloud Technical Essentials · Amazon Web Services (Coursera, 2026)
             <br />
             Introduction to Data Engineering · DeepLearning.AI (Coursera, 2026)

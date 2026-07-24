@@ -37,28 +37,90 @@ const personJsonLd = {
     "Backend Engineering",
     "Data Engineering",
     "REST API Design",
+    "Django",
+    "Django REST Framework",
+    "FastAPI",
+    "PostgreSQL",
     "AWS Cloud",
+    "AWS Solutions Architecture",
+    "Infrastructure as Code",
+    "Serverless",
+    "AWS Lambda",
+    "Amazon ECS",
+    "Amazon RDS",
+    "Amazon Redshift",
+    "Docker",
+    "CI/CD",
+    "Microservices",
+    "System Design",
+    "Distributed Systems",
     "Apache Kafka",
     "Apache Spark",
     "Apache Airflow",
     "ETL Pipelines",
-    "Django",
+    "Data Warehousing",
     "Next.js",
+    "React",
+    "TypeScript",
     "Machine Learning",
     "Retrieval-Augmented Generation",
+    "Recommender Systems",
+    "pgvector",
+    "Redis",
+    "Celery",
   ],
 };
+
+// Keyword list for the meta keywords tag (SEO). Broad but honest to the stack.
+const seoKeywords = [
+  "Saaim Abdullah",
+  "backend engineer",
+  "data engineer",
+  "AWS cloud engineer",
+  "Django developer",
+  "Django REST Framework",
+  "FastAPI",
+  "PostgreSQL",
+  "ETL pipeline engineer",
+  "Apache Kafka",
+  "Apache Spark",
+  "Apache Airflow",
+  "data warehousing",
+  "AWS Lambda",
+  "AWS ECS",
+  "AWS RDS",
+  "AWS Redshift",
+  "serverless",
+  "Docker",
+  "CI/CD",
+  "microservices",
+  "system design",
+  "REST API",
+  "Next.js developer",
+  "React",
+  "TypeScript",
+  "full-stack developer",
+  "AI engineer",
+  "RAG",
+  "recommender systems",
+  "machine learning",
+  "remote software engineer",
+  "freelance backend developer",
+  "Lahore",
+  "Pakistan",
+];
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const meta = Meta.generate({
     title: home.title,
     description: home.description,
     baseURL: baseURL,
     path: home.path,
     image: home.image,
   });
+  return { ...meta, keywords: seoKeywords };
 }
 
 export default async function RootLayout({
@@ -107,8 +169,11 @@ export default async function RootLayout({
                     root.setAttribute('data-' + key, value);
                   });
                   
-                  // Dark-only site: always force dark, ignore system + saved prefs.
-                  root.setAttribute('data-theme', 'dark');
+                  // Default to DARK (ignore system pref so it never loads white),
+                  // but honor an explicit user choice saved by the theme toggle.
+                  var saved = null;
+                  try { saved = localStorage.getItem('data-theme'); } catch (e) {}
+                  root.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
                 } catch (e) {
                   console.error('Failed to initialize theme:', e);
                   document.documentElement.setAttribute('data-theme', 'dark');

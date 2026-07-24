@@ -166,7 +166,7 @@ body {
   border-radius: 18px;
   background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
   transform: translateZ(-1px) scale(0.9);
-  filter: blur(26px);
+  filter: blur(16px);
   opacity: 0.35;
   z-index: -1;
   transition: filter 0.4s ease, opacity 0.4s ease;
@@ -194,7 +194,7 @@ body {
   filter: brightness(1.08);
 }
 .tiltCard:hover .tiltInner::after {
-  filter: blur(34px);
+  filter: blur(22px);
   opacity: 0.6;
 }
 
@@ -413,3 +413,31 @@ body {
 .socialBtn-whatsapp { --sc: #25d366; }
 .socialBtn-medium { --sc: #e5e7eb; }
 .socialBtn-email { --sc: #22d3ee; }
+
+/* ── Sleek hero social icons ─── circular glass buttons with a branded
+   glow + lift on hover. Colour comes from the .socialBtn-<name> --sc var. */
+.heroSocial {
+  border-radius: 999px !important;
+  border: 1px solid var(--border) !important;
+  background: color-mix(in srgb, var(--text) 4%, transparent) !important;
+  backdrop-filter: blur(6px);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.28s ease, border-color 0.28s ease, background 0.28s ease !important;
+}
+.heroSocial:hover {
+  transform: translateY(-3px);
+  border-color: var(--sc, #22d3ee) !important;
+  box-shadow: 0 10px 24px -8px var(--sc, #22d3ee);
+  background: color-mix(in srgb, var(--sc, #22d3ee) 14%, transparent) !important;
+}
+.heroSocial:active {
+  transform: translateY(-1px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .heroSocial {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+  }
+  .heroSocial:hover {
+    transform: none;
+  }
+}
