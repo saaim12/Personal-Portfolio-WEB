@@ -19,7 +19,7 @@ const routes: RoutesConfig = {
 const display: DisplayConfig = {
   location: true,
   time: true,
-  themeSwitcher: false, // dark-only site — no light theme
+  themeSwitcher: true, // dark by default, toggle in the header switches to light
 };
 
 // Import and set font for each variant

@@ -1,36 +1,29 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { IconButton } from "@once-ui-system/core";
+import { IconButton, useTheme } from "@once-ui-system/core";
 
-// Toggles data-theme between dark/light and persists to localStorage.
-// The inline script in layout.tsx reads that value on first paint (no flash).
+// Once UI's ThemeProvider is the single source of truth: it owns both the
+// data-theme attribute and the localStorage write. Setting the attribute
+// directly here would leave the provider's own state stale, and its style
+// effect would then revert the toggle on the next render.
 export const ThemeToggle = () => {
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    const current =
-      (document.documentElement.getAttribute("data-theme") as "dark" | "light") ||
-      "dark";
-    setTheme(current);
-  }, []);
+  // The server renders the dark default; only trust resolvedTheme once the
+  // client has hydrated, otherwise the icon mismatches on a saved light theme.
+  useEffect(() => setMounted(true), []);
 
-  const toggle = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    try {
-      localStorage.setItem("data-theme", next);
-    } catch {}
-    setTheme(next);
-  };
+  const isDark = !mounted || resolvedTheme !== "light";
 
   return (
     <IconButton
-      onClick={toggle}
-      icon={theme === "dark" ? "sun" : "moon"}
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      icon={isDark ? "sun" : "moon"}
       variant="ghost"
       size="m"
-      tooltip={theme === "dark" ? "Switch to light" : "Switch to dark"}
+      tooltip={isDark ? "Switch to light" : "Switch to dark"}
       aria-label="Toggle color theme"
     />
   );

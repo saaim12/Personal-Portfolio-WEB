@@ -43,13 +43,16 @@ export async function generateMetadata({
 
   if (!post) return {};
 
-  return Meta.generate({
-    title: post.metadata.title,
-    description: post.metadata.summary,
-    baseURL: baseURL,
-    image: post.metadata.image || `/api/og/generate?title=${post.metadata.title}`,
-    path: `${work.path}/${post.slug}`,
-  });
+  return {
+    ...Meta.generate({
+      title: post.metadata.title,
+      description: post.metadata.summary,
+      baseURL: baseURL,
+      image: post.metadata.image || `/api/og/generate?title=${post.metadata.title}`,
+      path: `${work.path}/${post.slug}`,
+    }),
+    alternates: { canonical: `${baseURL}${work.path}/${post.slug}` },
+  };
 }
 
 export default async function Project({
@@ -118,6 +121,18 @@ export default async function Project({
           </Text>
         </Row>
       </Row>
+      {post.metadata.link && (
+        <Row marginBottom="32" horizontal="center">
+          <Button
+            href={post.metadata.link}
+            variant="secondary"
+            size="s"
+            prefixIcon={post.metadata.link.includes("github.com") ? "github" : "globe"}
+            suffixIcon="arrowUpRight"
+            label={post.metadata.link.includes("github.com") ? "View source" : "Visit site"}
+          />
+        </Row>
+      )}
       {post.metadata.images.length > 0 && (
         <Media priority aspectRatio="16 / 9" radius="m" alt="image" src={post.metadata.images[0]} />
       )}

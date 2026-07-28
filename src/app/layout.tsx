@@ -173,7 +173,15 @@ export default async function RootLayout({
                   // but honor an explicit user choice saved by the theme toggle.
                   var saved = null;
                   try { saved = localStorage.getItem('data-theme'); } catch (e) {}
-                  root.setAttribute('data-theme', saved === 'light' ? 'light' : 'dark');
+                  var theme = saved === 'light' ? 'light' : 'dark';
+                  // Persist the default too. Once UI's ThemeProvider treats a
+                  // missing key as "system" and overwrites data-theme from
+                  // prefers-color-scheme, which would flip the site to light
+                  // on a light-mode OS and fight the toggle afterwards.
+                  if (saved !== 'light' && saved !== 'dark') {
+                    try { localStorage.setItem('data-theme', theme); } catch (e) {}
+                  }
+                  root.setAttribute('data-theme', theme);
                 } catch (e) {
                   console.error('Failed to initialize theme:', e);
                   document.documentElement.setAttribute('data-theme', 'dark');

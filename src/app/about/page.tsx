@@ -18,13 +18,16 @@ import styles from "@/components/about/about.module.scss";
 import React from "react";
 
 export async function generateMetadata() {
-  return Meta.generate({
-    title: about.title,
-    description: about.description,
-    baseURL: baseURL,
-    image: `/api/og/generate?title=${encodeURIComponent(about.title)}`,
-    path: about.path,
-  });
+  return {
+    ...Meta.generate({
+      title: about.title,
+      description: about.description,
+      baseURL: baseURL,
+      image: `/api/og/generate?title=${encodeURIComponent(about.title)}`,
+      path: about.path,
+    }),
+    alternates: { canonical: `${baseURL}${about.path}` },
+  };
 }
 
 export default function About() {

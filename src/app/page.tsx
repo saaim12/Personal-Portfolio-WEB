@@ -18,13 +18,16 @@ import {
 } from "@/components";
 
 export async function generateMetadata() {
-  return Meta.generate({
-    title: home.title,
-    description: home.description,
-    baseURL: baseURL,
-    path: home.path,
-    image: home.image,
-  });
+  return {
+    ...Meta.generate({
+      title: home.title,
+      description: home.description,
+      baseURL: baseURL,
+      path: home.path,
+      image: home.image,
+    }),
+    alternates: { canonical: baseURL },
+  };
 }
 
 export default function Home() {
@@ -74,6 +77,12 @@ export default function Home() {
               <GradientButton label="Book a call" href={home.cta.href} external color="#dc2626" />
               <GradientButton label="About me" href={about.path} color="#b91c1c" />
               <GradientButton label="Resume" href="/SaaimCV.pdf" external color="#ef4444" />
+              <GradientButton
+                label="Recommendation"
+                href="/Fitter-Recommendation-Letter.pdf"
+                external
+                color="#f87171"
+              />
             </Row>
           </RevealFx>
 

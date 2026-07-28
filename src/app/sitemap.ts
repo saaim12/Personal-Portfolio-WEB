@@ -11,6 +11,9 @@ export default async function sitemap() {
     (route) => routesConfig[route as keyof typeof routesConfig],
   );
 
+  // Must match the per-page `alternates.canonical` character for character.
+  // Next strips the root's trailing slash when rendering the canonical tag
+  // (trailingSlash is false), so "/" maps to a bare baseURL here too.
   const routes = activeRoutes.map((route) => ({
     url: `${baseURL}${route !== "/" ? route : ""}`,
     lastModified: new Date().toISOString().split("T")[0],
