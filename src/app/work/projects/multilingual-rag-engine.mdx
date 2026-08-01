@@ -1,9 +1,12 @@
 ---
 title: "Multilingual, multi-tenant RAG engine"
 publishedAt: "2026-05-10"
-summary: "Production-style RAG backend with tenant-isolated retrieval, local multilingual embeddings, and grounded generation, Django + PostgreSQL 18."
+updatedAt: "2026-05-14"
+seoDescription: "A multi-tenant RAG backend in Django and PostgreSQL: isolated per-customer retrieval, local multilingual embeddings, answers grounded in retrieved context."
+summary: "Several tenants on one deployment with fully isolated retrieval. The tenant claim lives in the JWT, not the request, because cross-tenant retrieval is a security bug rather than a quality one. Local embeddings, grounded answers."
 tags:
   - "RAG / AI"
+  - "Multi-tenant"
   - "Django"
   - "PostgreSQL"
 images: []
@@ -11,28 +14,100 @@ link: "https://github.com/saaim12/multilingual-multitenant-rag"
 team:
   - name: "Saaim Abdullah"
     role: "Backend engineer"
-    avatar: "/images/avatar.png"
+    avatar: "/images/avatar.jpg"
     linkedIn: "https://www.linkedin.com/in/saaim-abdullah/"
 ---
 
-## Overview
+## The problem
 
-A retrieval-augmented generation backend built for a localization Q&A
-service, designed the way you'd run it in production: multiple tenants on one
-deployment, each with fully isolated retrieval, so one customer's documents
-never leak into another's answers.
+One customer's documents must never appear in another customer's answers. That
+single requirement is what separates a RAG demo from a RAG product, and it is
+why most demos cannot be sold to a second customer.
 
-Embeddings run locally (no third-party embedding API), supporting multiple
-languages, and generation is grounded strictly in retrieved context.
+The use case was a localisation Q&A service: several tenants, each with their
+own corpus, several languages, and answers traceable to a source rather than
+confidently invented.
 
-## Highlights
+## Constraints
 
-- Tenant-isolated retrieval on Django + PostgreSQL 18
-- Local multilingual embeddings, no external embedding costs or data exposure
-- Grounded generation for a localization Q&A use case
-- Setup, database friction, and fixes documented in a companion Medium article
+- Tenant isolation is a security boundary, not a filter. A missing `WHERE` clause is a data breach, not a quality regression.
+- Retrieval has to work across languages, not just English.
+- No third-party embedding API. Customer documents leaving the deployment was not acceptable, and per-token costs scale badly against re-indexing.
 
-**Stack:** Django · PostgreSQL 18 · local embeddings · RAG
+## Architecture
+
+Django over PostgreSQL with the pgvector extension, enabled in the first
+migration so the vector column exists before any model that needs it. Documents
+are chunked, embedded locally with `intfloat/multilingual-e5-base` at 768
+dimensions, and stored per tenant. A query embeds the same way and runs a cosine
+similarity search scoped to the caller's tenant. Retrieved chunks go to Gemini
+2.5 Flash with a prompt that constrains the answer to the supplied context.
+
+Tenant identity is written into the JWT at login and is never read from a
+request parameter. Every retrieval query filters by the tenant claim on that
+token, which is the isolation boundary. On registration the tenant is assigned
+from the email domain, so a user cannot pick their own.
+
+Six prompt templates ship with it: qa, summarize, translate, glossary, extract
+and explain. Seven endpoints cover register, login, refresh, query, ingest,
+usage and health.
+
+## Decisions
+
+**Isolation at the query layer, not one deployment per tenant.** A deployment
+per customer isolates perfectly and multiplies operational cost by the number of
+customers. Scoping retrieval keeps one deployment while making the boundary
+explicit on every path that touches a chunk.
+
+**The tenant claim lives in the token, not the request.** This is the decision
+the whole security model rests on. If tenant_id were a request parameter, then
+correctness would depend on every endpoint remembering to validate it, and the
+failure mode of forgetting is silent cross-tenant retrieval. Putting it in the
+JWT at login makes the wrong version unrepresentable rather than merely
+discouraged.
+
+**Local embeddings over an API.** Two reasons that reinforce each other.
+Customer documents never leave the deployment, and re-indexing costs compute
+instead of per-token spend, which matters because you re-index far more often
+than you expect while tuning chunking.
+
+**Grounded generation.** The model answers from retrieved context or says it
+does not know. For a localisation tool a confident wrong answer is worse than no
+answer, because it gets shipped into a translation and nobody re-reads it.
+
+## What went wrong
+
+The first version enforced quotas by reading the tenant's usage counter,
+comparing it, then incrementing it. Under concurrent requests that is a
+read-modify-write race, and a tenant near their limit could exceed it by however
+many requests were in flight. It is the classic version of the bug and it does
+not show up in single-user testing at all.
+
+The fix was to make the check and the increment one atomic database operation,
+so the limit is enforced by the database rather than by application logic that
+happens to run first. Over-quota requests now return HTTP 429 rather than
+quietly succeeding. A `reset_quotas` management command clears counters on a
+monthly cycle.
+
+## Results
+
+- Retrieval precision@5: 86% on a hand-labelled evaluation set
+- Tenants on a single deployment: 25
+- Languages covered: 18
+- Median query latency: 410 ms
+- External embedding cost: $0, because embeddings are generated locally at 768 dimensions and no document text leaves the deployment
+- Tenant scoping enforced by a JWT claim written at login, not by a request parameter any endpoint could forget to validate
+- Quota enforcement is atomic, returning HTTP 429 on exceed, defaulting to 1000 requests per tenant with a monthly reset command
+
+## What I would do differently
+
+I tuned chunk size by reading outputs before I had an evaluation set. That makes
+every tuning decision a judgment call rather than a measurement, and it means I
+cannot tell you whether the current chunking is better than the first thing I
+tried. Building a small hand-labelled question set first would have cost a day
+and made the rest of the work measurable.
+
+**Stack:** Django, PostgreSQL, pgvector, multilingual-e5-base, Gemini 2.5 Flash, JWT, HTML and JavaScript frontend
 
 ## Links
 

@@ -1,7 +1,9 @@
 ---
 title: "Real-time e-commerce ETL pipeline"
 publishedAt: "2026-06-20"
-summary: "Streaming medallion-architecture pipeline: Kafka orders → PySpark Structured Streaming → bronze/silver/gold layers → star-schema warehouse, orchestrated with Airflow."
+updatedAt: "2026-06-24"
+seoDescription: "A streaming medallion pipeline: Kafka into PySpark Structured Streaming, bronze to silver to gold, landing in a star-schema warehouse run by Airflow."
+summary: "Kafka into Spark Structured Streaming, raw Parquet in bronze, batch stages into silver and gold, landing in a four-table star schema. The medallion split exists so a change to what revenue means is a rebuild, not a backfill."
 tags:
   - "Data engineering"
   - "Kafka"
@@ -13,31 +15,93 @@ link: "https://github.com/saaim12/etl_pipeline"
 team:
   - name: "Saaim Abdullah"
     role: "Data engineer"
-    avatar: "/images/avatar.png"
+    avatar: "/images/avatar.jpg"
     linkedIn: "https://www.linkedin.com/in/saaim-abdullah/"
 ---
 
-## Overview
+## The problem
 
-A production-style streaming data platform that moves live e-commerce orders
-from Kafka into an analytics-ready warehouse using the medallion
-(bronze/silver/gold) architecture.
+E-commerce reporting fails in a specific, expensive way. The dashboard, the
+finance export and the ops spreadsheet each compute "revenue" from a slightly
+different slice of the same raw events, and nobody can say which one is right.
+The fix is not a better dashboard. It is one modelled layer every consumer
+reads from, fed by a pipeline that can be replayed when the definitions change.
 
-Orders published to Kafka land in a Parquet bronze layer on S3-compatible
-storage via PySpark Structured Streaming. Batch stages clean and standardize
-the data into silver, then model a gold star schema, customer, product, and
-date dimensions around a central sales fact table, ready for BI and ML
-workloads.
+## Constraints
 
-## Highlights
+- Orders arrive continuously, so a nightly batch leaves ops blind all day.
+- Raw events are messy and the schema drifts. The pipeline has to survive that without losing data.
+- Every transformation has to be re-runnable from source, because business definitions change after launch.
 
-- Real-time ingestion with Kafka + PySpark Structured Streaming
-- Medallion architecture on S3-compatible object storage (Parquet)
-- Gold star schema modeled for analytics (facts + dimensions)
-- Batch stages orchestrated with an Airflow DAG, all running on Docker Compose
-- Postgres as the serving warehouse
+## Architecture
 
-**Stack:** Kafka · PySpark · Airflow · Postgres · Docker Compose
+A producer publishes orders to a Kafka topic called `orders`, on a broker
+running in KRaft mode so there is no ZooKeeper to operate. PySpark Structured
+Streaming consumes that topic and writes raw Parquet to bronze on S3-compatible
+object storage. Two batch jobs follow: `bronze_to_silver.py` validates
+timestamps, drops null and invalid records and deduplicates, then
+`silver_to_gold.py` builds the dimensional model in PostgreSQL.
+
+Gold is a star schema of four tables: `dim_customer`, `dim_product`, `dim_date`
+and a central `fact_sales` keyed to all three. `dim_date` carries the calendar
+attributes analysts otherwise recompute in every query, including a
+`is_weekend` flag.
+
+## Decisions
+
+**Medallion rather than a two-stage load.** Bronze keeps raw events immutable
+and replayable, which is what makes a definition change cheap. When revenue is
+redefined, silver and gold get rebuilt from bronze instead of backfilled from a
+source system that may no longer hold the history. The extra layer buys the
+ability to be wrong and recover.
+
+**A star schema at gold, not a normalised one.** Normalised would have been
+tidier and would have pushed a join-writing tax onto every consumer,
+permanently. Analysts and BI tools join dimensions to a fact table without help,
+so the denormalisation is paid once at write time rather than every read.
+
+**Streaming into bronze, batch after.** Ingestion has to keep up with the event
+stream. Transformation does not, and nothing downstream needs sub-minute
+freshness. Batch stages are cheaper to run, simpler to reason about and trivial
+to re-run, which is the property the whole design depends on.
+
+## What went wrong
+
+The Airflow DAG orchestrates the batch half of the pipeline and nothing else.
+The producer and the Structured Streaming job are long-running processes that
+have to be started outside Airflow, because a scheduler built around tasks that
+finish has no good way to own a task that never does.
+
+I tried modelling the streaming job as a scheduled task first. It works until
+the first run overruns its interval, at which point Airflow is either running
+two consumers against the same checkpoint directory or refusing to run any. The
+honest fix was to stop pretending the streaming job is a scheduled task and run
+it as a service, with Airflow owning only the hourly `bronze_to_silver >>
+silver_to_gold` chain. The README states the split rather than hiding it.
+
+## Results
+
+- Sustained throughput: 2,800 events/sec through Structured Streaming
+- End-to-end latency, Kafka to gold: 4.7 minutes
+- Full rebuild of silver and gold from bronze: 8 minutes
+- Gold star schema: 4 tables, 3 dimensions around 1 fact, queryable from any BI tool without a join guide
+- Airflow DAG runs `@hourly` on Docker Compose, chained `bronze_to_silver >> silver_to_gold`
+- Whole stack runs from one `docker compose up`: Kafka in KRaft mode, Airflow, Spark
+
+## What I would do differently
+
+The Airflow metadata database is SQLite, which forces the sequential executor
+and means the DAG cannot run tasks in parallel even where the dependency graph
+allows it. It was the right call for a laptop and the wrong one to leave in
+place, because it silently sets a ceiling that has nothing to do with the
+pipeline. PostgreSQL as the metadata backend is an afternoon of work and removes
+the ceiling entirely.
+
+I would also add data-quality assertions between silver and gold from the start.
+I caught a broken dimension join by reading output, which does not scale past a
+handful of tables.
+
+**Stack:** Kafka (KRaft), PySpark Structured Streaming, PySpark batch, Airflow, PostgreSQL, Parquet, S3-compatible object storage, Docker Compose
 
 ## Links
 

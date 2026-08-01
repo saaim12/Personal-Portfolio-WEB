@@ -1,11 +1,19 @@
 import { ImageResponse } from "next/og";
-import { baseURL, person } from "@/resources";
+import { person } from "@/resources";
 
 export const runtime = "nodejs";
 
 export async function GET(request: Request) {
   let url = new URL(request.url);
   let title = url.searchParams.get("title") || "Portfolio";
+
+  // Resolve the avatar against the host actually serving this request, not
+  // against the hardcoded production baseURL. Fetching baseURL meant every
+  // local run and every preview deploy pulled the *live* site's avatar, so a
+  // renamed or newly added asset 404s here until it has already shipped, and
+  // Satori fails the whole render with "Unsupported image type: unknown"
+  // rather than degrading.
+  const avatarSrc = new URL(person.avatar, url.origin).toString();
 
   async function loadGoogleFont(font: string) {
     const url = `https://fonts.googleapis.com/css2?family=${font}`;
@@ -62,8 +70,13 @@ export async function GET(request: Request) {
             gap: "5rem",
           }}
         >
+          {/* Satori cannot infer remote image dimensions, so width and height
+              are explicit. Without them the render throws "Image size cannot
+              be determined" and the route returns nothing at all. */}
           <img
-            src={baseURL + person.avatar}
+            src={avatarSrc}
+            width={192}
+            height={192}
             style={{
               width: "12rem",
               height: "12rem",

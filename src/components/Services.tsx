@@ -1,37 +1,40 @@
-import { createElement } from "react";
+import { createElement, type ReactNode } from "react";
 import { Column, Heading, Text } from "@once-ui-system/core";
 import { home } from "@/resources";
 import { iconLibrary } from "@/resources/icons";
-import { Reveal, TiltCard } from "@/components";
+import { Reveal } from "./Reveal";
 
-export function Services() {
+export function Services({ icon }: { icon?: ReactNode }) {
   if (!home.services.display) return null;
 
   return (
-    <Column fillWidth maxWidth="l" horizontal="center" gap="40" paddingY="80" paddingX="l">
+    // `as="h2"` matters: Once UI's Heading defaults to h1, so this section was
+    // emitting a second h1 on the homepage alongside the hero headline.
+    <Column fillWidth horizontal="center" className="section section--ruled">
       <Reveal>
-        <Column horizontal="center" gap="8" align="center">
-          <Heading variant="display-strong-s" align="center">
+        <div className="sectionHead">
+          <span className="eyebrow">{icon}Services</span>
+          <Heading as="h2" variant="display-strong-s" align="center">
             {home.services.title}
           </Heading>
           <Text onBackground="neutral-weak" variant="heading-default-m" wrap="balance">
             One engineer, the whole stack, design to database.
           </Text>
-        </Column>
+        </div>
       </Reveal>
 
-      <div className="serviceGrid">
+      <div className="cardGrid">
         {home.services.items.map((service, i) => (
-          <Reveal key={service.title} delay={i * 0.08}>
-            <TiltCard index={i}>
-              <div className="tiltBody">
-                {service.icon && (
-                  <span className="tiltIcon">{createElement(iconLibrary[service.icon])}</span>
-                )}
-                <h3 className="tiltTitle">{service.title}</h3>
-                <p className="tiltDesc">{service.description}</p>
-              </div>
-            </TiltCard>
+          <Reveal key={service.title} delay={i * 0.05}>
+            <div className="card">
+              {service.icon && (
+                <span className="cardIcon" aria-hidden="true">
+                  {createElement(iconLibrary[service.icon])}
+                </span>
+              )}
+              <h3 className="cardTitle">{service.title}</h3>
+              <p className="cardDesc">{service.description}</p>
+            </div>
           </Reveal>
         ))}
       </div>

@@ -12,18 +12,22 @@
 # next.js
 /.next/
 /out/
+/.turbo
 
 # production
 /build
 
 # misc
 .DS_Store
+Thumbs.db
 *.pem
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
 
 # local env files
 .env*.local
@@ -34,3 +38,29 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ── Local tooling output ────────────────────────────────────────────────
+# scripts/audit.mjs writes a full-page screenshot per route per breakpoint.
+# That directory reached 14 MB before it was ignored, and a screenshot is a
+# build artefact: it is regenerated on every run and is never worth a diff.
+/.audit/
+/.audit-log.txt
+/playwright-report/
+/test-results/
+*.lighthouseci/
+
+# Editors
+/.idea/
+*.swp
+*~
+# VS Code: keep shared workspace config, ignore the per-machine bits.
+/.vscode/*
+!/.vscode/extensions.json
+!/.vscode/settings.json
+
+# ── Scratch ─────────────────────────────────────────────────────────────
+# Ad-hoc probe scripts and screenshots at the repo root. Real tooling lives
+# in scripts/ and is committed; anything matching these is a throwaway.
+/*.local.*
+/scratch/
+/tmp/

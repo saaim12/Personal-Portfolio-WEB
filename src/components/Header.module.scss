@@ -1,21 +1,284 @@
-@use "./breakpoints.scss" as breakpoints;
+/* Navigation.
+   Two floating glass pills over the page rather than one full-bleed bar: the
+   brand on the left, the routes in their own capsule beside the CTA. Nothing
+   is painted across the full width, so the aurora runs uninterrupted behind
+   the header and the pills read as objects sitting on top of the page. */
 
-.mask {
-    pointer-events: none;
-    backdrop-filter: blur(0.5rem);
-    background: linear-gradient(to bottom, var(--page-background), var(--static-transparent));
-    mask-image: linear-gradient(rgba(0,0,0) 25%, rgba(0, 0, 0, 0) 100%);
-    mask-size: 100% 100%;
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: var(--nav-h);
+  display: flex;
+  align-items: center;
 }
 
-@media (max-width: breakpoints.$s) {
-    .position {
-        top: auto;
-        bottom: var(--static-space-24);
-    }
+/* The pills carry their own glass, so the scrolled state has nothing left to
+   do. The class is still applied while the mobile panel is open. */
+.scrolled {
+  background: var(--nav-bg);
+}
 
-    .mask {
-        transform: rotate(180deg);
-        bottom: 0;
+.inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+@mixin pill {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+/* Brand */
+.brand.brand {
+  @include pill;
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  padding: 6px 14px 6px 6px;
+  text-decoration: none;
+  color: var(--text);
+  flex-shrink: 0;
+  transition: border-color var(--base) var(--ease);
+}
+.brand.brand:hover {
+  border-color: var(--border-accent);
+}
+/* The portrait. Fixed square with object-fit, so a non-square source is
+   cropped rather than squashed, and a hairline keeps it from bleeding into
+   the glass pill behind it. */
+.mark {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  object-fit: cover;
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+  transition: box-shadow var(--base) var(--ease);
+}
+.brand.brand:hover .mark {
+  box-shadow: inset 0 0 0 1px var(--border-accent), 0 0 14px rgba(255, 255, 255, 0.3);
+}
+.brandName {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+/* Desktop links */
+.nav {
+  @include pill;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+}
+.link.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color var(--base) var(--ease);
+
+  svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  &:hover {
+    color: var(--text);
+    text-shadow: var(--glow);
+  }
+}
+.active.active {
+  color: var(--text);
+
+  &::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.iconBtn.iconBtn {
+  @include pill;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color var(--base) var(--ease), border-color var(--base) var(--ease);
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    color: var(--text);
+    border-color: var(--border-accent);
+
+    svg {
+      filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.6));
     }
+  }
+}
+
+.cta {
+  height: 38px;
+  padding: 0 18px;
+  font-size: 0.75rem;
+}
+
+/* Hamburger. Three bars that morph into an X. */
+.burger {
+  @include pill;
+  display: none;
+  position: relative;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+.burgerBar {
+  position: absolute;
+  left: 11px;
+  width: 16px;
+  height: 1.5px;
+  border-radius: 2px;
+  background: var(--text);
+  transition: transform var(--base) var(--ease), opacity var(--fast) var(--ease);
+
+  &:nth-child(1) { top: 14px; }
+  &:nth-child(2) { top: 19px; }
+  &:nth-child(3) { top: 24px; }
+}
+.burgerOpen {
+  .burgerBar:nth-child(1) { transform: translateY(5px) rotate(45deg); }
+  .burgerBar:nth-child(2) { opacity: 0; transform: scaleX(0.4); }
+  .burgerBar:nth-child(3) { transform: translateY(-5px) rotate(-45deg); }
+}
+
+/* Mobile panel */
+.panel {
+  position: fixed;
+  top: var(--nav-h);
+  left: 0;
+  right: 0;
+  z-index: 49;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px var(--gutter) 24px;
+  border-bottom: 1px solid var(--border);
+  /* Opaque, not glass: menu labels have to stay legible over the aurora. */
+  background: #060608;
+  box-shadow: var(--shadow-lg);
+  animation: panelIn var(--base) var(--ease);
+}
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.panelLink.panelLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* 52px clears the 44px WCAG 2.5.8 touch minimum comfortably. */
+  min-height: 52px;
+  padding: 0 12px;
+  border-radius: var(--radius);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-2);
+  text-decoration: none;
+  transition: background var(--fast) var(--ease), color var(--fast) var(--ease);
+
+  svg {
+    width: 18px;
+    height: 18px;
+    color: var(--muted);
+  }
+
+  &:hover,
+  &:active {
+    background: var(--surface-hover);
+    color: var(--text);
+    text-shadow: var(--glow);
+  }
+}
+.panelActive.panelActive {
+  color: var(--accent);
+  background: var(--accent-soft);
+
+  svg {
+    color: var(--accent);
+  }
+}
+.panelDivider {
+  height: 1px;
+  margin: 10px 2px;
+  background: var(--border);
+}
+.scrim {
+  position: fixed;
+  inset: var(--nav-h) 0 0 0;
+  z-index: 48;
+  background: color-mix(in srgb, var(--bg) 55%, transparent);
+  animation: modalIn var(--base) var(--ease);
+}
+
+@media (max-width: 860px) {
+  .nav,
+  .cta {
+    display: none;
+  }
+  .burger {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .scrim {
+    animation: none;
+  }
 }

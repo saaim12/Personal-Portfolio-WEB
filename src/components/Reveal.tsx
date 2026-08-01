@@ -1,35 +1,55 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import type { CSSProperties, ReactNode } from "react";
+import { createElement, useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 
 type RevealProps = {
   children: ReactNode;
-  /** stagger helper — delays the reveal (seconds) */
+  /** stagger helper, in seconds */
   delay?: number;
-  /** vertical travel distance in px (ignored under reduced motion) */
-  y?: number;
-  /** extra styles merged onto the wrapper (e.g. to act as a grid item) */
+  /** element to render — use "li" inside a list, where a div would be invalid */
+  as?: "div" | "li";
   style?: CSSProperties;
   className?: string;
 };
 
-// Additive scroll-reveal wrapper. Fades + rises section content once as it
-// enters the viewport. A full-width block wrapper, so it doesn't disturb the
-// Once UI layout it wraps. Reduced motion → opacity only, no transform.
-export function Reveal({ children, delay = 0, y = 24, style, className }: RevealProps) {
-  const reduce = useReducedMotion();
+// Scroll reveal without Framer Motion. The library was ~34 KB gzip to fade
+// something in and move it 12px; this does the same job with one observer and
+// a CSS class. The animation is opacity + transform only, so it stays on the
+// compositor and never triggers layout.
+export function Reveal({ children, delay = 0, as = "div", style, className }: RevealProps) {
+  const ref = useRef<HTMLElement>(null);
 
-  return (
-    <motion.div
-      className={className}
-      style={{ width: "100%", ...style }}
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-10% 0px" }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay }}
-    >
-      {children}
-    </motion.div>
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    // No IntersectionObserver (or already past): show it rather than hide it.
+    if (typeof IntersectionObserver === "undefined") {
+      el.classList.add("isVisible");
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("isVisible");
+          io.disconnect(); // reveal once
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px" },
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return createElement(
+    as,
+    {
+      ref,
+      className: `reveal${className ? ` ${className}` : ""}`,
+      style: { width: "100%", "--reveal-delay": `${delay * 1000}ms`, ...style } as CSSProperties,
+    },
+    children,
   );
 }

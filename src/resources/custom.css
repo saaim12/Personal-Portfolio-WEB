@@ -1,443 +1,1323 @@
-/* :root {
-  /*
-  /* Override default variables here */
-  /*
-  --font-size-display-multiplier:   1;
-  --font-size-heading-multiplier:   1;
-  --font-size-body-multiplier:      1;
-  --font-size-label-multiplier:     1;
+/* ═══════════════════════════════════════════════════════════════════════
+   DESIGN SYSTEM
+   ───────────────────────────────────────────────────────────────────────
+   One theme: black. There is no light mode — the whole design rests on a
+   pure #000 ground with light pooling on it, and every surface, border and
+   shadow value below is drawn for that ground specifically.
 
-  --line-height-display-multiplier: 1;
-  --line-height-heading-multiplier: 1;
-  --line-height-body-multiplier:    1;
-  --line-height-label-multiplier:   1;
+   Principles:
+     1. The ground is pure black. Depth comes from the animated aurora
+        behind the content, not from stepping grey surfaces.
+     2. Every raised surface is the same tinted glass panel: a 160° near-black
+        gradient over a 14px backdrop blur with a 10%-white hairline.
+     3. Elevation is a white bloom, not a drop shadow. On #000 a dark shadow
+        is invisible.
+     4. Monochrome. The accent is light itself — no hue anywhere.
+     5. Semantic colours (success/warning/error) exist but are almost never
+        used. Their job is to stay out of the way.
+   ═══════════════════════════════════════════════════════════════════════ */
 
-  --default-border:        var(--neutral-border-medium);
+:root {
+  --bg: #000000;
+  --bg-subtle: #060608;
+  --surface: linear-gradient(160deg, rgba(20, 20, 24, 0.68), rgba(5, 5, 8, 0.74));
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --surface-hover: linear-gradient(160deg, rgba(32, 32, 38, 0.78), rgba(10, 10, 14, 0.82));
+  --surface-active: linear-gradient(160deg, rgba(42, 42, 48, 0.86), rgba(14, 14, 18, 0.88));
+  --glass-blur: blur(14px);
 
-  /*
-  /* Example setup for custom colors */
-  /* Generate at: https://once-ui.com/customize */
-  /*
-  --scheme-brand-100: #08002f;
-  --scheme-brand-200:  #04025c;
-  --scheme-brand-300:  #1f398e;
-  --scheme-brand-400:  #3856ae;
-  --scheme-brand-500:  #5071cc;
-  --scheme-brand-600:  #6f94f1;
-  --scheme-brand-700:  #8db3ff;
-  --scheme-brand-800:  #b2dbff;
-  --scheme-brand-900:  #bfe8ff;
-  --scheme-brand-1000: #ccf6ff;
-  --scheme-brand-1100: #d2fcff;
-  --scheme-brand-1200: #d2fcff;
-  --scheme-brand-600-10: rgba(111,148,241,0.1);
-  --scheme-brand-600-30: rgba(111,148,241,0.3);
-  --scheme-brand-600-50: rgba(111,148,241,0.5);
-
-  --scheme-accent-100:  #030b10;
-  --scheme-accent-200:  #0d181d;
-  --scheme-accent-300:  #364248;
-  --scheme-accent-400:  #505d64;
-  --scheme-accent-500:  #69777e;
-  --scheme-accent-600:  #8a989f;
-  --scheme-accent-700:  #a8b7bf;
-  --scheme-accent-800:  #c8d7df;
-  --scheme-accent-900:  #d5e4ec;
-  --scheme-accent-1000: #e2f1f9;
-  --scheme-accent-1100: #e9f8ff;
-  --scheme-accent-1200: #efffff;
-  --scheme-accent-600-10: rgba(138,152,159,0.1);
-  --scheme-accent-600-30: rgba(138,152,159,0.3);
-  --scheme-accent-600-50: rgba(138,152,159,0.5);
-
-  --scheme-neutral-100:  #020b10;
-  --scheme-neutral-200:  #0b181d;
-  --scheme-neutral-300:  #344248;
-  --scheme-neutral-400:  #4f5d64;
-  --scheme-neutral-500:  #68777e;
-  --scheme-neutral-600:  #89989f;
-  --scheme-neutral-700:  #a7b7be;
-  --scheme-neutral-800:  #c7d7df;
-  --scheme-neutral-900:  #d4e4ec;
-  --scheme-neutral-1000: #e1f2f9;
-  --scheme-neutral-1100: #e7f8ff;
-  --scheme-neutral-1200: #eeffff;
-  --scheme-neutral-600-10: rgba(137,152,159,0.1);
-  --scheme-neutral-600-30: rgba(137,152,159,0.3);
-  --scheme-neutral-600-50: rgba(137,152,159,0.5);
-  /*
-}*/
-
-/* ── Color tokens (tune here) ────────────────────────────────────────────
-   The Once UI framework UI (nav, buttons, text, surfaces) is driven by the
-   neutral/brand/accent knobs in once-ui.config.ts. These CSS variables mirror
-   the same palette for the custom bits we own — mainly the hero gradient. */
-:root,
-:root[data-theme="light"] {
-  --bg: #f5f6f8;
-  --surface: #ffffff;
-  --text: #0f0f14;
-  --muted: #5a5a68;
-  --border: rgba(0, 0, 0, 0.09);
-  --accent: #0891b2; /* cyan — links / active nav / highlights */
-  --accent-2: #7c3aed; /* violet — gradient blobs ONLY, never text/borders */
-  /* hero gradient blobs — cyan + violet, low intensity so text stays readable */
-  --blob-1: rgba(8, 145, 178, 0.16);
-  --blob-2: color-mix(in srgb, var(--accent-2) 14%, transparent);
-  --blob-3: rgba(8, 145, 178, 0.12);
-  --blob-opacity: 0.7;
-}
-:root[data-theme="dark"] {
-  --bg: #0a0a0f;
-  --surface: #14141c;
-  --text: #f0f0f5;
-  --muted: #8b8b9a;
   --border: rgba(255, 255, 255, 0.1);
-  --accent: #22d3ee; /* cyan — links / active nav / highlights */
-  --accent-2: #8b5cf6; /* violet — gradient blobs ONLY, never text/borders */
-  /* brighter cyan + violet over the near-black bg */
-  --blob-1: rgba(34, 211, 238, 0.22);
-  --blob-2: rgba(139, 92, 246, 0.24);
-  --blob-3: rgba(34, 211, 238, 0.18);
-  --blob-opacity: 0.6;
+  --border-strong: rgba(255, 255, 255, 0.28);
+  --border-accent: rgba(255, 255, 255, 0.42);
+
+  --text: #ffffff;
+  --text-2: #c2c2c8;
+  --muted: #a6a6ae;
+
+  /* Monochrome: the accent is light itself. No hue anywhere. */
+  --accent: #ffffff;
+  --accent-hover: #d6d6db;
+  --accent-soft: rgba(255, 255, 255, 0.07);
+  --accent-contrast: #000000;
+
+  --success: #3fb950;
+  --warning: #d29922;
+  --error: #f85149;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 12px 34px -16px rgba(255, 255, 255, 0.16);
+  --shadow-lg: 0 20px 60px -20px rgba(255, 255, 255, 0.22);
+
+  --nav-bg: transparent;
+  --code-bg: rgba(255, 255, 255, 0.05);
 }
 
-/* ── Overflow safety net (FIX 1) ─── prevent any horizontal scroll globally.
-   overflow-x on <html> (the scroll root) keeps the sticky header intact. */
+/* ══ ONCE UI: MONOCHROME ════════════════════════════════════════════════
+   Once UI's brand/accent ramps only come in hues — there is no neutral option
+   for `brand` in its config — so the About page's buttons, tags and icons
+   still rendered indigo. Both function ramps are repointed at the gray scheme
+   here. Same specificity as Once UI's own [data-brand=…] rules, and this file
+   is imported after tokens.css, so source order settles it. Setting
+   `brand: "custom"` instead would mean redefining --scheme-brand-* by hand
+   and fighting the Schemes type for no extra control. */
+:root {
+  --function-brand-100: var(--scheme-gray-100);
+  --function-brand-200: var(--scheme-gray-200);
+  --function-brand-300: var(--scheme-gray-300);
+  --function-brand-400: var(--scheme-gray-400);
+  --function-brand-500: var(--scheme-gray-500);
+  --function-brand-600: var(--scheme-gray-600);
+  --function-brand-700: var(--scheme-gray-700);
+  --function-brand-800: var(--scheme-gray-800);
+  --function-brand-900: var(--scheme-gray-900);
+  --function-brand-1000: var(--scheme-gray-1000);
+  --function-brand-1100: var(--scheme-gray-1100);
+  --function-brand-1200: var(--scheme-gray-1200);
+  --function-brand-600-15: var(--scheme-gray-600-15);
+  --function-brand-600-30: var(--scheme-gray-600-30);
+  --function-brand-600-50: var(--scheme-gray-600-50);
+
+  --function-accent-100: var(--scheme-gray-100);
+  --function-accent-200: var(--scheme-gray-200);
+  --function-accent-300: var(--scheme-gray-300);
+  --function-accent-400: var(--scheme-gray-400);
+  --function-accent-500: var(--scheme-gray-500);
+  --function-accent-600: var(--scheme-gray-600);
+  --function-accent-700: var(--scheme-gray-700);
+  --function-accent-800: var(--scheme-gray-800);
+  --function-accent-900: var(--scheme-gray-900);
+  --function-accent-1000: var(--scheme-gray-1000);
+  --function-accent-1100: var(--scheme-gray-1100);
+  --function-accent-1200: var(--scheme-gray-1200);
+  --function-accent-600-15: var(--scheme-gray-600-15);
+  --function-accent-600-30: var(--scheme-gray-600-30);
+  --function-accent-600-50: var(--scheme-gray-600-50);
+
+  /* Slate's darkest step is #040816 — a blue-black. The ground is #000, and
+     the aurora canvas paints over this anyway; this is the fallback if the
+     canvas never mounts. */
+  --page-background: #000000;
+}
+
+/* Motion: one curve, three durations, site-wide. Consistent timing is most of
+   what separates "crafted" from "assembled". */
+:root {
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --fast: 140ms;
+  --base: 220ms;
+  --slow: 380ms;
+
+  --nav-h: 60px;
+  /* Generous, uniform radii: the design rounds everything at 11–22px. */
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 18px;
+  --content-max: 1180px;
+  --gutter: clamp(20px, 5vw, 48px);
+}
+
+/* ══ BASE ═══════════════════════════════════════════════════════════════ */
+
 html {
   overflow-x: hidden;
+}
+html:focus-within {
+  scroll-behavior: smooth;
+  /* Anchors must not land under the fixed nav. */
+  scroll-padding-top: calc(var(--nav-h) + 24px);
+}
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
 }
 img,
 video,
 canvas {
-  max-width: 100%;
   height: auto;
 }
-
-/* Smooth ~0.3s cross-fade when toggling light/dark. Reduced-motion opts out. */
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
+p,
+li,
+h1,
+h2,
+h3,
+h4 {
+  overflow-wrap: break-word;
 }
-@media (prefers-reduced-motion: reduce) {
-  body {
-    transition: none;
+pre,
+table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+:where(a, button, [role="button"], input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ══ LAYOUT ═════════════════════════════════════════════════════════════ */
+
+.section {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-top: 104px;
+  padding-bottom: 104px;
+}
+.section--tight {
+  padding-top: 72px;
+  padding-bottom: 72px;
+}
+.section--narrow {
+  max-width: 760px;
+}
+@media (max-width: 768px) {
+  .section {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+  .section--tight {
+    padding-top: 44px;
+    padding-bottom: 44px;
   }
 }
-/* ── Service / capability card grid ─── responsive, equal-height cards with
-   an elite hover lift + accent glow. Reduced-motion opts out of transforms. */
-.serviceGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  gap: 20px;
-  width: 100%;
-}
-/* ── Tilt card (Uiverse-style 3D tilt) ───────────────────────────────────
-   A thin gradient frame wraps a near-black face (text stays crisp), with a
-   soft blurred glow of the same gradient behind. Each card gets its own
-   gradient via --grad-start/--grad-end; the title + icon tint to a lightened
-   version (--tint) so the text reads as part of that card's color.
-   The tilt is pure CSS: a 5×5 grid of invisible cells over the face, and
-   `.tiltCard:has(.tr-N:hover)` rotates toward the hovered region. */
-.tiltCard {
-  position: relative;
-  height: 100%;
-  perspective: 900px;
-  /* Lightened tint of this card's gradient — used for title/icon/tags. */
-  --tint: color-mix(in srgb, var(--grad-start, #22d3ee) 55%, #ffffff);
-}
-/* The rotating element (also the link, when a card is clickable). */
-.tiltInner {
-  position: relative;
-  display: block;
-  height: 100%;
-  padding: 1.5px; /* gradient frame thickness */
-  border-radius: 18px;
-  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
-  transform-style: preserve-3d;
-  transition: transform 0.25s ease, filter 0.3s ease;
-  will-change: transform;
-  text-decoration: none;
-}
-/* Blurred glow behind the card. */
-.tiltInner::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 18px;
-  background: linear-gradient(135deg, var(--grad-start), var(--grad-end));
-  transform: translateZ(-1px) scale(0.9);
-  filter: blur(16px);
-  opacity: 0.35;
-  z-index: -1;
-  transition: filter 0.4s ease, opacity 0.4s ease;
-}
-/* Near-black readable face with a faint wash of the card's start color. */
-.tiltFace {
-  position: relative;
-  height: 100%;
-  border-radius: 16.5px;
-  overflow: hidden;
-  background:
-    radial-gradient(120% 120% at 0% 0%, color-mix(in srgb, var(--grad-start) 22%, transparent), transparent 55%),
-    #0b0b12;
-}
-/* Invisible 5×5 hover grid over the whole face. */
-.tiltTrack {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-}
-.tiltCard:hover .tiltInner {
-  filter: brightness(1.08);
-}
-.tiltCard:hover .tiltInner::after {
-  filter: blur(22px);
-  opacity: 0.6;
+/* Hairline between sections: structure without wrapping everything in boxes. */
+.section--ruled {
+  border-top: 1px solid var(--border);
 }
 
-/* Card content helpers (used by Services + project cards). */
-.tiltBody {
-  position: relative;
-  z-index: 1;
+.sectionHead {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  height: 100%;
-  min-height: 200px;
-  padding: 24px;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 52px;
+  text-align: center;
 }
-.tiltIcon {
+.eyebrow {
   display: inline-flex;
-  font-size: 1.9rem;
-  line-height: 1;
-  color: var(--tint);
-}
-.tiltTitle {
-  margin: 0;
-  font-size: 1.2rem;
-  font-weight: 700;
-  line-height: 1.25;
-  color: var(--tint);
-}
-.tiltDesc {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--muted);
-}
-.tiltTags {
-  display: flex;
-  flex-wrap: wrap;
+  align-items: center;
   gap: 8px;
-}
-.tiltTag {
-  font-size: 0.7rem;
-  padding: 4px 10px;
+  padding: 6px 14px;
+  border: 1px solid var(--border-strong);
   border-radius: 999px;
-  color: var(--tint);
-  background: color-mix(in srgb, var(--grad-start) 16%, transparent);
-  border: 1px solid color-mix(in srgb, var(--grad-start) 30%, transparent);
+  background: var(--accent-soft);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  font-family: var(--font-label), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-2);
 }
-.tiltMore {
-  margin-top: auto;
-  padding-top: 4px;
-  font-size: 0.9rem;
+.eyebrow svg {
+  width: 13px;
+  height: 13px;
+  color: var(--text);
+}
+
+/* ══ TYPOGRAPHY ═════════════════════════════════════════════════════════ */
+
+h1,
+h2 {
+  letter-spacing: -0.028em;
+}
+h3 {
+  letter-spacing: -0.012em;
+}
+
+.prose {
+  max-width: 68ch;
+  color: var(--text-2);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+.prose p {
+  margin: 0 0 1.35em;
+}
+.prose p:last-child {
+  margin-bottom: 0;
+}
+.prose strong {
+  color: var(--text);
   font-weight: 600;
-  color: var(--tint);
+}
+code {
+  padding: 0.15em 0.4em;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--code-bg);
+  font-family: var(--font-code), ui-monospace, monospace;
+  font-size: 0.875em;
+  color: var(--text);
+}
+pre code {
+  border: none;
+  background: none;
+  padding: 0;
 }
 
-/* 25 mouse-region tilts — rows tilt X (12→-12deg), cols tilt Y (-8→8deg). */
-.tiltCard:has(.tr-1:hover) .tiltInner { transform: rotateX(12deg) rotateY(-8deg); }
-.tiltCard:has(.tr-2:hover) .tiltInner { transform: rotateX(12deg) rotateY(-4deg); }
-.tiltCard:has(.tr-3:hover) .tiltInner { transform: rotateX(12deg) rotateY(0deg); }
-.tiltCard:has(.tr-4:hover) .tiltInner { transform: rotateX(12deg) rotateY(4deg); }
-.tiltCard:has(.tr-5:hover) .tiltInner { transform: rotateX(12deg) rotateY(8deg); }
-.tiltCard:has(.tr-6:hover) .tiltInner { transform: rotateX(6deg) rotateY(-8deg); }
-.tiltCard:has(.tr-7:hover) .tiltInner { transform: rotateX(6deg) rotateY(-4deg); }
-.tiltCard:has(.tr-8:hover) .tiltInner { transform: rotateX(6deg) rotateY(0deg); }
-.tiltCard:has(.tr-9:hover) .tiltInner { transform: rotateX(6deg) rotateY(4deg); }
-.tiltCard:has(.tr-10:hover) .tiltInner { transform: rotateX(6deg) rotateY(8deg); }
-.tiltCard:has(.tr-11:hover) .tiltInner { transform: rotateX(0deg) rotateY(-8deg); }
-.tiltCard:has(.tr-12:hover) .tiltInner { transform: rotateX(0deg) rotateY(-4deg); }
-.tiltCard:has(.tr-13:hover) .tiltInner { transform: rotateX(0deg) rotateY(0deg); }
-.tiltCard:has(.tr-14:hover) .tiltInner { transform: rotateX(0deg) rotateY(4deg); }
-.tiltCard:has(.tr-15:hover) .tiltInner { transform: rotateX(0deg) rotateY(8deg); }
-.tiltCard:has(.tr-16:hover) .tiltInner { transform: rotateX(-6deg) rotateY(-8deg); }
-.tiltCard:has(.tr-17:hover) .tiltInner { transform: rotateX(-6deg) rotateY(-4deg); }
-.tiltCard:has(.tr-18:hover) .tiltInner { transform: rotateX(-6deg) rotateY(0deg); }
-.tiltCard:has(.tr-19:hover) .tiltInner { transform: rotateX(-6deg) rotateY(4deg); }
-.tiltCard:has(.tr-20:hover) .tiltInner { transform: rotateX(-6deg) rotateY(8deg); }
-.tiltCard:has(.tr-21:hover) .tiltInner { transform: rotateX(-12deg) rotateY(-8deg); }
-.tiltCard:has(.tr-22:hover) .tiltInner { transform: rotateX(-12deg) rotateY(-4deg); }
-.tiltCard:has(.tr-23:hover) .tiltInner { transform: rotateX(-12deg) rotateY(0deg); }
-.tiltCard:has(.tr-24:hover) .tiltInner { transform: rotateX(-12deg) rotateY(4deg); }
-.tiltCard:has(.tr-25:hover) .tiltInner { transform: rotateX(-12deg) rotateY(8deg); }
+/* ══ LINKS ══════════════════════════════════════════════════════════════
+   Every link announces itself twice: an underline at rest, and on hover the
+   text goes to full white and lights up.
 
-/* Touch devices: the tilt is janky without a real pointer — drop it. */
-@media (hover: none) {
-  .tiltTrack { display: none; }
-}
-/* Reduced motion: keep the gradient + glow, kill the rotation. */
-@media (prefers-reduced-motion: reduce) {
-  .tiltInner { transform: none !important; transition: filter 0.3s ease; }
+   The bloom is the affordance. On a monochrome palette there is no link blue
+   to lean on, so hover state has to come from luminance instead of hue, and a
+   text-shadow reads as "this is live" in a way a colour shift alone does not
+   on a black ground. Two stops, tight and wide, so it looks like light rather
+   than like a blur.
+
+   --glow is one definition applied everywhere a link can appear: prose, MDX
+   bodies, the footer, nav, cards, certificates. Retune it here, once. */
+
+:root {
+  --glow: 0 0 10px rgba(255, 255, 255, 0.55), 0 0 26px rgba(255, 255, 255, 0.22);
 }
 
-/* ── Elite button hover ─── premium light-sweep + cyan glow-lift.
-   Applied via className="eliteBtn" on key CTAs. Respects reduced motion. */
-.eliteBtn {
+/* Anything that behaves as a link picks up the same lift. */
+.prose a:hover,
+a.textLink:hover,
+.extLink.extLink:hover,
+article a:hover,
+.certCard:hover .certView,
+.card:hover .projMore {
+  color: #ffffff;
+  text-shadow: var(--glow);
+}
+.prose a,
+a.textLink,
+.extLink.extLink,
+article a,
+.certView,
+.projMore {
+  transition: color var(--fast) var(--ease), text-shadow var(--base) var(--ease),
+    background-size var(--fast) var(--ease);
+}
+/* Icons that ride along with a link glow with it. */
+.extLink.extLink:hover svg,
+.card:hover .projMore svg,
+.certCard:hover .certView svg {
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+}
+
+/* The underline that wipes in from the left, the one the Resume and Client
+   recommendation links have, applied to every inline link on the site.
+   Transform-only, so it stays on the compositor and costs nothing.
+
+   Inline links keep a faint underline at rest as well. Hover is not available
+   to touch or keyboard users, so a link that is only identifiable on hover is
+   identifiable by colour alone, which WCAG 1.4.1 exists to prevent. The rest
+   state says "link", the hover state says "this one". */
+.prose a,
+article a,
+a.textLink {
   position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.28s ease, filter 0.28s ease;
-}
-.eliteBtn::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  background: linear-gradient(
-    115deg,
-    transparent 20%,
-    rgba(255, 255, 255, 0.35) 48%,
-    transparent 76%
+  text-decoration: none;
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.28),
+    rgba(255, 255, 255, 0.28)
   );
-  transform: translateX(-120%);
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 1px;
+  padding-bottom: 1px;
 }
-.eliteBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 34px -10px rgba(34, 211, 238, 0.55);
-  filter: brightness(1.05);
-}
-.eliteBtn:hover::after {
-  transform: translateX(120%);
-}
-.eliteBtn:active {
-  transform: translateY(0);
-}
-@media (prefers-reduced-motion: reduce) {
-  .eliteBtn {
-    transition: box-shadow 0.2s ease;
-  }
-  .eliteBtn:hover {
-    transform: none;
-  }
-  .eliteBtn::after {
-    display: none;
-  }
-}
-
-/* ── Mobile responsiveness safety net ─── tighten section padding and
-   headline sizing on small screens so nothing overflows or crowds. */
-@media (max-width: 640px) {
-  .serviceGrid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-}
-
-/* ── Branded social buttons ─── each carries its own accent via --sc and lights
-   up on hover with a colored glow + lift + border tint. */
-.socialBtn {
-  position: relative;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.25s ease, border-color 0.25s ease;
-}
-.socialBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px -10px var(--sc, #22d3ee);
-  border-color: var(--sc, #22d3ee) !important;
-}
-@media (prefers-reduced-motion: reduce) {
-  .socialBtn:hover {
-    transform: none;
-  }
-}
-
-/* ── Glass card with hover lighting ─── used for About experience / studies /
-   skills. Subtle surface that lifts and glows cyan on hover. */
-.glassCard {
-  position: relative;
-  border-radius: 14px;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.35s ease, border-color 0.35s ease;
-  will-change: transform;
-}
-.glassCard::before {
+.prose a::after,
+article a::after,
+a.textLink::after {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(34, 211, 238, 0.6), transparent 45%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  pointer-events: none;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1.5px;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--base) var(--ease);
 }
-.glassCard:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 44px -24px rgba(34, 211, 238, 0.55);
+.prose a:hover::after,
+article a:hover::after,
+a.textLink:hover::after {
+  transform: scaleX(1);
 }
-.glassCard:hover::before {
+/* The standalone-link underline picks up the same bloom as the text. */
+.extLink.extLink::after {
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+}
+
+/* Inline links sit at --text weight 500 at rest. The wipe-in underline and
+   the bloom above carry the hover state; this used to also thicken the resting
+   underline from 1px to 2px, which fought the wipe for the same 1px of space. */
+.prose a,
+article a,
+a.textLink {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* Doubled class, for the same reason as the buttons below. */
+.extLink.extLink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text-2);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--fast) var(--ease);
+}
+.extLink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--base) var(--ease);
+}
+.extLink.extLink:hover {
+  color: var(--accent);
+}
+.extLink:hover::after {
+  transform: scaleX(1);
+}
+.extLink svg {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
+  opacity: 0.7;
+  transition: transform var(--base) var(--ease), opacity var(--fast) var(--ease);
+}
+.extLink:hover svg {
   opacity: 1;
 }
-@media (prefers-reduced-motion: reduce) {
-  .glassCard {
-    transition: box-shadow 0.3s ease;
-  }
-  .glassCard:hover {
-    transform: none;
-  }
+/* Only a trailing arrow travels; a leading icon stays put. */
+.extLink:hover svg:last-child:not(:first-child) {
+  transform: translate(2px, -2px);
 }
 
-/* Skills grid on the About page */
-.skillGrid {
+/* ══ BUTTONS ════════════════════════════════════════════════════════════
+   The signature action: a hard-edged parallelogram, skewed 21°, uppercase and
+   tightly tracked, whose fill wipes to the opposite value on hover.
+
+   The skew is drawn by two stacked pseudo-elements rather than by
+   transforming the button, so the *label* never skews — no inner counter-skew
+   wrapper is needed and the markup stays a plain <a>. ::before is the resting
+   fill, ::after is the hover fill sitting on top of it at opacity 0. Both sit
+   at negative z-index inside the button's own stacking context, which puts
+   them behind the label but in front of the page. The skewed shape overhangs
+   the box by ~tan(21°)·height/2, hence the horizontal margin. */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0 22px;
+  height: 44px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-label), sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--fast) var(--ease), border-color var(--fast) var(--ease),
+    color var(--slow) var(--ease), transform var(--fast) var(--ease),
+    box-shadow var(--base) var(--ease);
+}
+.btn svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: transform var(--base) var(--ease);
+}
+.btn--lg {
+  height: 50px;
+  padding: 0 28px;
+  font-size: 0.875rem;
+}
+
+.btn--primary,
+.btn--secondary {
+  position: relative;
+  z-index: 0;
+  margin-inline: 10px;
+  background: transparent;
+  border-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+.btn--primary::before,
+.btn--secondary::before,
+.btn--primary::after,
+.btn--secondary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: skew(-21deg);
+}
+.btn--primary::before,
+.btn--secondary::before {
+  z-index: -2;
+}
+.btn--primary::after,
+.btn--secondary::after {
+  z-index: -1;
+  opacity: 0;
+  transition: opacity var(--slow) var(--ease);
+}
+.btn--primary:hover::after,
+.btn--secondary:hover::after {
+  opacity: 1;
+}
+.btn--primary:active,
+.btn--secondary:active {
+  transform: scale(0.985);
+}
+
+/* Every `color` below is written with the variant class doubled up on .btn.
+   Once UI's stylesheet carries `a:not(.button) { color: … }`, and a `:not()`
+   holding a class scores (0,1,1) — higher than any single class here, so the
+   plain `.btn--primary { color: … }` lost and the label rendered light-on-
+   light. `.btn.btn--primary` is (0,2,0) and wins, without !important and
+   without assuming the button is an anchor. */
+
+/* Solid light fill, wiping to near-black. */
+.btn.btn--primary {
+  color: var(--accent-contrast);
+}
+.btn--primary::before {
+  background: var(--accent);
+}
+.btn--primary::after {
+  background: #141414;
+}
+.btn.btn--primary:hover {
+  color: #ffffff;
+}
+.btn--primary:hover svg:last-child {
+  transform: translateX(3px);
+}
+
+/* Outline, wiping to the solid inverse. */
+.btn.btn--secondary {
+  color: var(--text);
+}
+.btn--secondary::before {
+  border: 2px solid var(--text);
+}
+.btn--secondary::after {
+  background: var(--text);
+}
+.btn.btn--secondary:hover {
+  color: var(--bg);
+}
+
+.btn.btn--ghost {
+  background: transparent;
+  color: var(--text-2);
+}
+.btn.btn--ghost:hover {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+/* ══ CARDS ══════════════════════════════════════════════════════════════
+   One card. The previous system wrapped each in a gradient frame drawn from
+   six unrelated colour pairs, with a blurred glow and a 25-cell 3D tilt: the
+   most reliable "template site" tell there is. */
+
+.card,
+.glassPanel {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 24px;
+  text-decoration: none;
+  transition: border-color var(--slow) var(--ease), background var(--slow) var(--ease),
+    transform var(--slow) var(--ease), box-shadow var(--slow) var(--ease);
+}
+/* Lifts a full 6px and picks up a white bloom rather than a drop shadow. */
+.card:hover {
+  border-color: var(--border-accent);
+  background: var(--surface-hover);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+.cardIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 16px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 11px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+  color: var(--text);
+  flex-shrink: 0;
+}
+.cardIcon svg {
+  width: 20px;
+  height: 20px;
+}
+.cardTitle {
+  margin: 0 0 9px;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text);
+}
+.cardDesc {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+.cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 288px), 1fr));
+  gap: 18px;
+  width: 100%;
+}
+.cardGrid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+}
+
+/* ══ TAGS ═══════════════════════════════════════════════════════════════ */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-family: var(--font-label), sans-serif;
+  font-size: 0.71875rem;
+  font-weight: 600;
+  color: var(--text-2);
+  white-space: nowrap;
+  transition: border-color var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+.tag:hover {
+  border-color: var(--border-accent);
+  color: var(--text);
+}
+.tagRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+/* ══ PROJECT CARD ═══════════════════════════════════════════════════════ */
+
+.projCard {
+  gap: 13px;
+}
+/* The stack line reads as one dotted-out label, not as a row of chips: the
+   card's own title is the thing that should carry weight. */
+.projTags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  font-size: 0.71875rem;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.projTag + .projTag::before {
+  content: "·";
+  margin-right: 8px;
+  color: var(--muted);
+}
+.projMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 12px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.projMore svg {
+  width: 15px;
+  height: 15px;
+  transition: transform var(--base) var(--ease);
+}
+.card:hover .projMore svg {
+  transform: translateX(3px);
+}
+
+/* ══ PROOF BAR ══════════════════════════════════════════════════════════ */
+
+/* Four glass tiles rather than four cells split by rules — the design gives
+   the numbers the same panel treatment as everything else on the page. */
+/* The hero column above this is `min-height: min(78vh, 720px)` with its
+   content centred, so once the content is as tall as that box there is no
+   slack left and the tiles start immediately under the social row. Measured
+   at 44px of separation on a 1440x900 desktop, and less on anything shorter.
+   The gap belongs here rather than as hero padding, because this is the
+   element that has to clear whatever the hero ends up being. */
+.proofBar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: 18px;
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  margin-top: clamp(40px, 7vh, 88px);
+  margin-bottom: 8px;
+}
+.proofItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 22px 18px;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  transition: border-color var(--slow) var(--ease), transform var(--slow) var(--ease),
+    box-shadow var(--slow) var(--ease);
+}
+.proofItem:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+.proofValue {
+  font-family: var(--font-heading), sans-serif;
+  font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+.proofLabel {
+  font-size: 0.78125rem;
+  line-height: 1.4;
+  color: var(--muted);
+  text-wrap: balance;
+  max-width: 24ch;
+}
+
+/* ══ PULL QUOTE ═════════════════════════════════════════════════════════ */
+
+/* The quote sits in the same glass panel as everything else, one step wider
+   in padding so it reads as the page's single loudest surface. */
+.quoteCard {
+  padding: clamp(28px, 5vw, 46px) clamp(22px, 4vw, 40px);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.pullQuote {
+  margin: 0;
+  font-family: var(--font-heading), sans-serif;
+  font-size: clamp(1.375rem, 2.8vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+/* ══ PROCESS ════════════════════════════════════════════════════════════
+   Four glass tiles led by an oversized step number. */
+
+.processList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: 18px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.processItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  transition: border-color var(--slow) var(--ease), transform var(--slow) var(--ease),
+    box-shadow var(--slow) var(--ease);
+}
+.processItem:hover {
+  border-color: var(--border-accent);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+.processStep {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.processTitle {
+  margin: 4px 0 0;
+  font-size: 0.96875rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text);
+}
+.processDesc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--text-2);
+}
+
+/* ══ FAQ ════════════════════════════════════════════════════════════════ */
+
+/* One glass panel, rows divided inside it — not a bare list on the page. */
+.faqList {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  overflow: hidden;
+}
+.faqItem {
+  border-bottom: 1px solid var(--border);
+}
+.faqItem:last-child {
+  border-bottom: none;
+}
+.faqQuestion {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  list-style: none;
+  padding: 20px 52px 20px 26px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--text);
+  transition: color var(--fast) var(--ease), background var(--fast) var(--ease);
+}
+.faqQuestion:hover {
+  background: var(--accent-soft);
+}
+.faqQuestion::-webkit-details-marker {
+  display: none;
+}
+.faqQuestion::before,
+.faqQuestion::after {
+  content: "";
+  position: absolute;
+  right: 26px;
+  top: 50%;
+  width: 11px;
+  height: 1.5px;
+  border-radius: 1px;
+  background: var(--muted);
+  transition: transform var(--base) var(--ease), background var(--fast) var(--ease);
+}
+.faqQuestion::before {
+  transform: translateY(-50%);
+}
+.faqQuestion::after {
+  transform: translateY(-50%) rotate(90deg);
+}
+.faqItem[open] .faqQuestion::after {
+  transform: translateY(-50%) rotate(0deg);
+}
+.faqItem[open] .faqQuestion::before,
+.faqItem[open] .faqQuestion::after,
+.faqQuestion:hover::before,
+.faqQuestion:hover::after {
+  background: var(--accent);
+}
+.faqAnswer {
+  margin: 0;
+  padding: 0 52px 22px 26px;
+  max-width: 68ch;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ══ SKILLS ═════════════════════════════════════════════════════════════
+   Every block on the About page — a job, a degree, a skill group — is the
+   same glass panel the rest of the site uses, instead of a rule above it. */
+
+.skillGroup {
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+.skillTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 4px;
+}
+.skillTag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: 0.71875rem;
+  font-weight: 600;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+
+/* ══ CERTIFICATES ═══════════════════════════════════════════════════════ */
+
+.certGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
   gap: 16px;
   width: 100%;
 }
+.certCard {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color var(--slow) var(--ease), background var(--slow) var(--ease),
+    transform var(--slow) var(--ease), box-shadow var(--slow) var(--ease);
+}
+.certCard:hover {
+  border-color: var(--border-accent);
+  background: var(--surface-hover);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+.certIssuer {
+  font-family: var(--font-code), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.certTitle {
+  margin: 0;
+  font-size: 0.9875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--text);
+}
+.certMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 4px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.certView {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--accent);
+  font-weight: 500;
+}
+.certView svg {
+  width: 14px;
+  height: 14px;
+}
 
-/* Per-platform accent colors for social buttons */
-.socialBtn-github { --sc: #e5e7eb; }
-.socialBtn-linkedin { --sc: #0a66c2; }
-.socialBtn-upwork { --sc: #14a800; }
-.socialBtn-whatsapp { --sc: #25d366; }
-.socialBtn-medium { --sc: #e5e7eb; }
-.socialBtn-email { --sc: #22d3ee; }
+.certModal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(14px, 3vw, 32px);
+  background: color-mix(in srgb, var(--bg) 84%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: modalIn var(--base) var(--ease);
+}
+@keyframes modalIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.certModalHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  width: min(1000px, 100%);
+}
+.certModalFrame {
+  width: min(1000px, 100%);
+  flex: 1;
+  min-height: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.certModalFrame object,
+.certModalFrame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.certClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+.certClose:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
 
-/* ── Sleek hero social icons ─── circular glass buttons with a branded
-   glow + lift on hover. Colour comes from the .socialBtn-<name> --sc var. */
-.heroSocial {
-  border-radius: 999px !important;
-  border: 1px solid var(--border) !important;
-  background: color-mix(in srgb, var(--text) 4%, transparent) !important;
-  backdrop-filter: blur(6px);
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow 0.28s ease, border-color 0.28s ease, background 0.28s ease !important;
+/* ══ AVATAR ═════════════════════════════════════════════════════════════
+   In full colour. This carried a grayscale filter that lifted on hover, to
+   neutralise the dark red studio backdrop in the source PNG; the portrait is
+   meant to be seen in colour, so the filter is gone and the ring does the
+   framing instead. */
+
+.heroAvatar {
+  display: inline-block;
+  border-radius: 50%;
+  /* The 3px light-to-graphite ring the design puts around the portrait. */
+  padding: 3px;
+  background: linear-gradient(135deg, #ffffff, #4a4a52, #ffffff);
+  transition: transform var(--slow) var(--ease);
 }
-.heroSocial:hover {
-  transform: translateY(-3px);
-  border-color: var(--sc, #22d3ee) !important;
-  box-shadow: 0 10px 24px -8px var(--sc, #22d3ee);
-  background: color-mix(in srgb, var(--sc, #22d3ee) 14%, transparent) !important;
+.heroAvatar:hover {
+  transform: scale(1.02);
 }
-.heroSocial:active {
-  transform: translateY(-1px);
+.heroAvatar img {
+  border-radius: 50%;
+  display: block;
 }
-@media (prefers-reduced-motion: reduce) {
-  .heroSocial {
-    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+
+/* ══ SHIMMER ════════════════════════════════════════════════════════════
+   A slow light sweep across the display numerals — the stat values and the
+   process step numbers. Reserved for figures: run it on body copy and the
+   page turns into a screensaver. */
+
+.shimmer,
+.proofValue,
+.processStep {
+  background: linear-gradient(100deg, #ffffff 0%, #cccccf 45%, #ffffff 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: shimmer 6s linear infinite;
+}
+@keyframes shimmer {
+  0% {
+    background-position: 0% 50%;
   }
-  .heroSocial:hover {
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* ══ AVAILABILITY ═══════════════════════════════════════════════════════ */
+
+.availability {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 10px 22px;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+.availabilityItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.availabilityItem + .availabilityItem {
+  padding-left: 22px;
+  border-left: 1px solid var(--border);
+}
+@media (max-width: 640px) {
+  .availability {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .availabilityItem + .availabilityItem {
+    padding-left: 0;
+    border-left: none;
+  }
+}
+.availableDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 60%, transparent);
+  animation: pulse 2.6s ease-out infinite;
+  flex-shrink: 0;
+}
+@keyframes pulse {
+  70% { box-shadow: 0 0 0 6px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* ══ CERT LIST (About) ══════════════════════════════════════════════════ */
+
+.certItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--border);
+}
+.certItem:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.certItem strong {
+  font-weight: 500;
+  color: var(--text);
+}
+.certItem span {
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+/* ══ SKIP LINK ══════════════════════════════════════════════════════════ */
+
+.skipLink {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 300;
+  padding: 12px 20px;
+  border-radius: 0 0 var(--radius) 0;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-weight: 600;
+  text-decoration: none;
+}
+.skipLink:focus {
+  left: 0;
+}
+
+/* ══ MOTION ═════════════════════════════════════════════════════════════ */
+
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 14px, 0);
+  transition: opacity 620ms var(--ease), transform 620ms var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.isVisible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+.heroWord {
+  display: inline-block;
+  white-space: pre;
+  opacity: 0;
+  transform: translate3d(0, 0.32em, 0);
+  animation: wordIn 680ms var(--ease) forwards;
+  animation-delay: var(--word-delay, 0ms);
+}
+@keyframes wordIn {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* ══ REDUCED MOTION ═════════════════════════════════════════════════════
+   One block, instead of the seven scattered overrides this file used to
+   carry. Nothing moves; everything still arrives. */
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
     transform: none;
   }
+  .heroWord {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+  .card:hover,
+  .certCard:hover,
+  .proofItem:hover,
+  .processItem:hover,
+  .btn:hover,
+  .btn:active,
+  .heroAvatar:hover {
+    transform: none;
+  }
+  /* The skewed button fills are transforms too — keep the shape, drop only
+     the motion, so :not() would be wrong here. */
+  .btn--primary::before,
+  .btn--primary::after,
+  .btn--secondary::before,
+  .btn--secondary::after {
+    transform: skew(-21deg);
+  }
+}
+
+/* Social pills glow their icon rather than their (absent) label. */
+.heroSocial.heroSocial:hover svg {
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.65));
+}
+
+/* ══ SOCIAL BUTTONS ═════════════════════════════════════════════════════
+   Monochrome at rest so six of them don't turn the hero into a paint chart;
+   each reveals its platform colour (--sc) only on hover. */
+
+.heroSocial.heroSocial {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--muted);
+  text-decoration: none;
+  transition: transform var(--base) var(--ease), border-color var(--base) var(--ease),
+    color var(--base) var(--ease), background var(--base) var(--ease),
+    box-shadow var(--base) var(--ease);
+}
+.heroSocial svg {
+  width: 17px;
+  height: 17px;
+}
+.heroSocial.heroSocial:hover {
+  transform: translateY(-6px);
+  border-color: var(--border-accent);
+  color: var(--text);
+  background: var(--surface-hover);
+  box-shadow: var(--shadow-lg);
+}
+
+/* The per-platform brand colours that used to appear on hover are gone: the
+   design is monochrome end to end, so the socials stay ink and light. The
+   .socialBtn-* classes are still emitted and are simply inert. */
+
+@media (prefers-reduced-motion: reduce) {
+  .heroSocial:hover { transform: none; }
+}
+
+/* ══ AURORA BACKDROP ════════════════════════════════════════════════════
+   z-index -1 puts the canvas above the body background but behind every
+   in-flow element, so no content needs a stacking context of its own. The
+   veil is the fixed highlight the canvas cannot draw: a wash from the top
+   edge that keeps the header area brighter than the fold. */
+
+.auroraField {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.auroraCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Barely there: enough to stop the constellation lines aliasing into hard
+     white hairlines, not enough to read as a blur. Went 3px → 1.2px → 0.5px;
+     past about 1px the motion stops looking like motion. */
+  filter: blur(0.5px);
+}
+/* Holds the field back from the copy without flattening it. The dim is the
+   knob that matters — the blur above barely moves it — and it is easy to
+   overdo: 62% killed the aurora, 28% still muted it. 12% is where the light
+   still moves and body copy still sits clearly in front of it. */
+.auroraVeil {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(255, 255, 255, 0.06), transparent 55%),
+    radial-gradient(90% 60% at 90% 20%, rgba(255, 255, 255, 0.03), transparent 50%),
+    rgba(0, 0, 0, 0.12);
+}
+
+/* ══ NAV OFFSET ═════════════════════════════════════════════════════════
+   The header is fixed at every breakpoint now, so every page needs to clear
+   it. Applied on <main> rather than on each page. */
+main {
+  padding-top: var(--nav-h);
 }

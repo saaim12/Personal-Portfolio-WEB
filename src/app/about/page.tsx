@@ -8,26 +8,20 @@ import {
   Media,
   Tag,
   Text,
-  Meta,
-  Schema,
   Row,
 } from "@once-ui-system/core";
-import { baseURL, about, person, social } from "@/resources";
+import { about, person, social, pageMeta, ogImageFor } from "@/resources";
+import { jsonLd, personJsonLd, webPageJsonLd } from "@/resources/schema";
 import TableOfContents from "@/components/about/TableOfContents";
 import styles from "@/components/about/about.module.scss";
 import React from "react";
 
 export async function generateMetadata() {
-  return {
-    ...Meta.generate({
-      title: about.title,
-      description: about.description,
-      baseURL: baseURL,
-      image: `/api/og/generate?title=${encodeURIComponent(about.title)}`,
-      path: about.path,
-    }),
-    alternates: { canonical: `${baseURL}${about.path}` },
-  };
+  return pageMeta({
+    title: about.title,
+    description: about.description,
+    path: about.path,
+  });
 }
 
 export default function About() {
@@ -55,19 +49,18 @@ export default function About() {
   ];
   return (
     <Column maxWidth="m">
-      <Schema
-        as="webPage"
-        baseURL={baseURL}
-        title={about.title}
-        description={about.description}
-        path={about.path}
-        image={`/api/og/generate?title=${encodeURIComponent(about.title)}`}
-        author={{
-          name: person.name,
-          url: `${baseURL}${about.path}`,
-          image: `${baseURL}${person.avatar}`,
-        }}
+      <script
+        {...jsonLd(
+          webPageJsonLd({
+            title: about.title,
+            description: about.description,
+            path: about.path,
+            image: ogImageFor(about.title),
+          }),
+        )}
       />
+      {/* Same @id as the homepage copy, so this is one entity, not two. */}
+      <script {...jsonLd(personJsonLd)} />
       {about.tableOfContent.display && (
         <Column
           left="0"
@@ -96,7 +89,10 @@ export default function About() {
             flex={3}
             horizontal="center"
           >
-            <Avatar src={person.avatar} size="xl" />
+            {/* Full colour, inside the design's gradient ring. */}
+            <span className="heroAvatar">
+              <Avatar src={person.avatar} size="xl" />
+            </span>
             <Row gap="8" vertical="center">
               <Icon onBackground="accent-weak" name="globe" />
               {person.city ?? person.location}
@@ -202,9 +198,11 @@ export default function About() {
           </Column>
 
           {about.intro.display && (
-            <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
+            // Plain div, not Column: Column is display:flex, which made every
+            // inline <strong> and <a> in the intro its own stacked row.
+            <div className="prose" style={{ marginBottom: "56px" }}>
               {about.intro.description}
-            </Column>
+            </div>
           )}
 
           {about.work.display && (
@@ -212,28 +210,31 @@ export default function About() {
               <Heading as="h2" id={about.work.title} variant="display-strong-s" marginBottom="m">
                 {about.work.title}
               </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
+              <Column fillWidth gap="40" marginBottom="56">
                 {about.work.experiences.map((experience, index) => (
                   <Column
                     key={`${experience.company}-${experience.role}-${index}`}
-                    className="glassCard"
+                    className="skillGroup"
                     fillWidth
-                    padding="24"
-                    background="surface"
-                    border="neutral-alpha-weak"
-                    radius="l"
                   >
-                    <Row fillWidth horizontal="between" vertical="end" marginBottom="4">
+                    <Row fillWidth horizontal="between" vertical="end" marginBottom="4" wrap gap="8">
                       <Text id={experience.company} variant="heading-strong-l">
                         {experience.company}
                       </Text>
-                      <Text variant="heading-default-xs" onBackground="neutral-weak">
+                      <Text variant="body-default-s" onBackground="neutral-weak">
                         {experience.timeframe}
                       </Text>
                     </Row>
-                    <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
-                      {experience.role}
-                    </Text>
+                    <Column gap="2" marginBottom="m">
+                      <Text variant="body-default-s" onBackground="brand-weak">
+                        {experience.role}
+                      </Text>
+                      {experience.location && (
+                        <Text variant="body-default-s" onBackground="neutral-weak">
+                          {experience.location}
+                        </Text>
+                      )}
+                    </Column>
                     <Column as="ul" gap="16">
                       {experience.achievements.map(
                         (achievement: React.ReactNode, index: number) => (
@@ -279,17 +280,13 @@ export default function About() {
               <Heading as="h2" id={about.studies.title} variant="display-strong-s" marginBottom="m">
                 {about.studies.title}
               </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
+              <Column fillWidth gap="32" marginBottom="56">
                 {about.studies.institutions.map((institution, index) => (
                   <Column
                     key={`${institution.name}-${index}`}
-                    className="glassCard"
+                    className="skillGroup"
                     fillWidth
                     gap="8"
-                    padding="24"
-                    background="surface"
-                    border="neutral-alpha-weak"
-                    radius="l"
                   >
                     <Text id={institution.name} variant="heading-strong-l">
                       {institution.name}
@@ -313,32 +310,23 @@ export default function About() {
               >
                 {about.technical.title}
               </Heading>
-              <div className="skillGrid">
+              <div className="cardGrid cardGrid--2">
                 {about.technical.skills.map((skill, index) => (
-                  <Column
-                    key={`${skill.title}-${index}`}
-                    className="glassCard"
-                    fillWidth
-                    gap="8"
-                    padding="20"
-                    background="surface"
-                    border="neutral-alpha-weak"
-                    radius="l"
-                  >
-                    <Text id={skill.title} variant="heading-strong-m" onBackground="brand-weak">
+                  <Column key={`${skill.title}-${index}`} className="skillGroup" fillWidth gap="8">
+                    <Text id={skill.title} variant="heading-strong-m">
                       {skill.title}
                     </Text>
                     <Text variant="body-default-m" onBackground="neutral-weak">
                       {skill.description}
                     </Text>
                     {skill.tags && skill.tags.length > 0 && (
-                      <Row wrap gap="8" paddingTop="8">
+                      <div className="skillTags">
                         {skill.tags.map((tag, tagIndex) => (
-                          <Tag key={`${skill.title}-${tagIndex}`} size="l" prefixIcon={tag.icon}>
+                          <span key={`${skill.title}-${tagIndex}`} className="skillTag">
                             {tag.name}
-                          </Tag>
+                          </span>
                         ))}
-                      </Row>
+                      </div>
                     )}
                     {skill.images && skill.images.length > 0 && (
                       <Row fillWidth paddingTop="m" gap="12" wrap>

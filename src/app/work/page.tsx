@@ -1,40 +1,48 @@
-import { Button, Column, Heading, Row, Text, Meta, Schema } from "@once-ui-system/core";
-import { baseURL, about, person, work } from "@/resources";
+import { Button, Column, Heading, Row, Text } from "@once-ui-system/core";
+import { work, pageMeta, ogImageFor } from "@/resources";
 import { Projects } from "@/components/work/Projects";
 import { Reveal } from "@/components";
+import { jsonLd, webPageJsonLd } from "@/resources/schema";
 
 export async function generateMetadata() {
-  return {
-    ...Meta.generate({
-      title: work.title,
-      description: work.description,
-      baseURL: baseURL,
-      image: `/api/og/generate?title=${encodeURIComponent(work.title)}`,
-      path: work.path,
-    }),
-    alternates: { canonical: `${baseURL}${work.path}` },
-  };
+  return pageMeta({
+    title: work.title,
+    description: work.description,
+    path: work.path,
+  });
 }
 
 export default function Work() {
   return (
     <Column maxWidth="m" paddingTop="24">
-      <Schema
-        as="webPage"
-        baseURL={baseURL}
-        path={work.path}
-        title={work.title}
-        description={work.description}
-        image={`/api/og/generate?title=${encodeURIComponent(work.title)}`}
-        author={{
-          name: person.name,
-          url: `${baseURL}${about.path}`,
-          image: `${baseURL}${person.avatar}`,
-        }}
+      <script
+        {...jsonLd(
+          webPageJsonLd({
+            title: work.title,
+            description: work.description,
+            path: work.path,
+            image: ogImageFor(work.title),
+          }),
+        )}
       />
-      <Heading marginBottom="l" variant="heading-strong-xl" align="center">
-        {work.title}
-      </Heading>
+      <Column fillWidth horizontal="center" align="center" gap="8" marginBottom="40">
+        <Heading variant="display-strong-m" align="center">
+          {work.title}
+        </Heading>
+        <Text
+          onBackground="neutral-weak"
+          variant="heading-default-m"
+          align="center"
+          wrap="balance"
+        >
+          Architecture, trade-offs, and results rather than a list of technologies.
+        </Text>
+        {/* Moved out of the H1, where it was legal boilerplate rendered in the
+            largest text on the page. */}
+        <Text variant="body-default-xs" onBackground="neutral-weak" align="center">
+          Client work published with permission.
+        </Text>
+      </Column>
       <Reveal>
         <Projects />
       </Reveal>
@@ -60,12 +68,12 @@ export default function Work() {
             align="center"
             wrap="balance"
           >
-            I write about how I build these systems architecture decisions, the
-            hard parts, and what I'd do differently on Medium.
+            I write up the architecture decisions, the parts that were hard, and
+            what I'd do differently. All on Medium.
           </Text>
           <Row gap="12" wrap horizontal="center">
             <Button
-              className="eliteBtn"
+              className="btnLift"
               href="https://medium.com/@saymmalik08"
               prefixIcon="medium"
               variant="secondary"

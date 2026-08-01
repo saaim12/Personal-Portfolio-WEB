@@ -2,9 +2,6 @@
 
 import {
   BorderStyle,
-  ChartMode,
-  ChartVariant,
-  DataThemeProvider,
   IconProvider,
   LayoutProvider,
   NeutralColor,
@@ -17,9 +14,15 @@ import {
   ToastProvider,
   TransitionStyle,
 } from "@once-ui-system/core";
-import { style, dataStyle } from "../resources";
+import { style } from "../resources";
 import { iconLibrary } from "../resources/icons";
 
+// DataThemeProvider used to wrap this tree as well. The site renders no
+// charts, so it was client bundle with nothing behind it.
+//
+// ToastProvider stays: the MDX components on the case-study pages call
+// useToast (the copy-to-clipboard confirmations), and removing it fails the
+// prerender of /work/[slug] rather than anything at runtime.
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <LayoutProvider>
@@ -34,23 +37,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
         transition={style.transition as TransitionStyle}
         scaling={style.scaling as ScalingSize}
       >
-        <DataThemeProvider
-          variant={dataStyle.variant as ChartVariant}
-          mode={dataStyle.mode as ChartMode}
-          height={dataStyle.height}
-          axis={{
-            stroke: dataStyle.axis.stroke,
-          }}
-          tick={{
-            fill: dataStyle.tick.fill,
-            fontSize: dataStyle.tick.fontSize,
-            line: dataStyle.tick.line,
-          }}
-        >
-          <ToastProvider>
-            <IconProvider icons={iconLibrary}>{children}</IconProvider>
-          </ToastProvider>
-        </DataThemeProvider>
+        <ToastProvider>
+          <IconProvider icons={iconLibrary}>{children}</IconProvider>
+        </ToastProvider>
       </ThemeProvider>
     </LayoutProvider>
   );

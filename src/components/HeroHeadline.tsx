@@ -1,54 +1,33 @@
-"use client";
-
 import { Heading } from "@once-ui-system/core";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
+import type { CSSProperties } from "react";
 
-// Hero-only word stagger: keeps the Once UI Heading (variant + wrap), but
-// splits the text into words that rise + fade in sequence on load.
-// Reduced motion → words just fade, no transform.
+// Per-word rise on load. Was Framer Motion; now a CSS keyframe with a
+// per-word delay, which means this component ships zero JavaScript and the
+// headline is in the HTML for crawlers either way.
 export function HeroHeadline({ text }: { text: string }) {
-  const reduce = useReducedMotion();
   const words = text.split(" ");
-
-  const container: Variants = {
-    hidden: {},
-    show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
-  };
-  const word: Variants = reduce
-    ? { hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.4 } } }
-    : {
-        hidden: { opacity: 0, y: "0.4em" },
-        show: {
-          opacity: 1,
-          y: 0,
-          transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-        },
-      };
 
   return (
     <Heading
       wrap="balance"
       variant="display-strong-l"
-      // Fluid size so 3-line headlines never overflow on small screens;
-      // tighter line-height so they don't dominate on mobile.
-      style={{ fontSize: "clamp(2rem, 6vw, 4.5rem)", lineHeight: 1.08 }}
+      style={{
+        // Caps at 4rem: 4.5rem forced this headline onto three lines and broke
+        // it at "and ship / production / systems".
+        fontSize: "clamp(1.875rem, 5.2vw, 4rem)",
+        lineHeight: 1.06,
+        letterSpacing: "-0.03em",
+      }}
     >
-      <motion.span
-        variants={container}
-        initial="hidden"
-        animate="show"
-        style={{ display: "inline" }}
-      >
-        {words.map((w, i) => (
-          <motion.span
-            key={`${w}-${i}`}
-            variants={word}
-            style={{ display: "inline-block", whiteSpace: "pre" }}
-          >
-            {i < words.length - 1 ? `${w} ` : w}
-          </motion.span>
-        ))}
-      </motion.span>
+      {words.map((w, i) => (
+        <span
+          key={`${w}-${i}`}
+          className="heroWord"
+          style={{ "--word-delay": `${100 + i * 65}ms` } as CSSProperties}
+        >
+          {i < words.length - 1 ? `${w} ` : w}
+        </span>
+      ))}
     </Heading>
   );
 }

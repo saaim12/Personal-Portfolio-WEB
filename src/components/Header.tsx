@@ -1,155 +1,170 @@
 "use client";
 
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import {
+  HiOutlineHome,
+  HiOutlineUser,
+  HiOutlineSquares2X2,
+  HiOutlineDocumentText,
+  HiArrowUpRight,
+  HiOutlineCalendarDays,
+} from "react-icons/hi2";
 
-import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
-
-import { routes, display, person, about, work } from "@/resources";
-import { ThemeToggle } from "./ThemeToggle";
+import { person, routes, about, work, home } from "@/resources";
 import styles from "./Header.module.scss";
 
-type TimeDisplayProps = {
-  timeZone: string;
-  locale?: string; // Optionally allow locale, defaulting to 'en-GB'
-};
+const NAV = [
+  { href: "/", label: "Home", icon: HiOutlineHome, key: "/" },
+  { href: about.path, label: about.label, icon: HiOutlineUser, key: "/about" },
+  { href: work.path, label: work.label, icon: HiOutlineSquares2X2, key: "/work" },
+] as const;
 
-const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" }) => {
-  const [currentTime, setCurrentTime] = useState("");
-
-  useEffect(() => {
-    const updateTime = () => {
-      const now = new Date();
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      };
-      const timeString = new Intl.DateTimeFormat(locale, options).format(now);
-      setCurrentTime(timeString);
-    };
-
-    updateTime();
-    const intervalId = setInterval(updateTime, 1000);
-
-    return () => clearInterval(intervalId);
-  }, [timeZone, locale]);
-
-  return <>{currentTime}</>;
-};
-
-export default TimeDisplay;
 
 export const Header = () => {
   const pathname = usePathname() ?? "";
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  // Frost the bar only once content is behind it.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Close the mobile panel on navigation.
+  useEffect(() => setOpen(false), [pathname]);
+
+  // While the panel is open: lock scroll and let Escape dismiss it.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
+  const isActive = (key: string) =>
+    key === "/" ? pathname === "/" : pathname.startsWith(key);
 
   return (
     <>
-      <Fade s={{ hide: true }} fillWidth position="fixed" height="80" zIndex={9} />
-      <Fade
-        hide
-        s={{ hide: false }}
-        fillWidth
-        position="fixed"
-        bottom="0"
-        to="top"
-        height="80"
-        zIndex={9}
-      />
-      <Row
-        fitHeight
-        className={styles.position}
-        position="sticky"
-        as="header"
-        zIndex={9}
-        fillWidth
-        padding="8"
-        horizontal="center"
-        data-border="rounded"
-        s={{
-          position: "fixed",
-        }}
-      >
-        <Row paddingLeft="12" fillWidth vertical="center" textVariant="body-default-s">
-          {display.location && (
-            <Row s={{ hide: true }}>{person.city ?? person.location}</Row>
-          )}
-        </Row>
-        <Row fillWidth horizontal="center">
-          <Row
-            background="page"
-            border="neutral-alpha-weak"
-            radius="l"
-            shadow="l"
-            paddingY="8"
-            paddingX="12"
-            horizontal="center"
-            zIndex={1}
-          >
-            <Row gap="8" vertical="center" textVariant="body-default-m" suppressHydrationWarning>
-              {routes["/"] && (
-                <ToggleButton prefixIcon="home" href="/" selected={pathname === "/"} />
-              )}
-              <Line background="neutral-alpha-medium" vert maxHeight="24" />
-              {routes["/about"] && (
-                <>
-                  <Row s={{ hide: true }}>
-                    <ToggleButton
-                      prefixIcon="person"
-                      href="/about"
-                      label={about.label}
-                      selected={pathname === "/about"}
-                    />
-                  </Row>
-                  <Row hide s={{ hide: false }}>
-                    <ToggleButton
-                      prefixIcon="person"
-                      href="/about"
-                      selected={pathname === "/about"}
-                    />
-                  </Row>
-                </>
-              )}
-              {routes["/work"] && (
-                <>
-                  <Row s={{ hide: true }}>
-                    <ToggleButton
-                      prefixIcon="grid"
-                      href="/work"
-                      label={work.label}
-                      selected={pathname.startsWith("/work")}
-                    />
-                  </Row>
-                  <Row hide s={{ hide: false }}>
-                    <ToggleButton
-                      prefixIcon="grid"
-                      href="/work"
-                      selected={pathname.startsWith("/work")}
-                    />
-                  </Row>
-                </>
-              )}
-              <Line background="neutral-alpha-medium" vert maxHeight="24" />
-              <ThemeToggle />
-            </Row>
-          </Row>
-        </Row>
-        <Flex fillWidth horizontal="end" vertical="center">
-          <Flex
-            paddingRight="12"
-            horizontal="end"
-            vertical="center"
-            textVariant="body-default-s"
-            gap="20"
-          >
-            <Flex s={{ hide: true }}>
-              {display.time && <TimeDisplay timeZone={person.location} />}
-            </Flex>
-          </Flex>
-        </Flex>
-      </Row>
+      <header className={`${styles.header} ${scrolled || open ? styles.scrolled : ""}`}>
+        <div className={styles.inner}>
+          <a href="/" className={styles.brand} aria-label={`${person.name}, home`}>
+            {/* The portrait, not the initials. next/image so the 1.7MB source
+                PNG is served as a ~32px optimised asset rather than in full.
+                Decorative: the brand name sits next to it and the anchor
+                carries its own aria-label. */}
+            <Image
+              className={styles.mark}
+              src={person.avatar}
+              alt=""
+              aria-hidden="true"
+              width={64}
+              height={64}
+              priority
+            />
+            <span className={styles.brandName}>{person.name}</span>
+          </a>
+
+          <nav className={styles.nav} aria-label="Main">
+            {NAV.filter((n) => routes[n.key as keyof typeof routes]).map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.key);
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className={`${styles.link} ${active ? styles.active : ""}`}
+                  aria-current={active ? "page" : undefined}
+                >
+                  <Icon aria-hidden="true" />
+                  {item.label}
+                </a>
+              );
+            })}
+          </nav>
+
+          <div className={styles.actions}>
+            <a
+              className={styles.iconBtn}
+              href="/SaaimCV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Resume (PDF, opens in a new tab)"
+              title="Resume (PDF)"
+            >
+              <HiOutlineDocumentText aria-hidden="true" />
+            </a>
+            <a className={`btn btn--primary ${styles.cta}`} href={home.cta.href}>
+              <HiOutlineCalendarDays aria-hidden="true" />
+              {home.cta.label}
+            </a>
+
+            <button
+              type="button"
+              className={`${styles.burger} ${open ? styles.burgerOpen : ""}`}
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              onClick={() => setOpen((v) => !v)}
+            >
+              <span className={styles.burgerBar} />
+              <span className={styles.burgerBar} />
+              <span className={styles.burgerBar} />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {open && (
+        <>
+          <div className={styles.scrim} onClick={() => setOpen(false)} aria-hidden="true" />
+          <div id="mobile-menu" className={styles.panel}>
+            {NAV.filter((n) => routes[n.key as keyof typeof routes]).map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item.key);
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className={`${styles.panelLink} ${active ? styles.panelActive : ""}`}
+                  aria-current={active ? "page" : undefined}
+                >
+                  <Icon aria-hidden="true" />
+                  {item.label}
+                </a>
+              );
+            })}
+
+            <div className={styles.panelDivider} />
+
+            <a
+              className={styles.panelLink}
+              href="/SaaimCV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <HiOutlineDocumentText aria-hidden="true" />
+              Resume (PDF)
+              <HiArrowUpRight aria-hidden="true" style={{ marginLeft: "auto" }} />
+            </a>
+            <a className={styles.panelLink} href={home.cta.href}>
+              <HiOutlineCalendarDays aria-hidden="true" />
+              {home.cta.label}
+              <HiArrowUpRight aria-hidden="true" style={{ marginLeft: "auto" }} />
+            </a>
+          </div>
+        </>
+      )}
     </>
   );
 };

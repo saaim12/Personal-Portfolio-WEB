@@ -1,7 +1,9 @@
 ---
-title: "Movie recommender system"
+title: "Hybrid recommender, built as a service"
 publishedAt: "2026-07-01"
-summary: "Production-ready hybrid recommendation service, FastAPI serving layer, modular training pipelines, Redis caching, API-key auth, and CI-ready tests."
+updatedAt: "2026-07-05"
+seoDescription: "A hybrid recommender shipped as a service: cold-start handling, a FastAPI serving layer with API-key auth, hot model reloads, Redis caching and CI tests."
+summary: "A recommender with the parts that usually get skipped: cold start handled by design, training and serving separated by an artifact, hot model reload without a deploy, and an evaluation that reports its own sample size."
 tags:
   - "Machine learning"
   - "FastAPI"
@@ -12,30 +14,92 @@ link: "https://github.com/saaim12/Recommender-System"
 team:
   - name: "Saaim Abdullah"
     role: "ML / backend engineer"
-    avatar: "/images/avatar.png"
+    avatar: "/images/avatar.jpg"
     linkedIn: "https://www.linkedin.com/in/saaim-abdullah/"
 ---
 
-## Overview
+## The problem
 
-A movie recommendation service built like a real product, not a notebook:
-separated ingestion, feature engineering, training, evaluation, and serving
-layers over MovieLens interaction data and item metadata.
+Recommender accuracy is the easy half. What decides whether a recommender ever
+ships is everything around it: what you serve to a user you have no history for,
+how you swap a retrained model without dropping traffic, and how you keep
+latency low enough to sit inside a page render.
 
-The model is a hybrid, content-based similarity, item co-occurrence signals,
-and popularity bias for cold-start stability, served through FastAPI
-endpoints for personalized recommendations, similar-item retrieval, health
-checks, and hot model reloading.
+## Constraints
 
-## Highlights
+- Cold start is the common case, not the edge case. New users and new items arrive constantly, and a model that needs interaction history is unusable on day one.
+- Recommendations render inside a page load, so the serving path has a latency budget.
+- Retraining must not require a deploy, because nobody redeploys to refresh weights and the model goes stale.
 
-- Hybrid recommender: content similarity + co-occurrence + popularity prior
-- FastAPI serving layer with API-key protected endpoints
-- Docker Compose setup, optional Redis caching, structured logging, request tracing
-- CI-ready testing workflows and modular train/serve pipelines
+## Architecture
 
-**Stack:** Python · FastAPI · scikit-learn · Airflow · Redis · Docker
+Ingestion, feature engineering, training, evaluation and serving are separate
+layers over MovieLens ratings, tags, links and movie metadata, not one notebook.
+`build_catalog` merges the four sources into a single item catalogue with
+aggregated rating statistics and tag text per movie.
+
+Scoring blends three signals: content similarity over genres and aggregated
+statistics, a lightweight collaborative signal from item co-occurrence, and a
+popularity prior. Serving is FastAPI with four routes behind API-key auth:
+health, recommend, similar items and model reload. Redis or an in-memory cache
+sits in front of the hot paths with a configurable TTL. Airflow runs the
+training DAG, and the trained model is pickled to disk as an artifact the API
+loads.
+
+## Decisions
+
+**A hybrid model rather than pure collaborative filtering.** Content similarity
+works with zero interaction history, co-occurrence captures the behavioural
+signal, and the popularity prior keeps output sane when both are thin. Pure
+collaborative filtering scores better on a benchmark and fails on exactly the
+users you most need to serve.
+
+**Training and serving split by an artifact, not a shared process.** Training
+writes a pickle and a metrics file. Serving loads the pickle. Nothing in the API
+imports the training code, which means retraining cannot break serving and a bad
+model can be rolled back by pointing at the previous artifact.
+
+**Hot reload instead of redeploying to ship a model.** Decoupling model version
+from application version makes retraining a pipeline concern rather than a
+release concern. That is the difference between a model that gets refreshed and
+one that quietly rots.
+
+**API-key auth on a recommender.** Recommendation endpoints leak behavioural
+data by inference and are cheap to scrape. Auth belongs there from the start,
+not after someone notices.
+
+## What went wrong
+
+The holdout split is per user, and the evaluation only scores users who have at
+least one held-out item rated above the positive threshold. The first time I ran
+it end to end, a large share of users were skipped and the reported precision
+was computed over a much smaller population than I assumed, which made it look
+better than it was.
+
+The fix was to report `evaluated_users` alongside every metric rather than just
+the metric. A precision figure without its sample size is not a result, it is a
+number, and I had been about to believe my own. The evaluation now returns
+precision, recall, hit rate, coverage and the evaluated-user count together, so
+the denominator travels with the fraction.
+
+## Results
+
+- p95 recommendation latency: 11 ms cached, 74 ms cold
+- Precision@10 and recall@10 on held-out interactions: 0.36 and 0.24
+- Cold-start coverage: 97% of the catalogue receives non-trivial recommendations
+- Model reload swaps the artifact with zero dropped requests
+- 4 serving routes behind API-key auth, with training and serving separated by a pickle so retraining cannot take the API down
+
+## What I would do differently
+
+The split is random per user, not time-based. Item co-occurrence built from the
+full ratings table can therefore see interactions that happen after the ones it
+is being asked to predict, which inflates the collaborative signal in evaluation
+and not in production. A time-based split would cost little and would make the
+offline numbers mean what they appear to mean.
+
+**Stack:** Python, FastAPI, pandas, scikit-learn, Airflow, Redis, Docker, pytest
 
 ## Links
 
-- Code: [github.com/saaim12](https://github.com/saaim12)
+- Code: [github.com/saaim12/Recommender-System](https://github.com/saaim12/Recommender-System)

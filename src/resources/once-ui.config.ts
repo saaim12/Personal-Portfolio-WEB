@@ -1,11 +1,4 @@
-import {
-  DataStyleConfig,
-  DisplayConfig,
-  EffectsConfig,
-  FontsConfig,
-  RoutesConfig,
-  StyleConfig,
-} from "@/types";
+import { FontsConfig, RoutesConfig, StyleConfig } from "@/types";
 
 // IMPORTANT: Replace with your own domain address - it's used for SEO in meta tags and schema
 const baseURL: string = "https://saaim.site";
@@ -16,31 +9,27 @@ const routes: RoutesConfig = {
   "/work": true,
 };
 
-const display: DisplayConfig = {
-  location: true,
-  time: true,
-  themeSwitcher: true, // dark by default, toggle in the header switches to light
-};
-
 // Import and set font for each variant
-import { Space_Grotesk, Inter, Space_Mono } from "next/font/google";
+import { Space_Grotesk, Manrope, Space_Mono } from "next/font/google";
 
-// Display / headings
+// Display / headings — Space Grotesk, the three weights the layout renders.
 const heading = Space_Grotesk({
   variable: "--font-heading",
+  weight: ["500", "600", "700"],
   subsets: ["latin"],
   display: "swap",
 });
 
 // Body copy
-const body = Inter({
+const body = Manrope({
   variable: "--font-body",
   subsets: ["latin"],
   display: "swap",
 });
 
-// UI labels
-const label = Inter({
+// UI labels — same family, separate CSS variable (Once UI tokens read
+// --font-label). Next dedupes the underlying font files.
+const label = Manrope({
   variable: "--font-label",
   subsets: ["latin"],
   display: "swap",
@@ -64,71 +53,22 @@ const fonts: FontsConfig = {
 
 // default customization applied to the HTML in the main layout.tsx
 const style: StyleConfig = {
-  theme: "dark", // dark-only site
-  neutral: "gray", // near-black #0A0A0A dark / off-white #F9F9F9 light — matches the requested bg/surface/text/muted/border
-  brand: "cyan", // cyan accent — links, active nav, highlights (both themes)
-  accent: "cyan", // cyan accent — links, active nav, highlights (both themes)
-  solid: "contrast", // color | contrast
-  solidStyle: "flat", // flat | plastic
-  border: "playful", // rounded | playful | conservative | sharp
-  surface: "translucent", // filled | translucent
-  transition: "all", // all | micro | macro
-  scaling: "100", // 90 | 95 | 100 | 105 | 110
+  theme: "dark",
+  neutral: "slate",
+  // Once UI's `Schemes` type has no neutral option, so brand/accent have to
+  // name a hue here. The design is monochrome, and custom.css repoints both
+  // --function-brand-* and --function-accent-* at the gray ramp, which is
+  // what actually renders. These two values are inert.
+  brand: "indigo",
+  accent: "indigo",
+  solid: "contrast",
+  solidStyle: "flat",
+  // "conservative" over "playful": tighter radii read as engineering tooling
+  // rather than as a consumer landing page.
+  border: "conservative",
+  surface: "translucent",
+  transition: "micro",
+  scaling: "100",
 };
 
-const dataStyle: DataStyleConfig = {
-  variant: "gradient", // flat | gradient | outline
-  mode: "categorical", // categorical | divergent | sequential
-  height: 24, // default chart height
-  axis: {
-    stroke: "var(--neutral-alpha-weak)",
-  },
-  tick: {
-    fill: "var(--neutral-on-background-weak)",
-    fontSize: 11,
-    line: false,
-  },
-};
-
-const effects: EffectsConfig = {
-  mask: {
-    cursor: false,
-    x: 50,
-    y: 0,
-    radius: 100,
-  },
-  gradient: {
-    display: false,
-    opacity: 100,
-    x: 50,
-    y: 60,
-    width: 100,
-    height: 50,
-    tilt: 0,
-    colorStart: "accent-background-strong",
-    colorEnd: "page-background",
-  },
-  dots: {
-    display: true,
-    opacity: 40,
-    size: "2",
-    color: "brand-background-strong",
-  },
-  grid: {
-    display: false,
-    opacity: 100,
-    color: "neutral-alpha-medium",
-    width: "0.25rem",
-    height: "0.25rem",
-  },
-  lines: {
-    display: false,
-    opacity: 100,
-    color: "neutral-alpha-weak",
-    size: "16",
-    thickness: 1,
-    angle: 45,
-  },
-};
-
-export { display, routes, baseURL, fonts, style, effects, dataStyle };
+export { routes, baseURL, fonts, style };

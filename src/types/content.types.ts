@@ -88,12 +88,6 @@ export interface Home extends BasePageConfig {
   image: `/images/${string}` | string;
   /** The headline of the home page (plain string so it can be split into words) */
   headline: string;
-  /** Featured badge, which appears above the headline */
-  featured: {
-    display: boolean;
-    title: React.ReactNode;
-    href: string;
-  };
   /** The sub text which appears below the headline */
   subline: React.ReactNode;
   /** Primary call-to-action button in the hero (e.g. WhatsApp / book a call) */
@@ -102,6 +96,13 @@ export interface Home extends BasePageConfig {
     /** External link (wa.me / cal.com / mailto) or internal path */
     href: string;
   };
+  /** Proof bar shown directly under the hero (trust stage of the page flow) */
+  proof: Array<{
+    /** The number or short phrase, rendered large */
+    value: string;
+    /** What the number refers to */
+    label: string;
+  }>;
   /** Services block shown on the home page */
   services: {
     display: boolean;
@@ -111,6 +112,33 @@ export interface Home extends BasePageConfig {
       title: string;
       description: React.ReactNode;
     }>;
+  };
+  /** Client testimonial block (social-proof stage) */
+  testimonial: {
+    display: boolean;
+    quote: string;
+    author: string;
+    role: string;
+    /** Optional path to a signed recommendation letter (PDF) */
+    letter?: string;
+  };
+  /** "How I work" block (process stage) */
+  process: {
+    display: boolean;
+    title: string;
+    subtitle: string;
+    steps: Array<{
+      /** Ordinal shown as a label, e.g. "01" */
+      step: string;
+      title: string;
+      description: string;
+    }>;
+  };
+  /** FAQ block (objection-handling stage). Also emitted as FAQPage schema. */
+  faq: {
+    display: boolean;
+    title: string;
+    items: Array<{ q: string; a: string }>;
   };
 }
 
@@ -161,6 +189,9 @@ export interface About extends BasePageConfig {
       timeframe: string;
       /** Role or job title */
       role: string;
+      /** Where the work happened. Kept separate from `role` so the two are laid
+       *  out with spacing rather than joined by a "·" inside one string. */
+      location?: string;
       /** Achievements at the company */
       achievements: React.ReactNode[];
       /** Images related to the experience */

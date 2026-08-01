@@ -1,7 +1,10 @@
 ---
-title: "Fitter Health: full platform, built from scratch"
+title: "Fitter Health: a production platform, built from zero"
+seoTitle: "Fitter Health: a platform built from zero"
 publishedAt: "2026-07-15"
-summary: "A preventive health-tech platform I engineered end to end for a Spain-based team. Frontend, backend, cloud infrastructure, and data layer, taken all the way to production."
+updatedAt: "2026-07-20"
+seoDescription: "How I built a Spain-based health-tech platform solo: Next.js, Django REST, PostgreSQL, Celery and the full AWS estate, from empty repo to production."
+summary: "A Spain-based health team had a validated concept and no engineering function. I built the platform and took it to production alone: entitlements, two-sided booking, invoice reconciliation with Odoo, and the AWS estate under it."
 tags:
   - "Full-stack"
   - "Django"
@@ -11,33 +14,103 @@ images: []
 link: "https://fitter.health/"
 team:
   - name: "Saaim Abdullah"
-    role: "Full-stack / backend / cloud engineer"
-    avatar: "/images/avatar.png"
+    role: "Founding engineer, full-stack through cloud"
+    avatar: "/images/avatar.jpg"
     linkedIn: "https://www.linkedin.com/in/saaim-abdullah/"
 ---
 
-## Overview
+## The problem
 
-Fitter Health is A preventive health-tech platform I built from the ground up. Not a feature bolted onto someone else's codebase, but the whole product: frontend, backend, database, cloud infrastructure, and data layer, owned from the first commit through to production for a Spain-based team.
+A Spain-based preventive health team had a validated product concept, real
+clinical domain expertise and no engineering function. They did not need a
+prototype or a contractor to work a ticket queue. They needed the platform
+built, and one person accountable for all of it.
 
-## What I built
+The code and the model are under NDA. What follows is architecture and
+reasoning, with no implementation detail or client data.
 
-**Frontend.** A modern Next.js interface for the platform's product modules.
+## Constraints
 
-**Backend.** Django and Django REST Framework APIs, with every contract and workflow designed for reliability and maintainability.
+The hard part here was never the stack. It was the domain.
 
-**Cloud.** The full AWS stack: ECS, RDS, S3, SNS, SQS, Redshift, API Gateway, IAM, and VPC. Containerized with Docker and production-secured.
+- **Memberships are entitlements, not subscriptions.** A member holds a balance of credits that different session types consume at different rates, with expiry and carry-over rules. Booking has to check entitlement, not just availability.
+- **Two-sided booking.** Coaches and members each have calendars, and a session is only real when both sides hold. Cancellation has to return the credit under some conditions and not others.
+- **Invoice state lives in Odoo.** Payment status originates in more than one payment rail and has to reconcile against the platform's view of what a member is owed or owes.
+- **Clinical compliance.** Who may see which record is a rule with legal weight, which produces a role and permission matrix considerably larger than the usual admin, staff, user triple.
+- **One engineer.** Every hour spent hand-rolling infrastructure was an hour not spent on the domain above.
 
-**Async and data.** Celery and Redis background processing, a notification and file-handling architecture, and a data layer ready for analytics and data-driven features.
+## Architecture
 
-**Production quality.** Automated tests, clean migrations, and database-level integrity constraints throughout.
+Django and Django REST Framework behind a Next.js frontend, PostgreSQL as the
+primary store, Celery and Redis for anything that must not block a request. On
+AWS: ECS behind API Gateway, RDS, S3, SNS and SQS for eventing, Redshift on the
+analytics path, inside a VPC with scoped IAM roles.
 
-## The point
+## Decisions
 
-This is the kind of work I do: complete, production-grade software products, front page to database, not just a website.
+**Django over FastAPI.** With one engineer and a non-technical team, the admin,
+the migration system and the auth stack removed months of work I would otherwise
+have written myself. It also lets the founders inspect and correct production
+records without filing a ticket with me, which for an entitlement model with
+edge cases is worth more than throughput. FastAPI would have been faster per
+request and considerably slower to a working business.
 
-**Stack:** Next.js · Django · DRF · PostgreSQL · Celery · Redis · Docker · AWS (ECS, RDS, S3, SNS, SQS, Redshift, API Gateway, IAM, VPC)
+**Entitlement state in the database, not in application logic.** Credit balances
+are money-adjacent. Every rule that could be expressed as a constraint or a
+transaction is, because application-layer validation is one deploy away from
+being bypassed and a double-spent credit is a support conversation with a member
+who is already annoyed.
+
+**ECS over Lambda.** Predictable long-lived database connections, no cold start
+on clinician-facing endpoints, and a monthly cost the founders could forecast
+before committing to it.
+
+## What went wrong
+
+The inactivity re-engagement pipeline dropped notifications, silently. Members
+who should have been nudged after a period without a session sometimes were not,
+and nothing in the logs said so. It surfaced as a product complaint, not as an
+alert, which is the worst way for anything to surface.
+
+The cause was the shape of the fan-out. SNS was publishing straight to its
+consumers, and SNS delivery is fire and forget: if a consumer was down,
+throttled or slow when the message arrived, the retry policy eventually gave up
+and the message was gone. There was no buffer holding it, so there was nothing
+to inspect afterwards and no count that disagreed with any other count. My first
+instinct was that the scheduling job was not selecting the right members, and I
+spent real time verifying the query before accepting that the messages were
+being generated correctly and lost after publication.
+
+The fix was to put SQS between SNS and the consumers. The topic now fans out to
+queues, and consumers read from the queue. A message survives a consumer being
+unavailable, redelivery is the default rather than a best effort, and anything
+that repeatedly fails lands somewhere I can look at it instead of disappearing.
+The lesson generalised: I now treat a queue without a durable buffer and a
+dead-letter path as an outage that has not happened yet.
+
+## Results
+
+- Live in production at [fitter.health](https://fitter.health/), built and operated by one engineer
+- Entitlement, booking and invoice reconciliation modelled with database-level constraints, so a credit cannot be double-spent by a race between two requests
+- Notification delivery is durable and inspectable after the SNS to SQS change, with failures landing in a dead-letter queue rather than vanishing
+- Infrastructure defined and reproducible, and the client owns the AWS account, the repositories and the domains
+
+{/* Test count, deploy duration, monthly AWS spend and time to first production
+    release are all real numbers behind the NDA. Sourcing notes are in the
+    handover; add them here if the client is happy for them to be public. */}
+
+## What I would do differently
+
+I would have built the notification path with the queue in it from the first
+day. The SNS-direct version was not a shortcut I took knowingly, it was a
+default I did not question, and questioning it would have cost an hour against
+the days it eventually took to find. Anything asynchronous and user-visible now
+starts with the buffer and the dead-letter path, and earns the right to be
+simpler later.
+
+**Stack:** Django, Django REST Framework, PostgreSQL, Celery, Redis, Next.js, AWS (ECS, RDS, S3, SNS, SQS, Redshift, API Gateway, IAM, VPC), Odoo integration
 
 ## Links
 
-- Live product: [fitter.health](https://fitter.health/)
+- Live: [fitter.health](https://fitter.health/)
+- Recommendation letter: [signed by the co-founder and CEO](/Fitter-Recommendation-Letter.pdf)

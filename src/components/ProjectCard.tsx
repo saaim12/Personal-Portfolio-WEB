@@ -1,38 +1,36 @@
-import { TiltCard } from "@/components";
+import { HiArrowRight } from "react-icons/hi2";
 
 interface ProjectCardProps {
   href: string;
   title: string;
   description: string;
   tags?: string[];
-  /** Picks this card's gradient from the TiltCard palette. */
-  index?: number;
 }
 
-// Clickable tilt card → the case study. Title/tags tint to the card's gradient.
+// Restrained project card: hairline border, monospace tags, arrow that travels
+// on hover. Replaces a 1.5px gradient frame drawn from six unrelated colour
+// pairs plus a blurred glow and a 25-cell 3D tilt.
 export const ProjectCard: React.FC<ProjectCardProps> = ({
   href,
   title,
   description,
   tags = [],
-  index = 0,
-}) => {
-  return (
-    <TiltCard index={index} href={href} ariaLabel={`${title} — read case study`}>
-      <div className="tiltBody">
-        {title && <h3 className="tiltTitle">{title}</h3>}
-        {tags.length > 0 && (
-          <div className="tiltTags">
-            {tags.map((t) => (
-              <span key={t} className="tiltTag">
-                {t}
-              </span>
-            ))}
-          </div>
-        )}
-        {description?.trim() && <p className="tiltDesc">{description}</p>}
-        <span className="tiltMore">Read case study →</span>
+}) => (
+  <a className="card projCard" href={href}>
+    {tags.length > 0 && (
+      <div className="projTags">
+        {tags.map((t) => (
+          <span key={t} className="projTag">
+            {t}
+          </span>
+        ))}
       </div>
-    </TiltCard>
-  );
-};
+    )}
+    <h3 className="cardTitle">{title}</h3>
+    {description?.trim() && <p className="cardDesc">{description}</p>}
+    <span className="projMore">
+      Read case study
+      <HiArrowRight aria-hidden="true" />
+    </span>
+  </a>
+);

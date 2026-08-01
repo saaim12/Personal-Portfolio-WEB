@@ -8,13 +8,13 @@
     }
 }
 
-/* TOC item: brightens to the cyan accent with a soft glow on hover. */
+/* TOC item: brightens to the brand accent on hover. */
 .tocLink {
     transition: color 0.25s ease, text-shadow 0.25s ease;
 }
 .hover:hover .tocLink {
-    color: var(--accent, #22d3ee);
-    text-shadow: 0 0 12px color-mix(in srgb, var(--accent, #22d3ee) 70%, transparent);
+    color: var(--accent);
+    text-shadow: 0 0 12px color-mix(in srgb, var(--accent) 70%, transparent);
 }
 
 @media (max-width: breakpoints.$s) {

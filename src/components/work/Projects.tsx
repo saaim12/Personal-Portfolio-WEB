@@ -1,5 +1,5 @@
 import { getPosts } from "@/utils/utils";
-import { Column, Row } from "@once-ui-system/core";
+
 import { ProjectCard } from "@/components";
 
 interface ProjectsProps {
@@ -24,20 +24,18 @@ export function Projects({ range, exclude }: ProjectsProps) {
     : sortedProjects;
 
   return (
-    // Responsive grid: cards wrap — 1-up on phones, 2-up once there's room
-    // (each cell is min ~20rem). No fixed columns, so nothing overflows.
-    <Row fillWidth gap="l" marginBottom="40" wrap vertical="start">
-      {displayedProjects.map((post, i) => (
-        <Column key={post.slug} flex={1} minWidth={20}>
-          <ProjectCard
-            index={i}
-            href={`/work/${post.slug}`}
-            title={post.metadata.title}
-            description={post.metadata.summary}
-            tags={post.metadata.tags}
-          />
-        </Column>
+    // Auto-fit grid: 1-up on phones, 2-up once there's room. No fixed column
+    // count, so nothing overflows at any width.
+    <div className="cardGrid cardGrid--2">
+      {displayedProjects.map((post) => (
+        <ProjectCard
+          key={post.slug}
+          href={`/work/${post.slug}`}
+          title={post.metadata.title}
+          description={post.metadata.summary}
+          tags={post.metadata.tags}
+        />
       ))}
-    </Row>
+    </div>
   );
 }
