@@ -15,10 +15,11 @@ type RouteMeta = {
 // Two things this has to get exactly right, or it works against the site:
 //
 //   - URLs must match each page's `alternates.canonical` character for
-//     character. Next renders canonicals without a trailing slash
-//     (trailingSlash is false), so "/" is a bare baseURL here too. A
-//     trailing-slash mismatch has Search Console report the sitemap URL as
-//     "alternate page with proper canonical tag" and drop it.
+//     character. No trailing slash anywhere, root included: Next normalises
+//     canonicals against `trailingSlash: false`, so the root renders as a bare
+//     "https://saaim.site" whatever pageMeta passes it, and this has to match.
+//     A mismatch has Search Console report the sitemap URL as "alternate page
+//     with proper canonical tag" and drop it.
 //   - lastModified must be a real content date. `new Date()`, which this used
 //     for the static routes, moves on every deploy and teaches crawlers the
 //     field is noise. Case studies carry `updatedAt` in their frontmatter,

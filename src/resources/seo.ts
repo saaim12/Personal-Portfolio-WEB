@@ -56,9 +56,17 @@ export function pageMeta({
   publishedTime,
   modifiedTime,
 }: PageMetaInput): Metadata {
-  // Next renders the canonical without a trailing slash (trailingSlash is
-  // false), so the root has to be a bare baseURL for the canonical tag and
-  // the sitemap entry to match character for character.
+  // One convention, no trailing slash anywhere, root included.
+  //
+  // This is not a preference, it is what Next enforces. `trailingSlash: false`
+  // in next.config.mjs normalises `alternates.canonical` on the way out, so
+  // passing "https://saaim.site/" here still renders as "https://saaim.site".
+  // Verified by passing the slashed form and reading the built HTML.
+  //
+  // The sitemap builds its URLs the same way and has to agree character for
+  // character: if the sitemap lists a URL whose page then declares a different
+  // canonical, Search Console reports it as "alternate page with proper
+  // canonical tag" and drops it from the index.
   const canonical = `${baseURL}${path === "/" ? "" : path}`;
   const ogImage = image ?? ogImageFor(title);
 
@@ -74,6 +82,10 @@ export function pageMeta({
 
   return {
     ...base,
+    // Stated explicitly rather than inherited from Meta.generate, so the
+    // origin every relative OG image resolves against is visible here and does
+    // not depend on a library default. Next requires this to be a URL object.
+    metadataBase: new URL(baseURL),
     alternates: { canonical },
     openGraph: {
       ...base.openGraph,
