@@ -15,7 +15,7 @@ import {
 } from "@once-ui-system/core";
 import { work, pageMeta, ogImageFor } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
-import { ScrollToHash, CustomMDX } from "@/components";
+import { ScrollToHash, CustomMDX, TechList } from "@/components";
 import { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
 import { jsonLd, caseStudyJsonLd } from "@/resources/schema";
@@ -129,16 +129,40 @@ export default async function Project({
           />
         </Row>
       )}
-      {post.metadata.images.length > 0 && (
+      {/* The stack, which used to be a comma-separated "**Stack:** …" line
+          buried at the bottom of the body. It belongs above the fold: it is
+          the first thing a technical reader looks for. */}
+      {post.metadata.stack.length > 0 && (
+        <Column maxWidth="s" gap="12" horizontal="center" marginBottom="32">
+          <Text variant="body-default-xs" onBackground="neutral-weak">
+            Built with
+          </Text>
+          <Row horizontal="center">
+            <TechList
+              items={post.metadata.stack}
+              variant="chip"
+              label="Technologies used on this project"
+            />
+          </Row>
+        </Column>
+      )}
+      {/* Every image, not just `images[0]`. A second diagram added to the
+          frontmatter used to be parsed and then silently never rendered. */}
+      {post.metadata.images.map((src, i) => (
         <Media
-          priority
+          key={src}
+          priority={i === 0}
           aspectRatio="16 / 9"
           radius="m"
           // Was alt="image" — useless to a screen reader and to image search.
-          alt={`${post.metadata.title}: architecture diagram`}
-          src={post.metadata.images[0]}
+          alt={
+            post.metadata.images.length > 1
+              ? `${post.metadata.title}: architecture diagram ${i + 1} of ${post.metadata.images.length}`
+              : `${post.metadata.title}: architecture diagram`
+          }
+          src={src}
         />
-      )}
+      ))}
       <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
         <CustomMDX source={post.content} />
       </Column>

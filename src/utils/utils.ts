@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import type { TechKey } from "@/resources/tech";
 import matter from "gray-matter";
 
 type Team = {
@@ -16,7 +17,6 @@ type Metadata = {
    * once " | Saaim Abdullah" is appended. Falls back to `title`.
    */
   seoTitle: string;
-  subtitle?: string;
   publishedAt: string;
   /** Content-change date, for sitemap lastModified and schema dateModified. */
   updatedAt: string;
@@ -28,8 +28,14 @@ type Metadata = {
   seoDescription: string;
   image?: string;
   images: string[];
-  tag?: string;
+  /** Category labels shown as text on the card, e.g. "Client work". */
   tags?: string[];
+  /**
+   * Canonical technology keys from `resources/tech.tsx`. Replaced the
+   * `**Stack:** Django, PostgreSQL, …` prose line that used to sit at the
+   * bottom of each case study body.
+   */
+  stack: TechKey[];
   team: Team[];
   link?: string;
 };
@@ -55,7 +61,6 @@ function readMDXFile(filePath: string) {
   const metadata: Metadata = {
     title: data.title || "",
     seoTitle: data.seoTitle || data.title || "",
-    subtitle: data.subtitle || "",
     publishedAt: data.publishedAt,
     // Falls back to the publish date rather than to the file mtime: git does
     // not preserve mtimes, so on a CI checkout every file reads as modified
@@ -65,8 +70,8 @@ function readMDXFile(filePath: string) {
     seoDescription: data.seoDescription || data.summary || "",
     image: data.image || "",
     images: data.images || [],
-    tag: data.tag || [],
     tags: data.tags || [],
+    stack: data.stack || [],
     team: data.team || [],
     link: data.link || "",
   };

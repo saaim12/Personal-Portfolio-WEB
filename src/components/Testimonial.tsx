@@ -20,6 +20,11 @@ export function Testimonial() {
           className="quoteCard"
           style={{ maxWidth: "720px", marginInline: "auto" }}
         >
+          {t.context && (
+            <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+              {t.context}
+            </Text>
+          )}
           <blockquote className="pullQuote">&ldquo;{t.quote}&rdquo;</blockquote>
           <Column gap="2" horizontal="center" align="center">
             <Text variant="label-strong-m">{t.author}</Text>

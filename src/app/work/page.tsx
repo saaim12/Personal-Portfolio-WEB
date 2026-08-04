@@ -6,11 +6,27 @@ import { jsonLd, webPageJsonLd } from "@/resources/schema";
 
 export async function generateMetadata() {
   return pageMeta({
-    title: work.title,
+    // `label`, not `title`: the layout template appends " | Saaim Abdullah",
+    // and `work.title` is the on-page H1.
+    title: work.label,
     description: work.description,
     path: work.path,
   });
 }
+
+// Three kinds of work, named. A flat list of five made a reader guess what
+// they were looking at; the headings do that job before any card is read.
+const GROUPS = [
+  { title: "Full stack", slugs: ["fitter-health-platform"] },
+  {
+    title: "Backend and AI",
+    slugs: ["multilingual-rag-engine", "movie-recommender-system"],
+  },
+  {
+    title: "Data engineering",
+    slugs: ["realtime-ecommerce-etl-pipeline", "autoencoder-edge-compression"],
+  },
+];
 
 export default function Work() {
   return (
@@ -35,17 +51,25 @@ export default function Work() {
           align="center"
           wrap="balance"
         >
-          Architecture, trade-offs, and results rather than a list of technologies.
+          Client projects and engineering projects, each with a write-up on how
+          it was built and what I&rsquo;d do differently.
         </Text>
-        {/* Moved out of the H1, where it was legal boilerplate rendered in the
-            largest text on the page. */}
-        <Text variant="body-default-xs" onBackground="neutral-weak" align="center">
-          Client work published with permission.
-        </Text>
+        {/* "Shown with the permission of clients" was removed: four of the five
+            are personal projects, and a reader who works that out stops
+            trusting the claim on the fifth. Which is which is stated on the
+            cards instead. */}
       </Column>
-      <Reveal>
-        <Projects />
-      </Reveal>
+
+      {GROUPS.map((group, i) => (
+        <Reveal key={group.title} delay={i * 0.06}>
+          <Column fillWidth gap="20" marginBottom="48">
+            <Heading as="h2" variant="heading-strong-l">
+              {group.title}
+            </Heading>
+            <Projects only={group.slugs} />
+          </Column>
+        </Reveal>
+      ))}
 
       <Reveal delay={0.1}>
         <Column
@@ -68,8 +92,8 @@ export default function Work() {
             align="center"
             wrap="balance"
           >
-            I write up the architecture decisions, the parts that were hard, and
-            what I'd do differently. All on Medium.
+            I write about how I build these systems on Medium: the architecture
+            decisions, the hard parts, and what I&rsquo;d do differently.
           </Text>
           <Row gap="12" wrap horizontal="center">
             <Button

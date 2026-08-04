@@ -104,7 +104,12 @@ export const Header = () => {
             >
               <HiOutlineDocumentText aria-hidden="true" />
             </a>
-            <a className={`btn btn--primary ${styles.cta}`} href={home.cta.href}>
+            <a
+              className={`btn btn--primary ${styles.cta}`}
+              href={home.cta.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <HiOutlineCalendarDays aria-hidden="true" />
               {home.cta.label}
             </a>
@@ -157,7 +162,12 @@ export const Header = () => {
               Resume (PDF)
               <HiArrowUpRight aria-hidden="true" style={{ marginLeft: "auto" }} />
             </a>
-            <a className={styles.panelLink} href={home.cta.href}>
+            <a
+              className={styles.panelLink}
+              href={home.cta.href}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <HiOutlineCalendarDays aria-hidden="true" />
               {home.cta.label}
               <HiArrowUpRight aria-hidden="true" style={{ marginLeft: "auto" }} />

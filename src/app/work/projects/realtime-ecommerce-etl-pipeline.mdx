@@ -3,13 +3,19 @@ title: "Real-time e-commerce ETL pipeline"
 publishedAt: "2026-06-20"
 updatedAt: "2026-06-24"
 seoDescription: "A streaming medallion pipeline: Kafka into PySpark Structured Streaming, bronze to silver to gold, landing in a star-schema warehouse run by Airflow."
-summary: "Kafka into Spark Structured Streaming, raw Parquet in bronze, batch stages into silver and gold, landing in a four-table star schema. The medallion split exists so a change to what revenue means is a rebuild, not a backfill."
+summary: "Orders streaming in live, landing in a warehouse the business can actually query. Built in layers so that changing what \"revenue\" means is a rebuild of one layer, not a re-import of everything."
 tags:
   - "Data engineering"
-  - "Kafka"
-  - "PySpark"
-  - "Airflow"
+stack:
+  - "kafka"
+  - "pyspark"
+  - "airflow"
+  - "postgresql"
+  - "parquet"
+  - "objectstorage"
+  - "dockercompose"
 images:
+  - "/images/projects/realtime-data-platform-aws-architecture.png"
   - "/images/projects/etl-diagram.png"
 link: "https://github.com/saaim12/etl_pipeline"
 team:
@@ -101,7 +107,6 @@ I would also add data-quality assertions between silver and gold from the start.
 I caught a broken dimension join by reading output, which does not scale past a
 handful of tables.
 
-**Stack:** Kafka (KRaft), PySpark Structured Streaming, PySpark batch, Airflow, PostgreSQL, Parquet, S3-compatible object storage, Docker Compose
 
 ## Links
 

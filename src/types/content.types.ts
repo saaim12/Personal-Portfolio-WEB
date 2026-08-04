@@ -1,4 +1,5 @@
 import { IconName } from "@/resources/icons";
+import type { TechKey } from "@/resources/tech";
 import { zones } from "tzdata";
 
 /**
@@ -90,10 +91,10 @@ export interface Home extends BasePageConfig {
   headline: string;
   /** The sub text which appears below the headline */
   subline: React.ReactNode;
-  /** Primary call-to-action button in the hero (e.g. WhatsApp / book a call) */
+  /** Booking CTA shared by the hero, the navbar and the mobile menu */
   cta: {
     label: string;
-    /** External link (wa.me / cal.com / mailto) or internal path */
+    /** External link (cal.com / wa.me / mailto) or internal path */
     href: string;
   };
   /** Proof bar shown directly under the hero (trust stage of the page flow) */
@@ -110,12 +111,15 @@ export interface Home extends BasePageConfig {
     items: Array<{
       icon?: IconName;
       title: string;
+      /** Plain-language line: what this is, for a non-technical reader */
       description: React.ReactNode;
     }>;
   };
   /** Client testimonial block (social-proof stage) */
   testimonial: {
     display: boolean;
+    /** Who this person is, shown above the quote */
+    context?: string;
     quote: string;
     author: string;
     role: string;
@@ -233,11 +237,13 @@ export interface About extends BasePageConfig {
       title: string;
       /** Skill description */
       description?: React.ReactNode;
-      /** Skill tags */
-      tags?: Array<{
-        name: string;
-        icon?: string;
-      }>;
+      /**
+       * Canonical technology keys from `resources/tech.tsx`, rendered as
+       * icon-plus-label chips. Replaced a `{ name }[]` of free-text strings,
+       * which could not be given icons without duplicating a lookup table per
+       * surface.
+       */
+      stack?: TechKey[];
       /** Images related to the skill */
       images?: Array<{
         /** Image source path */

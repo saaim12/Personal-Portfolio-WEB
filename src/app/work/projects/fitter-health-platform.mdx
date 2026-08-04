@@ -4,13 +4,30 @@ seoTitle: "Fitter Health: a platform built from zero"
 publishedAt: "2026-07-15"
 updatedAt: "2026-07-20"
 seoDescription: "How I built a Spain-based health-tech platform solo: Next.js, Django REST, PostgreSQL, Celery and the full AWS estate, from empty repo to production."
-summary: "A Spain-based health team had a validated concept and no engineering function. I built the platform and took it to production alone: entitlements, two-sided booking, invoice reconciliation with Odoo, and the AWS estate under it."
+summary: "A Spain-based health team had a validated idea and no engineering. I built the platform and took it to production alone: patient and provider accounts, two-sided booking, entitlements, invoicing wired into their Odoo, and the AWS underneath it."
 tags:
+  - "Client work"
   - "Full-stack"
-  - "Django"
-  - "Next.js"
-  - "AWS"
-images: []
+stack:
+  - "django"
+  - "drf"
+  - "postgresql"
+  - "celery"
+  - "redis"
+  - "nextjs"
+  - "aws"
+  - "ecs"
+  - "rds"
+  - "s3"
+  - "sns"
+  - "sqs"
+  - "redshift"
+  - "apigateway"
+  - "iam"
+  - "vpc"
+  - "odoo"
+images:
+  - "/images/projects/fitter-health-aws-architecture.png"
 link: "https://fitter.health/"
 team:
   - name: "Saaim Abdullah"
@@ -108,7 +125,6 @@ the days it eventually took to find. Anything asynchronous and user-visible now
 starts with the buffer and the dead-letter path, and earns the right to be
 simpler later.
 
-**Stack:** Django, Django REST Framework, PostgreSQL, Celery, Redis, Next.js, AWS (ECS, RDS, S3, SNS, SQS, Redshift, API Gateway, IAM, VPC), Odoo integration
 
 ## Links
 

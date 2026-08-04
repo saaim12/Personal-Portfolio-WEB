@@ -95,10 +95,15 @@ export default function Home() {
           <Reveal delay={0.25}>
             <Row gap="12" wrap horizontal="center" vertical="center">
               <a className="btn btn--primary btn--lg" href="/work">
-                See how I build
+                See what I&rsquo;ve built
                 <HiArrowRight aria-hidden="true" />
               </a>
-              <a className="btn btn--secondary btn--lg" href={home.cta.href}>
+              <a
+                className="btn btn--secondary btn--lg"
+                href={home.cta.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <HiOutlineCalendarDays aria-hidden="true" />
                 {home.cta.label}
               </a>
@@ -170,22 +175,33 @@ export default function Home() {
               Work
             </span>
             <Heading as="h2" variant="display-strong-s" align="center">
-              Selected work
+              Some things I&rsquo;ve built
             </Heading>
             <Text onBackground="neutral-weak" variant="heading-default-m" wrap="balance">
-              Architecture, trade-offs, and what I&rsquo;d do differently.
+              Client work and deep engineering projects, grouped by what they
+              are. Every one has a write-up on the architecture and the
+              trade-offs.
             </Text>
           </div>
         </Reveal>
 
+        {/* One from each of the three groups on /work, named rather than sliced
+            by date: the preview should represent the range of work, and a date
+            range would silently reshuffle it on the next case study. */}
         <Reveal delay={0.08}>
-          <Projects range={[1, 3]} />
+          <Projects
+            only={[
+              "fitter-health-platform",
+              "multilingual-rag-engine",
+              "realtime-ecommerce-etl-pipeline",
+            ]}
+          />
         </Reveal>
 
         <Reveal delay={0.12}>
           <Row fillWidth horizontal="center" paddingTop="32">
             <a className="btn btn--secondary" href="/work">
-              All five case studies
+              All five projects
               <HiArrowRight aria-hidden="true" />
             </a>
           </Row>

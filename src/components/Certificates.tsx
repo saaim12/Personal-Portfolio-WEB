@@ -59,6 +59,20 @@ export function Certificates() {
           );
         })}
       </div>
+
+      {/* Not a card: a card is a link, and an unearned certificate has nothing
+          to link to. It sits here rather than in the proof bar because an
+          in-progress cert only reads honestly with context around it. */}
+      <Reveal delay={0.2}>
+        <Text
+          variant="body-default-s"
+          onBackground="neutral-weak"
+          align="center"
+          paddingTop="24"
+        >
+          AWS Certified Solutions Architect &ndash; Associate: exam scheduled 2026.
+        </Text>
+      </Reveal>
     </Column>
   );
 }

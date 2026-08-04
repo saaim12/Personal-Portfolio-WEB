@@ -19,7 +19,7 @@ import { baseURL, person } from "@/resources";
 export const OG_WIDTH = 1200;
 export const OG_HEIGHT = 630;
 
-export const SITE_NAME = `${person.name} — Backend & Data Engineer`;
+export const SITE_NAME = `${person.name} — Software Engineer`;
 
 /**
  * Content-change date for the routes that have no frontmatter to read one

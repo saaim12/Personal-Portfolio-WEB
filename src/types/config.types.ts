@@ -42,16 +42,9 @@ export type StyleConfig = {
   scaling: ScalingSize;
 };
 
-/**
- * Top-level config types for once-ui.config.ts
- *
- * DisplayConfig, EffectsConfig and DataStyleConfig used to live here for the
- * template's location/time/theme toggles, its five-layer <Background>, and its
- * chart theme. None of the three had a consumer left.
- */
-export type OnceUIConfig = {
-  routes: RoutesConfig;
-  baseURL: string;
-  fonts: FontsConfig;
-  style: StyleConfig;
-};
+/* once-ui.config.ts exports `routes`, `baseURL`, `fonts` and `style` as four
+   separate values, each already typed above, so the OnceUIConfig wrapper that
+   used to sit here had no consumer. DisplayConfig, EffectsConfig and
+   DataStyleConfig went the same way earlier — they typed the template's
+   location/time/theme toggles, its five-layer <Background> and its chart
+   theme, none of which the site still has. */

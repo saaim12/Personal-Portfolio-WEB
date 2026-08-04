@@ -3,11 +3,18 @@ title: "Autoencoder compression for edge devices"
 publishedAt: "2025-11-15"
 updatedAt: "2025-11-20"
 seoDescription: "Bandwidth-bound sensors: a TensorFlow Lite Micro autoencoder compresses readings on the microcontroller, a Flask decoder on AWS EC2 rebuilds them server-side."
-summary: "Bandwidth, not compute, is the binding constraint on a remote sensor. The encoder runs on the microcontroller through TensorFlow Lite Micro at 7.8:1, and a Flask decoder on EC2 reconstructs the signal server-side."
+summary: "Squeezing sensor data down small enough to run on a microcontroller, with a decoder service on AWS reconstructing it on the other end. TensorFlow Lite Micro at 7.8:1, decoded by Flask on EC2."
 tags:
   - "Edge ML"
-  - "TensorFlow"
-  - "AWS"
+stack:
+  - "python"
+  - "tensorflow"
+  - "tflitemicro"
+  - "flask"
+  - "aws"
+  - "ec2"
+  - "s3"
+  - "esp32"
 images: []
 link: "https://github.com/saaim12/AutoEncoders_based_encryption_training_and_fitting_in_devices_such_as_esp_or_rasberry-pi"
 team:
@@ -90,7 +97,6 @@ compresses 7.8:1 while costing more power to run than the radio saves is a net
 loss, and I cannot currently prove it is not. That measurement comes first next
 time.
 
-**Stack:** Python, TensorFlow, TensorFlow Lite Micro, Flask, AWS (EC2, S3), ESP32
 
 ## Links
 

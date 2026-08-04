@@ -13,6 +13,7 @@ import {
 import { about, person, social, pageMeta, ogImageFor } from "@/resources";
 import { jsonLd, personJsonLd, webPageJsonLd } from "@/resources/schema";
 import TableOfContents from "@/components/about/TableOfContents";
+import { TechList } from "@/components";
 import styles from "@/components/about/about.module.scss";
 import React from "react";
 
@@ -319,14 +320,12 @@ export default function About() {
                     <Text variant="body-default-m" onBackground="neutral-weak">
                       {skill.description}
                     </Text>
-                    {skill.tags && skill.tags.length > 0 && (
-                      <div className="skillTags">
-                        {skill.tags.map((tag, tagIndex) => (
-                          <span key={`${skill.title}-${tagIndex}`} className="skillTag">
-                            {tag.name}
-                          </span>
-                        ))}
-                      </div>
+                    {skill.stack && skill.stack.length > 0 && (
+                      <TechList
+                        items={skill.stack}
+                        variant="chip"
+                        label={`${skill.title}: technologies`}
+                      />
                     )}
                     {skill.images && skill.images.length > 0 && (
                       <Row fillWidth paddingTop="m" gap="12" wrap>

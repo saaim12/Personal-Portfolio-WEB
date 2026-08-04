@@ -15,3 +15,4 @@ export { Testimonial } from "@/components/Testimonial";
 export { Process } from "@/components/Process";
 export { FAQ } from "@/components/FAQ";
 export { CustomMDX } from "@/components/mdx";
+export { TechList } from "@/components/Tech";

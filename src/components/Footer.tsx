@@ -1,10 +1,14 @@
 import { Column, Row, Text } from "@once-ui-system/core";
 import { HiArrowUpRight } from "react-icons/hi2";
 import { person, social } from "@/resources";
+import type { TechKey } from "@/resources/tech";
+import { TechList } from "./Tech";
 
 // Every page used to terminate in a wall: no navigation, no second chance, no
 // internal links for crawl depth. Separators here are layout (gaps and a rule),
 // not "·" characters wedged between strings.
+const COLOPHON: TechKey[] = ["nextjs", "vercel"];
+
 const LINKS = [
   { label: "Work", href: "/work", external: false },
   { label: "About", href: "/about", external: false },
@@ -42,35 +46,39 @@ export function Footer() {
               <Text variant="body-default-xs" onBackground="neutral-weak">
                 Site
               </Text>
-              {LINKS.map((l) => (
-                <a
-                  key={l.label}
-                  className="extLink"
-                  href={l.href}
-                  {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                >
-                  {l.label}
-                  {l.external && <HiArrowUpRight aria-hidden="true" />}
-                </a>
-              ))}
+              <div className="footerBtnCol">
+                {LINKS.map((l) => (
+                  <a
+                    key={l.label}
+                    className="footerBtn"
+                    href={l.href}
+                    {...(l.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  >
+                    {l.label}
+                    {l.external && <HiArrowUpRight aria-hidden="true" />}
+                  </a>
+                ))}
+              </div>
             </Column>
 
             <Column gap="12">
               <Text variant="body-default-xs" onBackground="neutral-weak">
                 Elsewhere
               </Text>
-              {social.map((s) => (
-                <a
-                  key={s.name}
-                  className="extLink"
-                  href={s.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {s.name === "Email" ? person.email : s.name}
-                  <HiArrowUpRight aria-hidden="true" />
-                </a>
-              ))}
+              <div className="footerBtnCol">
+                {social.map((s) => (
+                  <a
+                    key={s.name}
+                    className="footerBtn"
+                    href={s.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {s.name === "Email" ? person.email : s.name}
+                    <HiArrowUpRight aria-hidden="true" />
+                  </a>
+                ))}
+              </div>
             </Column>
           </Row>
         </Row>
@@ -86,9 +94,14 @@ export function Footer() {
           <Text variant="body-default-xs" onBackground="neutral-weak">
             © {new Date().getFullYear()} {person.name}
           </Text>
-          <Text variant="body-default-xs" onBackground="neutral-weak">
-            Built with Next.js, deployed on Vercel
-          </Text>
+          {/* Was the string "Built with Next.js, deployed on Vercel". Same two
+              technologies, now carrying their own marks. */}
+          <Row gap="8" vertical="center" wrap>
+            <Text variant="body-default-xs" onBackground="neutral-weak">
+              Built with
+            </Text>
+            <TechList items={COLOPHON} variant="chip" label="This site is built with" />
+          </Row>
         </Row>
       </Column>
     </Column>

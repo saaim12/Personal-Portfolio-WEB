@@ -49,7 +49,14 @@ const nextConfig = {
     // a site with no charts; react-icons has the same shape with thousands of
     // icon modules. This rewrites each named import to its own deep path so
     // only what is used gets bundled.
-    optimizePackageImports: ["react-icons/hi2", "react-icons/pi"],
+    // react-icons/si matters most: Simple Icons is ~3,000 modules and the
+    // technology map imports 44 of them by name.
+    optimizePackageImports: [
+      "react-icons/hi2",
+      "react-icons/pi",
+      "react-icons/si",
+      "react-icons/fa6",
+    ],
   },
   images: {
     // Modern formats first — Next falls back to the original for browsers

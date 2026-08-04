@@ -18,7 +18,8 @@ export function Services({ icon }: { icon?: ReactNode }) {
             {home.services.title}
           </Heading>
           <Text onBackground="neutral-weak" variant="heading-default-m" wrap="balance">
-            One engineer, the whole stack, design to database.
+            One engineer, the whole stack. If your project needs three of these
+            at once, that&rsquo;s usually why people call me.
           </Text>
         </div>
       </Reveal>
@@ -32,6 +33,11 @@ export function Services({ icon }: { icon?: ReactNode }) {
                   {createElement(iconLibrary[service.icon])}
                 </span>
               )}
+              {/* Deliberately no stack line and no logo row. These cards say
+                  what gets built, not what it is built with — naming a stack
+                  here made each one read as a specialism when the point of the
+                  section is the opposite. The stacks live on the case studies
+                  and in the skills section, where a reader has asked for them. */}
               <h3 className="cardTitle">{service.title}</h3>
               <p className="cardDesc">{service.description}</p>
             </div>

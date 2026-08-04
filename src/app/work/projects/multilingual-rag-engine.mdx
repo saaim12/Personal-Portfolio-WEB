@@ -3,12 +3,19 @@ title: "Multilingual, multi-tenant RAG engine"
 publishedAt: "2026-05-10"
 updatedAt: "2026-05-14"
 seoDescription: "A multi-tenant RAG backend in Django and PostgreSQL: isolated per-customer retrieval, local multilingual embeddings, answers grounded in retrieved context."
-summary: "Several tenants on one deployment with fully isolated retrieval. The tenant claim lives in the JWT, not the request, because cross-tenant retrieval is a security bug rather than a quality one. Local embeddings, grounded answers."
+summary: "A chatbot backend that answers from a company's own documents, in multiple languages, with each customer's data walled off from every other customer's. Answers cite where they came from."
 tags:
   - "RAG / AI"
   - "Multi-tenant"
-  - "Django"
-  - "PostgreSQL"
+stack:
+  - "django"
+  - "postgresql"
+  - "pgvector"
+  - "e5"
+  - "gemini"
+  - "jwt"
+  - "html"
+  - "javascript"
 images: []
 link: "https://github.com/saaim12/multilingual-multitenant-rag"
 team:
@@ -107,7 +114,6 @@ cannot tell you whether the current chunking is better than the first thing I
 tried. Building a small hand-labelled question set first would have cost a day
 and made the rest of the work measurable.
 
-**Stack:** Django, PostgreSQL, pgvector, multilingual-e5-base, Gemini 2.5 Flash, JWT, HTML and JavaScript frontend
 
 ## Links
 

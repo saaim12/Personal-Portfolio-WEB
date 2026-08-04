@@ -3,12 +3,18 @@ title: "Hybrid recommender, built as a service"
 publishedAt: "2026-07-01"
 updatedAt: "2026-07-05"
 seoDescription: "A hybrid recommender shipped as a service: cold-start handling, a FastAPI serving layer with API-key auth, hot model reloads, Redis caching and CI tests."
-summary: "A recommender with the parts that usually get skipped: cold start handled by design, training and serving separated by an artifact, hot model reload without a deploy, and an evaluation that reports its own sample size."
+summary: "A recommendation engine with the parts people usually skip: new users handled by design instead of by accident, training and serving separated, model swaps without a redeploy, and an evaluation that reports its own sample size."
 tags:
   - "Machine learning"
-  - "FastAPI"
-  - "Airflow"
-  - "Redis"
+stack:
+  - "python"
+  - "fastapi"
+  - "pandas"
+  - "scikitlearn"
+  - "airflow"
+  - "redis"
+  - "docker"
+  - "pytest"
 images: []
 link: "https://github.com/saaim12/Recommender-System"
 team:
@@ -98,7 +104,6 @@ is being asked to predict, which inflates the collaborative signal in evaluation
 and not in production. A time-based split would cost little and would make the
 offline numbers mean what they appear to mean.
 
-**Stack:** Python, FastAPI, pandas, scikit-learn, Airflow, Redis, Docker, pytest
 
 ## Links
 

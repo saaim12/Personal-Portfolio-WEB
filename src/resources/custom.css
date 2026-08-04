@@ -279,7 +279,6 @@ pre code {
 
 /* Anything that behaves as a link picks up the same lift. */
 .prose a:hover,
-a.textLink:hover,
 .extLink.extLink:hover,
 article a:hover,
 .certCard:hover .certView,
@@ -288,7 +287,6 @@ article a:hover,
   text-shadow: var(--glow);
 }
 .prose a,
-a.textLink,
 .extLink.extLink,
 article a,
 .certView,
@@ -312,8 +310,7 @@ article a,
    identifiable by colour alone, which WCAG 1.4.1 exists to prevent. The rest
    state says "link", the hover state says "this one". */
 .prose a,
-article a,
-a.textLink {
+article a {
   position: relative;
   text-decoration: none;
   background-image: linear-gradient(
@@ -326,8 +323,7 @@ a.textLink {
   padding-bottom: 1px;
 }
 .prose a::after,
-article a::after,
-a.textLink::after {
+article a::after {
   content: "";
   position: absolute;
   left: 0;
@@ -341,8 +337,7 @@ a.textLink::after {
   transition: transform var(--base) var(--ease);
 }
 .prose a:hover::after,
-article a:hover::after,
-a.textLink:hover::after {
+article a:hover::after {
   transform: scaleX(1);
 }
 /* The standalone-link underline picks up the same bloom as the text. */
@@ -354,8 +349,7 @@ a.textLink:hover::after {
    the bloom above carry the hover state; this used to also thicken the resting
    underline from 1px to 2px, which fought the wipe for the same 1px of space. */
 .prose a,
-article a,
-a.textLink {
+article a {
   color: var(--text);
   font-weight: 500;
 }
@@ -527,22 +521,13 @@ a.textLink {
   color: var(--bg);
 }
 
-.btn.btn--ghost {
-  background: transparent;
-  color: var(--text-2);
-}
-.btn.btn--ghost:hover {
-  background: var(--accent-soft);
-  color: var(--text);
-}
 
 /* ══ CARDS ══════════════════════════════════════════════════════════════
    One card. The previous system wrapped each in a gradient frame drawn from
    six unrelated colour pairs, with a blurred glow and a 25-cell 3D tilt: the
    most reliable "template site" tell there is. */
 
-.card,
-.glassPanel {
+.card {
   position: relative;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -606,31 +591,6 @@ a.textLink {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
 }
 
-/* ══ TAGS ═══════════════════════════════════════════════════════════════ */
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 10px;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--surface-2);
-  font-family: var(--font-label), sans-serif;
-  font-size: 0.71875rem;
-  font-weight: 600;
-  color: var(--text-2);
-  white-space: nowrap;
-  transition: border-color var(--fast) var(--ease), color var(--fast) var(--ease);
-}
-.tag:hover {
-  border-color: var(--border-accent);
-  color: var(--text);
-}
-.tagRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
 
 /* ══ PROJECT CARD ═══════════════════════════════════════════════════════ */
 
@@ -652,6 +612,17 @@ a.textLink {
   content: "·";
   margin-right: 8px;
   color: var(--muted);
+}
+/* Logo strip at the foot of the card. `margin-top: auto` claims the slack so
+   cards of differing copy length still line their strips up. */
+.projStack {
+  margin-top: auto;
+  padding-top: 16px;
+}
+/* `.projStack` already took the slack, so `.projMore` must not fight it for
+   the same space. */
+.projStack + .projMore {
+  margin-top: 0;
 }
 .projMore {
   display: inline-flex;
@@ -886,15 +857,57 @@ a.textLink {
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
 }
-.skillTags {
+
+/* ══ TECHNOLOGY ICONS ═══════════════════════════════════════════════════
+   Every tech mention on the site renders through <TechList>. Two variants:
+   icon-only for dense surfaces, icon-plus-label chips everywhere else.
+
+   Brand colour arrives as two custom properties set per icon, one resolved
+   for each ground (see techColors() in resources/tech.tsx). Anything that
+   would fail contrast comes through as `currentColor` for that theme, so
+   Django's near-black green and Next.js's pure black stay visible here
+   rather than vanishing into the page. */
+
+.techList {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 7px;
-  margin-top: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-.skillTag {
+.techList--icons {
+  gap: 10px;
+}
+.techList > li {
+  display: inline-flex;
+  min-width: 0;
+}
+
+.techIcon,
+.techChipIcon {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  color: var(--tech-dark, currentColor);
+  flex-shrink: 0;
+}
+.techIcon svg {
+  width: 17px;
+  height: 17px;
+}
+.techChipIcon svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* Same border, radius, surface and type as the rest of the design's small
+   surfaces, so the chips read as one system. */
+.techChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 4px 10px;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
@@ -902,7 +915,23 @@ a.textLink {
   font-size: 0.71875rem;
   font-weight: 600;
   color: var(--text-2);
-  white-space: nowrap;
+  /* Wraps rather than overflowing: some labels ("TensorFlow Lite Micro") are
+     wider than a card column on a phone. */
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The site ships dark-only today. These rules cost nothing now and are what
+   keeps the icons legible the day a light theme is added. */
+:root[data-theme="light"] .techIcon,
+:root[data-theme="light"] .techChipIcon {
+  color: var(--tech-light, currentColor);
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .techIcon,
+  :root:not([data-theme="dark"]) .techChipIcon {
+    color: var(--tech-light, currentColor);
+  }
 }
 
 /* ══ CERTIFICATES ═══════════════════════════════════════════════════════ */
@@ -972,66 +1001,8 @@ a.textLink {
   height: 14px;
 }
 
-.certModal {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: clamp(14px, 3vw, 32px);
-  background: color-mix(in srgb, var(--bg) 84%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  animation: modalIn var(--base) var(--ease);
-}
-@keyframes modalIn {
-  from { opacity: 0; }
   to { opacity: 1; }
-}
-.certModalHead {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  width: min(1000px, 100%);
-}
-.certModalFrame {
-  width: min(1000px, 100%);
-  flex: 1;
-  min-height: 0;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-}
-.certModalFrame object,
-.certModalFrame iframe {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  display: block;
-}
-.certClose {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--text-2);
-  cursor: pointer;
-  transition: background var(--fast) var(--ease), color var(--fast) var(--ease);
-}
-.certClose:hover {
-  background: var(--surface-hover);
-  color: var(--text);
-}
+
 
 /* ══ AVATAR ═════════════════════════════════════════════════════════════
    In full colour. This carried a grayscale filter that lifted on hover, to
@@ -1060,7 +1031,6 @@ a.textLink {
    process step numbers. Reserved for figures: run it on body copy and the
    page turns into a screensaver. */
 
-.shimmer,
 .proofValue,
 .processStep {
   background: linear-gradient(100deg, #ffffff 0%, #cccccf 45%, #ffffff 100%);
@@ -1279,6 +1249,69 @@ a.textLink {
 
 @media (prefers-reduced-motion: reduce) {
   .heroSocial:hover { transform: none; }
+}
+
+/* ══ FOOTER BUTTONS ═════════════════════════════════════════════════════
+   The footer link columns used to be bare text with a trailing arrow, which
+   read as body copy rather than as ten separate destinations. Same glass
+   panel, hairline border and 6px lift as .heroSocial — the site's existing
+   compact button — so this introduces no new treatment, only applies the one
+   already here to a surface that was missing it.
+
+   `justify-content: space-between` pins the arrow to the right edge, so a
+   column of buttons has its labels and its arrows both in line. */
+
+.footerBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--text-2);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  /* Long labels (the email address) must not push the column wider than the
+     footer allows on a phone. */
+  min-width: 0;
+  overflow-wrap: anywhere;
+  transition: transform var(--base) var(--ease), border-color var(--base) var(--ease),
+    color var(--base) var(--ease), background var(--base) var(--ease),
+    box-shadow var(--base) var(--ease);
+}
+.footerBtn svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  opacity: 0.65;
+}
+.footerBtn:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-accent);
+  background: var(--surface-hover);
+  color: var(--text);
+  box-shadow: var(--shadow-lg);
+}
+.footerBtn:hover svg {
+  opacity: 1;
+}
+/* Stretch to the column width so a stack of them shares one edge instead of
+   ragging to each label's length. */
+.footerBtnCol {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  min-width: 150px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footerBtn:hover { transform: none; }
 }
 
 /* ══ AURORA BACKDROP ════════════════════════════════════════════════════

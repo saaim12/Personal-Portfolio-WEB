@@ -1,6 +1,10 @@
 import { Column, Heading, Row, Text } from "@once-ui-system/core";
-import { HiOutlineEnvelope, HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
-import { person, social } from "@/resources";
+import {
+  HiOutlineEnvelope,
+  HiOutlineChatBubbleLeftRight,
+  HiOutlineCalendarDays,
+} from "react-icons/hi2";
+import { home, person, social } from "@/resources";
 import { iconLibrary } from "@/resources/icons";
 import { Reveal } from "./Reveal";
 
@@ -35,9 +39,10 @@ export function Contact() {
             align="center"
             wrap="balance"
           >
-            Backend, data platforms, AWS, or a full product from scratch. Send me
-            the problem and I&rsquo;ll tell you honestly whether I&rsquo;m the
-            right engineer for it, usually within a day.
+            A full product, a backend, a data pipeline, or a codebase someone
+            left you. Send me the problem in a few sentences and I&rsquo;ll tell
+            you honestly whether I&rsquo;m the right engineer for it. I reply
+            within a day.
           </Text>
         </Column>
       </Reveal>
@@ -52,9 +57,21 @@ export function Contact() {
               rel="noopener noreferrer"
             >
               <HiOutlineChatBubbleLeftRight aria-hidden="true" />
-              Chat on WhatsApp
+              Send me a message
             </a>
           )}
+          {/* Offered next to WhatsApp, not instead of it. A buyer who will not
+              open WhatsApp to an unknown number will book a slot, and the
+              reverse is equally true. */}
+          <a
+            className="btn btn--secondary btn--lg"
+            href={home.cta.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <HiOutlineCalendarDays aria-hidden="true" />
+            {home.cta.label}
+          </a>
           <a className="btn btn--secondary btn--lg" href={`mailto:${person.email}`}>
             <HiOutlineEnvelope aria-hidden="true" />
             {person.email}
