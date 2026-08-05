@@ -12,14 +12,17 @@ import { baseURL, person } from "@/resources";
 // absolute canonical.
 //
 // Everything is absolute against baseURL. Nothing in the site may hardcode a
-// domain — saaim.online 308s to saaim.site and the old *.vercel.app host must
+// domain, saaim.online 308s to saaim.site and the old *.vercel.app host must
 // never appear in output at all.
 
 /** Every OG image on the site is rendered by /api/og/generate at this size. */
 export const OG_WIDTH = 1200;
 export const OG_HEIGHT = 630;
 
-export const SITE_NAME = `${person.name} — Software Engineer`;
+// One value, used as og:site_name on every route. No em dash: the site does not
+// use them anywhere, and this string is the one place a stray one survives a
+// content pass because it is never rendered on screen.
+export const SITE_NAME = `${person.name}, software engineer`;
 
 /**
  * Content-change date for the routes that have no frontmatter to read one
@@ -27,7 +30,7 @@ export const SITE_NAME = `${person.name} — Software Engineer`;
  *
  * Deliberately not `new Date()`: a lastModified that moves on every build is
  * a lastModified crawlers learn to ignore. Deliberately not the file mtime
- * either — git does not preserve mtimes, so on a Vercel build every file
+ * either, git does not preserve mtimes, so on a Vercel build every file
  * reads as "modified at checkout", which is the same lie with extra steps.
  */
 export const SITE_LAST_MODIFIED = "2026-08-01";

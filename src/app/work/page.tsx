@@ -6,9 +6,10 @@ import { jsonLd, webPageJsonLd } from "@/resources/schema";
 
 export async function generateMetadata() {
   return pageMeta({
-    // `label`, not `title`: the layout template appends " | Saaim Abdullah",
-    // and `work.title` is the on-page H1.
-    title: work.label,
+    // The layout template appends " | Saaim Abdullah", so this renders as
+    // "Systems I've built | Saaim Abdullah". It was `work.label` ("Work"),
+    // which wasted the most valuable 17 characters in a search result.
+    title: work.title,
     description: work.description,
     path: work.path,
   });
@@ -51,8 +52,9 @@ export default function Work() {
           align="center"
           wrap="balance"
         >
-          Client projects and engineering projects, each with a write-up on how
-          it was built and what I&rsquo;d do differently.
+          Five systems, each with the problem, the architecture, the trade-offs
+          I made, and what I would change. One was client work in production,
+          four were built to go deep on something.
         </Text>
         {/* "Shown with the permission of clients" was removed: four of the five
             are personal projects, and a reader who works that out stops
@@ -92,8 +94,8 @@ export default function Work() {
             align="center"
             wrap="balance"
           >
-            I write about how I build these systems on Medium: the architecture
-            decisions, the hard parts, and what I&rsquo;d do differently.
+            I write up the architecture decisions, the parts that were hard, and
+            what I would do differently. All on Medium.
           </Text>
           <Row gap="12" wrap horizontal="center">
             <Button
@@ -106,6 +108,21 @@ export default function Work() {
               arrowIcon
             >
               Read my articles on Medium
+            </Button>
+            {/* The five systems above are the interesting work, but most loops
+                still open with an algorithms round, and a recruiter screening
+                for one looks for exactly this. Kept alongside the write-ups
+                rather than promoted above them. */}
+            <Button
+              className="btnLift"
+              href="https://github.com/saaim12/DSA-Python"
+              prefixIcon="github"
+              variant="secondary"
+              size="m"
+              data-border="rounded"
+              arrowIcon
+            >
+              DSA practice in Python
             </Button>
           </Row>
         </Column>

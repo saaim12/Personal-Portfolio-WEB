@@ -22,7 +22,7 @@ type Metadata = {
   updatedAt: string;
   summary: string;
   /**
-   * Search-results description, 140–160 characters. `summary` is page copy and
+   * Search-results description, 140 to 160 characters. `summary` is page copy and
    * runs past 200, which Google truncates mid-sentence.
    */
   seoDescription: string;

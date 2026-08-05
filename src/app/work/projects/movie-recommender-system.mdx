@@ -1,9 +1,9 @@
 ---
 title: "Hybrid recommender, built as a service"
 publishedAt: "2026-07-01"
-updatedAt: "2026-07-05"
+updatedAt: "2026-08-06"
 seoDescription: "A hybrid recommender shipped as a service: cold-start handling, a FastAPI serving layer with API-key auth, hot model reloads, Redis caching and CI tests."
-summary: "A recommendation engine with the parts people usually skip: new users handled by design instead of by accident, training and serving separated, model swaps without a redeploy, and an evaluation that reports its own sample size."
+summary: "A recommender with the parts that usually get skipped: cold start handled by design, training and serving separated by an artifact, hot model reload without a deploy, and an evaluation that reports its own sample size."
 tags:
   - "Machine learning"
 stack:
@@ -31,13 +31,29 @@ ships is everything around it: what you serve to a user you have no history for,
 how you swap a retrained model without dropping traffic, and how you keep
 latency low enough to sit inside a page render.
 
+Both of the hard cases are the ones a benchmark hides. A model tuned on users
+with long histories scores well and then meets a user with none, and a model
+that has to be redeployed to pick up new weights stops being retrained long
+before anyone admits it. I built this to find out what the serving layer around
+a recommender has to look like for neither of those to happen.
+
 ## Constraints
 
 - Cold start is the common case, not the edge case. New users and new items arrive constantly, and a model that needs interaction history is unusable on day one.
 - Recommendations render inside a page load, so the serving path has a latency budget.
 - Retraining must not require a deploy, because nobody redeploys to refresh weights and the model goes stale.
 
-## Architecture
+The data is MovieLens: ratings, tags, links and movie metadata, and nothing
+else. No user profile beyond interaction history, no item text beyond genres and
+tags, and no way to buy a signal that is not in the files. Every scoring
+decision below is a consequence of that, and a recommender given richer features
+would reasonably make different ones.
+
+{/* Saaim: worth adding the latency budget as a number rather than as "inside a
+    page load". The p95 figures under "How it's built" show what it achieved;
+    a stated budget would show what it had to beat. */}
+
+## How it's built
 
 Ingestion, feature engineering, training, evaluation and serving are separate
 layers over MovieLens ratings, tags, links and movie metadata, not one notebook.
@@ -52,7 +68,37 @@ sits in front of the hot paths with a configurable TTL. Airflow runs the
 training DAG, and the trained model is pickled to disk as an artifact the API
 loads.
 
-## Decisions
+**The evaluation was lying, quietly.** The holdout split is per user, and the
+evaluation only scores users who have at least one held-out item rated above the
+positive threshold. The first time I ran it end to end, a large share of users
+were skipped and the reported precision was computed over a much smaller
+population than I assumed, which made it look better than it was. The fix was to
+report `evaluated_users` alongside every metric rather than just the metric. A
+precision figure without its sample size is not a result, it is a number, and I
+had been about to believe my own. The evaluation now returns precision, recall,
+hit rate, coverage and the evaluated-user count together, so the denominator
+travels with the fraction.
+
+**Measured:**
+
+- p95 recommendation latency: 11 ms cached, 74 ms cold
+- Precision@10 and recall@10 on held-out interactions: 0.36 and 0.24
+- Cold-start coverage: 97% of the catalogue receives non-trivial recommendations
+- Model reload swaps the artifact with zero dropped requests
+- 4 serving routes behind API-key auth
+
+## Trade-offs I made
+
+**Training and serving separated by an artifact.** The trainer writes a versioned
+model artifact; the serving process loads it. The cost is a staleness window
+between training and reload. The benefit is that training failures cannot take
+serving down, and either side can be changed, scaled, or rolled back without
+touching the other.
+
+**Hot model reload instead of redeploys.** New artifacts are picked up by the
+running service. The cost is having to handle version skew and reload safety
+inside the service rather than leaning on a deploy pipeline to do it. The benefit
+is model iteration decoupled from release cadence.
 
 **A hybrid model rather than pure collaborative filtering.** Content similarity
 works with zero interaction history, co-occurrence captures the behavioural
@@ -60,43 +106,11 @@ signal, and the popularity prior keeps output sane when both are thin. Pure
 collaborative filtering scores better on a benchmark and fails on exactly the
 users you most need to serve.
 
-**Training and serving split by an artifact, not a shared process.** Training
-writes a pickle and a metrics file. Serving loads the pickle. Nothing in the API
-imports the training code, which means retraining cannot break serving and a bad
-model can be rolled back by pointing at the previous artifact.
+**API-key auth on a recommender.** Recommendation endpoints leak behavioural data
+by inference and are cheap to scrape. Auth belongs there from the start, not
+after someone notices.
 
-**Hot reload instead of redeploying to ship a model.** Decoupling model version
-from application version makes retraining a pipeline concern rather than a
-release concern. That is the difference between a model that gets refreshed and
-one that quietly rots.
-
-**API-key auth on a recommender.** Recommendation endpoints leak behavioural
-data by inference and are cheap to scrape. Auth belongs there from the start,
-not after someone notices.
-
-## What went wrong
-
-The holdout split is per user, and the evaluation only scores users who have at
-least one held-out item rated above the positive threshold. The first time I ran
-it end to end, a large share of users were skipped and the reported precision
-was computed over a much smaller population than I assumed, which made it look
-better than it was.
-
-The fix was to report `evaluated_users` alongside every metric rather than just
-the metric. A precision figure without its sample size is not a result, it is a
-number, and I had been about to believe my own. The evaluation now returns
-precision, recall, hit rate, coverage and the evaluated-user count together, so
-the denominator travels with the fraction.
-
-## Results
-
-- p95 recommendation latency: 11 ms cached, 74 ms cold
-- Precision@10 and recall@10 on held-out interactions: 0.36 and 0.24
-- Cold-start coverage: 97% of the catalogue receives non-trivial recommendations
-- Model reload swaps the artifact with zero dropped requests
-- 4 serving routes behind API-key auth, with training and serving separated by a pickle so retraining cannot take the API down
-
-## What I would do differently
+## What I'd do differently
 
 The split is random per user, not time-based. Item co-occurrence built from the
 full ratings table can therefore see interactions that happen after the ones it
@@ -104,6 +118,12 @@ is being asked to predict, which inflates the collaborative signal in evaluation
 and not in production. A time-based split would cost little and would make the
 offline numbers mean what they appear to mean.
 
+I would also stop treating the three scoring signals as a fixed blend. Content
+similarity, co-occurrence and the popularity prior are combined with weights I
+chose by hand and never revisited, which means I cannot say what any one of them
+contributes. Ablating each signal against the evaluation set would tell me
+whether the collaborative component earns its complexity at all, and I have no
+evidence either way.
 
 ## Links
 

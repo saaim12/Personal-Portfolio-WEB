@@ -7,8 +7,8 @@ import { createElement } from "react";
  * the project cards, the case studies, the skills section and the footer.
  *
  * Two variants and no more:
- *   "icon"  — icon only, for dense surfaces (project cards, service cards)
- *   "chip"  — icon plus label, for detail pages and the skills section
+ *   "icon", icon only, for dense surfaces (project cards, service cards)
+ *   "chip", icon plus label, for detail pages and the skills section
  *
  * Accessibility: in "icon" mode the name exists only in the logo, so each one
  * carries its own `aria-label` and a `title` for pointer users. In "chip" mode

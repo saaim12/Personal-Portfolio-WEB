@@ -5,8 +5,11 @@ import {
   HiOutlineLink,
   HiEnvelope,
   HiCalendarDays,
+  HiOutlineCircleStack,
   HiOutlineDocument,
+  HiOutlineExclamationTriangle,
   HiOutlineGlobeAsiaAustralia,
+  HiOutlineMagnifyingGlass,
   HiOutlineRocketLaunch,
 } from "react-icons/hi2";
 
@@ -19,7 +22,7 @@ import { FaGithub, FaLinkedin, FaWhatsapp, FaMedium, FaUpwork } from "react-icon
  *
  * This map is merged over Once UI's own defaults by `IconProvider`, so a name
  * used only inside a Once UI component (chevronRight, arrowRight, check …)
- * needs no entry here — it already resolves. Twenty-two entries for platforms
+ * needs no entry here, it already resolves. Twenty-two entries for platforms
  * the site does not link to (Discord, X, Threads, Instagram, Facebook,
  * Pinterest, Reddit, Telegram, Supabase, Figma …) were removed for that
  * reason: nothing referenced them, and Once UI does not need them.
@@ -42,6 +45,10 @@ export const iconLibrary: Record<string, IconType> = {
   document: HiOutlineDocument,
   rocket: HiOutlineRocketLaunch,
   whatsapp: FaWhatsapp,
+  // Used by the "How I work" cards on the home page.
+  warning: HiOutlineExclamationTriangle,
+  database: HiOutlineCircleStack,
+  search: HiOutlineMagnifyingGlass,
 };
 
 export type IconLibrary = typeof iconLibrary;

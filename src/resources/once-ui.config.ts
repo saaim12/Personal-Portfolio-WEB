@@ -12,7 +12,7 @@ const routes: RoutesConfig = {
 // Import and set font for each variant
 import { Space_Grotesk, Manrope, Space_Mono } from "next/font/google";
 
-// Display / headings — Space Grotesk, the three weights the layout renders.
+// Display / headings, Space Grotesk, the three weights the layout renders.
 const heading = Space_Grotesk({
   variable: "--font-heading",
   weight: ["500", "600", "700"],
@@ -27,7 +27,7 @@ const body = Manrope({
   display: "swap",
 });
 
-// UI labels — same family, separate CSS variable (Once UI tokens read
+// UI labels, same family, separate CSS variable (Once UI tokens read
 // --font-label). Next dedupes the underlying font files.
 const label = Manrope({
   variable: "--font-label",
@@ -35,7 +35,7 @@ const label = Manrope({
   display: "swap",
 });
 
-// Mono — small labels, section markers, tech tags, code.
+// Mono, small labels, section markers, tech tags, code.
 // Space Mono is not a variable font, so weights must be explicit.
 const code = Space_Mono({
   variable: "--font-code",

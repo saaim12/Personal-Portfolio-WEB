@@ -112,7 +112,7 @@ export default async function RootLayout({
               `display: false`, so it rendered nothing while still shipping
               both client components. AuroraField is the backdrop now. */}
           <AuroraField />
-          {/* First tab stop on every page — lets keyboard and screen-reader
+          {/* First tab stop on every page, lets keyboard and screen-reader
               users skip the nav instead of tabbing through it each time. */}
           <a href="#main" className="skipLink">
             Skip to content

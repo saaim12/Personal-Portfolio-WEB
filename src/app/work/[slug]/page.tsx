@@ -154,7 +154,7 @@ export default async function Project({
           priority={i === 0}
           aspectRatio="16 / 9"
           radius="m"
-          // Was alt="image" — useless to a screen reader and to image search.
+          // Was alt="image", useless to a screen reader and to image search.
           alt={
             post.metadata.images.length > 1
               ? `${post.metadata.title}: architecture diagram ${i + 1} of ${post.metadata.images.length}`
@@ -187,11 +187,12 @@ export default async function Project({
         align="center"
       >
         <Heading as="h2" variant="heading-strong-l" align="center">
-          Building something like this?
+          Want to dig into this one?
         </Heading>
         <Text onBackground="neutral-weak" align="center" wrap="balance">
-          Tell me the problem and I'll tell you honestly whether I'm the right
-          engineer for it.
+          I&rsquo;m open to full-time backend, platform and data engineering
+          roles, and happy to walk through any decision on this page in more
+          detail than it deserves.
         </Text>
         <Button
           className="btnLift"
@@ -201,7 +202,7 @@ export default async function Project({
           data-border="rounded"
           arrowIcon
         >
-          Start a conversation
+          Get in touch
         </Button>
       </Column>
       <ScrollToHash />

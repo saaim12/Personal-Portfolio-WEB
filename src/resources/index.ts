@@ -1,5 +1,5 @@
 // import a pre-defined template for config and content options
-export { person, social, home, about, work, certificates } from "./content";
+export { person, social, home, about, work, certificates, bookingLink } from "./content";
 
 export { routes, baseURL, fonts, style } from "./once-ui.config";
 

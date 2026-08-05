@@ -6,7 +6,7 @@ type RevealProps = {
   children: ReactNode;
   /** stagger helper, in seconds */
   delay?: number;
-  /** element to render — use "li" inside a list, where a div would be invalid */
+  /** element to render, use "li" inside a list, where a div would be invalid */
   as?: "div" | "li";
   style?: CSSProperties;
   className?: string;

@@ -70,7 +70,7 @@ export function Certificates() {
           align="center"
           paddingTop="24"
         >
-          AWS Certified Solutions Architect &ndash; Associate: exam scheduled 2026.
+          AWS Certified Solutions Architect, Associate: exam scheduled 2026.
         </Text>
       </Reveal>
     </Column>

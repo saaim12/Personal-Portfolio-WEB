@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 // to the cursor.
 //
 // It sits fixed at z-index -1, which puts it above the page background and
-// below every in-flow element — no z-index has to be added to the content for
+// below every in-flow element, no z-index has to be added to the content for
 // it to stay readable.
 //
 // Everything is one canvas: the alternative (blurred DOM blobs plus an SVG

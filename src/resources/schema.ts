@@ -4,14 +4,14 @@ import { SITE_NAME } from "./seo";
 // JSON-LD graph nodes, one export per schema type.
 //
 // These lived in layout.tsx, which meant Person and FAQPage were emitted on
-// every route — including each case study, which is not about a person and
+// every route, including each case study, which is not about a person and
 // has no FAQ. Structured data should describe the page it is on. They are
 // mounted per route now:
 //
-//   layout   → WebSite        (describes the site, correct everywhere)
-//   /        → Person, FAQPage
-//   /about   → Person
-//   /work/*  → BlogPosting    (via Once UI's <Schema>)
+//   layout   -> WebSite        (describes the site, correct everywhere)
+//   /        -> Person
+//   /about   -> Person
+//   /work/*  -> BlogPosting
 //
 // Person carries a stable @id so the homepage and About copies resolve to one
 // node rather than two competing entities.
@@ -22,7 +22,7 @@ export const PERSON_ID = `${baseURL}/#person`;
  * Helper for the <script type="application/ld+json"> props.
  *
  * A plain <script>, not Once UI's <Schema> component. <Schema> renders through
- * next/script, which injects the tag after hydration — so none of the WebPage
+ * next/script, which injects the tag after hydration, so none of the WebPage
  * or BlogPosting markup was in the server HTML at all, only in the RSC
  * payload. Structured data has to be in the response a crawler is served.
  */
@@ -115,20 +115,24 @@ export const personJsonLd = {
   name: person.name,
   url: baseURL,
   image: `${baseURL}${person.avatar}`,
-  jobTitle: "Software Engineer (Backend, Data & Cloud)",
+  jobTitle: "Software Engineer",
   description: home.description,
   email: person.email,
+  // Parsed by sourcing tools, which is the only reason it is worth stating a
+  // job-seeking status in markup rather than only in the copy.
+  seeks: {
+    "@type": "Demand",
+    name: "Full-time backend, platform or data engineering role",
+  },
   address: {
     "@type": "PostalAddress",
     addressLocality: "Lahore",
     addressCountry: "PK",
   },
   sameAs: social.filter((s) => s.name !== "Email").map((s) => s.link),
-  worksFor: {
-    "@type": "Organization",
-    name: "Fitter Health",
-    url: "https://fitter.health/",
-  },
+  // No `worksFor`: the Fitter Health engagement ended in July 2026, and a
+  // current-employer claim the reader can check and find finished is worse than
+  // no claim at all.
   alumniOf: {
     "@type": "CollegeOrUniversity",
     name: "COMSATS University Islamabad",
@@ -175,16 +179,4 @@ export const personJsonLd = {
     "Redis",
     "Celery",
   ],
-};
-
-// Generated from the same content the FAQ section renders, so the two can
-// never disagree. Wins expandable SERP real estate on name searches.
-export const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: home.faq.items.map((item) => ({
-    "@type": "Question",
-    name: item.q,
-    acceptedAnswer: { "@type": "Answer", text: item.a },
-  })),
 };

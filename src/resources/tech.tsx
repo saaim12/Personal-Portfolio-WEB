@@ -62,12 +62,11 @@ import {
  * `color` is the official Simple Icons brand hex. It is not used directly:
  * `techColors()` below checks it against both grounds and swaps in
  * `currentColor` for whichever theme it would vanish against. Leave `color`
- * undefined for anything with no brand identity (a concept, not a product) —
- * those render in the surrounding text colour on purpose.
+ * undefined for anything with no brand identity (a concept, not a product), * those render in the surrounding text colour on purpose.
  *
  * Export names were verified against react-icons 5.5.0. Several plausible
- * guesses do not exist in that version — there is no `SiAmazonaws`,
- * `SiAmazonsns`, `SiAmazonvpc` or `SiAwsiam` — so check before adding.
+ * guesses do not exist in that version, there is no `SiAmazonaws`,
+ * `SiAmazonsns`, `SiAmazonvpc` or `SiAwsiam`, so check before adding.
  */
 export type TechKey = keyof typeof TECH;
 
@@ -204,7 +203,7 @@ function contrast(a: number, b: number): number {
 
 /**
  * The two CSS custom properties an icon needs. Anything under 3:1 against a
- * ground — WCAG's threshold for non-text content — falls back to
+ * ground, WCAG's threshold for non-text content, falls back to
  * `currentColor` for that theme only, so it inherits the surrounding text and
  * stays legible instead of disappearing.
  */

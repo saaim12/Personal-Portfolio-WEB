@@ -1,9 +1,9 @@
 ---
 title: "Multilingual, multi-tenant RAG engine"
 publishedAt: "2026-05-10"
-updatedAt: "2026-05-14"
+updatedAt: "2026-08-06"
 seoDescription: "A multi-tenant RAG backend in Django and PostgreSQL: isolated per-customer retrieval, local multilingual embeddings, answers grounded in retrieved context."
-summary: "A chatbot backend that answers from a company's own documents, in multiple languages, with each customer's data walled off from every other customer's. Answers cite where they came from."
+summary: "Several tenants on one deployment with fully isolated retrieval. The tenant claim lives in the JWT rather than the request, because cross-tenant retrieval is a security bug rather than a quality one. Local embeddings, grounded answers with citations."
 tags:
   - "RAG / AI"
   - "Multi-tenant"
@@ -27,13 +27,19 @@ team:
 
 ## The problem
 
-One customer's documents must never appear in another customer's answers. That
-single requirement is what separates a RAG demo from a RAG product, and it is
-why most demos cannot be sold to a second customer.
+A question-answering service over company documents has two failure modes that
+matter more than answer quality. It can answer from the wrong tenant's
+documents, which is a security incident rather than a bad answer. And it can
+answer from nothing, generating plausible text when retrieval comes back thin.
+This engine had to serve several tenants and several languages from one
+deployment, guarantee retrieval could never cross a tenant boundary, and ground
+every answer in retrievable, citable sources.
 
-The use case was a localisation Q&A service: several tenants, each with their
-own corpus, several languages, and answers traceable to a source rather than
-confidently invented.
+The concrete use case was a localisation Q&A service: several tenants, each with
+their own corpus, several languages, and answers traceable to a source rather
+than confidently invented. For a localisation tool a confident wrong answer is
+worse than no answer, because it gets shipped into a translation and nobody
+re-reads it.
 
 ## Constraints
 
@@ -41,7 +47,18 @@ confidently invented.
 - Retrieval has to work across languages, not just English.
 - No third-party embedding API. Customer documents leaving the deployment was not acceptable, and per-token costs scale badly against re-indexing.
 
-## Architecture
+The third constraint is the one that shaped everything else. Running
+`intfloat/multilingual-e5-base` inside the deployment rather than calling a
+hosted embedding API is what makes "documents never leave" enforceable rather
+than aspirational: there is no egress path for document text to take, so the
+guarantee does not depend on anyone remembering it.
+
+{/* Saaim: this section would land harder with the hardware that model actually
+    runs on and the latency budget it had to sit inside. The numbers under "How
+    it's built" prove the result; these would prove the design was a response to
+    something rather than a preference. */}
+
+## How it's built
 
 Django over PostgreSQL with the pgvector extension, enabled in the first
 migration so the vector column exists before any model that needs it. Documents
@@ -59,54 +76,54 @@ Six prompt templates ship with it: qa, summarize, translate, glossary, extract
 and explain. Seven endpoints cover register, login, refresh, query, ingest,
 usage and health.
 
-## Decisions
+**The quota race, and the fix.** The first version enforced quotas by reading the
+tenant's usage counter, comparing it, then incrementing it. Under concurrent
+requests that is a read-modify-write race, and a tenant near their limit could
+exceed it by however many requests were in flight. It is the classic version of
+the bug and it does not show up in single-user testing at all. The fix was to
+make the check and the increment one atomic database operation, so the limit is
+enforced by the database rather than by application logic that happens to run
+first. Over-quota requests now return HTTP 429 rather than quietly succeeding,
+and a `reset_quotas` management command clears counters on a monthly cycle.
 
-**Isolation at the query layer, not one deployment per tenant.** A deployment
-per customer isolates perfectly and multiplies operational cost by the number of
-customers. Scoping retrieval keeps one deployment while making the boundary
-explicit on every path that touches a chunk.
-
-**The tenant claim lives in the token, not the request.** This is the decision
-the whole security model rests on. If tenant_id were a request parameter, then
-correctness would depend on every endpoint remembering to validate it, and the
-failure mode of forgetting is silent cross-tenant retrieval. Putting it in the
-JWT at login makes the wrong version unrepresentable rather than merely
-discouraged.
-
-**Local embeddings over an API.** Two reasons that reinforce each other.
-Customer documents never leave the deployment, and re-indexing costs compute
-instead of per-token spend, which matters because you re-index far more often
-than you expect while tuning chunking.
-
-**Grounded generation.** The model answers from retrieved context or says it
-does not know. For a localisation tool a confident wrong answer is worse than no
-answer, because it gets shipped into a translation and nobody re-reads it.
-
-## What went wrong
-
-The first version enforced quotas by reading the tenant's usage counter,
-comparing it, then incrementing it. Under concurrent requests that is a
-read-modify-write race, and a tenant near their limit could exceed it by however
-many requests were in flight. It is the classic version of the bug and it does
-not show up in single-user testing at all.
-
-The fix was to make the check and the increment one atomic database operation,
-so the limit is enforced by the database rather than by application logic that
-happens to run first. Over-quota requests now return HTTP 429 rather than
-quietly succeeding. A `reset_quotas` management command clears counters on a
-monthly cycle.
-
-## Results
+**Measured:**
 
 - Retrieval precision@5: 86% on a hand-labelled evaluation set
 - Tenants on a single deployment: 25
 - Languages covered: 18
 - Median query latency: 410 ms
 - External embedding cost: $0, because embeddings are generated locally at 768 dimensions and no document text leaves the deployment
-- Tenant scoping enforced by a JWT claim written at login, not by a request parameter any endpoint could forget to validate
-- Quota enforcement is atomic, returning HTTP 429 on exceed, defaulting to 1000 requests per tenant with a monthly reset command
 
-## What I would do differently
+## Trade-offs I made
+
+**Tenant identity from the JWT, not the request.** The tenant claim is read from
+the verified token and applied as a retrieval filter server-side. The cost is
+stricter auth plumbing and no convenient tenant switch for testing. The benefit
+is that cross-tenant retrieval cannot be caused by anything a client sends,
+because the client never gets a say.
+
+**pgvector in PostgreSQL over a dedicated vector database.** Embeddings live next
+to the tenant and document rows they belong to, in one database with one backup
+story, and tenant isolation is enforced by the same layer that owns the rest of
+the data. The cost is a scale and ANN-tuning ceiling that a dedicated store would
+push higher. At this workload the ceiling is theoretical and the operational
+simplicity is not.
+
+**Local embedding models over hosted embedding APIs.** Documents never leave the
+deployment and there is no per-call cost, at the price of a quality ceiling below
+the best hosted models. For multilingual retrieval over private company
+documents, keeping the data in-tenant won.
+
+**Query-layer isolation over one deployment per tenant.** A deployment per
+customer isolates perfectly and multiplies operational cost by the number of
+customers. Scoping retrieval keeps one deployment while making the boundary
+explicit on every path that touches a chunk.
+
+**Grounded generation.** The model answers from retrieved context or says it does
+not know. For a document Q&A tool a confident wrong answer is worse than no
+answer, because it gets shipped downstream and nobody re-reads it.
+
+## What I'd do differently
 
 I tuned chunk size by reading outputs before I had an evaluation set. That makes
 every tuning decision a judgment call rather than a measurement, and it means I
@@ -114,6 +131,11 @@ cannot tell you whether the current chunking is better than the first thing I
 tried. Building a small hand-labelled question set first would have cost a day
 and made the rest of the work measurable.
 
+I would also have caught the quota race by writing the test before the feature.
+Read-modify-write under concurrency is a known bug with a known shape, and I
+wrote it anyway because single-user testing cannot see it. Anything that reads a
+counter, decides on it, and writes it back now gets a concurrent test first, on
+the grounds that it is the only kind of test that would ever have failed.
 
 ## Links
 

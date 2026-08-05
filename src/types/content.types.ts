@@ -91,12 +91,18 @@ export interface Home extends BasePageConfig {
   headline: string;
   /** The sub text which appears below the headline */
   subline: React.ReactNode;
-  /** Booking CTA shared by the hero, the navbar and the mobile menu */
+  /** Primary CTA shared by the hero, the navbar and the mobile menu */
   cta: {
     label: string;
-    /** External link (cal.com / wa.me / mailto) or internal path */
+    /** External link (mailto / cal.com) or internal path */
     href: string;
   };
+  /**
+   * One compact line under the hero carrying the four facts a recruiter needs
+   * before anything else: availability, location and hours, discipline, and
+   * how soon. Rendered as separate spans, not one joined string.
+   */
+  status: string[];
   /** Proof bar shown directly under the hero (trust stage of the page flow) */
   proof: Array<{
     /** The number or short phrase, rendered large */
@@ -104,14 +110,22 @@ export interface Home extends BasePageConfig {
     /** What the number refers to */
     label: string;
   }>;
-  /** Services block shown on the home page */
-  services: {
+  /**
+   * "How I work" block. Replaced a six-card Services grid: a services list is
+   * consultancy framing and is the clearest signal to a recruiter that a site
+   * belongs to a freelancer rather than a candidate. Working habits do the
+   * equivalent job of separating this candidate from others with the same
+   * stack, which most portfolios never attempt.
+   */
+  practice: {
     display: boolean;
     title: string;
+    /** Eyebrow above the heading */
+    label: string;
+    intro: string;
     items: Array<{
       icon?: IconName;
       title: string;
-      /** Plain-language line: what this is, for a non-technical reader */
       description: React.ReactNode;
     }>;
   };
@@ -126,23 +140,17 @@ export interface Home extends BasePageConfig {
     /** Optional path to a signed recommendation letter (PDF) */
     letter?: string;
   };
-  /** "How I work" block (process stage) */
-  process: {
+  /**
+   * "What I'm looking for". Replaced an eight-item FAQ about pricing, project
+   * size and code ownership: those are buyer questions, and answering them
+   * tells a hiring manager they are reading a contractor's site.
+   */
+  looking: {
     display: boolean;
     title: string;
-    subtitle: string;
-    steps: Array<{
-      /** Ordinal shown as a label, e.g. "01" */
-      step: string;
-      title: string;
-      description: string;
-    }>;
-  };
-  /** FAQ block (objection-handling stage). Also emitted as FAQPage schema. */
-  faq: {
-    display: boolean;
-    title: string;
-    items: Array<{ q: string; a: string }>;
+    /** Eyebrow above the heading */
+    label: string;
+    body: React.ReactNode;
   };
 }
 

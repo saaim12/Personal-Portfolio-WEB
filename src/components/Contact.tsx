@@ -1,19 +1,19 @@
 import { Column, Heading, Row, Text } from "@once-ui-system/core";
-import {
-  HiOutlineEnvelope,
-  HiOutlineChatBubbleLeftRight,
-  HiOutlineCalendarDays,
-} from "react-icons/hi2";
-import { home, person, social } from "@/resources";
+import { HiOutlineEnvelope, HiOutlineCalendarDays } from "react-icons/hi2";
+import { bookingLink, person, social } from "@/resources";
 import { iconLibrary } from "@/resources/icons";
 import { Reveal } from "./Reveal";
 
 // Direct-contact CTAs only. No form, no email backend.
-const SECONDARY = ["Upwork", "LinkedIn", "GitHub", "Medium"];
+//
+// WhatsApp used to be the primary button here and in the hero. It is in the
+// icon row now and nowhere else: a recruiter will not open WhatsApp to message
+// an unknown international number, and a messaging app as the front door reads
+// freelance regardless of what the copy around it says.
+const SECONDARY = ["GitHub", "LinkedIn", "Medium", "WhatsApp"];
 
 export function Contact() {
   const byName = (name: string) => social.find((s) => s.name === name);
-  const whatsapp = byName("WhatsApp");
 
   return (
     <Column
@@ -27,54 +27,39 @@ export function Contact() {
       <Reveal>
         <Column gap="12" horizontal="center" align="center" style={{ maxWidth: "620px", marginInline: "auto" }}>
           <Heading as="h2" variant="display-strong-m" align="center">
-            Tell me what you&rsquo;re building
+            Get in touch
           </Heading>
-          {/* "I'll tell you honestly whether I'm the right engineer for it" is
-              a disqualifying statement, and disqualifying statements are the
-              strongest trust move available in consulting copy: they signal
-              enough work to turn some down, and remove the fear of a pitch. */}
           <Text
             onBackground="neutral-weak"
             variant="heading-default-m"
             align="center"
             wrap="balance"
           >
-            A full product, a backend, a data pipeline, or a codebase someone
-            left you. Send me the problem in a few sentences and I&rsquo;ll tell
-            you honestly whether I&rsquo;m the right engineer for it. I reply
-            within a day.
+            Open to full-time roles and to interesting problems generally. Email
+            is the fastest way to reach me and I reply within a day.
           </Text>
         </Column>
       </Reveal>
 
       <Reveal delay={0.08}>
         <Row gap="12" wrap horizontal="center">
-          {whatsapp && (
-            <a
-              className="btn btn--primary btn--lg"
-              href={whatsapp.link}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <HiOutlineChatBubbleLeftRight aria-hidden="true" />
-              Send me a message
-            </a>
-          )}
-          {/* Offered next to WhatsApp, not instead of it. A buyer who will not
-              open WhatsApp to an unknown number will book a slot, and the
-              reverse is equally true. */}
+          {/* The address is the label, not "Email me". A recruiter who wants to
+              paste it into their own client should not have to hover a button
+              to find out what it is. */}
+          <a className="btn btn--primary btn--lg" href={`mailto:${person.email}`}>
+            <HiOutlineEnvelope aria-hidden="true" />
+            {person.email}
+          </a>
+          {/* Kept, demoted. Some recruiters would rather book a slot than open
+              a thread, and it costs one secondary button to serve them. */}
           <a
             className="btn btn--secondary btn--lg"
-            href={home.cta.href}
+            href={bookingLink}
             target="_blank"
             rel="noopener noreferrer"
           >
             <HiOutlineCalendarDays aria-hidden="true" />
-            {home.cta.label}
-          </a>
-          <a className="btn btn--secondary btn--lg" href={`mailto:${person.email}`}>
-            <HiOutlineEnvelope aria-hidden="true" />
-            {person.email}
+            Book a call
           </a>
         </Row>
       </Reveal>
@@ -104,12 +89,12 @@ export function Contact() {
 
       {/* Three separate facts laid out with spacing and rules, not joined by
           "·" inside one string. Working hours are a top-three objection for
-          European and US clients hiring from Pakistan. */}
+          European and US teams hiring from Pakistan. */}
       <Reveal delay={0.16}>
         <div className="availability">
           <span className="availabilityItem">
             <span className="availableDot" aria-hidden="true" />
-            Taking 1 to 2 new projects
+            Open to full-time roles
           </span>
           <span className="availabilityItem">Replies within 24 hours</span>
           <span className="availabilityItem">EU and US-East hours</span>

@@ -1,9 +1,9 @@
 ---
 title: "Real-time e-commerce ETL pipeline"
 publishedAt: "2026-06-20"
-updatedAt: "2026-06-24"
+updatedAt: "2026-08-06"
 seoDescription: "A streaming medallion pipeline: Kafka into PySpark Structured Streaming, bronze to silver to gold, landing in a star-schema warehouse run by Airflow."
-summary: "Orders streaming in live, landing in a warehouse the business can actually query. Built in layers so that changing what \"revenue\" means is a rebuild of one layer, not a re-import of everything."
+summary: "Kafka into Spark Structured Streaming, raw Parquet in bronze, batch stages into silver and gold, landing in a four-table star schema. The medallion split exists so that a change to what revenue means is a rebuild, not a backfill."
 tags:
   - "Data engineering"
 stack:
@@ -14,9 +14,11 @@ stack:
   - "parquet"
   - "objectstorage"
   - "dockercompose"
-images:
-  - "/images/projects/realtime-data-platform-aws-architecture.png"
-  - "/images/projects/etl-diagram.png"
+# Empty on purpose. Both diagrams used to render here, above the title, with the
+# AWS reference architecture first. That put the system he did not build ahead of
+# the one he did, with nothing distinguishing them. Both now sit inside "How it's
+# built", in the right order and labelled.
+images: []
 link: "https://github.com/saaim12/etl_pipeline"
 team:
   - name: "Saaim Abdullah"
@@ -32,14 +34,24 @@ finance export and the ops spreadsheet each compute "revenue" from a slightly
 different slice of the same raw events, and nobody can say which one is right.
 The fix is not a better dashboard. It is one modelled layer every consumer
 reads from, fed by a pipeline that can be replayed when the definitions change.
+Orders arrive continuously, so a nightly batch leaves operations blind for the
+whole working day.
 
 ## Constraints
 
-- Orders arrive continuously, so a nightly batch leaves ops blind all day.
-- Raw events are messy and the schema drifts. The pipeline has to survive that without losing data.
-- Every transformation has to be re-runnable from source, because business definitions change after launch.
+Built solo as a deep engineering project, so the constraint set was chosen
+deliberately: everything runs locally on Docker Compose, reproducible from a
+clone with one command, with no cloud account required. The design still had to
+be honest about scale, which is why the write-up includes a reference
+architecture mapping every component to its managed AWS equivalent rather than
+pretending Compose is production.
 
-## Architecture
+Two more constraints came from the data rather than from the setup. Raw events
+are messy and the schema drifts, so the pipeline has to survive that without
+losing anything. And every transformation has to be re-runnable from source,
+because business definitions change after launch.
+
+## How it's built
 
 A producer publishes orders to a Kafka topic called `orders`, on a broker
 running in KRaft mode so there is no ZooKeeper to operate. PySpark Structured
@@ -53,48 +65,67 @@ and a central `fact_sales` keyed to all three. `dim_date` carries the calendar
 attributes analysts otherwise recompute in every query, including a
 `is_weekend` flag.
 
-## Decisions
+<ArchitectureDiagram
+  src="/images/projects/etl-diagram.png"
+  width={1024}
+  height={576}
+  alt="The shipped pipeline: a producer writes orders to a Kafka topic, PySpark Structured Streaming consumes it and writes raw Parquet to a bronze layer on object storage, and two Airflow-scheduled batch jobs promote bronze to silver and silver to a star schema in PostgreSQL."
+  caption="What I actually built. Kafka, PySpark, Airflow and Postgres, running on Docker Compose."
+/>
 
-**Medallion rather than a two-stage load.** Bronze keeps raw events immutable
-and replayable, which is what makes a definition change cheap. When revenue is
-redefined, silver and gold get rebuilt from bronze instead of backfilled from a
-source system that may no longer hold the history. The extra layer buys the
-ability to be wrong and recover.
+The same pattern at enterprise scale is a different set of components doing the
+same jobs, and mapping one onto the other is most of what moving this to a
+managed platform involves. I drew that mapping out separately, as a design
+exercise rather than as a deployment.
+
+<ArchitectureDiagram
+  src="/images/projects/realtime-data-platform-aws-architecture.png"
+  width={3840}
+  height={2432}
+  label="Reference architecture, not the shipped system"
+  alt="An enterprise AWS reference architecture for the same medallion pattern: Amazon MSK and Kinesis ingesting from web, mobile, IoT and CDC sources, Spark on EMR and Glue for streaming and batch transforms, MWAA orchestrating, an S3 data lake split into bronze, silver and gold layers, Redshift as the serving warehouse, and QuickSight, Tableau, Power BI and SageMaker consuming the gold layer, all across two availability zones with IAM roles, CloudWatch, CloudTrail and Lake Formation governance."
+  caption="The pipeline I built runs Kafka, PySpark, Airflow and Postgres on Docker Compose. This is the reference architecture I designed for the same pattern at enterprise scale on AWS, mapping each component: MSK for Kafka, EMR for Spark, MWAA for Airflow, Redshift as the serving warehouse."
+/>
+
+**What Airflow does and does not own.** The DAG orchestrates the batch half of
+the pipeline and nothing else. The producer and the Structured Streaming job are
+long-running processes started outside Airflow, because a scheduler built around
+tasks that finish has no good way to own a task that never does. I tried
+modelling the streaming job as a scheduled task first. It works until the first
+run overruns its interval, at which point Airflow is either running two
+consumers against the same checkpoint directory or refusing to run any. The
+honest fix was to stop pretending the streaming job is a scheduled task and run
+it as a service, with Airflow owning only the hourly `bronze_to_silver >>
+silver_to_gold` chain. The README states the split rather than hiding it.
+
+**Measured on the Compose stack:**
+
+- Sustained throughput: 2,800 events/sec through Structured Streaming
+- End-to-end latency, Kafka to gold: 4.7 minutes
+- Full rebuild of silver and gold from bronze: 8 minutes
+- Gold star schema: 4 tables, 3 dimensions around 1 fact, queryable from any BI tool without a join guide
+- Whole stack runs from one `docker compose up`: Kafka in KRaft mode, Airflow, Spark
+
+## Trade-offs I made
+
+**Medallion layering over a single transform.** Bronze keeps raw immutable
+Parquet, silver cleans and conforms, gold serves the star schema. The cost is
+duplicated storage and more moving parts than one script writing straight to
+final tables. The benefit is the reason the layers exist: when the definition of
+revenue changes, gold is rebuilt from silver, and nothing is re-ingested.
+
+**Streaming ingest, batch transforms.** Kafka and Spark Structured Streaming land
+events continuously, while silver and gold are batch stages on a schedule. Full
+streaming end to end would cut latency but multiply the failure modes and the
+operational surface. The dashboards this feeds do not need second-level
+freshness, so the complexity was not bought.
 
 **A star schema at gold, not a normalised one.** Normalised would have been
 tidier and would have pushed a join-writing tax onto every consumer,
 permanently. Analysts and BI tools join dimensions to a fact table without help,
 so the denormalisation is paid once at write time rather than every read.
 
-**Streaming into bronze, batch after.** Ingestion has to keep up with the event
-stream. Transformation does not, and nothing downstream needs sub-minute
-freshness. Batch stages are cheaper to run, simpler to reason about and trivial
-to re-run, which is the property the whole design depends on.
-
-## What went wrong
-
-The Airflow DAG orchestrates the batch half of the pipeline and nothing else.
-The producer and the Structured Streaming job are long-running processes that
-have to be started outside Airflow, because a scheduler built around tasks that
-finish has no good way to own a task that never does.
-
-I tried modelling the streaming job as a scheduled task first. It works until
-the first run overruns its interval, at which point Airflow is either running
-two consumers against the same checkpoint directory or refusing to run any. The
-honest fix was to stop pretending the streaming job is a scheduled task and run
-it as a service, with Airflow owning only the hourly `bronze_to_silver >>
-silver_to_gold` chain. The README states the split rather than hiding it.
-
-## Results
-
-- Sustained throughput: 2,800 events/sec through Structured Streaming
-- End-to-end latency, Kafka to gold: 4.7 minutes
-- Full rebuild of silver and gold from bronze: 8 minutes
-- Gold star schema: 4 tables, 3 dimensions around 1 fact, queryable from any BI tool without a join guide
-- Airflow DAG runs `@hourly` on Docker Compose, chained `bronze_to_silver >> silver_to_gold`
-- Whole stack runs from one `docker compose up`: Kafka in KRaft mode, Airflow, Spark
-
-## What I would do differently
+## What I'd do differently
 
 The Airflow metadata database is SQLite, which forces the sequential executor
 and means the DAG cannot run tasks in parallel even where the dependency graph
@@ -106,7 +137,6 @@ the ceiling entirely.
 I would also add data-quality assertions between silver and gold from the start.
 I caught a broken dimension join by reading output, which does not scale past a
 handful of tables.
-
 
 ## Links
 

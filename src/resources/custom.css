@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════════
    DESIGN SYSTEM
    ───────────────────────────────────────────────────────────────────────
-   One theme: black. There is no light mode — the whole design rests on a
+   One theme: black. There is no light mode, the whole design rests on a
    pure #000 ground with light pooling on it, and every surface, border and
    shadow value below is drawn for that ground specifically.
 
@@ -12,7 +12,7 @@
         gradient over a 14px backdrop blur with a 10%-white hairline.
      3. Elevation is a white bloom, not a drop shadow. On #000 a dark shadow
         is invisible.
-     4. Monochrome. The accent is light itself — no hue anywhere.
+     4. Monochrome. The accent is light itself, no hue anywhere.
      5. Semantic colours (success/warning/error) exist but are almost never
         used. Their job is to stay out of the way.
    ═══════════════════════════════════════════════════════════════════════ */
@@ -53,8 +53,8 @@
 }
 
 /* ══ ONCE UI: MONOCHROME ════════════════════════════════════════════════
-   Once UI's brand/accent ramps only come in hues — there is no neutral option
-   for `brand` in its config — so the About page's buttons, tags and icons
+   Once UI's brand/accent ramps only come in hues, there is no neutral option
+   for `brand` in its config, so the About page's buttons, tags and icons
    still rendered indigo. Both function ramps are repointed at the gray scheme
    here. Same specificity as Once UI's own [data-brand=…] rules, and this file
    is imported after tokens.css, so source order settles it. Setting
@@ -93,7 +93,7 @@
   --function-accent-600-30: var(--scheme-gray-600-30);
   --function-accent-600-50: var(--scheme-gray-600-50);
 
-  /* Slate's darkest step is #040816 — a blue-black. The ground is #000, and
+  /* Slate's darkest step is #040816, a blue-black. The ground is #000, and
      the aurora canvas paints over this anyway; this is the fallback if the
      canvas never mounts. */
   --page-background: #000000;
@@ -108,7 +108,7 @@
   --slow: 380ms;
 
   --nav-h: 60px;
-  /* Generous, uniform radii: the design rounds everything at 11–22px. */
+  /* Generous, uniform radii: the design rounds everything at 11 to 22px. */
   --radius-sm: 10px;
   --radius: 14px;
   --radius-lg: 18px;
@@ -244,6 +244,102 @@ h3 {
 .prose strong {
   color: var(--text);
   font-weight: 600;
+}
+/* Used by "What I'm looking for", which is a centred section rather than a
+   left-aligned article column. */
+.prose--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* ══ STATUS LINE ════════════════════════════════════════════════════════
+   The four facts a recruiter checks first, directly under the hero. Rules
+   between the items are drawn, not typed: joining them with a separator
+   character inside one string is what forces an em dash back into the copy. */
+
+.statusLine {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  /* Gap alone separates the facts. Drawn vertical rules were tried and
+     removed: this line wraps at every width, and a rule positioned off the
+     previous sibling lands at the start of a wrapped row, where it reads as a
+     stray mark rather than as a separator. */
+  gap: 6px 26px;
+  max-width: 720px;
+  margin: 4px auto 0;
+  padding: 12px 24px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--accent-soft);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--text-2);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* ══ ARCHITECTURE DIAGRAM ═══════════════════════════════════════════════
+   A case study body is capped at a readable measure for prose, which is far
+   too narrow for a diagram. This breaks out of that column up to the page
+   width, and below the width where the diagram is still legible it scrolls
+   inside its own frame rather than shrinking into an unreadable smudge. */
+
+.archFigure {
+  /* Half the space either side of the article column, minus a gutter, capped
+     so the figure never outgrows the page. Resolves to 0 on narrow screens,
+     where there is nothing to break out of. */
+  --arch-bleed: clamp(0px, calc((100vw - 100%) / 2 - 32px), 260px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 32px calc(-1 * var(--arch-bleed));
+}
+.archLabel {
+  font-family: var(--font-label), sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.archScroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  scrollbar-width: thin;
+}
+.archLink {
+  display: block;
+  /* Below this width the diagram is not readable at any zoom, so the frame
+     scrolls instead of the image shrinking. */
+  min-width: 560px;
+}
+.archImage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.archCaption {
+  color: var(--text-2);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+.archHint {
+  display: none;
+  color: var(--text-2);
+  font-size: 0.75rem;
+  font-style: italic;
+}
+/* Only shown where `.archScroll` can actually overflow. A scrollable region
+   with no visible edge is one most readers never find. */
+@media (max-width: 640px) {
+  .archHint {
+    display: block;
+  }
 }
 code {
   padding: 0.15em 0.4em;
@@ -404,7 +500,7 @@ article a {
    tightly tracked, whose fill wipes to the opposite value on hover.
 
    The skew is drawn by two stacked pseudo-elements rather than by
-   transforming the button, so the *label* never skews — no inner counter-skew
+   transforming the button, so the *label* never skews, no inner counter-skew
    wrapper is needed and the markup stays a plain <a>. ::before is the resting
    fill, ::after is the hover fill sitting on top of it at opacity 0. Both sit
    at negative z-index inside the button's own stacking context, which puts
@@ -485,7 +581,7 @@ article a {
 
 /* Every `color` below is written with the variant class doubled up on .btn.
    Once UI's stylesheet carries `a:not(.button) { color: … }`, and a `:not()`
-   holding a class scores (0,1,1) — higher than any single class here, so the
+   holding a class scores (0,1,1), higher than any single class here, so the
    plain `.btn--primary { color: … }` lost and the label rendered light-on-
    light. `.btn.btn--primary` is (0,2,0) and wins, without !important and
    without assuming the button is an anchor. */
@@ -645,7 +741,7 @@ article a {
 
 /* ══ PROOF BAR ══════════════════════════════════════════════════════════ */
 
-/* Four glass tiles rather than four cells split by rules — the design gives
+/* Four glass tiles rather than four cells split by rules, the design gives
    the numbers the same panel treatment as everything else on the page. */
 /* The hero column above this is `min-height: min(78vh, 720px)` with its
    content centred, so once the content is as tall as that box there is no
@@ -775,7 +871,7 @@ article a {
 
 /* ══ FAQ ════════════════════════════════════════════════════════════════ */
 
-/* One glass panel, rows divided inside it — not a bare list on the page. */
+/* One glass panel, rows divided inside it, not a bare list on the page. */
 .faqList {
   width: 100%;
   border: 1px solid var(--border);
@@ -846,7 +942,7 @@ article a {
 }
 
 /* ══ SKILLS ═════════════════════════════════════════════════════════════
-   Every block on the About page — a job, a degree, a skill group — is the
+   Every block on the About page, a job, a degree, a skill group, is the
    same glass panel the rest of the site uses, instead of a rule above it. */
 
 .skillGroup {
@@ -1027,7 +1123,7 @@ article a {
 }
 
 /* ══ SHIMMER ════════════════════════════════════════════════════════════
-   A slow light sweep across the display numerals — the stat values and the
+   A slow light sweep across the display numerals, the stat values and the
    process step numbers. Reserved for figures: run it on body copy and the
    page turns into a screensaver. */
 
@@ -1195,7 +1291,7 @@ article a {
   .heroAvatar:hover {
     transform: none;
   }
-  /* The skewed button fills are transforms too — keep the shape, drop only
+  /* The skewed button fills are transforms too, keep the shape, drop only
      the motion, so :not() would be wrong here. */
   .btn--primary::before,
   .btn--primary::after,
@@ -1254,8 +1350,8 @@ article a {
 /* ══ FOOTER BUTTONS ═════════════════════════════════════════════════════
    The footer link columns used to be bare text with a trailing arrow, which
    read as body copy rather than as ten separate destinations. Same glass
-   panel, hairline border and 6px lift as .heroSocial — the site's existing
-   compact button — so this introduces no new treatment, only applies the one
+   panel, hairline border and 6px lift as .heroSocial, the site's existing
+   compact button, so this introduces no new treatment, only applies the one
    already here to a surface that was missing it.
 
    `justify-content: space-between` pins the arrow to the right edge, so a
@@ -1336,7 +1432,7 @@ article a {
   filter: blur(0.5px);
 }
 /* Holds the field back from the copy without flattening it. The dim is the
-   knob that matters — the blur above barely moves it — and it is easy to
+   knob that matters, the blur above barely moves it, and it is easy to
    overdo: 62% killed the aurora, 28% still muted it. 12% is where the light
    still moves and body copy still sits clearly in front of it. */
 .auroraVeil {

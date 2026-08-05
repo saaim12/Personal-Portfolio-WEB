@@ -9,7 +9,7 @@ import {
   HiOutlineSquares2X2,
   HiOutlineDocumentText,
   HiArrowUpRight,
-  HiOutlineCalendarDays,
+  HiOutlineEnvelope,
 } from "react-icons/hi2";
 
 import { person, routes, about, work, home } from "@/resources";
@@ -104,13 +104,10 @@ export const Header = () => {
             >
               <HiOutlineDocumentText aria-hidden="true" />
             </a>
-            <a
-              className={`btn btn--primary ${styles.cta}`}
-              href={home.cta.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <HiOutlineCalendarDays aria-hidden="true" />
+            {/* No target="_blank": this is a mailto now, and opening one in a
+                new tab leaves the reader staring at a blank page. */}
+            <a className={`btn btn--primary ${styles.cta}`} href={home.cta.href}>
+              <HiOutlineEnvelope aria-hidden="true" />
               {home.cta.label}
             </a>
 
@@ -162,13 +159,8 @@ export const Header = () => {
               Resume (PDF)
               <HiArrowUpRight aria-hidden="true" style={{ marginLeft: "auto" }} />
             </a>
-            <a
-              className={styles.panelLink}
-              href={home.cta.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <HiOutlineCalendarDays aria-hidden="true" />
+            <a className={styles.panelLink} href={home.cta.href}>
+              <HiOutlineEnvelope aria-hidden="true" />
               {home.cta.label}
               <HiArrowUpRight aria-hidden="true" style={{ marginLeft: "auto" }} />
             </a>

@@ -27,6 +27,8 @@ import {
   Line,
 } from "@once-ui-system/core";
 
+import { ArchitectureDiagram } from "./ArchitectureDiagram";
+
 type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
   children: ReactNode;
@@ -202,6 +204,9 @@ const components = {
   Icon,
   Media,
   SmartLink,
+  // Architecture diagrams break out of the narrow article column and scroll
+  // rather than shrink. See ArchitectureDiagram for why that needs a component.
+  ArchitectureDiagram,
 };
 
 type CustomMDXProps = MDXRemoteProps & {

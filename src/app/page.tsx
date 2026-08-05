@@ -2,23 +2,21 @@ import { Column, Heading, Row, Text } from "@once-ui-system/core";
 import {
   HiOutlineDocumentText,
   HiArrowRight,
-  HiOutlineCalendarDays,
-  HiOutlineSparkles,
+  HiOutlineWrenchScrewdriver,
   HiOutlineSquares2X2,
-  HiOutlineMap,
-  HiOutlineQuestionMarkCircle,
+  HiOutlineFlag,
 } from "react-icons/hi2";
 import { home, person, social, pageMeta, ogImageFor } from "@/resources";
-import { jsonLd, personJsonLd, faqJsonLd, webPageJsonLd } from "@/resources/schema";
+import { jsonLd, personJsonLd, webPageJsonLd } from "@/resources/schema";
 import { iconLibrary } from "@/resources/icons";
 import {
   HeroHeadline,
-  Services,
+  Practice,
   Contact,
   ProofBar,
+  StatusLine,
   Testimonial,
-  Process,
-  FAQ,
+  LookingFor,
   Certificates,
   Reveal,
 } from "@/components";
@@ -46,10 +44,9 @@ export default function Home() {
           }),
         )}
       />
-      {/* Person and FAQPage belong to this page: it introduces the person and
-          it is the only route that renders the FAQ. */}
+      {/* Person belongs to this page: it is the one that introduces him.
+          FAQPage went with the FAQ section it was generated from. */}
       <script {...jsonLd(personJsonLd)} />
-      <script {...jsonLd(faqJsonLd)} />
 
       {/* ── 1. ATTENTION ────────────────────────────────────────────────── */}
       <div
@@ -88,38 +85,30 @@ export default function Home() {
             </Text>
           </Reveal>
 
-          {/* Two buttons, one clear primary. This was four equal-weight red
-              buttons plus six social icons: ten peer targets with no
-              hierarchy, and the reliable outcome of ten equal choices is
-              none of them. */}
+          {/* Two buttons, one clear primary. The primary points at the
+              write-ups rather than at a contact channel: for this audience the
+              conversion event is reading one case study properly, not sending
+              a message. */}
           <Reveal delay={0.25}>
             <Row gap="12" wrap horizontal="center" vertical="center">
               <a className="btn btn--primary btn--lg" href="/work">
-                See what I&rsquo;ve built
+                Read the engineering write-ups
                 <HiArrowRight aria-hidden="true" />
               </a>
               <a
                 className="btn btn--secondary btn--lg"
-                href={home.cta.href}
+                href="/SaaimCV.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <HiOutlineCalendarDays aria-hidden="true" />
-                {home.cta.label}
+                <HiOutlineDocumentText aria-hidden="true" />
+                Resume (PDF)
               </a>
             </Row>
           </Reveal>
 
-          {/* Resume demoted to a text link on purpose: a recruiter scanning
-              for it finds a labelled link faster than they parse four
-              shouting buttons, and everyone else stops being asked to
-              download a CV. The icon keeps it reading as clickable. */}
           <Reveal delay={0.32}>
             <Row gap="24" wrap horizontal="center" textVariant="body-default-s">
-              <a className="extLink" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer">
-                <HiOutlineDocumentText aria-hidden="true" />
-                Resume (PDF)
-              </a>
               <a
                 className="extLink"
                 href="/Fitter-Recommendation-Letter.pdf"
@@ -134,7 +123,7 @@ export default function Home() {
 
           <Reveal delay={0.38}>
             <Row gap="8" horizontal="center" wrap>
-              {social.map((item) => {
+              {social.filter((item) => item.essential).map((item) => {
                 const Icon = iconLibrary[item.icon];
                 return (
                   item.link && (
@@ -154,6 +143,11 @@ export default function Home() {
               })}
             </Row>
           </Reveal>
+
+          {/* Availability, location, discipline and start date, before
+              anything else on the page. A recruiter used to have to read three
+              separate sections to answer these four questions. */}
+          <StatusLine />
         </Column>
       </div>
 
@@ -161,7 +155,7 @@ export default function Home() {
       <ProofBar />
 
       {/* ── 3. AUTHORITY ── */}
-      <Services icon={<HiOutlineSparkles aria-hidden="true" />} />
+      <Practice icon={<HiOutlineWrenchScrewdriver aria-hidden="true" />} />
 
       {/* ── 4 + 5. PROOF / TECHNICAL DEPTH ───────────────────────────────
           The single highest-impact change on the site: proof used to live one
@@ -175,12 +169,12 @@ export default function Home() {
               Work
             </span>
             <Heading as="h2" variant="display-strong-s" align="center">
-              Some things I&rsquo;ve built
+              Systems I&rsquo;ve built
             </Heading>
             <Text onBackground="neutral-weak" variant="heading-default-m" wrap="balance">
-              Client work and deep engineering projects, grouped by what they
-              are. Every one has a write-up on the architecture and the
-              trade-offs.
+              Each one has a write-up covering the problem, the design, the
+              trade-offs I made, and what I would do differently. The reasoning
+              matters more than the repo.
             </Text>
           </div>
         </Reveal>
@@ -201,7 +195,7 @@ export default function Home() {
         <Reveal delay={0.12}>
           <Row fillWidth horizontal="center" paddingTop="32">
             <a className="btn btn--secondary" href="/work">
-              All five projects
+              All five write-ups
               <HiArrowRight aria-hidden="true" />
             </a>
           </Row>
@@ -211,16 +205,13 @@ export default function Home() {
       {/* ── 6. SOCIAL PROOF ── */}
       <Testimonial />
 
-      {/* ── 7. PROCESS ── */}
-      <Process icon={<HiOutlineMap aria-hidden="true" />} />
-
-      {/* ── 8. CREDENTIALS ── */}
+      {/* ── 7. CREDENTIALS ── */}
       <Certificates />
 
-      {/* ── 9. OBJECTION HANDLING ── */}
-      <FAQ icon={<HiOutlineQuestionMarkCircle aria-hidden="true" />} />
+      {/* ── 8. FIT ── */}
+      <LookingFor icon={<HiOutlineFlag aria-hidden="true" />} />
 
-      {/* ── 10. ACTION ── */}
+      {/* ── 9. ACTION ── */}
       <Contact />
     </Column>
   );
