@@ -79,10 +79,10 @@ the stack:
 
 Django and Django REST Framework behind a Next.js frontend, PostgreSQL as the
 primary store, Celery and Redis for anything that must not block a request. On
-AWS: containerised application instances in private subnets across two
-availability zones, RDS PostgreSQL in its own private subnet tier, S3 for files,
-SES for transactional mail, and SNS with SQS on the eventing path, all inside a
-VPC with scoped IAM roles.
+AWS: containerised application instances behind a load balancer across two
+availability zones, RDS for PostgreSQL, S3 for files, SES for transactional
+mail, and SNS with SQS on the eventing path, all inside a VPC with scoped IAM
+roles and no public database path.
 
 - A Next.js frontend covering both sides of the product: the customer-facing panel and a full admin panel for operations and content.
 - A custom CRM module for leads and pipeline, built into the platform rather than bolted on from a third-party tool.
@@ -94,24 +94,11 @@ adjustments and the compliance-sensitive record views all have first-class
 screens. The CRM sits inside the platform for the same reason: a lead becoming a
 member is then one system's state change instead of two systems disagreeing.
 
-<ArchitectureDiagram
-  src="/images/projects/fitter-health-aws-architecture.png"
-  width={8175}
-  height={7350}
-  alt="AWS deployment diagram: users reach an internet gateway and application load balancer, which routes into private application subnets in two availability zones, each running the Django application and backed by a multi-AZ RDS PostgreSQL instance in a separate private database subnet. NAT gateways and optional bastion hosts sit in the public subnets. A Lambda function, and IAM governing access to S3 and SES, sit alongside."
-  caption="The network and compute layout: one VPC, two availability zones, application and database tiers in separate private subnets, public subnets carrying only the NAT gateways and an optional bastion, and IAM in front of S3 and SES."
-/>
-
-That diagram covers the request path and the network boundary. It does not show
-the asynchronous side, which is where the interesting failure lived, so the
-notification path is described below in text rather than drawn.
-
-{/* Saaim: worth redrawing when you have an hour. The diagram omits the SNS and
-    SQS path entirely, draws compute as a generic "Django App" box rather than
-    as ECS, labels both availability zones "Subnet B", and shows 172.16.x route
-    table entries against a 10.0.0.0/16 VPC. The sentence above makes the first
-    omission deliberate rather than a contradiction, which holds up fine, but a
-    reviewer who reads carefully will still spot the last two. */}
+{/* No architecture diagram on this page. The deployment diagram is covered by
+    the NDA, so it is not published here and the image has been removed from the
+    repository. The prose above stays deliberately at the level of which
+    services are used and why, with no network topology, addressing or
+    implementation detail. Keep it there. */}
 
 **What it does in production.** It is live at
 [fitter.health](https://fitter.health/), built and operated by one engineer.
