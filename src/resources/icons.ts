@@ -11,6 +11,10 @@ import {
   HiOutlineGlobeAsiaAustralia,
   HiOutlineMagnifyingGlass,
   HiOutlineRocketLaunch,
+  HiOutlineArrowsPointingOut,
+  HiOutlineCodeBracket,
+  HiOutlineShare,
+  HiOutlineSquare3Stack3D,
 } from "react-icons/hi2";
 
 import { PiGridFourDuotone, PiBookBookmarkDuotone } from "react-icons/pi";
@@ -49,6 +53,11 @@ export const iconLibrary: Record<string, IconType> = {
   warning: HiOutlineExclamationTriangle,
   database: HiOutlineCircleStack,
   search: HiOutlineMagnifyingGlass,
+  scale: HiOutlineArrowsPointingOut,
+  // Used by the "Algorithms in the open" cards on the home page.
+  code: HiOutlineCodeBracket,
+  graph: HiOutlineShare,
+  stack: HiOutlineSquare3Stack3D,
 };
 
 export type IconLibrary = typeof iconLibrary;

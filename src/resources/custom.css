@@ -116,6 +116,27 @@
   --gutter: clamp(20px, 5vw, 48px);
 }
 
+/* ══ CUSTOM CURSOR ══════════════════════════════════════════════════════
+   The class is added by the Cursor component, so this only ever applies when
+   the replacement is actually on screen: no JavaScript, a coarse pointer, or
+   a failed mount all leave the system cursor exactly where it was.
+
+   Text entry is carved out. A ring cannot show a caret position, and guessing
+   where a click will land inside a string is the one job the I-beam does that
+   nothing else can. */
+@media (pointer: fine) {
+  html.hasCustomCursor,
+  html.hasCustomCursor * {
+    cursor: none;
+  }
+
+  html.hasCustomCursor input,
+  html.hasCustomCursor textarea,
+  html.hasCustomCursor [contenteditable="true"] {
+    cursor: auto;
+  }
+}
+
 /* ══ BASE ═══════════════════════════════════════════════════════════════ */
 
 html {
@@ -538,6 +559,27 @@ article a {
   height: 50px;
   padding: 0 28px;
   font-size: 0.875rem;
+}
+
+/* Below ~380px a long label cannot fit on one line, and `white-space: nowrap`
+   on a fixed-height box turns that into page-wide horizontal overflow rather
+   than into a taller button: at 320px "Read the engineering write-ups" measured
+   326px inside 288px of available width and pushed the whole hero out. The
+   button wraps and grows here instead. */
+@media (max-width: 380px) {
+  .btn {
+    max-width: 100%;
+    height: auto;
+    min-height: 44px;
+    padding: 10px 18px;
+    white-space: normal;
+    text-align: center;
+  }
+  .btn--lg {
+    height: auto;
+    min-height: 50px;
+    padding: 12px 20px;
+  }
 }
 
 .btn--primary,

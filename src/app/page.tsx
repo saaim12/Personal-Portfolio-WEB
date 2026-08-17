@@ -5,7 +5,9 @@ import {
   HiOutlineWrenchScrewdriver,
   HiOutlineSquares2X2,
   HiOutlineFlag,
+  HiOutlineCommandLine,
 } from "react-icons/hi2";
+import { FaGithub } from "react-icons/fa6";
 import { home, person, social, pageMeta, ogImageFor } from "@/resources";
 import { jsonLd, personJsonLd, webPageJsonLd } from "@/resources/schema";
 import { iconLibrary } from "@/resources/icons";
@@ -18,6 +20,8 @@ import {
   Testimonial,
   LookingFor,
   Certificates,
+  Fundamentals,
+  SkillsMarquee,
   Reveal,
 } from "@/components";
 import { Projects } from "@/components/work/Projects";
@@ -107,6 +111,9 @@ export default function Home() {
             </Row>
           </Reveal>
 
+          {/* Two links a recruiter would otherwise have to hunt for: the signed
+              reference, and the algorithms repo most loops screen for. Both
+              above the fold, both secondary to the write-ups. */}
           <Reveal delay={0.32}>
             <Row gap="24" wrap horizontal="center" textVariant="body-default-s">
               <a
@@ -117,6 +124,15 @@ export default function Home() {
               >
                 <HiOutlineDocumentText aria-hidden="true" />
                 Client recommendation (PDF)
+              </a>
+              <a
+                className="extLink"
+                href="https://github.com/saaim12/DSA-Python"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FaGithub aria-hidden="true" />
+                Data structures &amp; algorithms in Python
               </a>
             </Row>
           </Reveal>
@@ -151,6 +167,11 @@ export default function Home() {
         </Column>
       </div>
 
+      {/* Texture, not a claim: the stack at a glance, muted enough that the
+          headline above it still wins. The real evidence is the proof bar
+          under it and the write-ups below that. */}
+      <SkillsMarquee />
+
       {/* ── 2. TRUST ── */}
       <ProofBar />
 
@@ -172,9 +193,10 @@ export default function Home() {
               Systems I&rsquo;ve built
             </Heading>
             <Text onBackground="neutral-weak" variant="heading-default-m" wrap="balance">
-              Each one has a write-up covering the problem, the design, the
-              trade-offs I made, and what I would do differently. The reasoning
-              matters more than the repo.
+              Not screenshots. Each one is a write-up: the constraint that
+              actually bound, the architecture it forced, the trade-off I made
+              with my eyes open, and the thing I would build differently now.
+              Read one and you know how I think about a system.
             </Text>
           </div>
         </Reveal>
@@ -205,13 +227,16 @@ export default function Home() {
       {/* ── 6. SOCIAL PROOF ── */}
       <Testimonial />
 
-      {/* ── 7. CREDENTIALS ── */}
+      {/* ── 7. FUNDAMENTALS ── */}
+      <Fundamentals icon={<HiOutlineCommandLine aria-hidden="true" />} />
+
+      {/* ── 8. CREDENTIALS ── */}
       <Certificates />
 
-      {/* ── 8. FIT ── */}
+      {/* ── 9. FIT ── */}
       <LookingFor icon={<HiOutlineFlag aria-hidden="true" />} />
 
-      {/* ── 9. ACTION ── */}
+      {/* ── 10. ACTION ── */}
       <Contact />
     </Column>
   );

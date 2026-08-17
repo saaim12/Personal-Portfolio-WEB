@@ -1,0 +1,211 @@
+/* Skills marquee.
+   One animated element per row, one property animated on it (transform), and
+   no JavaScript at all: the component is a server component and this file is
+   the whole behaviour. Pause, direction, reduced motion and the edge fade are
+   all CSS.
+
+   The seam: the track holds the item list twice and translates by exactly
+   -50%, so at the end of a cycle the second copy sits precisely where the
+   first started. That only holds if the two copies measure identically, which
+   is why the horizontal rhythm is `margin-right` on every item rather than a
+   `gap` between the two groups. A gap between groups would add one extra
+   space to the track that -50% does not account for, and the wrap would jump
+   by half of it. */
+
+@use "./breakpoints.scss" as breakpoints;
+
+.marquee {
+  /* Overridden per instance from the component's inline style. */
+  --marquee-speed: 40s;
+  --marquee-gap: 56px;
+  --marquee-row: 40px;
+
+  /* The home page's root column is `align-items: center`, which sizes every
+     child to its own content rather than to the column. Without this the
+     wrapper grew to the full width of the track, the clip below had nothing
+     left to clip, and the page carried a ~3,900px horizontal scrollbar at
+     every viewport. `stretch` opts this one child back into filling the
+     column, and `width: auto` then resolves against it. */
+  align-self: stretch;
+  width: auto;
+  /* Full bleed. Cancels the main element's fluid gutter exactly, rather than
+     using 100vw: on a desktop browser with a classic scrollbar, 100vw is wider
+     than the page and buys a horizontal scrollbar at every viewport width. */
+  margin-inline: calc(-1 * clamp(16px, 5vw, 48px));
+  padding-block: 4px;
+}
+
+/* Clips the track and fades both ends into the page. Height is fixed here so
+   the row occupies its final space from the first paint: nothing below the
+   hero moves when the font or the icons resolve. */
+.viewport {
+  position: relative;
+  height: var(--marquee-row);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 8%,
+    #000 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
+}
+
+.viewport + .viewport {
+  margin-top: 2px;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  height: 100%;
+  align-items: center;
+  will-change: transform;
+  animation: marqueeScroll var(--marquee-speed) linear infinite;
+}
+
+/* Right-to-left is the default direction of travel, so the "right" variant is
+   the same keyframes played backwards rather than a second set. */
+.reverse {
+  animation-direction: reverse;
+}
+
+@keyframes marqueeScroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+/* `animation-play-state` freezes the transform where it stands and resumes
+   from the same value, so a pause reads as a stop rather than a snap.
+
+   Hover does not pause. The row is meant to keep travelling while you point at
+   it, and hovering only lights the item up; `pauseOnHover` is still there as a
+   prop if that ever changes. Keyboard focus pauses regardless of the prop:
+   a keyboard user cannot hover, and this is their way to stop the motion. */
+.pausable:hover .track {
+  animation-play-state: paused;
+}
+
+.marquee:focus-within .track {
+  animation-play-state: paused;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  flex: 0 0 auto;
+  /* The rhythm, and the thing that makes -50% exact. See the note at the top. */
+  margin-right: var(--marquee-gap);
+  font-family: var(--font-label), sans-serif;
+  font-size: 0.78125rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  color: var(--muted);
+  opacity: 0.7;
+  /* --fast, not --slow. The row keeps moving under the cursor, so an item is
+     only hovered in passing; at 380ms the colour would arrive after it had
+     already gone. */
+  transition: opacity var(--fast) var(--ease), color var(--fast) var(--ease);
+}
+
+/* Fixed box, so an icon that decodes late cannot resize the row. */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 21px;
+  height: 21px;
+  color: currentColor;
+  transition: color var(--fast) var(--ease);
+}
+
+.icon svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+}
+
+/* At rest the row is texture: one muted grey, below full opacity, well under
+   the headline above it. The brand colour is the reward for pointing at one. */
+.item:hover {
+  opacity: 1;
+  color: var(--text);
+}
+
+.item:hover .icon {
+  color: var(--tech-dark, currentColor);
+}
+
+/* Dark-only today, same as the tech chips. These cost nothing now and are
+   what keeps the marks legible the day a light theme exists. */
+:root[data-theme="light"] .item:hover .icon {
+  color: var(--tech-light, currentColor);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) .item:hover .icon {
+    color: var(--tech-light, currentColor);
+  }
+}
+
+@include breakpoints.s {
+  .marquee {
+    --marquee-gap: 34px;
+    --marquee-row: 34px;
+  }
+
+  .item {
+    font-size: 0.75rem;
+    gap: 7px;
+  }
+
+  .icon,
+  .icon svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Motion off entirely, not slowed. The duplicate copy exists only to hide the
+   wrap point, so with nothing wrapping it is removed and the single real list
+   becomes an ordinary horizontally scrollable row. */
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+
+  .duplicate {
+    display: none;
+  }
+
+  .viewport {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .item {
+    transition: none;
+  }
+}

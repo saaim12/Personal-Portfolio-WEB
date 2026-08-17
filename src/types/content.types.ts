@@ -129,6 +129,27 @@ export interface Home extends BasePageConfig {
       description: React.ReactNode;
     }>;
   };
+  /**
+   * "Algorithms in the open". The public DSA repo, shown rather than linked in
+   * passing: almost every loop opens with an algorithms round, and a recruiter
+   * screening for one cannot tell a candidate who practises from one who does
+   * not unless the work is visible.
+   */
+  fundamentals: {
+    display: boolean;
+    title: string;
+    /** Eyebrow above the heading */
+    label: string;
+    intro: string;
+    /** Repository the section points at */
+    link: string;
+    linkLabel: string;
+    items: Array<{
+      icon?: IconName;
+      title: string;
+      description: React.ReactNode;
+    }>;
+  };
   /** Client testimonial block (social-proof stage) */
   testimonial: {
     display: boolean;

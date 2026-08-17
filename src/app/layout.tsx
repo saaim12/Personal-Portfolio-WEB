@@ -5,7 +5,7 @@ import "@/resources/custom.css";
 import classNames from "classnames";
 
 import { Column, Flex } from "@once-ui-system/core";
-import { Header, Providers, Footer, AuroraField } from "@/components";
+import { Header, Providers, Footer, AuroraField, Cursor } from "@/components";
 import { baseURL, fonts, style, home, person, pageMeta } from "@/resources";
 import { jsonLd, webSiteJsonLd } from "@/resources/schema";
 
@@ -112,6 +112,9 @@ export default async function RootLayout({
               `display: false`, so it rendered nothing while still shipping
               both client components. AuroraField is the backdrop now. */}
           <AuroraField />
+          {/* Site-wide pointer. Renders nothing until a fine pointer actually
+              moves, so touch devices and no-JS visitors are untouched. */}
+          <Cursor />
           {/* First tab stop on every page, lets keyboard and screen-reader
               users skip the nav instead of tabbing through it each time. */}
           <a href="#main" className="skipLink">

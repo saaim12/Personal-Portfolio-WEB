@@ -12,9 +12,10 @@ export function HeroHeadline({ text }: { text: string }) {
       wrap="balance"
       variant="display-strong-l"
       style={{
-        // Caps at 4rem: 4.5rem forced this headline onto three lines and broke
-        // it at "and ship / production / systems".
-        fontSize: "clamp(1.875rem, 5.2vw, 4rem)",
+        // Caps at 3.25rem. The headline is a full sentence now, and at 4rem it
+        // ran to five lines and swallowed the fold; the subline and the buttons
+        // underneath are what the reader is meant to reach.
+        fontSize: "clamp(1.75rem, 4.2vw, 3.25rem)",
         lineHeight: 1.06,
         letterSpacing: "-0.03em",
       }}
@@ -23,7 +24,9 @@ export function HeroHeadline({ text }: { text: string }) {
         <span
           key={`${w}-${i}`}
           className="heroWord"
-          style={{ "--word-delay": `${100 + i * 65}ms` } as CSSProperties}
+          // 35ms a word, not 65: at nineteen words the old step left the last
+          // line still arriving well over a second in.
+          style={{ "--word-delay": `${100 + i * 35}ms` } as CSSProperties}
         >
           {i < words.length - 1 ? `${w} ` : w}
         </span>

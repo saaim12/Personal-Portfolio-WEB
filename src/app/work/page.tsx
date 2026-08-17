@@ -52,9 +52,12 @@ export default function Work() {
           align="center"
           wrap="balance"
         >
-          Five systems, each with the problem, the architecture, the trade-offs
-          I made, and what I would change. One was client work in production,
-          four were built to go deep on something.
+          Five systems, each written up as the problem, the architecture, the
+          trade-offs I made, and what I would change. One is client work running
+          in production; the other four I built to get to the bottom of
+          something: streaming and warehouse modelling, tenant-isolated
+          retrieval, cold-start recommendation, and inference on a
+          microcontroller.
         </Text>
         {/* "Shown with the permission of clients" was removed: four of the five
             are personal projects, and a reader who works that out stops
@@ -122,7 +125,7 @@ export default function Work() {
               data-border="rounded"
               arrowIcon
             >
-              DSA practice in Python
+              Algorithms in Python on GitHub
             </Button>
           </Row>
         </Column>
