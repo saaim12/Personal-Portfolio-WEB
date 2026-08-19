@@ -42,6 +42,11 @@ export function Projects({ range, exclude, only }: ProjectsProps) {
           description={post.metadata.summary}
           tags={post.metadata.tags}
           stack={post.metadata.stack}
+          thumbnail={post.metadata.thumbnail}
+          hardPart={post.metadata.hardPart}
+          // Slug, not title: the event name has to stay stable in the
+          // dashboard when a case study is retitled.
+          track={`work_card:${post.slug}`}
         />
       ))}
     </div>

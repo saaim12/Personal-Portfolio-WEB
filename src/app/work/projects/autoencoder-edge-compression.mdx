@@ -16,6 +16,8 @@ stack:
   - "s3"
   - "esp32"
 images: []
+thumbnail: "/images/projects/autoencoder-edge-compression-architecture.png"
+hardPart: "The encoder had to fit in flash beside the application on microcontroller-class hardware and still cost less power to run than the bytes it saves to send."
 link: "https://github.com/saaim12/AutoEncoders_based_encryption_training_and_fitting_in_devices_such_as_esp_or_rasberry-pi"
 team:
   - name: "Saaim Abdullah"
@@ -56,6 +58,14 @@ original signal server-side, with S3 holding encoded payloads.
 
 The asymmetry is the entire design. The constrained side only ever runs the
 cheap half.
+
+<ArchitectureDiagram
+  src="/images/projects/autoencoder-edge-compression-architecture.png"
+  alt="On an ESP32-class device, a 128-value sensor window runs through the encoder half of the autoencoder, converted to TensorFlow Lite Micro, integer-quantised and occupying 86 KB of flash. It emits a 16-float latent vector, a 7.8:1 reduction, which crosses the radio link to a Flask decoder on EC2 that reconstructs the signal at 0.0038 MSE, with S3 holding the encoded payloads."
+  caption="The split that is the whole design: the device runs only the encoder, and the half that costs memory runs where memory is free."
+  width={2400}
+  height={1350}
+/>
 
 **Sizing the latent vector, and getting it wrong first.** The first latent size I
 tried was too aggressive. It fit comfortably and reconstructed badly, in a way

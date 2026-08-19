@@ -28,6 +28,17 @@ type Metadata = {
   seoDescription: string;
   image?: string;
   images: string[];
+  /**
+   * Card thumbnail, 16:9. Optional: a case study without one gets a
+   * typographic tile at the same aspect ratio, so the grid never ragged.
+   */
+  thumbnail?: string;
+  /**
+   * One line naming the part of this build that was actually hard. The card
+   * used to show only the summary, which reads as scope rather than as
+   * difficulty, and scope is the half a reviewer already assumes.
+   */
+  hardPart?: string;
   /** Category labels shown as text on the card, e.g. "Client work". */
   tags?: string[];
   /**
@@ -70,6 +81,8 @@ function readMDXFile(filePath: string) {
     seoDescription: data.seoDescription || data.summary || "",
     image: data.image || "",
     images: data.images || [],
+    thumbnail: data.thumbnail || "",
+    hardPart: data.hardPart || "",
     tags: data.tags || [],
     stack: data.stack || [],
     team: data.team || [],

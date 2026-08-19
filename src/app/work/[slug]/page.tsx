@@ -49,7 +49,11 @@ export async function generateMetadata({
     title: post.metadata.seoTitle,
     description: post.metadata.seoDescription,
     path: `${work.path}/${post.slug}`,
-    image: post.metadata.image || ogImageFor(post.metadata.title),
+    // The card thumbnail before the generated title card: an architecture
+    // diagram or a shot of the live product says more in a link preview than
+    // the title rendered on a black rectangle, and the title is already in the
+    // preview's own title line.
+    image: post.metadata.image || post.metadata.thumbnail || ogImageFor(post.metadata.title),
     type: "article",
     publishedTime: post.metadata.publishedAt,
     modifiedTime: post.metadata.updatedAt,
@@ -85,7 +89,7 @@ export default async function Project({
             title: post.metadata.title,
             description: post.metadata.seoDescription,
             path: `${work.path}/${post.slug}`,
-            image: post.metadata.image || ogImageFor(post.metadata.title),
+            image: post.metadata.image || post.metadata.thumbnail || ogImageFor(post.metadata.title),
             datePublished: post.metadata.publishedAt,
             dateModified: post.metadata.updatedAt,
           }),

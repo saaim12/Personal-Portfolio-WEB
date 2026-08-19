@@ -17,6 +17,8 @@ stack:
   - "html"
   - "javascript"
 images: []
+thumbnail: "/images/projects/multilingual-rag-engine-architecture.png"
+hardPart: "Cross-tenant retrieval is a security incident, not a bad answer. The tenant claim had to come from the verified JWT, so a client can never ask for someone else's documents."
 link: "https://github.com/saaim12/multilingual-multitenant-rag"
 team:
   - name: "Saaim Abdullah"
@@ -75,6 +77,14 @@ from the email domain, so a user cannot pick their own.
 Six prompt templates ship with it: qa, summarize, translate, glossary, extract
 and explain. Seven endpoints cover register, login, refresh, query, ingest,
 usage and health.
+
+<ArchitectureDiagram
+  src="/images/projects/multilingual-rag-engine-architecture.png"
+  alt="A query carrying a signed JWT reaches Django and DRF, which reads the tenant claim from the token rather than from the request. The query is embedded locally by multilingual-e5-base at 768 dimensions, a cosine search in PostgreSQL with pgvector is filtered by that tenant claim, and the retrieved chunks go to Gemini 2.5 Flash, which answers only from them."
+  caption="The retrieval path. The tenant claim enters at the token and constrains every query after it, so isolation is a property of the request rather than of remembering a WHERE clause."
+  width={2400}
+  height={1350}
+/>
 
 **The quota race, and the fix.** The first version enforced quotas by reading the
 tenant's usage counter, comparing it, then incrementing it. Under concurrent

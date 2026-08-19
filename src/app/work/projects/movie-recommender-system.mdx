@@ -16,6 +16,8 @@ stack:
   - "docker"
   - "pytest"
 images: []
+thumbnail: "/images/projects/movie-recommender-system-architecture.png"
+hardPart: "Swapping a retrained model without dropping traffic. Hot reload inside the running service, version skew and reload safety handled there rather than by a deploy."
 link: "https://github.com/saaim12/Recommender-System"
 team:
   - name: "Saaim Abdullah"
@@ -67,6 +69,14 @@ health, recommend, similar items and model reload. Redis or an in-memory cache
 sits in front of the hot paths with a configurable TTL. Airflow runs the
 training DAG, and the trained model is pickled to disk as an artifact the API
 loads.
+
+<ArchitectureDiagram
+  src="/images/projects/movie-recommender-system-architecture.png"
+  alt="The four MovieLens sources are merged by build_catalog and trained into a blend of content similarity, item co-occurrence and a popularity prior, on a schedule driven by an Airflow DAG. Training writes a versioned model artifact. The FastAPI serving layer, behind API-key auth with four routes and a Redis or in-memory cache in front of it, hot-reloads that artifact without a deploy."
+  caption="Training on top, serving underneath, and the versioned artifact as the only thing that crosses between them."
+  width={2400}
+  height={1350}
+/>
 
 **The evaluation was lying, quietly.** The holdout split is per user, and the
 evaluation only scores users who have at least one held-out item rated above the

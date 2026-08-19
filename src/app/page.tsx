@@ -2,13 +2,14 @@ import { Column, Heading, Row, Text } from "@once-ui-system/core";
 import {
   HiOutlineDocumentText,
   HiArrowRight,
+  HiArrowUpRight,
   HiOutlineWrenchScrewdriver,
   HiOutlineSquares2X2,
   HiOutlineFlag,
   HiOutlineCommandLine,
+  HiOutlineRectangleStack,
 } from "react-icons/hi2";
-import { FaGithub } from "react-icons/fa6";
-import { home, person, social, pageMeta, ogImageFor } from "@/resources";
+import { home, social, pageMeta, ogImageFor } from "@/resources";
 import { jsonLd, personJsonLd, webPageJsonLd } from "@/resources/schema";
 import { iconLibrary } from "@/resources/icons";
 import {
@@ -23,6 +24,9 @@ import {
   Fundamentals,
   SkillsMarquee,
   Reveal,
+  ScrollCue,
+  Track,
+  Stack,
 } from "@/components";
 import { Projects } from "@/components/work/Projects";
 
@@ -35,6 +39,14 @@ export async function generateMetadata() {
   });
 }
 
+// The home page carries the whole story.
+//
+// Analytics said what analytics usually says about a portfolio: visitors land
+// here and navigate nowhere. So nothing that matters sits behind a click any
+// more. /work, /about and each case study still exist, but as depth for the
+// few who want it, not as the only place the substance lives. Every section
+// below is full content, and every section ends with exactly one link pointing
+// at the next specific thing rather than a menu of five.
 export default function Home() {
   return (
     <Column fillWidth horizontal="center">
@@ -52,6 +64,11 @@ export default function Home() {
           FAQPage went with the FAQ section it was generated from. */}
       <script {...jsonLd(personJsonLd)} />
 
+      {/* One delegated click listener and one scroll listener for the page.
+          Everything it measures stays server-rendered. The section index is
+          not here: it lives in the header pill, so the page has one nav. */}
+      <Track />
+
       {/* ── 1. ATTENTION ────────────────────────────────────────────────── */}
       <div
         style={{
@@ -64,15 +81,9 @@ export default function Home() {
         <Column
           horizontal="center"
           align="center"
-          gap="24"
-          style={{
-            position: "relative",
-            zIndex: 1,
-            maxWidth: "720px",
-            minHeight: "min(78vh, 720px)",
-            justifyContent: "center",
-            paddingTop: "40px",
-          }}
+          gap="16"
+          className="hero"
+          style={{ position: "relative", zIndex: 1, maxWidth: "720px" }}
         >
           <Row fillWidth horizontal="center">
             <HeroHeadline text={home.headline} />
@@ -89,50 +100,55 @@ export default function Home() {
             </Text>
           </Reveal>
 
-          {/* Two buttons, one clear primary. The primary points at the
-              write-ups rather than at a contact channel: for this audience the
-              conversion event is reading one case study properly, not sending
-              a message. */}
+          {/* The primary button no longer leaves the page. It used to open
+              /work, and the second button opened a PDF in a viewer, which is
+              where the visit ended. Both destinations are still here, one as
+              an in-page scroll and one as a small link. */}
           <Reveal delay={0.25}>
             <Row gap="12" wrap horizontal="center" vertical="center">
-              <a className="btn btn--primary btn--lg" href="/work">
-                Read the engineering write-ups
+              <a
+                className="btn btn--primary btn--lg"
+                href="#work"
+                data-track="hero_cta:see_the_work"
+              >
+                See the work
                 <HiArrowRight aria-hidden="true" />
               </a>
               <a
                 className="btn btn--secondary btn--lg"
-                href="/SaaimCV.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/work"
+                data-track="hero_cta:read_the_write_ups"
               >
-                <HiOutlineDocumentText aria-hidden="true" />
-                Resume (PDF)
+                Read the write-ups
               </a>
             </Row>
           </Reveal>
 
-          {/* Two links a recruiter would otherwise have to hunt for: the signed
-              reference, and the algorithms repo most loops screen for. Both
-              above the fold, both secondary to the write-ups. */}
+          {/* Both PDFs, demoted to text and both opening in a new tab. A
+              recruiter who wants the CV still finds it in two seconds; a
+              recruiter who wanted the site no longer loses it to a PDF
+              viewer. */}
           <Reveal delay={0.32}>
             <Row gap="24" wrap horizontal="center" textVariant="body-default-s">
+              <a
+                className="extLink"
+                href="/SaaimCV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                data-track="hero_link:resume"
+              >
+                <HiOutlineDocumentText aria-hidden="true" />
+                Resume (PDF)
+              </a>
               <a
                 className="extLink"
                 href="/Fitter-Recommendation-Letter.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-track="hero_link:recommendation"
               >
                 <HiOutlineDocumentText aria-hidden="true" />
                 Client recommendation (PDF)
-              </a>
-              <a
-                className="extLink"
-                href="https://github.com/saaim12/DSA-Python"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaGithub aria-hidden="true" />
-                Data structures &amp; algorithms in Python
               </a>
             </Row>
           </Reveal>
@@ -164,6 +180,8 @@ export default function Home() {
               anything else on the page. A recruiter used to have to read three
               separate sections to answer these four questions. */}
           <StatusLine />
+
+          <ScrollCue />
         </Column>
       </div>
 
@@ -172,16 +190,16 @@ export default function Home() {
           under it and the write-ups below that. */}
       <SkillsMarquee />
 
-      {/* ── 2. TRUST ── */}
+      {/* ── 2 + 3. TRUST AND PROOF ───────────────────────────────────────
+          The anchor opens on the numbers and runs into the cards, because
+          those four tiles are what the cards are evidence for. It also puts
+          the top of #work inside the first screen on a 1440x900 desktop,
+          which is the entire point of capping the hero.
+
+          Cards, not a list of titles: the whole card is the click target,
+          because people click blocks and do not hunt for links. */}
+      <Column id="work" fillWidth horizontal="center">
       <ProofBar />
-
-      {/* ── 3. AUTHORITY ── */}
-      <Practice icon={<HiOutlineWrenchScrewdriver aria-hidden="true" />} />
-
-      {/* ── 4 + 5. PROOF / TECHNICAL DEPTH ───────────────────────────────
-          The single highest-impact change on the site: proof used to live one
-          nav click away, so most visitors reached the contact block without
-          ever seeing anything built. */}
       <Column fillWidth horizontal="center" className="section section--ruled">
         <Reveal>
           <div className="sectionHead">
@@ -216,27 +234,64 @@ export default function Home() {
 
         <Reveal delay={0.12}>
           <Row fillWidth horizontal="center" paddingTop="32">
-            <a className="btn btn--secondary" href="/work">
-              All five write-ups
+            <a
+              className="extLink"
+              href="/work/fitter-health-platform"
+              data-track="section_outro:fitter_incident"
+            >
+              The notification pipeline on Fitter Health dropped messages
+              silently. Here is what I changed.
+              <HiArrowRight aria-hidden="true" />
+            </a>
+          </Row>
+        </Reveal>
+      </Column>
+      </Column>
+
+      {/* ── 4. SOCIAL PROOF ── */}
+      <Testimonial />
+
+      {/* ── 5. STACK ─────────────────────────────────────────────────────
+          Was on /about, where the traffic never went. */}
+      <Stack icon={<HiOutlineRectangleStack aria-hidden="true" />} />
+
+      {/* ── 6. APPROACH ── */}
+      <Column id="approach" fillWidth horizontal="center" className="sectionGroup">
+        <Practice icon={<HiOutlineWrenchScrewdriver aria-hidden="true" />} />
+        <Reveal className="sectionOutro">
+          <Row fillWidth horizontal="center">
+            <a
+              className="extLink"
+              href="https://medium.com/@saymmalik08"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track="section_outro:medium"
+            >
+              Longer-form notes on what I&rsquo;m building, on Medium
+              <HiArrowUpRight aria-hidden="true" />
+            </a>
+          </Row>
+        </Reveal>
+      </Column>
+
+      {/* ── 7. WRITING & FUNDAMENTALS ── */}
+      <Column id="writing" fillWidth horizontal="center" className="sectionGroup">
+        <Fundamentals icon={<HiOutlineCommandLine aria-hidden="true" />} />
+        <Certificates />
+        <Reveal className="sectionOutro">
+          <Row fillWidth horizontal="center">
+            <a className="extLink" href="#contact" data-track="section_outro:contact">
+              If any of this looks like a problem you currently have, email me.
               <HiArrowRight aria-hidden="true" />
             </a>
           </Row>
         </Reveal>
       </Column>
 
-      {/* ── 6. SOCIAL PROOF ── */}
-      <Testimonial />
-
-      {/* ── 7. FUNDAMENTALS ── */}
-      <Fundamentals icon={<HiOutlineCommandLine aria-hidden="true" />} />
-
-      {/* ── 8. CREDENTIALS ── */}
-      <Certificates />
-
-      {/* ── 9. FIT ── */}
+      {/* ── 8. FIT ── */}
       <LookingFor icon={<HiOutlineFlag aria-hidden="true" />} />
 
-      {/* ── 10. ACTION ── */}
+      {/* ── 9. ACTION ── */}
       <Contact />
     </Column>
   );

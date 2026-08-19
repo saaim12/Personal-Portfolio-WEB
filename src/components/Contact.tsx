@@ -46,7 +46,11 @@ export function Contact() {
           {/* The address is the label, not "Email me". A recruiter who wants to
               paste it into their own client should not have to hover a button
               to find out what it is. */}
-          <a className="btn btn--primary btn--lg" href={`mailto:${person.email}`}>
+          <a
+            className="btn btn--primary btn--lg"
+            href={`mailto:${person.email}`}
+            data-track="contact:email"
+          >
             <HiOutlineEnvelope aria-hidden="true" />
             {person.email}
           </a>
@@ -57,6 +61,7 @@ export function Contact() {
             href={bookingLink}
             target="_blank"
             rel="noopener noreferrer"
+            data-track="contact:book_a_call"
           >
             <HiOutlineCalendarDays aria-hidden="true" />
             Book a call

@@ -18,5 +18,8 @@ export { Footer } from "@/components/Footer";
 export { ProofBar } from "@/components/ProofBar";
 export { Testimonial } from "@/components/Testimonial";
 export { LookingFor } from "@/components/LookingFor";
+export { ScrollCue } from "@/components/ScrollCue";
+export { Track } from "@/components/Track";
+export { Stack } from "@/components/Stack";
 export { CustomMDX } from "@/components/mdx";
 export { TechList } from "@/components/Tech";

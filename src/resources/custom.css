@@ -209,6 +209,37 @@ table {
   border-top: 1px solid var(--border);
 }
 
+/* The five ids the header's section index and the hero's primary button are
+   written against. `scroll-margin-top` rather than relying on the global
+   `scroll-padding-top` alone, so a heading never lands under the fixed bar. */
+#work,
+#stack,
+#approach,
+#writing,
+#contact {
+  scroll-margin-top: calc(var(--nav-h) + 28px);
+}
+
+/* A named block that ends with one forward link. The last section inside it
+   hands most of its bottom padding to the link, so the link reads as the end
+   of that section rather than as an orphan floating between two. */
+.sectionGroup {
+  width: 100%;
+}
+.sectionGroup > .section:nth-last-child(2) {
+  padding-bottom: 32px;
+}
+.sectionOutro {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 104px;
+}
+@media (max-width: 768px) {
+  .sectionOutro {
+    padding-bottom: 64px;
+  }
+}
+
 .sectionHead {
   display: flex;
   flex-direction: column;
@@ -1491,4 +1522,136 @@ article a {
    it. Applied on <main> rather than on each page. */
 main {
   padding-top: var(--nav-h);
+}
+
+/* ══ HERO ═══════════════════════════════════════════════════════════════
+   Capped, deliberately. At full viewport height the page looked finished
+   before it started: a black screen, a headline and two buttons, with no
+   evidence a second section existed. At 78vh the top of the skills row and
+   the proof tiles under it are visible on a 1440x900 desktop without
+   scrolling, which is the whole argument for scrolling. */
+
+.hero {
+  min-height: min(78vh, 720px);
+  justify-content: center;
+}
+@media (max-width: 768px) {
+  .hero {
+    min-height: 85vh;
+  }
+}
+
+/* ══ SCROLL CUE ═════════════════════════════════════════════════════════
+   Removes the ambiguity the cap leaves. Fixed 28px box whether it is shown
+   or not, so fading it out shifts nothing. */
+
+.scrollCue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-top: 8px;
+  color: var(--muted);
+  opacity: 0.75;
+  transition: opacity var(--slow) var(--ease);
+}
+.scrollCue svg {
+  width: 20px;
+  height: 20px;
+  animation: cueBob 1.9s var(--ease) infinite;
+}
+.scrollCueOut {
+  opacity: 0;
+}
+@keyframes cueBob {
+  0%,
+  100% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+/* ══ PROJECT CARD: THUMBNAIL AND HARD PART ══════════════════════════════
+   A fixed 16:9 box whether there is an image or not, so a case study gaining
+   a diagram later reflows nothing, and the grid never rags. The monogram is
+   the placeholder: the design is monochrome end to end, so a coloured tile
+   would be the one thing on the page fighting it. */
+
+.projThumb {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin-bottom: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015));
+}
+.projThumb img {
+  object-fit: cover;
+}
+.projThumbMark {
+  font-family: var(--font-heading), serif;
+  font-size: clamp(2.5rem, 7vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text);
+  opacity: 0.22;
+}
+
+/* Scope is the half a reviewer already assumes. This is the other half, so it
+   gets a rule of its own rather than another paragraph of body copy. */
+.projHard {
+  margin: 2px 0 0;
+  padding-left: 12px;
+  border-left: 2px solid var(--border-accent);
+  font-size: 0.84375rem;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+.projHardLabel {
+  display: block;
+  margin-bottom: 3px;
+  font-family: var(--font-label), sans-serif;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+/* The skills blocks moved onto the home page as the Stack section. They were
+   laid out by a flex gap on /about; here they are plain elements, so the chip
+   row needs its own separation from the paragraph above it. */
+.skillGroup .techList {
+  margin-top: 14px;
+}
+
+/* ══ REDUCED MOTION: LATE ADDITIONS ═════════════════════════════════════
+   Same intent as the block further up, but these have to sit after the rules
+   they override: the scroll cue and the section bar are declared below it,
+   and at equal specificity source order settles it. */
+
+@media (prefers-reduced-motion: reduce) {
+  /* Once UI's global.scss sets `html { scroll-behavior: smooth }` with no
+     media query at all. The override further up is on `html:focus-within`,
+     which is more specific but does not match until something on the page has
+     focus, so on a freshly loaded page the smooth scroll survived a reduce
+     preference. Both selectors, so it is off either way. */
+  html,
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+  /* The cue still says "the page continues", it just stops bobbing to say it.
+     Without this the global 0.01ms duration snaps it to its end frame. */
+  .scrollCue svg {
+    animation: none;
+    transform: none;
+  }
 }

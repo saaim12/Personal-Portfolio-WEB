@@ -124,6 +124,34 @@
   }
 }
 
+/* The same pill, holding the home page's sections instead of the routes once
+   the reader is past the hero. Set in the label face used by the section
+   eyebrows it points at, so it reads as an index of this page rather than as a
+   different set of destinations. There is no second bar: two stacked glass
+   capsules read as two navbars. */
+.sectionLink.sectionLink {
+  padding: 0 11px;
+  font-family: var(--font-label), sans-serif;
+  font-size: 0.71875rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  animation: navSwap var(--base) var(--ease) both;
+}
+
+@keyframes navSwap {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sectionLink.sectionLink {
+    animation: none;
+  }
+}
+
 .actions {
   display: flex;
   align-items: center;

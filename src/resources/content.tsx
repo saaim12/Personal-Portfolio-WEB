@@ -78,23 +78,26 @@ const home: Home = {
   image: "/images/og/home.jpg",
   label: "Home",
   // The homepage is the one route the title template does not suffix, so this
-  // carries the name itself.
-  title: `${person.name}, software engineer. Distributed systems, backend, and data.`,
+  // carries the name itself. Kept inside 60 characters: the previous version
+  // ran to 74 and Google was cutting it after "Distributed", which is the one
+  // word in it doing any work.
+  title: `${person.name} — backend and distributed systems engineer`,
   // Kept inside 160 chars so Google doesn't truncate it mid-phrase.
   description: `Software engineer building scalable, distributed backends. Took a health platform from an empty repo to production solo. Django, AWS, Kubernetes, Kafka, Spark.`,
-  // Names the discipline in the first three words. The previous headline sold
-  // a service ("I turn ideas into working software"); a recruiter scanning for
-  // thirty seconds needs the job title, not the offer.
-  headline:
-    "Hi, I’m Saaim. I build software that scales, and I design the distributed systems that keep it standing.",
+  // Plain language, on purpose. The previous version opened with "distributed
+  // systems" and a subline about schemas, queues and replicas, which is the
+  // right vocabulary for the case studies and the wrong one for the first
+  // fifteen seconds: most people reading this are recruiters, and a headline
+  // they have to decode is a headline they skip. The technical claims are
+  // still on the page, they just start below the fold, where someone who wants
+  // them is looking for them.
+  headline: "Hi, I’m Saaim. I build software that keeps working when a lot of people use it.",
   subline: (
     <>
-      The half of this job I actually enjoy is the load-bearing half: the
-      schema, the queue that must not drop a message, the service that stays up
-      while replicas come and go under it. I took a health platform from an
-      empty repo to live production as the only engineer on it, and before that
-      ran backend services on AWS for 1,000 to 3,000 daily users, split across
-      pods and scaled on throughput.
+      I built a health platform in Spain on my own, from nothing to real
+      customers using it every day. Before that I looked after the systems
+      behind an app a few thousand people used daily. What I enjoy is the
+      unglamorous half of the job: making things that don’t fall over.
     </>
   ),
   // One CTA definition drives the hero, the navbar and the mobile menu. Email,
