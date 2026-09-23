@@ -52,6 +52,17 @@
   --code-bg: rgba(255, 255, 255, 0.05);
 }
 
+/* Typography is intentionally a little more editorial than a default SaaS
+   stack: Bricolage gives headings a distinctive silhouette while Jakarta keeps
+   recruiter-facing copy calm and highly legible. */
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: -0.035em;
+  font-kerning: normal;
+}
+
 /* ══ ONCE UI: MONOCHROME ════════════════════════════════════════════════
    Once UI's brand/accent ramps only come in hues, there is no neutral option
    for `brand` in its config, so the About page's buttons, tags and icons
@@ -1520,10 +1531,6 @@ article a {
 /* ══ NAV OFFSET ═════════════════════════════════════════════════════════
    The header is fixed at every breakpoint now, so every page needs to clear
    it. Applied on <main> rather than on each page. */
-main {
-  padding-top: var(--nav-h);
-}
-
 /* ══ HERO ═══════════════════════════════════════════════════════════════
    Capped, deliberately. At full viewport height the page looked finished
    before it started: a black screen, a headline and two buttons, with no

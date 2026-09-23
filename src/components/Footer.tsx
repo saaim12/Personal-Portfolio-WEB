@@ -11,7 +11,8 @@ const COLOPHON: TechKey[] = ["nextjs", "vercel"];
 
 const LINKS = [
   { label: "Work", href: "/work", external: false },
-  { label: "About", href: "/about", external: false },
+  { label: "Experience", href: "/experience", external: false },
+  { label: "Projects", href: "/work", external: false },
   { label: "Resume", href: "/SaaimCV.pdf", external: true },
   { label: "Writing", href: "https://medium.com/@saymmalik08", external: true },
 ];

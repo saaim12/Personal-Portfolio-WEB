@@ -23,7 +23,7 @@ const VIEWPORTS = [
 
 const ROUTES = [
   { name: "home", path: "/" },
-  { name: "about", path: "/about" },
+  { name: "experience", path: "/experience" },
   { name: "work", path: "/work" },
   { name: "case", path: "/work/fitter-health-platform" },
   { name: "404", path: "/does-not-exist" },

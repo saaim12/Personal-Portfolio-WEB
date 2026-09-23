@@ -81,9 +81,9 @@ const home: Home = {
   // carries the name itself. Kept inside 60 characters: the previous version
   // ran to 74 and Google was cutting it after "Distributed", which is the one
   // word in it doing any work.
-  title: `${person.name} — backend and distributed systems engineer`,
+  title: `${person.name} — Software Engineer`,
   // Kept inside 160 chars so Google doesn't truncate it mid-phrase.
-  description: `Software engineer building scalable, distributed backends. Took a health platform from an empty repo to production solo. Django, AWS, Kubernetes, Kafka, Spark.`,
+  description: `Saaim Abdullah is a software engineer in Lahore who turns complex software problems into dependable products, APIs, and data systems.`,
   // Plain language, on purpose. The previous version opened with "distributed
   // systems" and a subline about schemas, queues and replicas, which is the
   // right vocabulary for the case studies and the wrong one for the first
@@ -91,15 +91,8 @@ const home: Home = {
   // they have to decode is a headline they skip. The technical claims are
   // still on the page, they just start below the fold, where someone who wants
   // them is looking for them.
-  headline: "Hi, I’m Saaim. I build software that keeps working when a lot of people use it.",
-  subline: (
-    <>
-      I built a health platform in Spain on my own, from nothing to real
-      customers using it every day. Before that I looked after the systems
-      behind an app a few thousand people used daily. What I enjoy is the
-      unglamorous half of the job: making things that don’t fall over.
-    </>
-  ),
+  headline: "Software Engineer — Backend & Full Stack",
+  subline: <>I take software from idea to reliable delivery: backend systems, full-stack products, APIs, data pipelines, cloud infrastructure, and the integrations that connect them. With Python, TypeScript, PostgreSQL, and AWS, I help teams solve difficult engineering problems and ship with confidence.</>,
   // One CTA definition drives the hero, the navbar and the mobile menu. Email,
   // not a booking link: it is the channel a recruiter reaches for first, and it
   // costs the reader nothing to use.
@@ -121,10 +114,10 @@ const home: Home = {
   // specific market, add it here. That is the one version of this line that
   // wins something rather than merely avoiding a problem.
   status: [
-    "Open to full-time roles, remote or relocation",
+    "Open to software engineering roles and serious product work",
     "Based in Lahore, working European and US-East hours",
-    "Backend, distributed systems, and data engineering",
-    "Available now",
+    "Backend, full-stack, cloud, and data engineering",
+    "Reliable delivery from architecture to handover",
   ],
   // Scope and scale, not credentials. Every value is checkable against the live
   // site, the CV, the signed letter or the repos. "100% job success on Upwork"
@@ -135,7 +128,7 @@ const home: Home = {
   // of the five, and it was also the one carrying a number ("2.5 years") that
   // the dates on the linked CV contradicted.
   proof: [
-    { value: "Sole engineer", label: "built a health platform end to end and handed it over live" },
+    { value: "End to end", label: "from product architecture and APIs to deployment and handover" },
     { value: "1,000 to 3,000", label: "daily users on backend services I owned at Expertflow" },
     { value: "130 ms to 30 ms", label: "admin API latency, on Redis caching and index tuning" },
     { value: "5 systems", label: "with written architecture breakdowns, not just repos" },
@@ -237,32 +230,29 @@ const home: Home = {
   },
   looking: {
     display: true,
-    label: "What's next",
-    title: "What I'm looking for",
+    label: "Working together",
+    title: "A dependable engineering partner",
     body: (
       <>
         <p>
-          Backend, platform, or distributed systems roles where I own a service
-          rather than a ticket queue. I have worked both ends of that: inside a
-          team at Expertflow with live traffic to keep up, and alone on Fitter
-          Health, where every schema decision and every consequence was mine.
-          Owning the consequences is the part I want to keep.
+          Bring me a product problem, an overloaded backend, a data workflow,
+          or a system that needs to become easier to operate. I can help shape
+          the architecture, build the core software, connect the services,
+          improve performance, and leave the team with something documented
+          and maintainable.
         </p>
         <p>
-          The problems I want more of are the ones that only appear under load:
-          partitioning and replication, back-pressure and retries, idempotent
-          consumers, exactly the class of bug that never reproduces on a laptop.
-          Most fluent in Python and TypeScript, across Django, DRF, FastAPI,
-          PostgreSQL, Kafka and AWS. Going deeper on distributed data processing
-          and retrieval right now, sitting the AWS Solutions Architect Associate
-          exam this year, and keeping the algorithm work in the open on GitHub.
+          My strongest work is in Python and TypeScript across Django, REST
+          APIs, PostgreSQL, AWS, queues, ETL, and modern web applications. I am
+          comfortable taking responsibility for the details that make software
+          trustworthy: clear contracts, useful tests, safe migrations, failure
+          recovery, observability, and a clean handover.
         </p>
         <p>
-          I work best on small teams where the person writing the code talks to
-          the person who needs it, and I would rather join one with senior
-          engineers to learn from than be the most experienced person in the
-          room again. Open to remote roles with EU or US-East teams, and to
-          relocating.
+          I work well with founders, product teams, designers, and senior
+          engineers. I communicate clearly, learn quickly, and stay accountable
+          from the first technical decision through production support. Open to
+          remote software engineering roles with EU or US-East teams.
         </p>
       </>
     ),

@@ -181,7 +181,11 @@ export function AuroraField() {
     };
 
     // Reduced motion still gets the aurora, just frozen on one frame.
-    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const still =
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      window.matchMedia("(max-width: 600px)").matches ||
+      ("connection" in navigator &&
+        Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData));
     if (still) {
       draw(0);
       return () => {

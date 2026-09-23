@@ -5,15 +5,15 @@ const baseURL: string = "https://saaim.site";
 
 const routes: RoutesConfig = {
   "/": true,
-  "/about": true,
+  "/experience": true,
   "/work": true,
 };
 
 // Import and set font for each variant
-import { Space_Grotesk, Manrope, Space_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Plus_Jakarta_Sans, IBM_Plex_Mono } from "next/font/google";
 
 // Display / headings, Space Grotesk, the three weights the layout renders.
-const heading = Space_Grotesk({
+const heading = Bricolage_Grotesque({
   variable: "--font-heading",
   weight: ["500", "600", "700"],
   subsets: ["latin"],
@@ -21,7 +21,7 @@ const heading = Space_Grotesk({
 });
 
 // Body copy
-const body = Manrope({
+const body = Plus_Jakarta_Sans({
   variable: "--font-body",
   subsets: ["latin"],
   display: "swap",
@@ -29,7 +29,7 @@ const body = Manrope({
 
 // UI labels, same family, separate CSS variable (Once UI tokens read
 // --font-label). Next dedupes the underlying font files.
-const label = Manrope({
+const label = Plus_Jakarta_Sans({
   variable: "--font-label",
   subsets: ["latin"],
   display: "swap",
@@ -37,7 +37,7 @@ const label = Manrope({
 
 // Mono, small labels, section markers, tech tags, code.
 // Space Mono is not a variable font, so weights must be explicit.
-const code = Space_Mono({
+const code = IBM_Plex_Mono({
   variable: "--font-code",
   weight: ["400", "700"],
   subsets: ["latin"],

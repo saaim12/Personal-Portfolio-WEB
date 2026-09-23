@@ -108,18 +108,18 @@ export default function Home() {
             <Row gap="12" wrap horizontal="center" vertical="center">
               <a
                 className="btn btn--primary btn--lg"
-                href="#work"
-                data-track="hero_cta:see_the_work"
+                href="/experience"
+                data-track="hero_cta:view_experience"
               >
-                See the work
+                View experience
                 <HiArrowRight aria-hidden="true" />
               </a>
               <a
                 className="btn btn--secondary btn--lg"
                 href="/work"
-                data-track="hero_cta:read_the_write_ups"
+                data-track="hero_cta:see_projects"
               >
-                Read the write-ups
+                See Projects
               </a>
             </Row>
           </Reveal>
@@ -131,24 +131,24 @@ export default function Home() {
           <Reveal delay={0.32}>
             <Row gap="24" wrap horizontal="center" textVariant="body-default-s">
               <a
-                className="extLink"
+                className="btn btn--primary"
                 href="/SaaimCV.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-track="hero_link:resume"
               >
                 <HiOutlineDocumentText aria-hidden="true" />
-                Resume (PDF)
+                View Resume
               </a>
               <a
-                className="extLink"
+                className="btn btn--secondary"
                 href="/Fitter-Recommendation-Letter.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-track="hero_link:recommendation"
               >
                 <HiOutlineDocumentText aria-hidden="true" />
-                Client recommendation (PDF)
+                Client Recommendation
               </a>
             </Row>
           </Reveal>
@@ -211,10 +211,10 @@ export default function Home() {
               Systems I&rsquo;ve built
             </Heading>
             <Text onBackground="neutral-weak" variant="heading-default-m" wrap="balance">
-              Not screenshots. Each one is a write-up: the constraint that
-              actually bound, the architecture it forced, the trade-off I made
-              with my eyes open, and the thing I would build differently now.
-              Read one and you know how I think about a system.
+              Practical engineering across product development, backend
+              systems, cloud infrastructure, and data. Explore the work to see
+              how I approach complex requirements and turn them into software
+              people can depend on.
             </Text>
           </div>
         </Reveal>

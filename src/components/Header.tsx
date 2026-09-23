@@ -12,13 +12,14 @@ import {
   HiOutlineEnvelope,
 } from "react-icons/hi2";
 
-import { person, routes, about, work, home } from "@/resources";
+import { person, routes, home } from "@/resources";
 import styles from "./Header.module.scss";
 
 const NAV = [
   { href: "/", label: "Home", icon: HiOutlineHome, key: "/" },
-  { href: about.path, label: about.label, icon: HiOutlineUser, key: "/about" },
-  { href: work.path, label: work.label, icon: HiOutlineSquares2X2, key: "/work" },
+  { href: "/experience", label: "Experience", icon: HiOutlineUser, key: "/experience" },
+  { href: "/work", label: "Projects", icon: HiOutlineSquares2X2, key: "/work" },
+  { href: "/#contact", label: "Contact", icon: HiOutlineEnvelope, key: "/contact" },
 ] as const;
 
 // The home page's section index. It lives in this pill rather than in a second
@@ -38,52 +39,19 @@ export const Header = () => {
   const pathname = usePathname() ?? "";
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [pastHero, setPastHero] = useState(false);
-  const [section, setSection] = useState<string>("");
-
   const isHome = pathname === "/";
-  const showSections = isHome && pastHero;
 
   // Frost the bar only once content is behind it, and swap the pill's contents
   // once the reader is past the hero on the home page.
   useEffect(() => {
     const onScroll = () => {
       setScrolled(window.scrollY > 8);
-      setPastHero(window.scrollY > window.innerHeight * 0.55);
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Which section is in view. Only ever runs on the home page, which is the
-  // only route that has these ids.
-  useEffect(() => {
-    if (!isHome || typeof IntersectionObserver === "undefined") return;
-    const els = SECTIONS.map((s) => document.getElementById(s.id)).filter(
-      (el): el is HTMLElement => el !== null,
-    );
-    if (!els.length) return;
-
-    const visible = new Set<string>();
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) visible.add(e.target.id);
-          else visible.delete(e.target.id);
-        }
-        // Document order rather than whichever entry fired last, so scrolling
-        // up highlights what scrolling down did. Approach is not in the list
-        // and empties the set on the way past; keeping the previous value
-        // stops the underline blinking off.
-        const next = SECTIONS.find((s) => visible.has(s.id))?.id;
-        if (next) setSection(next);
-      },
-      { rootMargin: "-96px 0px -55% 0px" },
-    );
-    for (const el of els) io.observe(el);
-    return () => io.disconnect();
-  }, [isHome]);
 
   // Close the mobile panel on navigation.
   useEffect(() => setOpen(false), [pathname]);
@@ -127,23 +95,9 @@ export const Header = () => {
 
           <nav
             className={styles.nav}
-            aria-label={showSections ? "Sections on this page" : "Main"}
+            aria-label="Main"
           >
-            {showSections
-              ? SECTIONS.map((item) => (
-                  <a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    className={`${styles.link} ${styles.sectionLink} ${
-                      section === item.id ? styles.active : ""
-                    }`}
-                    aria-current={section === item.id ? "true" : undefined}
-                    data-track={`section_nav:${item.id}`}
-                  >
-                    {item.label}
-                  </a>
-                ))
-              : NAV.filter((n) => routes[n.key as keyof typeof routes]).map((item) => {
+            {NAV.filter((n) => routes[n.key as keyof typeof routes] || n.key === "/contact").map((item) => {
                   const Icon = item.icon;
                   const active = isActive(item.key);
                   return (
@@ -200,25 +154,7 @@ export const Header = () => {
           <div id="mobile-menu" className={styles.panel}>
             {/* On the home page the sections come first: they are where the
                 content is, and the routes below them are the depth. */}
-            {isHome && (
-              <>
-                {SECTIONS.map((item) => (
-                  <a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    className={`${styles.panelLink} ${
-                      section === item.id ? styles.panelActive : ""
-                    }`}
-                    data-track={`section_nav:${item.id}`}
-                    onClick={() => setOpen(false)}
-                  >
-                    {item.label}
-                  </a>
-                ))}
-                <div className={styles.panelDivider} />
-              </>
-            )}
-            {NAV.filter((n) => routes[n.key as keyof typeof routes]).map((item) => {
+            {NAV.filter((n) => routes[n.key as keyof typeof routes] || n.key === "/contact").map((item) => {
               const Icon = item.icon;
               const active = isActive(item.key);
               return (

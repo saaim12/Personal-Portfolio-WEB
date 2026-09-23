@@ -47,7 +47,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const meta: Record<string, RouteMeta> = {
     "/": { lastModified: SITE_LAST_MODIFIED, changeFrequency: "monthly", priority: 1 },
     "/work": { lastModified: newestPost, changeFrequency: "monthly", priority: 0.9 },
-    "/about": { lastModified: SITE_LAST_MODIFIED, changeFrequency: "monthly", priority: 0.8 },
+    "/experience": { lastModified: SITE_LAST_MODIFIED, changeFrequency: "monthly", priority: 0.8 },
   };
 
   const pages = Object.keys(routesConfig)

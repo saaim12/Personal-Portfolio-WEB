@@ -5,18 +5,14 @@
    the header and the pills read as objects sitting on top of the page. */
 
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   z-index: 50;
   height: var(--nav-h);
   display: flex;
   align-items: center;
 }
 
-/* The pills carry their own glass, so the scrolled state has nothing left to
-   do. The class is still applied while the mobile panel is open. */
+/* The header stays in document flow and scrolls away with the page. */
 .scrolled {
   background: var(--nav-bg);
 }

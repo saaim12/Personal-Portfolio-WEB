@@ -35,7 +35,7 @@ const authorNode = {
   "@type": "Person",
   "@id": PERSON_ID,
   name: person.name,
-  url: `${baseURL}/about`,
+  url: `${baseURL}/experience`,
 };
 
 /** WebPage node for the hand-written routes. */
