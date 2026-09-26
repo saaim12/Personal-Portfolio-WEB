@@ -1,9 +1,9 @@
-import { About, Home, Person, Social, Work } from "@/types";
+import type { About, Home, Person, Social, Work } from "@/types/content.types";
 
 const person: Person = {
   firstName: "Saaim",
   lastName: "Abdullah",
-  name: `Saaim Abdullah`,
+  name: "Saaim Abdullah",
   // One label, used by the footer, the About page and the Person schema, so
   // the site never states the role two different ways on two different routes.
   role: "Software engineer",
@@ -83,7 +83,7 @@ const home: Home = {
   // word in it doing any work.
   title: `${person.name} — Software Engineer`,
   // Kept inside 160 chars so Google doesn't truncate it mid-phrase.
-  description: `Saaim Abdullah is a software engineer in Lahore who turns complex software problems into dependable products, APIs, and data systems.`,
+  description: "Saaim Abdullah is a software engineer in Lahore who turns complex software problems into dependable products, APIs, and data systems.",
   // Plain language, on purpose. The previous version opened with "distributed
   // systems" and a subline about schemas, queues and replicas, which is the
   // right vocabulary for the case studies and the wrong one for the first
@@ -266,8 +266,8 @@ const about: About = {
   // including it produced "About, Saaim Abdullah | Saaim Abdullah".
   // Never rendered on screen (the H1 is the name); this is the <title> and
   // the OG card. The layout template appends " | Saaim Abdullah".
-  title: `About`,
-  description: `Software engineer in Lahore, working EU and US-East hours. Distributed backends and data platforms in Django, PostgreSQL, AWS, Kubernetes, Kafka and Spark.`,
+  title: "About",
+  description: "Software engineer in Lahore, working EU and US-East hours. Distributed backends and data platforms in Django, PostgreSQL, AWS, Kubernetes, Kafka and Spark.",
   tableOfContent: {
     display: true,
     subItems: false,
@@ -382,48 +382,13 @@ const about: About = {
           // he did use costs nothing; claiming one the diagram contradicts
           // costs the whole page. If they were genuinely in the build, the fix
           // is to put them on the diagram, then add them back here.
-          <>
-            Shipped the full AWS estate: ECS, RDS, S3, SNS, SQS, IAM and VPC,
-            containerised, least privilege, and production-ready across two
-            availability zones.
-          </>,
-          <>
-            Defined every API contract and backend workflow, designing for
-            reliability, maintainability, and data-driven features from day one.
-          </>,
-          <>
-            Built the notification and file-handling architecture on Celery and
-            Redis, and handed over a documented API surface backed by 135
-            passing tests, reversible migrations, and database-level integrity
-            constraints throughout.
-          </>,
-          <>
-            Modelled the membership and entitlement layer across a 106-table
-            PostgreSQL schema: credit balances, coach and user session booking,
-            an e-commerce store, an admin CRM, and invoice status synchronised
-            with Odoo across more than one payment rail, under clinical
-            compliance rules and a large role-based access matrix.
-          </>,
-          <>
-            Designed and shipped the ETL pipeline into a star-schema PostgreSQL
-            warehouse serving three consumers at once: feature workflows for the
-            data science team, product analytics on best-selling items, and
-            aggregated reporting for external partners. One modelled layer, so
-            the three never disagree about what a number means.
-          </>,
-          <>
-            Automated the member lifecycle email on EventBridge-scheduled Lambda
-            and SES: renewal reminders that replaced a manual call-and-chase
-            process, and inactivity re-engagement that runs without anyone
-            triggering it.
-          </>,
-          <>
-            Diagnosed silent notification loss in the inactivity re-engagement
-            pipeline. SNS was fanning out directly to consumers with no durable
-            buffer, so anything failing mid-delivery was gone with no error
-            raised. Putting SQS between SNS and the consumers made delivery
-            retryable and gave the failures somewhere to land.
-          </>,
+          "Shipped the full AWS estate: ECS, RDS, S3, SNS, SQS, IAM and VPC, containerised, least privilege, and production-ready across two availability zones.",
+          "Defined every API contract and backend workflow, designing for reliability, maintainability, and data-driven features from day one.",
+          "Built the notification and file-handling architecture on Celery and Redis, and handed over a documented API surface backed by 135 passing tests, reversible migrations, and database-level integrity constraints throughout.",
+          "Modelled the membership and entitlement layer across a 106-table PostgreSQL schema: credit balances, coach and user session booking, an e-commerce store, an admin CRM, and invoice status synchronised with Odoo across more than one payment rail, under clinical compliance rules and a large role-based access matrix.",
+          "Designed and shipped the ETL pipeline into a star-schema PostgreSQL warehouse serving three consumers at once: feature workflows for the data science team, product analytics on best-selling items, and aggregated reporting for external partners. One modelled layer, so the three never disagree about what a number means.",
+          "Automated the member lifecycle email on EventBridge-scheduled Lambda and SES: renewal reminders that replaced a manual call-and-chase process, and inactivity re-engagement that runs without anyone triggering it.",
+          "Diagnosed silent notification loss in the inactivity re-engagement pipeline. SNS was fanning out directly to consumers with no durable buffer, so anything failing mid-delivery was gone with no error raised. Putting SQS between SNS and the consumers made delivery retryable and gave the failures somewhere to land.",
         ],
         images: [],
       },
@@ -453,34 +418,11 @@ const about: About = {
             policies that scale replicas on request throughput, so traffic
             spikes cost capacity instead of availability.
           </>,
-          <>
-            Cut admin panel response time from 130 ms to 30 ms with Redis
-            caching and database index tuning, after profiling showed the
-            queries rather than the application were the cost.
-          </>,
-          <>
-            Designed and shipped event-driven batch and streaming ETL pipelines
-            on AWS Lambda, MWAA (managed Airflow), EMR, PySpark, Glue and S3,
-            automating ingestion, standardisation and cataloguing of raw inputs
-            into analytics-ready Parquet for BI reporting and ML feature
-            workflows.
-          </>,
-          <>
-            Developed a real-time voice and video communication SDK on WebRTC,
-            and the REST APIs binding frontend clients, SDK modules and
-            third-party platforms together.
-          </>,
-          <>
-            Implemented a chatbot workflow that cut first-response time on
-            inbound queries, delivered SQL-based analytics for customer
-            insight reporting, and hardened platform access with time-bound
-            permission controls.
-          </>,
-          <>
-            Worked across the Angular frontend, backend and SDK teams to ship
-            features end to end, which is where I learned that the contract
-            between two services is the thing worth arguing about.
-          </>,
+          "Cut admin panel response time from 130 ms to 30 ms with Redis caching and database index tuning, after profiling showed the queries rather than the application were the cost.",
+          "Designed and shipped event-driven batch and streaming ETL pipelines on AWS Lambda, MWAA (managed Airflow), EMR, PySpark, Glue and S3, automating ingestion, standardisation and cataloguing of raw inputs into analytics-ready Parquet for BI reporting and ML feature workflows.",
+          "Developed a real-time voice and video communication SDK on WebRTC, and the REST APIs binding frontend clients, SDK modules and third-party platforms together.",
+          "Implemented a chatbot workflow that cut first-response time on inbound queries, delivered SQL-based analytics for customer insight reporting, and hardened platform access with time-bound permission controls.",
+          "Worked across the Angular frontend, backend and SDK teams to ship features end to end, which is where I learned that the contract between two services is the thing worth arguing about.",
         ],
         images: [],
       },
@@ -773,7 +715,7 @@ const work: Work = {
   title: `Systems I've built`,
   // Search-results copy, not page copy. Kept inside 160 characters so it is
   // not truncated.
-  description: `Five systems with written architecture breakdowns: the constraint that bound, the design it forced, the trade-offs, and what I would build differently now.`,
+  description: "Five systems with written architecture breakdowns: the constraint that bound, the design it forced, the trade-offs, and what I would build differently now.",
   // Create new project pages by adding a new .mdx file to src/app/work/projects
   // All projects are listed on the home and /work routes
 };

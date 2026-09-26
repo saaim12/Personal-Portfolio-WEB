@@ -1,4 +1,4 @@
-import { home } from "@/resources";
+import { home } from "@/resources/content";
 import { Reveal } from "./Reveal";
 
 // The four facts a technical recruiter is scanning for in the first thirty

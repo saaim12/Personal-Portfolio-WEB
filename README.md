@@ -24,4 +24,16 @@ Deployed on Vercel, domain: [saaim.site](https://saaim.site).
 - Identity, services, experience, skills: `src/resources/content.tsx`
 - Site config (domain, routes, theme, fonts): `src/resources/once-ui.config.ts`
 - Project case studies: `src/app/work/projects/*.mdx`
-- Blog posts (route currently hidden): `src/app/blog/posts/*.mdx`
+
+## Validation
+
+```bash
+npm run lint
+npm run typecheck
+npm run build
+node scripts/seo-audit.mjs http://localhost:3000
+node scripts/audit.mjs http://localhost:3000
+```
+
+Project MDX is read by `gray-matter` and rendered on the server with
+`next-mdx-remote/rsc`; it does not use the Next MDX loader.

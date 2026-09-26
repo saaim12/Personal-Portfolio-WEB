@@ -1,6 +1,6 @@
 import { Column, Row, Text } from "@once-ui-system/core";
 import { HiArrowUpRight } from "react-icons/hi2";
-import { person, social } from "@/resources";
+import { person, social } from "@/resources/content";
 import type { TechKey } from "@/resources/tech";
 import { TechList } from "./Tech";
 
@@ -21,6 +21,7 @@ export function Footer() {
   return (
     <Column
       as="footer"
+      className="siteFooter"
       fillWidth
       horizontal="center"
       paddingY="48"
@@ -33,7 +34,7 @@ export function Footer() {
       <Column fillWidth gap="32" style={{ maxWidth: "1120px" }}>
         <Row fillWidth horizontal="between" wrap gap="32">
           <Column gap="8" style={{ maxWidth: "340px" }}>
-            <Text variant="label-strong-m">{person.name}</Text>
+            <h2 className="footerHeadline">{person.role}</h2>
             <Text variant="body-default-s" onBackground="neutral-weak">
               {person.role}
             </Text>
@@ -98,12 +99,13 @@ export function Footer() {
           {/* Was the string "Built with Next.js, deployed on Vercel". Same two
               technologies, now carrying their own marks. */}
           <Row gap="8" vertical="center" wrap>
-            <Text variant="body-default-xs" onBackground="neutral-weak">
-              Built with
-            </Text>
-            <TechList items={COLOPHON} variant="chip" label="This site is built with" />
+            
+            
           </Row>
         </Row>
+        <div className="footerWordmark" aria-hidden="true">
+          {person.firstName}
+        </div>
       </Column>
     </Column>
   );

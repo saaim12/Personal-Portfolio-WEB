@@ -1,25 +1,16 @@
-import { MDXRemote, MDXRemoteProps } from "next-mdx-remote/rsc";
-import React, { ReactNode } from "react";
+import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
+import React from "react";
+import type { ReactNode } from "react";
 import { slugify as transliterate } from "transliteration";
 
 import {
-  Heading,
   HeadingLink,
   Text,
   InlineCode,
   CodeBlock,
-  TextProps,
-  MediaProps,
-  Accordion,
-  AccordionGroup,
-  Table,
-  Feedback,
-  Button,
-  Card,
-  Grid,
+  type TextProps,
+  type MediaProps,
   Row,
-  Column,
-  Icon,
   Media,
   SmartLink,
   List,
@@ -123,9 +114,9 @@ function createInlineCode({ children }: { children: ReactNode }) {
   return <InlineCode>{children}</InlineCode>;
 }
 
-function createCodeBlock(props: any) {
+function createCodeBlock(props: React.ComponentProps<"pre">) {
   // For pre tags that contain code blocks
-  if (props.children && props.children.props && props.children.props.className) {
+  if (React.isValidElement<{ className?: string; children: string }>(props.children) && props.children.props.className) {
     const { className, children } = props.children.props;
 
     // Extract language from className (format: language-xxx)
@@ -173,44 +164,30 @@ function createHR() {
 }
 
 const components = {
-  p: createParagraph as any,
-  h1: createHeading("h1") as any,
-  h2: createHeading("h2") as any,
-  h3: createHeading("h3") as any,
-  h4: createHeading("h4") as any,
-  h5: createHeading("h5") as any,
-  h6: createHeading("h6") as any,
-  img: createImage as any,
-  a: CustomLink as any,
-  code: createInlineCode as any,
-  pre: createCodeBlock as any,
-  ol: createList("ol") as any,
-  ul: createList("ul") as any,
-  li: createListItem as any,
-  hr: createHR as any,
-  Heading,
+  p: createParagraph,
+  h1: createHeading("h1"),
+  h2: createHeading("h2"),
+  h3: createHeading("h3"),
+  h4: createHeading("h4"),
+  h5: createHeading("h5"),
+  h6: createHeading("h6"),
+  img: createImage,
+  a: CustomLink,
+  code: createInlineCode,
+  pre: createCodeBlock,
+  ol: createList("ol"),
+  ul: createList("ul"),
+  li: createListItem,
+  hr: createHR,
   Text,
   CodeBlock,
   InlineCode,
-  Accordion,
-  AccordionGroup,
-  Table,
-  Feedback,
-  Button,
-  Card,
-  Grid,
   Row,
-  Column,
-  Icon,
-  Media,
-  SmartLink,
-  // Architecture diagrams break out of the narrow article column and scroll
-  // rather than shrink. See ArchitectureDiagram for why that needs a component.
   ArchitectureDiagram,
-};
+} as NonNullable<MDXRemoteProps["components"]>;
 
 type CustomMDXProps = MDXRemoteProps & {
-  components?: typeof components;
+  components?: MDXRemoteProps["components"];
 };
 
 export function CustomMDX(props: CustomMDXProps) {

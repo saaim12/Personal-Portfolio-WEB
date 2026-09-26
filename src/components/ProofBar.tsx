@@ -1,4 +1,4 @@
-import { home } from "@/resources";
+import { home } from "@/resources/content";
 import { Reveal } from "./Reveal";
 
 // Trust stage of the homepage flow, directly under the hero so the first thing

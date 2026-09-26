@@ -1,13 +1,5 @@
-import { IconName } from "@/resources/icons";
+import type { IconName } from "@/resources/icons";
 import type { TechKey } from "@/resources/tech";
-import { zones } from "tzdata";
-
-/**
- * IANA time zone string (e.g., 'Asia/Calcutta', 'Europe/Vienna').
- * See: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
- */
-export type IANATimeZone = Extract<keyof typeof zones, string>; // Narrow to string keys for React usage
-
 /**
  * Represents a person featured in the portfolio.
  */
@@ -25,7 +17,7 @@ export type Person = {
   /** Email address */
   email: string;
   /** IANA time zone location (used for the live clock) */
-  location: IANATimeZone;
+  location: string;
   /** Human-friendly city shown in the UI, e.g. 'Lahore, Pakistan' */
   city?: string;
   /** Languages spoken */

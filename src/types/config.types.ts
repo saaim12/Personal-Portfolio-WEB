@@ -1,4 +1,4 @@
-import {
+import type {
   BorderStyle,
   NeutralColor,
   ScalingSize,
@@ -9,7 +9,7 @@ import {
   Theme,
   TransitionStyle,
 } from "@once-ui-system/core";
-import { NextFontWithVariable } from "next/dist/compiled/@next/font";
+import type { NextFontWithVariable } from "next/dist/compiled/@next/font";
 
 /**
  * Route configuration for enabled/disabled routes.
@@ -22,7 +22,6 @@ export type RoutesConfig = Record<`/${string}`, boolean>;
 export type FontsConfig = {
   heading: NextFontWithVariable;
   body: NextFontWithVariable;
-  label: NextFontWithVariable;
   code: NextFontWithVariable;
 };
 

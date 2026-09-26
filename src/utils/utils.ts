@@ -1,5 +1,6 @@
-import fs from "fs";
-import path from "path";
+import { cache } from "react";
+import fs from "node:fs";
+import path from "node:path";
 import type { TechKey } from "@/resources/tech";
 import matter from "gray-matter";
 
@@ -92,7 +93,7 @@ function readMDXFile(filePath: string) {
   return { metadata, content };
 }
 
-function getMDXData(dir: string) {
+const getMDXData = cache((dir: string) => {
   const mdxFiles = getMDXFiles(dir);
   return mdxFiles.map((file) => {
     const { metadata, content } = readMDXFile(path.join(dir, file));
@@ -104,9 +105,9 @@ function getMDXData(dir: string) {
       content,
     };
   });
-}
+});
 
-export function getPosts(customPath = ["", "", "", ""]) {
+export function getPosts(customPath: string[]) {
   const postsDir = path.join(process.cwd(), ...customPath);
   return getMDXData(postsDir);
 }

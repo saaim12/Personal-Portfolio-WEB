@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+
 
 export function ScrollToHash() {
-  const router = useRouter();
+
 
   useEffect(() => {
     // Get the hash from the URL
@@ -14,10 +14,10 @@ export function ScrollToHash() {
       const id = hash.replace("#", "");
       const element = document.getElementById(id);
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+        element.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
       }
     }
-  }, [router]);
+  }, []);
 
   return null;
 }

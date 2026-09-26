@@ -1,4 +1,5 @@
-import { baseURL, home, person, social } from "@/resources";
+import { baseURL } from "@/resources/once-ui.config";
+import { home, person, social } from "@/resources/content";
 import { SITE_NAME } from "./seo";
 
 // JSON-LD graph nodes, one export per schema type.

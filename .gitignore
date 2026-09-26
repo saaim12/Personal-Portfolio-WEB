@@ -8,7 +8,7 @@
 
 # testing
 /coverage
-
+.audit-redesign
 # next.js
 /.next/
 /out/

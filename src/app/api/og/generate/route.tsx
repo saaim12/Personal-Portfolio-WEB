@@ -1,11 +1,11 @@
 import { ImageResponse } from "next/og";
-import { person } from "@/resources";
+import { person } from "@/resources/content";
 
 export const runtime = "nodejs";
 
 export async function GET(request: Request) {
-  let url = new URL(request.url);
-  let title = url.searchParams.get("title") || "Portfolio";
+  const url = new URL(request.url);
+  const title = url.searchParams.get("title") || "Portfolio";
 
   // Resolve the avatar against the host actually serving this request, not
   // against the hardcoded production baseURL. Fetching baseURL meant every
@@ -22,7 +22,7 @@ export async function GET(request: Request) {
 
     if (resource) {
       const response = await fetch(resource[1]);
-      if (response.status == 200) {
+      if (response.status === 200) {
         return await response.arrayBuffer();
       }
     }
@@ -75,6 +75,7 @@ export async function GET(request: Request) {
               be determined" and the route returns nothing at all. */}
           <img
             src={avatarSrc}
+            alt=""
             width={192}
             height={192}
             style={{

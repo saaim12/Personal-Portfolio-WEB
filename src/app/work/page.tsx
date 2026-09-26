@@ -1,7 +1,8 @@
 import { Button, Column, Heading, Row, Text } from "@once-ui-system/core";
-import { work, pageMeta, ogImageFor } from "@/resources";
+import { work } from "@/resources/content";
+import { pageMeta, ogImageFor } from "@/resources/seo";
 import { Projects } from "@/components/work/Projects";
-import { Reveal } from "@/components";
+import { Reveal } from "@/components/Reveal";
 import { jsonLd, webPageJsonLd } from "@/resources/schema";
 
 export async function generateMetadata() {

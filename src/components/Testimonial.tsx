@@ -1,6 +1,6 @@
 import { Column, Row, Text } from "@once-ui-system/core";
 import { HiArrowUpRight } from "react-icons/hi2";
-import { home } from "@/resources";
+import { home } from "@/resources/content";
 import { Reveal } from "./Reveal";
 
 // Social-proof stage. This quote used to sit mid-paragraph on the About page,

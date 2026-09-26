@@ -1,7 +1,8 @@
 import type { MetadataRoute } from "next";
 
 import { getPosts } from "@/utils/utils";
-import { baseURL, routes as routesConfig, SITE_LAST_MODIFIED } from "@/resources";
+import { baseURL, routes as routesConfig } from "@/resources/once-ui.config";
+import { SITE_LAST_MODIFIED } from "@/resources/seo";
 
 type RouteMeta = {
   lastModified: string;

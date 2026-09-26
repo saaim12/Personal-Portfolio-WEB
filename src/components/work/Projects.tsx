@@ -1,6 +1,6 @@
 import { getPosts } from "@/utils/utils";
 
-import { ProjectCard } from "@/components";
+import { ProjectCard } from "@/components/ProjectCard";
 
 interface ProjectsProps {
   range?: [number, number?];

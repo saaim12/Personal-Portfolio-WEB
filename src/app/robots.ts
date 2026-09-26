@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { baseURL } from "@/resources";
+import { baseURL } from "@/resources/once-ui.config";
 
 export default function robots(): MetadataRoute.Robots {
   // Preview deploys and the old *.vercel.app host must not be indexed as

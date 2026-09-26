@@ -39,6 +39,7 @@ export function Reveal({ children, delay = 0, as = "div", style, className }: Re
       { rootMargin: "0px 0px -10% 0px" },
     );
 
+    el.classList.add("revealReady");
     io.observe(el);
     return () => io.disconnect();
   }, []);

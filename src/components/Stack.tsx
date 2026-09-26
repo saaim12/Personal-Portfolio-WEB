@@ -1,7 +1,7 @@
 import { Column, Heading, Row, Text } from "@once-ui-system/core";
 import type { ReactNode } from "react";
 import { HiArrowRight } from "react-icons/hi2";
-import { about } from "@/resources";
+import { about } from "@/resources/content";
 import { Reveal } from "./Reveal";
 import { TechList } from "./Tech";
 

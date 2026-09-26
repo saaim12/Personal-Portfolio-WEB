@@ -2,11 +2,16 @@ import "@once-ui-system/core/css/styles.css";
 import "@once-ui-system/core/css/tokens.css";
 import "@/resources/custom.css";
 
-import classNames from "classnames";
 
 import { Column, Flex } from "@once-ui-system/core";
-import { Header, Providers, Footer, AuroraField, Cursor } from "@/components";
-import { baseURL, fonts, style, home, person, pageMeta } from "@/resources";
+import { Header } from "@/components/Header";
+import { Providers } from "@/components/Providers";
+import { Footer } from "@/components/Footer";
+import { ScreenCrawler } from "@/components/ScreenCrawler";
+import { fonts } from "@/resources/fonts";
+import { style } from "@/resources/once-ui.config";
+import { home, person } from "@/resources/content";
+import { pageMeta } from "@/resources/seo";
 import { jsonLd, webSiteJsonLd } from "@/resources/schema";
 
 import { Analytics } from "@vercel/analytics/next";
@@ -44,16 +49,16 @@ export default async function RootLayout({
       as="html"
       lang={person.locale ?? "en"}
       fillWidth
-      className={classNames(
+      className={[
         fonts.heading.variable,
         fonts.body.variable,
-        fonts.label.variable,
         fonts.code.variable,
-      )}
+      ].join(" ")}
     >
       <head>
         <script
           id="theme-init"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: Static theme initialization uses trusted local config.
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -78,15 +83,12 @@ export default async function RootLayout({
                     root.setAttribute('data-' + key, value);
                   });
                   
-                  // There is no light theme. The stored value is written
-                  // anyway because Once UI's ThemeProvider treats a missing
-                  // key as "system" and would overwrite data-theme from
-                  // prefers-color-scheme on a light-mode OS.
-                  try { localStorage.setItem('data-theme', 'dark'); } catch (e) {}
-                  root.setAttribute('data-theme', 'dark');
+                  // Match the editorial palette before hydration, including returning visitors.
+                  try { localStorage.setItem('data-theme', 'light'); } catch (e) {}
+                  root.setAttribute('data-theme', 'light');
                 } catch (e) {
                   console.error('Failed to initialize theme:', e);
-                  document.documentElement.setAttribute('data-theme', 'dark');
+                  document.documentElement.setAttribute('data-theme', 'light');
                 }
               })();
             `,
@@ -107,20 +109,12 @@ export default async function RootLayout({
           padding="0"
           horizontal="center"
         >
-          {/* The template's <Background> layer used to sit here, wrapped in a
-              RevealFx. Every one of its five effects was configured
-              `display: false`, so it rendered nothing while still shipping
-              both client components. AuroraField is the backdrop now. */}
-          <AuroraField />
-          {/* Site-wide pointer. Renders nothing until a fine pointer actually
-              moves, so touch devices and no-JS visitors are untouched. */}
-          <Cursor />
           {/* First tab stop on every page, lets keyboard and screen-reader
               users skip the nav instead of tabbing through it each time. */}
           <a href="#main" className="skipLink">
             Skip to content
           </a>
-          <Header />
+          <Header name={person.name} contact={home.cta} />
           <Flex
             id="main"
             as="main"
@@ -130,13 +124,17 @@ export default async function RootLayout({
             flex={1}
             // Fluid gutters: 16px on phones → 48px on desktop. Content still
             // caps at each page's maxWidth, so nothing exceeds the viewport.
-            style={{ paddingLeft: "clamp(16px, 5vw, 48px)", paddingRight: "clamp(16px, 5vw, 48px)" }}
+            style={{
+              paddingLeft: "clamp(16px, 5vw, 48px)",
+              paddingRight: "clamp(16px, 5vw, 48px)",
+            }}
           >
             <Flex horizontal="center" fillWidth minHeight="0">
               {children}
             </Flex>
           </Flex>
           <Footer />
+          <ScreenCrawler />
           <Analytics />
           <SpeedInsights />
         </Column>

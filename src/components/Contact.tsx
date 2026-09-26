@@ -1,6 +1,6 @@
 import { Column, Heading, Row, Text } from "@once-ui-system/core";
 import { HiOutlineEnvelope, HiOutlineCalendarDays } from "react-icons/hi2";
-import { bookingLink, person, social } from "@/resources";
+import { bookingLink, person, social } from "@/resources/content";
 import { iconLibrary } from "@/resources/icons";
 import { Reveal } from "./Reveal";
 

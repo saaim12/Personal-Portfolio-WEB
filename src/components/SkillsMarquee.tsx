@@ -73,7 +73,6 @@ function Row({
   const copy = (duplicate: boolean) => (
     <ul
       className={duplicate ? `${styles.group} ${styles.duplicate}` : styles.group}
-      role="list"
       {...(duplicate ? { "aria-hidden": true as const } : { "aria-label": label })}
     >
       {items.map((skill) => (

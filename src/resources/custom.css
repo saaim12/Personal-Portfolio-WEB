@@ -1,60 +1,11 @@
-/* ═══════════════════════════════════════════════════════════════════════
-   DESIGN SYSTEM
-   ───────────────────────────────────────────────────────────────────────
-   One theme: black. There is no light mode, the whole design rests on a
-   pure #000 ground with light pooling on it, and every surface, border and
-   shadow value below is drawn for that ground specifically.
-
-   Principles:
-     1. The ground is pure black. Depth comes from the animated aurora
-        behind the content, not from stepping grey surfaces.
-     2. Every raised surface is the same tinted glass panel: a 160° near-black
-        gradient over a 14px backdrop blur with a 10%-white hairline.
-     3. Elevation is a white bloom, not a drop shadow. On #000 a dark shadow
-        is invisible.
-     4. Monochrome. The accent is light itself, no hue anywhere.
-     5. Semantic colours (success/warning/error) exist but are almost never
-        used. Their job is to stay out of the way.
-   ═══════════════════════════════════════════════════════════════════════ */
-
 :root {
-  --bg: #000000;
-  --bg-subtle: #060608;
-  --surface: linear-gradient(160deg, rgba(20, 20, 24, 0.68), rgba(5, 5, 8, 0.74));
-  --surface-2: rgba(255, 255, 255, 0.06);
-  --surface-hover: linear-gradient(160deg, rgba(32, 32, 38, 0.78), rgba(10, 10, 14, 0.82));
-  --surface-active: linear-gradient(160deg, rgba(42, 42, 48, 0.86), rgba(14, 14, 18, 0.88));
-  --glass-blur: blur(14px);
-
-  --border: rgba(255, 255, 255, 0.1);
-  --border-strong: rgba(255, 255, 255, 0.28);
-  --border-accent: rgba(255, 255, 255, 0.42);
-
-  --text: #ffffff;
-  --text-2: #c2c2c8;
-  --muted: #a6a6ae;
-
-  /* Monochrome: the accent is light itself. No hue anywhere. */
-  --accent: #ffffff;
-  --accent-hover: #d6d6db;
-  --accent-soft: rgba(255, 255, 255, 0.07);
-  --accent-contrast: #000000;
 
   --success: #3fb950;
   --warning: #d29922;
   --error: #f85149;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 12px 34px -16px rgba(255, 255, 255, 0.16);
-  --shadow-lg: 0 20px 60px -20px rgba(255, 255, 255, 0.22);
-
   --nav-bg: transparent;
-  --code-bg: rgba(255, 255, 255, 0.05);
 }
-
-/* Typography is intentionally a little more editorial than a default SaaS
-   stack: Bricolage gives headings a distinctive silhouette while Jakarta keeps
-   recruiter-facing copy calm and highly legible. */
 h1,
 h2,
 h3,
@@ -62,15 +13,6 @@ h4 {
   letter-spacing: -0.035em;
   font-kerning: normal;
 }
-
-/* ══ ONCE UI: MONOCHROME ════════════════════════════════════════════════
-   Once UI's brand/accent ramps only come in hues, there is no neutral option
-   for `brand` in its config, so the About page's buttons, tags and icons
-   still rendered indigo. Both function ramps are repointed at the gray scheme
-   here. Same specificity as Once UI's own [data-brand=…] rules, and this file
-   is imported after tokens.css, so source order settles it. Setting
-   `brand: "custom"` instead would mean redefining --scheme-brand-* by hand
-   and fighting the Schemes type for no extra control. */
 :root {
   --function-brand-100: var(--scheme-gray-100);
   --function-brand-200: var(--scheme-gray-200);
@@ -103,15 +45,7 @@ h4 {
   --function-accent-600-15: var(--scheme-gray-600-15);
   --function-accent-600-30: var(--scheme-gray-600-30);
   --function-accent-600-50: var(--scheme-gray-600-50);
-
-  /* Slate's darkest step is #040816, a blue-black. The ground is #000, and
-     the aurora canvas paints over this anyway; this is the fallback if the
-     canvas never mounts. */
-  --page-background: #000000;
 }
-
-/* Motion: one curve, three durations, site-wide. Consistent timing is most of
-   what separates "crafted" from "assembled". */
 :root {
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --fast: 140ms;
@@ -119,43 +53,15 @@ h4 {
   --slow: 380ms;
 
   --nav-h: 60px;
-  /* Generous, uniform radii: the design rounds everything at 11 to 22px. */
   --radius-sm: 10px;
-  --radius: 14px;
-  --radius-lg: 18px;
-  --content-max: 1180px;
   --gutter: clamp(20px, 5vw, 48px);
 }
-
-/* ══ CUSTOM CURSOR ══════════════════════════════════════════════════════
-   The class is added by the Cursor component, so this only ever applies when
-   the replacement is actually on screen: no JavaScript, a coarse pointer, or
-   a failed mount all leave the system cursor exactly where it was.
-
-   Text entry is carved out. A ring cannot show a caret position, and guessing
-   where a click will land inside a string is the one job the I-beam does that
-   nothing else can. */
-@media (pointer: fine) {
-  html.hasCustomCursor,
-  html.hasCustomCursor * {
-    cursor: none;
-  }
-
-  html.hasCustomCursor input,
-  html.hasCustomCursor textarea,
-  html.hasCustomCursor [contenteditable="true"] {
-    cursor: auto;
-  }
-}
-
-/* ══ BASE ═══════════════════════════════════════════════════════════════ */
 
 html {
   overflow-x: hidden;
 }
 html:focus-within {
   scroll-behavior: smooth;
-  /* Anchors must not land under the fixed nav. */
   scroll-padding-top: calc(var(--nav-h) + 24px);
 }
 img,
@@ -189,8 +95,6 @@ table {
   border-radius: var(--radius-sm);
 }
 
-/* ══ LAYOUT ═════════════════════════════════════════════════════════════ */
-
 .section {
   width: 100%;
   max-width: var(--content-max);
@@ -215,14 +119,9 @@ table {
     padding-bottom: 44px;
   }
 }
-/* Hairline between sections: structure without wrapping everything in boxes. */
 .section--ruled {
   border-top: 1px solid var(--border);
 }
-
-/* The five ids the header's section index and the hero's primary button are
-   written against. `scroll-margin-top` rather than relying on the global
-   `scroll-padding-top` alone, so a heading never lands under the fixed bar. */
 #work,
 #stack,
 #approach,
@@ -230,10 +129,6 @@ table {
 #contact {
   scroll-margin-top: calc(var(--nav-h) + 28px);
 }
-
-/* A named block that ends with one forward link. The last section inside it
-   hands most of its bottom padding to the link, so the link reads as the end
-   of that section rather than as an orphan floating between two. */
 .sectionGroup {
   width: 100%;
 }
@@ -282,8 +177,6 @@ table {
   color: var(--text);
 }
 
-/* ══ TYPOGRAPHY ═════════════════════════════════════════════════════════ */
-
 h1,
 h2 {
   letter-spacing: -0.028em;
@@ -308,27 +201,16 @@ h3 {
   color: var(--text);
   font-weight: 600;
 }
-/* Used by "What I'm looking for", which is a centred section rather than a
-   left-aligned article column. */
 .prose--center {
   margin-inline: auto;
   text-align: center;
 }
-
-/* ══ STATUS LINE ════════════════════════════════════════════════════════
-   The four facts a recruiter checks first, directly under the hero. Rules
-   between the items are drawn, not typed: joining them with a separator
-   character inside one string is what forces an em dash back into the copy. */
 
 .statusLine {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  /* Gap alone separates the facts. Drawn vertical rules were tried and
-     removed: this line wraps at every width, and a rule positioned off the
-     previous sibling lands at the start of a wrapped row, where it reads as a
-     stray mark rather than as a separator. */
   gap: 6px 26px;
   max-width: 720px;
   margin: 4px auto 0;
@@ -344,16 +226,7 @@ h3 {
   text-align: center;
 }
 
-/* ══ ARCHITECTURE DIAGRAM ═══════════════════════════════════════════════
-   A case study body is capped at a readable measure for prose, which is far
-   too narrow for a diagram. This breaks out of that column up to the page
-   width, and below the width where the diagram is still legible it scrolls
-   inside its own frame rather than shrinking into an unreadable smudge. */
-
 .archFigure {
-  /* Half the space either side of the article column, minus a gutter, capped
-     so the figure never outgrows the page. Resolves to 0 on narrow screens,
-     where there is nothing to break out of. */
   --arch-bleed: clamp(0px, calc((100vw - 100%) / 2 - 32px), 260px);
   display: flex;
   flex-direction: column;
@@ -377,8 +250,6 @@ h3 {
 }
 .archLink {
   display: block;
-  /* Below this width the diagram is not readable at any zoom, so the frame
-     scrolls instead of the image shrinking. */
   min-width: 560px;
 }
 .archImage {
@@ -397,8 +268,6 @@ h3 {
   font-size: 0.75rem;
   font-style: italic;
 }
-/* Only shown where `.archScroll` can actually overflow. A scrollable region
-   with no visible edge is one most readers never find. */
 @media (max-width: 640px) {
   .archHint {
     display: block;
@@ -418,25 +287,6 @@ pre code {
   background: none;
   padding: 0;
 }
-
-/* ══ LINKS ══════════════════════════════════════════════════════════════
-   Every link announces itself twice: an underline at rest, and on hover the
-   text goes to full white and lights up.
-
-   The bloom is the affordance. On a monochrome palette there is no link blue
-   to lean on, so hover state has to come from luminance instead of hue, and a
-   text-shadow reads as "this is live" in a way a colour shift alone does not
-   on a black ground. Two stops, tight and wide, so it looks like light rather
-   than like a blur.
-
-   --glow is one definition applied everywhere a link can appear: prose, MDX
-   bodies, the footer, nav, cards, certificates. Retune it here, once. */
-
-:root {
-  --glow: 0 0 10px rgba(255, 255, 255, 0.55), 0 0 26px rgba(255, 255, 255, 0.22);
-}
-
-/* Anything that behaves as a link picks up the same lift. */
 .prose a:hover,
 .extLink.extLink:hover,
 article a:hover,
@@ -453,21 +303,11 @@ article a,
   transition: color var(--fast) var(--ease), text-shadow var(--base) var(--ease),
     background-size var(--fast) var(--ease);
 }
-/* Icons that ride along with a link glow with it. */
 .extLink.extLink:hover svg,
 .card:hover .projMore svg,
 .certCard:hover .certView svg {
   filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
 }
-
-/* The underline that wipes in from the left, the one the Resume and Client
-   recommendation links have, applied to every inline link on the site.
-   Transform-only, so it stays on the compositor and costs nothing.
-
-   Inline links keep a faint underline at rest as well. Hover is not available
-   to touch or keyboard users, so a link that is only identifiable on hover is
-   identifiable by colour alone, which WCAG 1.4.1 exists to prevent. The rest
-   state says "link", the hover state says "this one". */
 .prose a,
 article a {
   position: relative;
@@ -499,21 +339,14 @@ article a::after {
 article a:hover::after {
   transform: scaleX(1);
 }
-/* The standalone-link underline picks up the same bloom as the text. */
 .extLink.extLink::after {
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
 }
-
-/* Inline links sit at --text weight 500 at rest. The wipe-in underline and
-   the bloom above carry the hover state; this used to also thicken the resting
-   underline from 1px to 2px, which fought the wipe for the same 1px of space. */
 .prose a,
 article a {
   color: var(--text);
   font-weight: 500;
 }
-
-/* Doubled class, for the same reason as the buttons below. */
 .extLink.extLink {
   position: relative;
   display: inline-flex;
@@ -553,22 +386,9 @@ article a {
 .extLink:hover svg {
   opacity: 1;
 }
-/* Only a trailing arrow travels; a leading icon stays put. */
 .extLink:hover svg:last-child:not(:first-child) {
   transform: translate(2px, -2px);
 }
-
-/* ══ BUTTONS ════════════════════════════════════════════════════════════
-   The signature action: a hard-edged parallelogram, skewed 21°, uppercase and
-   tightly tracked, whose fill wipes to the opposite value on hover.
-
-   The skew is drawn by two stacked pseudo-elements rather than by
-   transforming the button, so the *label* never skews, no inner counter-skew
-   wrapper is needed and the markup stays a plain <a>. ::before is the resting
-   fill, ::after is the hover fill sitting on top of it at opacity 0. Both sit
-   at negative z-index inside the button's own stacking context, which puts
-   them behind the label but in front of the page. The skewed shape overhangs
-   the box by ~tan(21°)·height/2, hence the horizontal margin. */
 
 .btn {
   display: inline-flex;
@@ -602,12 +422,6 @@ article a {
   padding: 0 28px;
   font-size: 0.875rem;
 }
-
-/* Below ~380px a long label cannot fit on one line, and `white-space: nowrap`
-   on a fixed-height box turns that into page-wide horizontal overflow rather
-   than into a taller button: at 320px "Read the engineering write-ups" measured
-   326px inside 288px of available width and pushed the whole hero out. The
-   button wraps and grows here instead. */
 @media (max-width: 380px) {
   .btn {
     max-width: 100%;
@@ -662,15 +476,6 @@ article a {
 .btn--secondary:active {
   transform: scale(0.985);
 }
-
-/* Every `color` below is written with the variant class doubled up on .btn.
-   Once UI's stylesheet carries `a:not(.button) { color: … }`, and a `:not()`
-   holding a class scores (0,1,1), higher than any single class here, so the
-   plain `.btn--primary { color: … }` lost and the label rendered light-on-
-   light. `.btn.btn--primary` is (0,2,0) and wins, without !important and
-   without assuming the button is an anchor. */
-
-/* Solid light fill, wiping to near-black. */
 .btn.btn--primary {
   color: var(--accent-contrast);
 }
@@ -686,8 +491,6 @@ article a {
 .btn--primary:hover svg:last-child {
   transform: translateX(3px);
 }
-
-/* Outline, wiping to the solid inverse. */
 .btn.btn--secondary {
   color: var(--text);
 }
@@ -700,12 +503,6 @@ article a {
 .btn.btn--secondary:hover {
   color: var(--bg);
 }
-
-
-/* ══ CARDS ══════════════════════════════════════════════════════════════
-   One card. The previous system wrapped each in a gradient frame drawn from
-   six unrelated colour pairs, with a blurred glow and a 25-cell 3D tilt: the
-   most reliable "template site" tell there is. */
 
 .card {
   position: relative;
@@ -724,7 +521,6 @@ article a {
   transition: border-color var(--slow) var(--ease), background var(--slow) var(--ease),
     transform var(--slow) var(--ease), box-shadow var(--slow) var(--ease);
 }
-/* Lifts a full 6px and picks up a white bloom rather than a drop shadow. */
 .card:hover {
   border-color: var(--border-accent);
   background: var(--surface-hover);
@@ -771,14 +567,9 @@ article a {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
 }
 
-
-/* ══ PROJECT CARD ═══════════════════════════════════════════════════════ */
-
 .projCard {
   gap: 13px;
 }
-/* The stack line reads as one dotted-out label, not as a row of chips: the
-   card's own title is the thing that should carry weight. */
 .projTags {
   display: flex;
   flex-wrap: wrap;
@@ -793,14 +584,10 @@ article a {
   margin-right: 8px;
   color: var(--muted);
 }
-/* Logo strip at the foot of the card. `margin-top: auto` claims the slack so
-   cards of differing copy length still line their strips up. */
 .projStack {
   margin-top: auto;
   padding-top: 16px;
 }
-/* `.projStack` already took the slack, so `.projMore` must not fight it for
-   the same space. */
 .projStack + .projMore {
   margin-top: 0;
 }
@@ -822,17 +609,6 @@ article a {
 .card:hover .projMore svg {
   transform: translateX(3px);
 }
-
-/* ══ PROOF BAR ══════════════════════════════════════════════════════════ */
-
-/* Four glass tiles rather than four cells split by rules, the design gives
-   the numbers the same panel treatment as everything else on the page. */
-/* The hero column above this is `min-height: min(78vh, 720px)` with its
-   content centred, so once the content is as tall as that box there is no
-   slack left and the tiles start immediately under the social row. Measured
-   at 44px of separation on a 1440x900 desktop, and less on anything shorter.
-   The gap belongs here rather than as hero padding, because this is the
-   element that has to clear whatever the hero ends up being. */
 .proofBar {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
@@ -878,11 +654,6 @@ article a {
   text-wrap: balance;
   max-width: 24ch;
 }
-
-/* ══ PULL QUOTE ═════════════════════════════════════════════════════════ */
-
-/* The quote sits in the same glass panel as everything else, one step wider
-   in padding so it reads as the page's single loudest surface. */
 .quoteCard {
   padding: clamp(28px, 5vw, 46px) clamp(22px, 4vw, 40px);
   border: 1px solid var(--border);
@@ -902,133 +673,6 @@ article a {
   text-wrap: balance;
 }
 
-/* ══ PROCESS ════════════════════════════════════════════════════════════
-   Four glass tiles led by an oversized step number. */
-
-.processList {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
-  gap: 18px;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-.processItem {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 22px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  transition: border-color var(--slow) var(--ease), transform var(--slow) var(--ease),
-    box-shadow var(--slow) var(--ease);
-}
-.processItem:hover {
-  border-color: var(--border-accent);
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-}
-.processStep {
-  font-family: var(--font-heading), sans-serif;
-  font-size: 1.375rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--text);
-}
-.processTitle {
-  margin: 4px 0 0;
-  font-size: 0.96875rem;
-  font-weight: 700;
-  line-height: 1.3;
-  color: var(--text);
-}
-.processDesc {
-  margin: 0;
-  font-size: 0.8125rem;
-  line-height: 1.6;
-  color: var(--text-2);
-}
-
-/* ══ FAQ ════════════════════════════════════════════════════════════════ */
-
-/* One glass panel, rows divided inside it, not a bare list on the page. */
-.faqList {
-  width: 100%;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  overflow: hidden;
-}
-.faqItem {
-  border-bottom: 1px solid var(--border);
-}
-.faqItem:last-child {
-  border-bottom: none;
-}
-.faqQuestion {
-  position: relative;
-  display: block;
-  cursor: pointer;
-  list-style: none;
-  padding: 20px 52px 20px 26px;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  line-height: 1.45;
-  color: var(--text);
-  transition: color var(--fast) var(--ease), background var(--fast) var(--ease);
-}
-.faqQuestion:hover {
-  background: var(--accent-soft);
-}
-.faqQuestion::-webkit-details-marker {
-  display: none;
-}
-.faqQuestion::before,
-.faqQuestion::after {
-  content: "";
-  position: absolute;
-  right: 26px;
-  top: 50%;
-  width: 11px;
-  height: 1.5px;
-  border-radius: 1px;
-  background: var(--muted);
-  transition: transform var(--base) var(--ease), background var(--fast) var(--ease);
-}
-.faqQuestion::before {
-  transform: translateY(-50%);
-}
-.faqQuestion::after {
-  transform: translateY(-50%) rotate(90deg);
-}
-.faqItem[open] .faqQuestion::after {
-  transform: translateY(-50%) rotate(0deg);
-}
-.faqItem[open] .faqQuestion::before,
-.faqItem[open] .faqQuestion::after,
-.faqQuestion:hover::before,
-.faqQuestion:hover::after {
-  background: var(--accent);
-}
-.faqAnswer {
-  margin: 0;
-  padding: 0 52px 22px 26px;
-  max-width: 68ch;
-  font-size: 0.9375rem;
-  line-height: 1.7;
-  color: var(--muted);
-}
-
-/* ══ SKILLS ═════════════════════════════════════════════════════════════
-   Every block on the About page, a job, a degree, a skill group, is the
-   same glass panel the rest of the site uses, instead of a rule above it. */
-
 .skillGroup {
   padding: 22px;
   border: 1px solid var(--border);
@@ -1037,16 +681,6 @@ article a {
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
 }
-
-/* ══ TECHNOLOGY ICONS ═══════════════════════════════════════════════════
-   Every tech mention on the site renders through <TechList>. Two variants:
-   icon-only for dense surfaces, icon-plus-label chips everywhere else.
-
-   Brand colour arrives as two custom properties set per icon, one resolved
-   for each ground (see techColors() in resources/tech.tsx). Anything that
-   would fail contrast comes through as `currentColor` for that theme, so
-   Django's near-black green and Next.js's pure black stay visible here
-   rather than vanishing into the page. */
 
 .techList {
   display: flex;
@@ -1081,9 +715,6 @@ article a {
   width: 13px;
   height: 13px;
 }
-
-/* Same border, radius, surface and type as the rest of the design's small
-   surfaces, so the chips read as one system. */
 .techChip {
   display: inline-flex;
   align-items: center;
@@ -1095,14 +726,9 @@ article a {
   font-size: 0.71875rem;
   font-weight: 600;
   color: var(--text-2);
-  /* Wraps rather than overflowing: some labels ("TensorFlow Lite Micro") are
-     wider than a card column on a phone. */
   min-width: 0;
   overflow-wrap: anywhere;
 }
-
-/* The site ships dark-only today. These rules cost nothing now and are what
-   keeps the icons legible the day a light theme is added. */
 :root[data-theme="light"] .techIcon,
 :root[data-theme="light"] .techChipIcon {
   color: var(--tech-light, currentColor);
@@ -1113,8 +739,6 @@ article a {
     color: var(--tech-light, currentColor);
   }
 }
-
-/* ══ CERTIFICATES ═══════════════════════════════════════════════════════ */
 
 .certGrid {
   display: grid;
@@ -1183,36 +807,7 @@ article a {
 
   to { opacity: 1; }
 
-
-/* ══ AVATAR ═════════════════════════════════════════════════════════════
-   In full colour. This carried a grayscale filter that lifted on hover, to
-   neutralise the dark red studio backdrop in the source PNG; the portrait is
-   meant to be seen in colour, so the filter is gone and the ring does the
-   framing instead. */
-
-.heroAvatar {
-  display: inline-block;
-  border-radius: 50%;
-  /* The 3px light-to-graphite ring the design puts around the portrait. */
-  padding: 3px;
-  background: linear-gradient(135deg, #ffffff, #4a4a52, #ffffff);
-  transition: transform var(--slow) var(--ease);
-}
-.heroAvatar:hover {
-  transform: scale(1.02);
-}
-.heroAvatar img {
-  border-radius: 50%;
-  display: block;
-}
-
-/* ══ SHIMMER ════════════════════════════════════════════════════════════
-   A slow light sweep across the display numerals, the stat values and the
-   process step numbers. Reserved for figures: run it on body copy and the
-   page turns into a screensaver. */
-
-.proofValue,
-.processStep {
+.proofValue {
   background: linear-gradient(100deg, #ffffff 0%, #cccccf 45%, #ffffff 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
@@ -1229,8 +824,6 @@ article a {
     background-position: 200% 50%;
   }
 }
-
-/* ══ AVAILABILITY ═══════════════════════════════════════════════════════ */
 
 .availability {
   display: flex;
@@ -1274,8 +867,6 @@ article a {
   100% { box-shadow: 0 0 0 0 transparent; }
 }
 
-/* ══ CERT LIST (About) ══════════════════════════════════════════════════ */
-
 .certItem {
   display: flex;
   flex-direction: column;
@@ -1296,8 +887,6 @@ article a {
   color: var(--muted);
 }
 
-/* ══ SKIP LINK ══════════════════════════════════════════════════════════ */
-
 .skipLink {
   position: absolute;
   left: -9999px;
@@ -1313,8 +902,6 @@ article a {
 .skipLink:focus {
   left: 0;
 }
-
-/* ══ MOTION ═════════════════════════════════════════════════════════════ */
 
 .reveal {
   opacity: 0;
@@ -1342,10 +929,6 @@ article a {
   }
 }
 
-/* ══ REDUCED MOTION ═════════════════════════════════════════════════════
-   One block, instead of the seven scattered overrides this file used to
-   carry. Nothing moves; everything still arrives. */
-
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
     scroll-behavior: auto;
@@ -1369,14 +952,10 @@ article a {
   .card:hover,
   .certCard:hover,
   .proofItem:hover,
-  .processItem:hover,
   .btn:hover,
-  .btn:active,
-  .heroAvatar:hover {
+  .btn:active {
     transform: none;
   }
-  /* The skewed button fills are transforms too, keep the shape, drop only
-     the motion, so :not() would be wrong here. */
   .btn--primary::before,
   .btn--primary::after,
   .btn--secondary::before,
@@ -1384,15 +963,9 @@ article a {
     transform: skew(-21deg);
   }
 }
-
-/* Social pills glow their icon rather than their (absent) label. */
 .heroSocial.heroSocial:hover svg {
   filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.65));
 }
-
-/* ══ SOCIAL BUTTONS ═════════════════════════════════════════════════════
-   Monochrome at rest so six of them don't turn the hero into a paint chart;
-   each reveals its platform colour (--sc) only on hover. */
 
 .heroSocial.heroSocial {
   display: inline-flex;
@@ -1423,23 +996,9 @@ article a {
   box-shadow: var(--shadow-lg);
 }
 
-/* The per-platform brand colours that used to appear on hover are gone: the
-   design is monochrome end to end, so the socials stay ink and light. The
-   .socialBtn-* classes are still emitted and are simply inert. */
-
 @media (prefers-reduced-motion: reduce) {
   .heroSocial:hover { transform: none; }
 }
-
-/* ══ FOOTER BUTTONS ═════════════════════════════════════════════════════
-   The footer link columns used to be bare text with a trailing arrow, which
-   read as body copy rather than as ten separate destinations. Same glass
-   panel, hairline border and 6px lift as .heroSocial, the site's existing
-   compact button, so this introduces no new treatment, only applies the one
-   already here to a surface that was missing it.
-
-   `justify-content: space-between` pins the arrow to the right edge, so a
-   column of buttons has its labels and its arrows both in line. */
 
 .footerBtn {
   display: inline-flex;
@@ -1456,8 +1015,6 @@ article a {
   font-size: 0.8125rem;
   font-weight: 600;
   text-decoration: none;
-  /* Long labels (the email address) must not push the column wider than the
-     footer allows on a phone. */
   min-width: 0;
   overflow-wrap: anywhere;
   transition: transform var(--base) var(--ease), border-color var(--base) var(--ease),
@@ -1480,8 +1037,6 @@ article a {
 .footerBtn:hover svg {
   opacity: 1;
 }
-/* Stretch to the column width so a stack of them shares one edge instead of
-   ragging to each label's length. */
 .footerBtnCol {
   display: flex;
   flex-direction: column;
@@ -1493,64 +1048,6 @@ article a {
 @media (prefers-reduced-motion: reduce) {
   .footerBtn:hover { transform: none; }
 }
-
-/* ══ AURORA BACKDROP ════════════════════════════════════════════════════
-   z-index -1 puts the canvas above the body background but behind every
-   in-flow element, so no content needs a stacking context of its own. The
-   veil is the fixed highlight the canvas cannot draw: a wash from the top
-   edge that keeps the header area brighter than the fold. */
-
-.auroraField {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-}
-.auroraCanvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-  /* Barely there: enough to stop the constellation lines aliasing into hard
-     white hairlines, not enough to read as a blur. Went 3px → 1.2px → 0.5px;
-     past about 1px the motion stops looking like motion. */
-  filter: blur(0.5px);
-}
-/* Holds the field back from the copy without flattening it. The dim is the
-   knob that matters, the blur above barely moves it, and it is easy to
-   overdo: 62% killed the aurora, 28% still muted it. 12% is where the light
-   still moves and body copy still sits clearly in front of it. */
-.auroraVeil {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(120% 80% at 50% -10%, rgba(255, 255, 255, 0.06), transparent 55%),
-    radial-gradient(90% 60% at 90% 20%, rgba(255, 255, 255, 0.03), transparent 50%),
-    rgba(0, 0, 0, 0.12);
-}
-
-/* ══ NAV OFFSET ═════════════════════════════════════════════════════════
-   The header is fixed at every breakpoint now, so every page needs to clear
-   it. Applied on <main> rather than on each page. */
-/* ══ HERO ═══════════════════════════════════════════════════════════════
-   Capped, deliberately. At full viewport height the page looked finished
-   before it started: a black screen, a headline and two buttons, with no
-   evidence a second section existed. At 78vh the top of the skills row and
-   the proof tiles under it are visible on a 1440x900 desktop without
-   scrolling, which is the whole argument for scrolling. */
-
-.hero {
-  min-height: min(78vh, 720px);
-  justify-content: center;
-}
-@media (max-width: 768px) {
-  .hero {
-    min-height: 85vh;
-  }
-}
-
-/* ══ SCROLL CUE ═════════════════════════════════════════════════════════
-   Removes the ambiguity the cap leaves. Fixed 28px box whether it is shown
-   or not, so fading it out shifts nothing. */
 
 .scrollCue {
   display: inline-flex;
@@ -1581,12 +1078,6 @@ article a {
   }
 }
 
-/* ══ PROJECT CARD: THUMBNAIL AND HARD PART ══════════════════════════════
-   A fixed 16:9 box whether there is an image or not, so a case study gaining
-   a diagram later reflows nothing, and the grid never rags. The monogram is
-   the placeholder: the design is monochrome end to end, so a coloured tile
-   would be the one thing on the page fighting it. */
-
 .projThumb {
   position: relative;
   display: flex;
@@ -1611,9 +1102,6 @@ article a {
   color: var(--text);
   opacity: 0.22;
 }
-
-/* Scope is the half a reviewer already assumes. This is the other half, so it
-   gets a rule of its own rather than another paragraph of body copy. */
 .projHard {
   margin: 2px 0 0;
   padding-left: 12px;
@@ -1632,33 +1120,706 @@ article a {
   text-transform: uppercase;
   color: var(--text);
 }
-
-/* The skills blocks moved onto the home page as the Stack section. They were
-   laid out by a flex gap on /about; here they are plain elements, so the chip
-   row needs its own separation from the paragraph above it. */
 .skillGroup .techList {
   margin-top: 14px;
 }
 
-/* ══ REDUCED MOTION: LATE ADDITIONS ═════════════════════════════════════
-   Same intent as the block further up, but these have to sit after the rules
-   they override: the scroll cue and the section bar are declared below it,
-   and at equal specificity source order settles it. */
-
 @media (prefers-reduced-motion: reduce) {
-  /* Once UI's global.scss sets `html { scroll-behavior: smooth }` with no
-     media query at all. The override further up is on `html:focus-within`,
-     which is more specific but does not match until something on the page has
-     focus, so on a freshly loaded page the smooth scroll survived a reduce
-     preference. Both selectors, so it is off either way. */
   html,
   html:focus-within {
     scroll-behavior: auto;
   }
-  /* The cue still says "the page continues", it just stops bobbing to say it.
-     Without this the global 0.01ms duration snaps it to its end frame. */
   .scrollCue svg {
     animation: none;
     transform: none;
   }
 }
+html:root {
+  --bg: #faf7f3;
+  --bg-subtle: #f0ede8;
+  --page-background: #faf7f3;
+  --surface: #f2efea;
+  --surface-2: #e9e6e1;
+  --surface-hover: #e9e6e1;
+  --surface-active: #dedbd6;
+  --text: #111111;
+  --text-2: #41403e;
+  --muted: #686662;
+  --accent: #111111;
+  --accent-hover: #373531;
+  --accent-soft: #eeebe6;
+  --accent-contrast: #faf7f3;
+  --border: #d9d6d1;
+  --border-strong: #b8b5b0;
+  --border-accent: #111111;
+  --code-bg: #eeebe6;
+  --glass-blur: none;
+  --glow: none;
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: 0 16px 48px #11111118;
+  --radius: 12px;
+  --radius-lg: 20px;
+  --content-max: 1180px;
+}
+html body {
+  color: var(--text);
+  background: var(--bg);
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  opacity: 0.035;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23000' filter='url(%23n)' opacity='.5' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading), sans-serif;
+}
+.editorialHero {
+  width: 100%;
+  max-width: 1180px;
+  padding-top: clamp(180px, 30vh, 320px);
+}
+.heroType {
+  position: relative;
+}
+.heroTitle {
+  margin: 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: clamp(66px, 12.1vw, 174px);
+  font-weight: 800;
+  letter-spacing: -.055em;
+  line-height: 0.9;
+}
+.heroTitle .heroWord {
+  display: block;
+}
+.heroSpark,
+.heroBolt {
+  position: absolute;
+  font-size: clamp(44px, 8vw, 110px);
+  line-height: 1;
+  text-shadow: 2px 2px #9b87c9;
+}
+.heroSpark {
+  left: 0;
+  top: -45px;
+  transform: rotate(-12deg);
+}
+.heroBolt {
+  right: 12px;
+  bottom: -55px;
+  transform: rotate(18deg);
+}
+.heroBaseline {
+  display: grid;
+  grid-template-columns: 1fr 200px 1fr;
+  align-items: end;
+  gap: 24px;
+  margin-top: 90px;
+}
+.heroYear {
+  font-family: var(--font-heading), sans-serif;
+  font-size: clamp(32px, 4.8vw, 68px);
+  font-weight: 600;
+  letter-spacing: -.06em;
+  line-height: 1;
+}
+.heroPortrait {
+  width: 200px;
+  height: 230px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.heroPortraitSource {
+  width: 200px;
+  height: 230px;
+  transition: opacity 120ms linear;
+}
+.portraitOverlay {
+  position: fixed;
+  inset: 0 auto auto 0;
+  z-index: 45;
+  overflow: hidden;
+  border-radius: 18px;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: center;
+  will-change: transform, width, height;
+}
+.portraitOverlay img,
+.portraitDestination img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.portraitDestination {
+  width: min(100%, 420px);
+  aspect-ratio: 21 / 26;
+  align-self: center;
+  overflow: hidden;
+  border-radius: 20px;
+  opacity: 1;
+  transition: opacity 160ms linear;
+}
+.heroLocation {
+  text-transform: uppercase;
+  text-align: right;
+  font-size: 14px;
+  letter-spacing: -.03em;
+}
+.heroIntro {
+  padding-top: 220px;
+  padding-bottom: 120px;
+}
+.heroIntro h2,
+.sectionHead h2,
+#contact h2 {
+  font-size: clamp(42px, 5.3vw, 76px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -.055em;
+}
+.introColumns {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(260px, 1.15fr) minmax(0, 0.9fr);
+  gap: clamp(28px, 5vw, 76px);
+  margin-top: 130px;
+  align-items: end;
+}
+.introIdentity h3 {
+  max-width: 350px;
+  font-size: 26px;
+  line-height: 1.25;
+  font-weight: 500;
+}
+.introDetails p {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+.introActions {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 24px;
+}
+.introIdentity .statusLine {
+  margin-top: 28px;
+  justify-content: flex-start;
+  text-align: left;
+}
+.heroIntro > .scrollCue {
+  margin-top: 60px;
+}
+.section {
+  padding-block: 100px;
+}
+.section--ruled {
+  border-top: 0;
+}
+.sectionHead {
+  align-items: flex-start;
+  text-align: left;
+  gap: 20px;
+  margin-bottom: 58px;
+}
+.sectionHead h2 {
+  text-align: left;
+  max-width: 800px;
+}
+.sectionHead > :last-child:not(h2) {
+  max-width: 680px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+.eyebrow {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: 11px;
+  letter-spacing: .12em;
+}
+.eyebrow::before {
+  content: "/";
+}
+.eyebrow svg {
+  display: none;
+}
+.btn.btn--primary,
+.btn.btn--secondary {
+  border-radius: 8px;
+  min-height: 44px;
+  box-shadow: none;
+  font-weight: 500;
+}
+.btn.btn--primary {
+  color: #faf7f3;
+  background: #111;
+}
+.btn.btn--secondary {
+  color: #111;
+  background: transparent;
+  border: 1px solid var(--border-strong);
+}
+.btn::before,
+.btn::after {
+  display: none;
+}
+.btn.btn--primary:hover {
+  background: #373531;
+  color: white;
+  transform: translateY(-2px);
+}
+.btn.btn--secondary:hover {
+  background: #e9e6e1;
+  color: #111;
+  transform: translateY(-2px);
+}
+.extLink.extLink:hover,
+.prose a:hover,
+.card:hover .projMore,
+.certCard:hover .certView {
+  color: #111;
+  text-shadow: none;
+}
+.extLink:hover svg,
+.card:hover .projMore svg {
+  filter: none;
+}
+.heroSocial.heroSocial {
+  border: 0;
+  width: auto;
+  min-height: 44px;
+  height: auto;
+  padding: 10px 14px;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--social-color, #333);
+  border-radius: 8px;
+  color: #fff;
+}
+.heroSocial[data-platform="github"] { --social-color: #24292f; }
+.heroSocial[data-platform="linkedin"] { --social-color: #0a66c2; }
+.heroSocial[data-platform="medium"] { --social-color: #171717; }
+.heroSocial[data-platform="whatsapp"] { --social-color: #137c3b; }
+.heroSocial[data-platform="email"] { --social-color: #a93226; }
+.heroSocial.heroSocial:hover {
+  background: var(--social-color, #333);
+  color: #fff;
+  box-shadow: none;
+  transform: translateY(-3px);
+}
+.heroSocial.heroSocial:focus-visible {
+  outline: 2px solid var(--social-color, #333);
+  outline-offset: 3px;
+}
+.card {
+  background: transparent;
+  backdrop-filter: none;
+  border: 0;
+  box-shadow: none;
+  border-radius: 0;
+}
+.card:hover {
+  background: transparent;
+  box-shadow: none;
+  border-color: transparent;
+}
+.cardGrid--2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px 20px;
+}
+.projCard {
+  padding: 0;
+}
+.projThumb {
+  aspect-ratio: 1.45;
+  border: 0;
+  border-radius: 20px;
+  background: #e7e4df;
+  margin-bottom: 10px;
+}
+.projThumb img {
+  object-fit: contain;
+  padding: 20px;
+  transition: transform 650ms var(--ease);
+}
+.projCard:hover .projThumb img {
+  transform: scale(1.035);
+}
+.projCard .cardTitle {
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -.04em;
+  line-height: 1.15;
+}
+#work .cardGrid--2 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+#work .projThumb {
+  aspect-ratio: 4 / 3;
+  border-radius: 14px;
+}
+#work .projThumb img {
+  padding: 12px;
+}
+#work .projCard .cardTitle {
+  font-size: clamp(18px, 1.65vw, 24px);
+}
+#work .cardDesc {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  font-size: 13px;
+  line-height: 1.55;
+}
+#work .projHard {
+  font-size: 12px;
+  line-height: 1.45;
+}
+#work .projStack .techList > li:nth-child(n + 7) {
+  display: none;
+}
+.projTags {
+  font-size: 12px;
+}
+.cardDesc {
+  color: var(--text-2);
+}
+.proofBar {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  padding-block: 52px;
+}
+.proofItem {
+  border-radius: 0;
+  border-bottom: 1px solid var(--border);
+}
+.proofItem:hover {
+  background: transparent;
+}
+.proofValue {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: #111;
+}
+#stack .cardGrid {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+.skillGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 8%;
+  padding: 38px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: none;
+}
+.skillGroup .cardTitle {
+  font-size: 30px;
+  font-weight: 500;
+}
+.skillGroup .cardDesc {
+  margin: 0;
+}
+.skillGroup .techList {
+  grid-column: 2;
+  margin-top: 0;
+}
+.quoteCard {
+  padding: 52px;
+  background: #111;
+  border-radius: 20px;
+  --text: #faf7f3;
+  --text-2: #d7d4d0;
+  --muted: #ccc;
+  color: #faf7f3;
+}
+.quoteCard [class*="neutral"],
+.quoteCard .extLink {
+  color: #d7d4d0;
+}
+.quoteCard .extLink:hover {
+  color: white;
+}
+.pullQuote {
+  font-family: var(--font-heading), sans-serif;
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 1.25;
+}
+.certCard {
+  background: transparent;
+  box-shadow: none;
+}
+#contact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px 80px;
+  align-items: start;
+  text-align: left;
+}
+#contact > .reveal:first-child {
+  grid-row: span 2;
+}
+#contact > .reveal:first-child > div {
+  align-items: flex-start;
+  text-align: left;
+}
+#contact h2,
+#contact h2 + div {
+  text-align: left;
+}
+#contact > .reveal:nth-child(2) {
+  background: #111;
+  padding: 32px;
+  border-radius: 16px;
+}
+#contact > .reveal:nth-child(2) .btn {
+  width: 100%;
+  overflow-wrap: anywhere;
+}
+#contact > .reveal:nth-child(2) .btn--primary {
+  background: #faf7f3;
+  color: #111;
+}
+#contact > .reveal:nth-child(2) .btn--secondary {
+  color: #faf7f3;
+  border-color: #777;
+}
+#contact > .reveal:nth-child(2) .btn--secondary:hover,
+#contact > .reveal:nth-child(2) .btn--secondary:focus-visible {
+  background: #faf7f3;
+  color: #111;
+  border-color: #faf7f3;
+}
+#contact > .reveal:nth-child(2) .btn--secondary:focus-visible {
+  outline: 2px solid #faf7f3;
+  outline-offset: 3px;
+}
+#contact > .reveal:last-child {
+  grid-column: 1 / -1;
+}
+.siteFooter {
+  background: #111;
+  --text: #faf7f3;
+  --text-2: #d7d4d0;
+  --muted: #b8b5b0;
+  --border: #333;
+  --surface: #222;
+  --accent: #faf7f3;
+  color: #faf7f3;
+  padding-top: 100px;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+.siteFooter [class*="neutral"] {
+  color: #b8b5b0;
+}
+.footerHeadline {
+  font-size: clamp(44px, 4.8vw, 68px);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: -.055em;
+  margin: 0 0 24px;
+}
+.footerBtnCol {
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: 300px;
+}
+.footerBtn {
+  background: #faf7f3;
+  color: #111;
+  border: none;
+  border-radius: 6px;
+}
+.footerBtn:hover {
+  color: #111;
+  background: #d7d4d0;
+  box-shadow: none;
+}
+.footerWordmark {
+  font-family: var(--font-heading), sans-serif;
+  font-size: clamp(100px, 22vw, 310px);
+  line-height: 0.85;
+  font-weight: 800;
+  letter-spacing: -.06em;
+  text-transform: uppercase;
+  color: #252525;
+  margin-top: 40px;
+  text-align: center;
+}
+@media (max-width: 760px) {
+  .editorialHero {
+    padding-top: 195px;
+  }
+  .heroTitle {
+    font-size: clamp(48px, 12vw, 92px);
+  }
+  .heroSpark {
+    top: -35px;
+    left: 0;
+  }
+  .heroBolt {
+    right: 0;
+    bottom: -40px;
+  }
+  .heroBaseline {
+    grid-template-columns: 1fr 140px 1fr;
+    gap: 8px;
+    margin-top: 65px;
+  }
+  .heroPortrait {
+    width: 140px;
+    height: 170px;
+  }
+  .heroPortraitSource {
+    width: 140px;
+    height: 170px;
+  }
+  .heroYear {
+    font-size: 26px;
+  }
+  .heroLocation {
+    font-size: 10px;
+    max-width: 100px;
+    justify-self: end;
+  }
+  .heroIntro {
+    padding-top: 130px;
+  }
+  .introColumns {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    margin-top: 50px;
+  }
+  .portraitDestination {
+    width: min(82vw, 360px);
+    grid-row: 2;
+  }
+  .introDetails {
+    grid-row: 3;
+  }
+  .introDetails p {
+    font-size: 16px;
+  }
+  .section {
+    padding-block: 64px;
+  }
+  .heroIntro.section {
+    padding-top: 130px;
+  }
+  .cardGrid--2 {
+    grid-template-columns: 1fr;
+  }
+  #work .cardGrid--2 {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  .sectionHead {
+    margin-bottom: 34px;
+  }
+  .skillGroup {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .skillGroup .techList {
+    grid-column: 1;
+  }
+  .quoteCard {
+    padding: 30px 22px;
+  }
+  #contact {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  #contact > .reveal:first-child {
+    grid-row: auto;
+  }
+  #contact > .reveal:nth-child(2) {
+    padding: 24px 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .heroPortrait,
+  .projThumb img {
+    transition: none;
+  }
+  .portraitOverlay {
+    display: none;
+  }
+  .portraitDestination {
+    opacity: 1 !important;
+  }
+}
+@media (min-width: 761px) and (max-width: 1040px) {
+  #work .cardGrid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.reveal {
+  opacity: 1;
+  transform: none;
+}
+.reveal.revealReady:not(.isVisible) {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+}
+.heroBolt {
+  filter: drop-shadow(2px 2px 0 #9b87c9);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal.revealReady:not(.isVisible) {
+    opacity: 1;
+    transform: none;
+  }
+}
+#contact > *,
+#contact .btn,
+.introColumns > * {
+  min-width: 0;
+}
+#contact .btn {
+  white-space: normal;
+  text-align: center;
+}
+#contact > .reveal:nth-child(2) > div {
+  width: 100%;
+}
+#main:not(:has(.editorialHero)) {
+  padding-top: 120px;
+}
+.btn.btn--primary,
+.btn.btn--secondary {
+  text-transform: none;
+  letter-spacing: 0;
+}
+#contact > .reveal:first-child span {
+  text-align: left;
+  line-height: 1.5;
+}
+#contact .btn {
+  font-size: 14px;
+}
+html[data-theme="light"] {
+  --neutral-on-background-weak: #686662;
+  --neutral-on-background-strong: #111;
+}
+
+:root { --font-label: var(--font-body); }

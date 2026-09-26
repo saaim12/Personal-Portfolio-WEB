@@ -1,7 +1,8 @@
 import { Meta } from "@once-ui-system/core";
 import type { Metadata } from "next";
 
-import { baseURL, person } from "@/resources";
+import { baseURL } from "@/resources/once-ui.config";
+import { person } from "@/resources/content";
 
 // One place that turns a page's identity into <head>.
 //

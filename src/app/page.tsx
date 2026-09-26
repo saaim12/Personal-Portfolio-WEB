@@ -1,33 +1,27 @@
+import Image from "next/image";
 import { Column, Heading, Row, Text } from "@once-ui-system/core";
 import {
   HiOutlineDocumentText,
   HiArrowRight,
   HiArrowUpRight,
-  HiOutlineWrenchScrewdriver,
   HiOutlineSquares2X2,
-  HiOutlineFlag,
-  HiOutlineCommandLine,
   HiOutlineRectangleStack,
 } from "react-icons/hi2";
-import { home, social, pageMeta, ogImageFor } from "@/resources";
+import { home, person, social } from "@/resources/content";
+import { pageMeta, ogImageFor } from "@/resources/seo";
 import { jsonLd, personJsonLd, webPageJsonLd } from "@/resources/schema";
 import { iconLibrary } from "@/resources/icons";
-import {
-  HeroHeadline,
-  Practice,
-  Contact,
-  ProofBar,
-  StatusLine,
-  Testimonial,
-  LookingFor,
-  Certificates,
-  Fundamentals,
-  SkillsMarquee,
-  Reveal,
-  ScrollCue,
-  Track,
-  Stack,
-} from "@/components";
+import { HeroHeadline } from "@/components/HeroHeadline";
+import { Contact } from "@/components/Contact";
+import { ProofBar } from "@/components/ProofBar";
+import { StatusLine } from "@/components/StatusLine";
+import { Testimonial } from "@/components/Testimonial";
+import { SkillsMarquee } from "@/components/SkillsMarquee";
+import { Reveal } from "@/components/Reveal";
+import { ScrollCue } from "@/components/ScrollCue";
+import { Track } from "@/components/Track";
+import { Stack } from "@/components/Stack";
+import { PortraitTransition } from "@/components/PortraitTransition";
 import { Projects } from "@/components/work/Projects";
 
 export async function generateMetadata() {
@@ -64,126 +58,103 @@ export default function Home() {
           FAQPage went with the FAQ section it was generated from. */}
       <script {...jsonLd(personJsonLd)} />
 
-      {/* One delegated click listener and one scroll listener for the page.
-          Everything it measures stays server-rendered. The section index is
-          not here: it lives in the header pill, so the page has one nav. */}
       <Track />
-
-      {/* ── 1. ATTENTION ────────────────────────────────────────────────── */}
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Column
-          horizontal="center"
-          align="center"
-          gap="16"
-          className="hero"
-          style={{ position: "relative", zIndex: 1, maxWidth: "720px" }}
-        >
-          <Row fillWidth horizontal="center">
-            <HeroHeadline text={home.headline} />
-          </Row>
-
-          <Reveal delay={0.15}>
-            <Text
-              wrap="balance"
-              onBackground="neutral-weak"
-              variant="heading-default-l"
-              align="center"
-            >
-              {home.subline}
-            </Text>
-          </Reveal>
-
-          {/* The primary button no longer leaves the page. It used to open
-              /work, and the second button opened a PDF in a viewer, which is
-              where the visit ended. Both destinations are still here, one as
-              an in-page scroll and one as a small link. */}
-          <Reveal delay={0.25}>
-            <Row gap="12" wrap horizontal="center" vertical="center">
+      <section className="editorialHero" aria-label="Introduction">
+        <div className="heroType">
+          <span className="heroSpark" aria-hidden="true">
+            &#10022;
+          </span>
+          <HeroHeadline text={person.role} />
+          <svg className="heroBolt" aria-hidden="true" viewBox="0 0 70 100" width="80" height="110">
+            <path d="M44 2 5 54l25 4-7 40 43-56-27-3Z" fill="currentColor" />
+          </svg>
+        </div>
+        <div className="heroBaseline">
+          <span className="heroYear">&copy;{new Date().getFullYear()}</span>
+          <PortraitTransition src={person.avatar} alt={person.name} />
+          <span className="heroLocation">/{person.city}</span>
+        </div>
+      </section>
+      <section className="heroIntro section" aria-labelledby="intro-title">
+        <Reveal>
+          <h2 id="intro-title">
+            Hey!
+          </h2>
+        </Reveal>
+        <div className="introColumns">
+          <div className="introIdentity">
+            <h3>{home.headline}</h3>
+            <StatusLine />
+          </div>
+          <div id="portrait-destination" className="portraitDestination">
+            <Image
+              src={person.avatar}
+              alt=""
+              aria-hidden="true"
+              width={420}
+              height={520}
+              sizes="(max-width: 760px) 82vw, 420px"
+            />
+          </div>
+          <div className="introDetails">
+            <p>{home.subline}</p>
+            <div className="introActions">
               <a
-                className="btn btn--primary btn--lg"
+                className="btn btn--primary"
                 href="/experience"
                 data-track="hero_cta:view_experience"
               >
-                View experience
-                <HiArrowRight aria-hidden="true" />
+                View experience <HiArrowRight aria-hidden="true" />
               </a>
-              <a
-                className="btn btn--secondary btn--lg"
-                href="/work"
-                data-track="hero_cta:see_projects"
-              >
-                See Projects
+              <a className="extLink" href="/work" data-track="hero_cta:see_projects">
+                See Projects <HiArrowUpRight aria-hidden="true" />
               </a>
-            </Row>
-          </Reveal>
-
-          {/* Both PDFs, demoted to text and both opening in a new tab. A
-              recruiter who wants the CV still finds it in two seconds; a
-              recruiter who wanted the site no longer loses it to a PDF
-              viewer. */}
-          <Reveal delay={0.32}>
-            <Row gap="24" wrap horizontal="center" textVariant="body-default-s">
+            </div>
+            <div className="introActions">
               <a
-                className="btn btn--primary"
+                className="extLink"
                 href="/SaaimCV.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-track="hero_link:resume"
               >
-                <HiOutlineDocumentText aria-hidden="true" />
-                View Resume
+                <HiOutlineDocumentText aria-hidden="true" /> View Resume
               </a>
               <a
-                className="btn btn--secondary"
+                className="extLink"
                 href="/Fitter-Recommendation-Letter.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-track="hero_link:recommendation"
               >
-                <HiOutlineDocumentText aria-hidden="true" />
-                Client Recommendation
+                Client Recommendation <HiArrowUpRight aria-hidden="true" />
               </a>
-            </Row>
-          </Reveal>
-
-          <Reveal delay={0.38}>
-            <Row gap="8" horizontal="center" wrap>
-              {social.filter((item) => item.essential).map((item) => {
-                const Icon = iconLibrary[item.icon];
-                return (
-                  item.link && (
+            </div>
+            <div className="introActions">
+              {social
+                .filter((item) => item.essential)
+                .map((item) => {
+                  const Icon = iconLibrary[item.icon];
+                  return (
                     <a
                       key={item.name}
-                      className={`heroSocial socialBtn-${item.name.toLowerCase()}`}
+                      className="heroSocial"
+                      data-platform={item.icon}
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={item.name}
-                      title={item.name}
                     >
                       <Icon aria-hidden="true" />
+                      <span>{item.name}</span>
                     </a>
-                  )
-                );
-              })}
-            </Row>
-          </Reveal>
-
-          {/* Availability, location, discipline and start date, before
-              anything else on the page. A recruiter used to have to read three
-              separate sections to answer these four questions. */}
-          <StatusLine />
-
-          <ScrollCue />
-        </Column>
-      </div>
+                  );
+                })}
+            </div>
+          </div>
+        </div>
+        <ScrollCue />
+      </section>
 
       {/* Texture, not a claim: the stack at a glance, muted enough that the
           headline above it still wins. The real evidence is the proof bar
@@ -199,53 +170,52 @@ export default function Home() {
           Cards, not a list of titles: the whole card is the click target,
           because people click blocks and do not hunt for links. */}
       <Column id="work" fillWidth horizontal="center">
-      <ProofBar />
-      <Column fillWidth horizontal="center" className="section section--ruled">
-        <Reveal>
-          <div className="sectionHead">
-            <span className="eyebrow">
-              <HiOutlineSquares2X2 aria-hidden="true" />
-              Work
-            </span>
-            <Heading as="h2" variant="display-strong-s" align="center">
-              Systems I&rsquo;ve built
-            </Heading>
-            <Text onBackground="neutral-weak" variant="heading-default-m" wrap="balance">
-              Practical engineering across product development, backend
-              systems, cloud infrastructure, and data. Explore the work to see
-              how I approach complex requirements and turn them into software
-              people can depend on.
-            </Text>
-          </div>
-        </Reveal>
+        <ProofBar />
+        <Column fillWidth horizontal="center" className="section section--ruled">
+          <Reveal>
+            <div className="sectionHead">
+              <span className="eyebrow">
+                <HiOutlineSquares2X2 aria-hidden="true" />
+                Work
+              </span>
+              <Heading as="h2" variant="display-strong-s" align="center">
+                Systems I&rsquo;ve built
+              </Heading>
+              <Text onBackground="neutral-weak" variant="heading-default-m" wrap="balance">
+                Practical engineering across product development, backend systems, cloud
+                infrastructure, and data. Explore the work to see how I approach complex
+                requirements and turn them into software people can depend on.
+              </Text>
+            </div>
+          </Reveal>
 
-        {/* One from each of the three groups on /work, named rather than sliced
+          {/* One from each of the three groups on /work, named rather than sliced
             by date: the preview should represent the range of work, and a date
             range would silently reshuffle it on the next case study. */}
-        <Reveal delay={0.08}>
-          <Projects
-            only={[
-              "fitter-health-platform",
-              "multilingual-rag-engine",
-              "realtime-ecommerce-etl-pipeline",
-            ]}
-          />
-        </Reveal>
+          <Reveal delay={0.08}>
+            <Projects
+              only={[
+                "fitter-health-platform",
+                "multilingual-rag-engine",
+                "realtime-ecommerce-etl-pipeline",
+              ]}
+            />
+          </Reveal>
 
-        <Reveal delay={0.12}>
-          <Row fillWidth horizontal="center" paddingTop="32">
-            <a
-              className="extLink"
-              href="/work/fitter-health-platform"
-              data-track="section_outro:fitter_incident"
-            >
-              The notification pipeline on Fitter Health dropped messages
-              silently. Here is what I changed.
-              <HiArrowRight aria-hidden="true" />
-            </a>
-          </Row>
-        </Reveal>
-      </Column>
+          <Reveal delay={0.12}>
+            <Row fillWidth horizontal="center" paddingTop="32">
+              <a
+                className="extLink"
+                href="/work/fitter-health-platform"
+                data-track="section_outro:fitter_incident"
+              >
+                The notification pipeline on Fitter Health dropped messages silently. Here is what I
+                changed.
+                <HiArrowRight aria-hidden="true" />
+              </a>
+            </Row>
+          </Reveal>
+        </Column>
       </Column>
 
       {/* ── 4. SOCIAL PROOF ── */}
@@ -255,43 +225,7 @@ export default function Home() {
           Was on /about, where the traffic never went. */}
       <Stack icon={<HiOutlineRectangleStack aria-hidden="true" />} />
 
-      {/* ── 6. APPROACH ── */}
-      <Column id="approach" fillWidth horizontal="center" className="sectionGroup">
-        <Practice icon={<HiOutlineWrenchScrewdriver aria-hidden="true" />} />
-        <Reveal className="sectionOutro">
-          <Row fillWidth horizontal="center">
-            <a
-              className="extLink"
-              href="https://medium.com/@saymmalik08"
-              target="_blank"
-              rel="noopener noreferrer"
-              data-track="section_outro:medium"
-            >
-              Longer-form notes on what I&rsquo;m building, on Medium
-              <HiArrowUpRight aria-hidden="true" />
-            </a>
-          </Row>
-        </Reveal>
-      </Column>
-
-      {/* ── 7. WRITING & FUNDAMENTALS ── */}
-      <Column id="writing" fillWidth horizontal="center" className="sectionGroup">
-        <Fundamentals icon={<HiOutlineCommandLine aria-hidden="true" />} />
-        <Certificates />
-        <Reveal className="sectionOutro">
-          <Row fillWidth horizontal="center">
-            <a className="extLink" href="#contact" data-track="section_outro:contact">
-              If any of this looks like a problem you currently have, email me.
-              <HiArrowRight aria-hidden="true" />
-            </a>
-          </Row>
-        </Reveal>
-      </Column>
-
-      {/* ── 8. FIT ── */}
-      <LookingFor icon={<HiOutlineFlag aria-hidden="true" />} />
-
-      {/* ── 9. ACTION ── */}
+      {/* Final action */}
       <Contact />
     </Column>
   );

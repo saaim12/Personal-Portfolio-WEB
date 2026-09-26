@@ -9,14 +9,12 @@ import {
   HiOutlineTableCells,
 } from "react-icons/hi2";
 import {
-  SiAmazonapigateway,
   SiAmazondynamodb,
   SiAmazonec2,
   SiAmazonecs,
   SiAmazoneks,
   SiAmazoniam,
   SiAmazonrds,
-  SiAmazonredshift,
   SiAmazons3,
   SiAmazonsqs,
   SiAmazonwebservices,
@@ -41,12 +39,10 @@ import {
   SiJsonwebtokens,
   SiKubernetes,
   SiMongodb,
-  SiMysql,
   SiNextdotjs,
   SiNodedotjs,
   SiOdoo,
   SiOpenai,
-  SiOpenjdk,
   SiPandas,
   SiPostgresql,
   SiPytest,
@@ -92,7 +88,6 @@ export const TECH = {
   python: { label: "Python", icon: SiPython, color: "#3776AB" },
   typescript: { label: "TypeScript", icon: SiTypescript, color: "#3178C6" },
   javascript: { label: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },
-  java: { label: "Java", icon: SiOpenjdk, color: "#437291" },
   sql: { label: "SQL", icon: HiOutlineTableCells, generic: true },
 
   // ── Backend ────────────────────────────────────────────────────────────
@@ -133,7 +128,6 @@ export const TECH = {
 
   // ── Databases ──────────────────────────────────────────────────────────
   postgresql: { label: "PostgreSQL", icon: SiPostgresql, color: "#4169E1" },
-  mysql: { label: "MySQL", icon: SiMysql, color: "#4479A1" },
   mongodb: { label: "MongoDB", icon: SiMongodb, color: "#47A248" },
   dynamodb: { label: "DynamoDB", icon: SiAmazondynamodb, color: "#4053D6" },
   redis: { label: "Redis", icon: SiRedis, color: "#FF4438" },
@@ -146,10 +140,8 @@ export const TECH = {
   ec2: { label: "Amazon EC2", icon: SiAmazonec2, color: "#FF9900" },
   lambda: { label: "AWS Lambda", icon: SiAwslambda, color: "#FF9900" },
   rds: { label: "Amazon RDS", icon: SiAmazonrds, color: "#527FFF" },
-  redshift: { label: "Amazon Redshift", icon: SiAmazonredshift, color: "#8C4FFF" },
   s3: { label: "Amazon S3", icon: SiAmazons3, color: "#569A31" },
   sqs: { label: "Amazon SQS", icon: SiAmazonsqs, color: "#FF4F8B" },
-  apigateway: { label: "API Gateway", icon: SiAmazonapigateway, color: "#FF4F8B" },
   iam: { label: "IAM", icon: SiAmazoniam, color: "#DD344C" },
   // Simple Icons ships no SNS or VPC mark. The AWS logo is a truer stand-in
   // than a generic cube, so these are not flagged `generic`.

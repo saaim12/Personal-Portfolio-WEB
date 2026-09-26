@@ -1,7 +1,7 @@
 // import a pre-defined template for config and content options
 export { person, social, home, about, work, certificates, bookingLink } from "./content";
 
-export { routes, baseURL, fonts, style } from "./once-ui.config";
+export { routes, baseURL, style } from "./once-ui.config";
 
 export {
   pageMeta,
@@ -11,3 +11,5 @@ export {
   OG_WIDTH,
   OG_HEIGHT,
 } from "./seo";
+
+export { fonts } from "./fonts";

@@ -1,5 +1,5 @@
 import { Column, Heading, Text } from "@once-ui-system/core";
-import { pageMeta, ogImageFor, person, social } from "@/resources";
+import { pageMeta, ogImageFor } from "@/resources/seo";
 import { jsonLd, webPageJsonLd } from "@/resources/schema";
 
 export async function generateMetadata() {
