@@ -114,7 +114,7 @@ export default async function RootLayout({
           <a href="#main" className="skipLink">
             Skip to content
           </a>
-          <Header name={person.name} contact={home.cta} />
+          <Header name={person.name} />
           <Flex
             id="main"
             as="main"

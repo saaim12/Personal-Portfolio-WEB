@@ -1,16 +1,15 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import type { CSSProperties } from "react";
 import {
   HiOutlineHome,
   HiOutlineUser,
   HiOutlineSquares2X2,
   HiOutlineDocumentText,
-  HiArrowUpRight,
   HiOutlineEnvelope,
 } from "react-icons/hi2";
-
 import { routes } from "@/resources/once-ui.config";
 import styles from "./Header.module.scss";
 
@@ -19,143 +18,64 @@ const NAV = [
   { href: "/experience", label: "Experience", icon: HiOutlineUser, key: "/experience" },
   { href: "/work", label: "Projects", icon: HiOutlineSquares2X2, key: "/work" },
   { href: "/#contact", label: "Contact", icon: HiOutlineEnvelope, key: "/contact" },
+  { href: "/SaaimCV.pdf", label: "Resume", icon: HiOutlineDocumentText, key: "/resume" },
 ] as const;
+const items = NAV.filter((item) =>
+  routes[item.key as keyof typeof routes] || item.key === "/contact" || item.key === "/resume"
+);
 
-export const Header = ({ name, contact }: { name: string; contact: { href: string; label: string } }) => {
+export function Header({ name }: { name: string }) {
   const pathname = usePathname() ?? "";
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
-  const toggleRef = useRef<HTMLButtonElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
+  const [preview, setPreview] = useState<number | null>(null);
+  const [contactActive, setContactActive] = useState(false);
 
-  // Frost the bar once content scrolls behind it.
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 8);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  // Close the mobile panel on navigation.
-  useEffect(() => {
-    if (pathname) setOpen(false);
+    const updateHash = () => setContactActive(pathname === "/" && window.location.hash === "#contact");
+    updateHash();
+    window.addEventListener("hashchange", updateHash);
+    return () => window.removeEventListener("hashchange", updateHash);
   }, [pathname]);
 
-  // While the panel is open: lock scroll and let Escape dismiss it.
-  useEffect(() => {
-    if (!open) return;
-    const links = panelRef.current?.querySelectorAll<HTMLAnchorElement>("a");
-    links?.[0]?.focus();
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(false);
-        toggleRef.current?.focus();
-      }
-      if (e.key === "Tab" && links?.length) {
-        const first = links[0];
-        const last = links[links.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          toggleRef.current?.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          toggleRef.current?.focus();
-        } else if (document.activeElement === toggleRef.current) {
-          e.preventDefault();
-          (e.shiftKey ? last : first).focus();
-        }
-      }
-    };
-    document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [open]);
-
-  const isActive = (key: string) => (key === "/" ? pathname === "/" : pathname.startsWith(key));
+  const activeIndex = items.findIndex((item) => {
+    if (item.key === "/contact") return pathname === "/" && contactActive;
+    if (item.key === "/") return pathname === "/" && !contactActive;
+    return pathname.startsWith(item.key);
+  });
+  const highlighted = preview ?? activeIndex;
 
   return (
-    <>
-      <header className={`${styles.header} ${scrolled || open ? styles.scrolled : ""}`}>
-        <div className={styles.inner}>
-          <a href="/" className={styles.brand} aria-label={`${name}, home`}>
-            <span className={styles.brandName}>{name}</span>
-          </a>
-
-          <div className={styles.actions}>
-            <button
-              ref={toggleRef}
-              type="button"
-              className={`${styles.burger} ${open ? styles.burgerOpen : ""}`}
-              aria-label={open ? "Close menu" : "Open menu"}
-              aria-expanded={open}
-              aria-controls="mobile-menu"
-              onClick={() => setOpen((v) => !v)}
-            >
-              <span className={styles.burgerBar} />
-              <span className={styles.burgerBar} />
-              <span className={styles.burgerBar} />
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {open && (
-        <>
-          <button
-            type="button"
-            tabIndex={-1}
-            className={styles.scrim}
-            onClick={() => setOpen(false)}
-            aria-label="Dismiss menu"
-          />
-          <div id="mobile-menu" ref={panelRef} className={styles.panel}>
-            {/* On the home page the sections come first: they are where the
-                content is, and the routes below them are the depth. */}
-            {NAV.filter((n) => routes[n.key as keyof typeof routes] || n.key === "/contact").map(
-              (item) => {
-                const Icon = item.icon;
-                const active = isActive(item.key);
-                return (
-                  <a
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    className={`${styles.panelLink} ${active ? styles.panelActive : ""}`}
-                    aria-current={active ? "page" : undefined}
-                  >
-                    <Icon aria-hidden="true" />
-                    {item.label}
-                  </a>
-                );
-              },
-            )}
-
-            <div className={styles.panelDivider} />
-
-            <a
-              className={styles.panelLink}
-              href="/SaaimCV.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <HiOutlineDocumentText aria-hidden="true" />
-              Resume (PDF)
-              <HiArrowUpRight aria-hidden="true" style={{ marginLeft: "auto" }} />
-            </a>
-            <a className={styles.panelLink} href={contact.href}>
-              <HiOutlineEnvelope aria-hidden="true" />
-              {contact.label}
-              <HiArrowUpRight aria-hidden="true" style={{ marginLeft: "auto" }} />
-            </a>
-          </div>
-        </>
-      )}
-    </>
+    <header className={styles.header}>
+      <div className={styles.inner}>
+        <nav
+          className={styles.dock}
+          aria-label={`${name}, main navigation`}
+          style={{ "--active-index": Math.max(0, highlighted), "--item-count": items.length } as CSSProperties}
+          onMouseLeave={() => setPreview(null)}
+          onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setPreview(null); }}
+        >
+          <span className={styles.glass} aria-hidden="true" style={{ opacity: highlighted < 0 ? 0 : 1 }} />
+          {items.map((item, index) => {
+            const Icon = item.icon;
+            const resume = item.key === "/resume";
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                className={`${styles.dockLink} ${highlighted === index ? styles.dockActive : ""}`}
+                aria-label={resume ? "Resume (PDF, opens in a new tab)" : item.label}
+                aria-current={index === activeIndex ? "page" : undefined}
+                {...(resume ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                onMouseEnter={() => setPreview(index)}
+                onFocus={() => setPreview(index)}
+                onClick={() => { if (!resume) setContactActive(item.key === "/contact"); }}
+              >
+                <Icon aria-hidden="true" />
+                <span>{item.label}</span>
+              </a>
+            );
+          })}
+        </nav>
+      </div>
+    </header>
   );
-};
+}

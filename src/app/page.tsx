@@ -83,6 +83,7 @@ export default function Home() {
         </Reveal>
         <div className="introColumns">
           <div className="introIdentity">
+            <span className="introEyebrow">{person.name}</span>
             <h3>{home.headline}</h3>
             <StatusLine />
           </div>
@@ -98,7 +99,7 @@ export default function Home() {
           </div>
           <div className="introDetails">
             <p>{home.subline}</p>
-            <div className="introActions">
+            <div className="introActions introPrimaryActions">
               <a
                 className="btn btn--primary"
                 href="/experience"
@@ -106,31 +107,37 @@ export default function Home() {
               >
                 View experience <HiArrowRight aria-hidden="true" />
               </a>
-              <a className="extLink" href="/work" data-track="hero_cta:see_projects">
+              <a className="btn btn--secondary" href="/work" data-track="hero_cta:see_projects">
                 See Projects <HiArrowUpRight aria-hidden="true" />
               </a>
             </div>
-            <div className="introActions">
+            <div className="introDocuments">
               <a
-                className="extLink"
+                className="introDocument"
                 href="/SaaimCV.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-track="hero_link:resume"
               >
-                <HiOutlineDocumentText aria-hidden="true" /> View Resume
+                <HiOutlineDocumentText aria-hidden="true" />
+                <span><strong>View Resume</strong><small>Experience &amp; skills · PDF</small></span>
+                <HiArrowUpRight aria-hidden="true" />
               </a>
               <a
-                className="extLink"
+                className="introDocument"
                 href="/Fitter-Recommendation-Letter.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 data-track="hero_link:recommendation"
               >
-                Client Recommendation <HiArrowUpRight aria-hidden="true" />
+                <HiOutlineDocumentText aria-hidden="true" />
+                <span><strong>Client Recommendation</strong><small>A note from the founder · PDF</small></span>
+                <HiArrowUpRight aria-hidden="true" />
               </a>
             </div>
-            <div className="introActions">
+            <div className="introConnect">
+              <span className="introEyebrow">Find me online</span>
+              <div className="introActions introSocials">
               {social
                 .filter((item) => item.essential)
                 .map((item) => {
@@ -150,6 +157,7 @@ export default function Home() {
                     </a>
                   );
                 })}
+              </div>
             </div>
           </div>
         </div>

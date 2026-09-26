@@ -35,8 +35,8 @@ export function Contact() {
             align="center"
             wrap="balance"
           >
-            Open to full-time roles and to interesting problems generally. Email
-            is the fastest way to reach me and I reply within a day.
+            Have a software engineering role or a product in mind? Email me to
+            start a conversation. I usually reply within a day.
           </Text>
         </Column>
       </Reveal>

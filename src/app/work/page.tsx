@@ -32,7 +32,7 @@ const GROUPS = [
 
 export default function Work() {
   return (
-    <Column maxWidth="m" paddingTop="24">
+    <Column className="workPage" maxWidth="m" paddingTop="24">
       <script
         {...jsonLd(
           webPageJsonLd({
@@ -53,12 +53,9 @@ export default function Work() {
           align="center"
           wrap="balance"
         >
-          Five systems, each written up as the problem, the architecture, the
-          trade-offs I made, and what I would change. One is client work running
-          in production; the other four I built to get to the bottom of
-          something: streaming and warehouse modelling, tenant-isolated
-          retrieval, cold-start recommendation, and inference on a
-          microcontroller.
+          Five projects across full-stack development, backend systems, AI,
+          and data engineering. Explore the problem, architecture, and trade-offs
+          behind each build, from a live client platform to four personal projects.
         </Text>
         {/* "Shown with the permission of clients" was removed: four of the five
             are personal projects, and a reader who works that out stops
@@ -82,6 +79,7 @@ export default function Work() {
           fillWidth
           marginTop="xl"
           padding="40"
+          className="pageCallout"
           gap="16"
           radius="l"
           border="neutral-alpha-weak"

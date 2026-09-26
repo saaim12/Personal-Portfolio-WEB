@@ -1,4 +1,5 @@
 import type { About, Home, Person, Social, Work } from "@/types/content.types";
+import { Fragment } from "react";
 
 const person: Person = {
   firstName: "Saaim",
@@ -366,7 +367,7 @@ const about: About = {
           // Lead bullet is the outcome in plain language; the stack follows.
           // Every bullet under it is mechanism, which is correct once this one
           // has done the plain-language job.
-          <>
+          <Fragment key="fitter-delivery">
             <strong>
               Took a validated health-tech concept from zero to a live product
               used by patients and providers, as the only engineer
@@ -374,7 +375,7 @@ const about: About = {
             . Designed and built the frontend, backend, database, cloud
             infrastructure, and data layer end to end, then documented and
             handed the system over.
-          </>,
+          </Fragment>,
           // Redshift and API Gateway were removed here and from the Cloud and
           // DevOps skills block. The published architecture diagram shows
           // neither, and a stack list that contradicts the site's own diagram
@@ -403,21 +404,21 @@ const about: About = {
         // stack (MWAA, EMR, PySpark, Glue) rather than "Lambda and S3". The
         // site was quietly claiming less than the CV it links to.
         achievements: [
-          <>
+          <Fragment key="expertflow-apis">
             <strong>
               Owned backend REST APIs serving 1,000 to 3,000 daily users
             </strong>
             , deployed as Docker containers on AWS EC2 behind an Application
             Load Balancer, with rate limiting, scoped IAM and VPC isolation.
-          </>,
-          <>
+          </Fragment>,
+          <Fragment key="expertflow-eks">
             <strong>
               Re-deployed the backend as a distributed system on AWS EKS
             </strong>
             , splitting services across pods with Horizontal Pod Autoscaler
             policies that scale replicas on request throughput, so traffic
             spikes cost capacity instead of availability.
-          </>,
+          </Fragment>,
           "Cut admin panel response time from 130 ms to 30 ms with Redis caching and database index tuning, after profiling showed the queries rather than the application were the cost.",
           "Designed and shipped event-driven batch and streaming ETL pipelines on AWS Lambda, MWAA (managed Airflow), EMR, PySpark, Glue and S3, automating ingestion, standardisation and cataloguing of raw inputs into analytics-ready Parquet for BI reporting and ML feature workflows.",
           "Developed a real-time voice and video communication SDK on WebRTC, and the REST APIs binding frontend clients, SDK modules and third-party platforms together.",
@@ -657,56 +658,6 @@ const about: About = {
   },
 };
 
-// Certificates.
-//
-// Titles, issuers and dates were read out of the PDFs in /public/certificates,
-// whose filenames are opaque Coursera IDs ("Coursera QVJNSFCJXF1Z.pdf"). The
-// verify URLs matter more than the images do: a link a recruiter can check
-// beats a screenshot they cannot.
-type Certificate = {
-  title: string;
-  issuer: string;
-  /** Platform the course was delivered through, when it differs from the issuer */
-  via?: string;
-  date: string;
-  /** Path under /public */
-  /** Local PDF. Only used as the link target when there is no `verify` URL. */
-  file?: string;
-  /** Issuer's public verification URL, where one exists */
-  verify?: string;
-};
-
-const certificates: Certificate[] = [
-  {
-    title: "AWS Cloud Technical Essentials",
-    issuer: "Amazon Web Services",
-    via: "Coursera",
-    date: "March 2026",
-    verify: "https://coursera.org/verify/QVJNSFCJXF1Z",
-  },
-  {
-    title: "Introduction to Data Engineering",
-    issuer: "DeepLearning.AI & AWS",
-    via: "Coursera",
-    date: "February 2026",
-    verify: "https://coursera.org/verify/ZX9RBL6N853V",
-  },
-  {
-    title: "Claude Code 101",
-    issuer: "Anthropic",
-    date: "May 2026",
-    file: "/certificates/claude_code_101.pdf",
-  },
-  // IBM's "Getting Started with Git and GitHub" was removed, for the same
-  // reason the About page's certification list already excluded it: at this
-  // level a Git intro reads as a negative signal next to two AWS credentials,
-  // and the site was listing it in one place while arguing against it in
-  // another. Restore both together if it goes back:
-  // { title: "Getting Started with Git and GitHub", issuer: "IBM",
-  //   via: "Coursera", date: "February 2026",
-  //   verify: "https://coursera.org/verify/TDGYZCBYXJ7S" },
-];
-
 const work: Work = {
   path: "/work",
   label: "Work",
@@ -720,4 +671,4 @@ const work: Work = {
   // All projects are listed on the home and /work routes
 };
 
-export { person, social, home, about, work, certificates, bookingLink };
+export { person, social, home, about, work, bookingLink };

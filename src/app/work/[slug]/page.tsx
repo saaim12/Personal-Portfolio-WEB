@@ -83,7 +83,7 @@ export default async function Project({
     })) || [];
 
   return (
-    <Column as="section" maxWidth="m" horizontal="center" gap="l">
+    <Column className="caseStudy" as="section" maxWidth="m" horizontal="center" gap="l">
       <script
         {...jsonLd(
           caseStudyJsonLd({
@@ -184,6 +184,7 @@ export default async function Project({
         fillWidth
         marginTop="40"
         padding="40"
+        className="pageCallout"
         gap="16"
         radius="l"
         border="neutral-alpha-weak"
@@ -192,12 +193,12 @@ export default async function Project({
         align="center"
       >
         <Heading as="h2" variant="heading-strong-l" align="center">
-          Want to dig into this one?
+          Let’s talk about the engineering
         </Heading>
         <Text onBackground="neutral-weak" align="center" wrap="balance">
-          I&rsquo;m open to full-time backend, platform and data engineering
-          roles, and happy to walk through any decision on this page in more
-          detail than it deserves.
+          I&rsquo;m open to software engineering roles across backend, platform,
+          and data teams. Get in touch to discuss the architecture, trade-offs,
+          or how this experience could help your team.
         </Text>
         <Button
           className="btnLift"

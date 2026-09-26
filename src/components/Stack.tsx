@@ -26,9 +26,8 @@ export function Stack({ icon }: { icon?: ReactNode }) {
             {t.title}
           </Heading>
           <Text onBackground="neutral-weak" variant="heading-default-m" wrap="balance">
-            Grouped by what the work is for rather than by language. The
-            sentence is the part that matters; the logos are there for whoever
-            is scanning for a keyword.
+            The tools and engineering practices I use to build, deploy, and
+            maintain products, backend services, and data platforms.
           </Text>
         </div>
       </Reveal>

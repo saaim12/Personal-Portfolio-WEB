@@ -33,7 +33,7 @@ export function Projects({ range, exclude, only }: ProjectsProps) {
   return (
     // Auto-fit grid: 1-up on phones, 2-up once there's room. No fixed column
     // count, so nothing overflows at any width.
-    <div className="cardGrid cardGrid--2">
+    <div className="cardGrid cardGrid--2 projectGrid">
       {displayedProjects.map((post) => (
         <ProjectCard
           key={post.slug}
