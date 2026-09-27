@@ -1,47 +1,27 @@
-import { Column, Row, Text } from "@once-ui-system/core";
-import { HiArrowUpRight } from "react-icons/hi2";
+﻿import Image from "next/image";
 import { home } from "@/resources/content";
-import { Reveal } from "./Reveal";
+import { getPosts } from "@/utils/utils";
 
-// Social-proof stage. This quote used to sit mid-paragraph on the About page,
-// where nobody read it, behind an unlabelled button called "Recommendation".
-// Naming the letter is what turns it from a mystery download into proof.
 export function Testimonial() {
   const t = home.testimonial;
-  if (!t?.display) return null;
-
+  const project = getPosts(["src", "app", "work", "projects"]).find(p => p.slug === "fitter-health-platform");
+  if (!project) return null;
   return (
-    <Column fillWidth horizontal="center" className="section section--tight section--ruled">
-      <Reveal>
-        <Column
-          horizontal="center"
-          align="center"
-          gap="20"
-          className="quoteCard"
-          style={{ maxWidth: "720px", marginInline: "auto" }}
-        >
-          {t.context && (
-            <Text variant="body-default-s" onBackground="neutral-weak" align="center">
-              {t.context}
-            </Text>
-          )}
-          <blockquote className="pullQuote">&ldquo;{t.quote}&rdquo;</blockquote>
-          <Column gap="2" horizontal="center" align="center">
-            <Text variant="label-strong-m">{t.author}</Text>
-            <Text variant="body-default-s" onBackground="neutral-weak">
-              {t.role}
-            </Text>
-          </Column>
-          {t.letter && (
-            <Row>
-              <a className="extLink" href={t.letter} target="_blank" rel="noopener noreferrer">
-                Read the signed recommendation letter
-                <HiArrowUpRight aria-hidden="true" />
-              </a>
-            </Row>
-          )}
-        </Column>
-      </Reveal>
-    </Column>
+    <div className="featuredDelivery">
+      <div className="featuredProduct">
+        {project.metadata.thumbnail && <a href="/work/fitter-health-platform" data-track="work_card:fitter-health-platform"><Image src={project.metadata.thumbnail} alt="Fitter Health's live website" width={1200} height={800} sizes="(max-width: 760px) 100vw, 600px" /></a>}
+        <span className="introEyebrow">Client work · Shipped &amp; handed over</span>
+        <h3>Fitter Health</h3>
+        <p>{project.metadata.cardSummary}</p>
+        <dl className="projectFacts"><div><dt>My contribution</dt><dd>{project.metadata.contribution}</dd></div><div><dt>Result</dt><dd>{project.metadata.result}</dd></div></dl>
+        <div className="featuredLinks"><a className="btn btn--primary" href="/work/fitter-health-platform" data-track="work_card:fitter-health-platform">Read case study ↗</a>{project.metadata.link && <a className="extLink" href={project.metadata.link} target="_blank" rel="noopener noreferrer">Visit live product ↗</a>}</div>
+      </div>
+      {t.display && <aside className="founderQuote" aria-label="Client recommendation">
+        <span className="introEyebrow">From the founder</span>
+        <blockquote>“{t.quote}”</blockquote>
+        <p><strong>{t.author}</strong><br />{t.role}</p>
+        {t.letter && <a className="extLink" href={t.letter} target="_blank" rel="noopener noreferrer">Read the signed recommendation ↗</a>}
+      </aside>}
+    </div>
   );
 }

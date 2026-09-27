@@ -22,6 +22,9 @@ type Metadata = {
   /** Content-change date, for sitemap lastModified and schema dateModified. */
   updatedAt: string;
   summary: string;
+  cardSummary?: string;
+  contribution?: string;
+  result?: string;
   /**
    * Search-results description, 140 to 160 characters. `summary` is page copy and
    * runs past 200, which Google truncates mid-sentence.
@@ -79,6 +82,9 @@ function readMDXFile(filePath: string) {
     // at build time.
     updatedAt: data.updatedAt || data.publishedAt,
     summary: data.summary || "",
+    cardSummary: data.cardSummary,
+    contribution: data.contribution,
+    result: data.result,
     seoDescription: data.seoDescription || data.summary || "",
     image: data.image || "",
     images: data.images || [],

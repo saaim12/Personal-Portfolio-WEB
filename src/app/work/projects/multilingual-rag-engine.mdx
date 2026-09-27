@@ -1,6 +1,9 @@
 ---
 title: "Multilingual, multi-tenant RAG engine"
 publishedAt: "2026-05-10"
+cardSummary: "Answer questions from private documents without mixing customer data."
+contribution: "Built tenant-isolated retrieval, local embeddings and a Django API."
+result: "86% precision@5 on a hand-labelled evaluation set, across 18 languages."
 updatedAt: "2026-08-06"
 seoDescription: "A multi-tenant RAG backend in Django and PostgreSQL: isolated per-customer retrieval, local multilingual embeddings, answers grounded in retrieved context."
 summary: "Several tenants on one deployment with fully isolated retrieval. The tenant claim lives in the JWT rather than the request, because cross-tenant retrieval is a security bug rather than a quality one. Local embeddings, grounded answers with citations."

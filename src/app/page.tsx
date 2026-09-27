@@ -59,7 +59,8 @@ export default function Home() {
       <script {...jsonLd(personJsonLd)} />
 
       <Track />
-      <section className="editorialHero" aria-label="Introduction">
+      <section className="editorialHero recruiterHero" aria-label="Introduction">
+        <p className="heroAvailability"><span className="availableDot" aria-hidden="true" />Open to software engineering roles &amp; product work</p>
         <div className="heroType">
           <span className="heroSpark" aria-hidden="true">
             &#10022;
@@ -70,11 +71,15 @@ export default function Home() {
           </svg>
         </div>
         <div className="heroBaseline">
-          <span className="heroYear">&copy;{new Date().getFullYear()}</span>
+          <div className="heroIdentity"><strong>{person.name}</strong><span>Backend &amp; Full-Stack Engineer</span><small>{person.city} · EU &amp; US-East hours</small></div>
           <PortraitTransition src={person.avatar} alt={person.name} />
-          <span className="heroLocation">/{person.city}</span>
+          <div className="heroAudienceActions">
+            <a className="btn btn--primary" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer" data-track="hero_link:resume">View résumé <HiOutlineDocumentText aria-hidden="true" /></a>
+            <a className="btn btn--secondary" href={`mailto:${person.email}?subject=Let%E2%80%99s%20discuss%20a%20product`} data-track="hero_cta:discuss_product">Discuss a product <HiArrowUpRight aria-hidden="true" /></a>
+          </div>
         </div>
       </section>
+      <ProofBar />
       <section className="heroIntro section" aria-labelledby="intro-title">
         <Reveal>
           <h2 id="intro-title">
@@ -178,7 +183,6 @@ export default function Home() {
           Cards, not a list of titles: the whole card is the click target,
           because people click blocks and do not hunt for links. */}
       <Column id="work" fillWidth horizontal="center">
-        <ProofBar />
         <Column fillWidth horizontal="center" className="section section--ruled">
           <Reveal>
             <div className="sectionHead">
@@ -197,13 +201,14 @@ export default function Home() {
             </div>
           </Reveal>
 
+          <Testimonial />
+
           {/* One from each of the three groups on /work, named rather than sliced
             by date: the preview should represent the range of work, and a date
             range would silently reshuffle it on the next case study. */}
           <Reveal delay={0.08}>
             <Projects
               only={[
-                "fitter-health-platform",
                 "multilingual-rag-engine",
                 "realtime-ecommerce-etl-pipeline",
               ]}
@@ -227,7 +232,6 @@ export default function Home() {
       </Column>
 
       {/* ── 4. SOCIAL PROOF ── */}
-      <Testimonial />
 
       {/* ── 5. STACK ─────────────────────────────────────────────────────
           Was on /about, where the traffic never went. */}

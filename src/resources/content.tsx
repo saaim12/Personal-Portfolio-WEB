@@ -129,7 +129,7 @@ const home: Home = {
   // of the five, and it was also the one carrying a number ("2.5 years") that
   // the dates on the linked CV contradicted.
   proof: [
-    { value: "End to end", label: "from product architecture and APIs to deployment and handover" },
+    { value: "Fitter Health", label: "a live health platform, built solo and handed over" },
     { value: "1,000 to 3,000", label: "daily users on backend services I owned at Expertflow" },
     { value: "130 ms to 30 ms", label: "admin API latency, on Redis caching and index tuning" },
     { value: "5 systems", label: "with written architecture breakdowns, not just repos" },

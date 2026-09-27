@@ -1,6 +1,9 @@
 ---
 title: "Hybrid recommender, built as a service"
 publishedAt: "2026-07-01"
+cardSummary: "Serve useful recommendations for new users and refresh models without downtime."
+contribution: "Built a hybrid model, FastAPI serving, Redis caching and hot model reloads."
+result: "11 ms cached p95 latency; 97% of the catalogue covered in evaluation."
 updatedAt: "2026-08-06"
 seoDescription: "A hybrid recommender shipped as a service: cold-start handling, a FastAPI serving layer with API-key auth, hot model reloads, Redis caching and CI tests."
 summary: "A recommender with the parts that usually get skipped: cold start handled by design, training and serving separated by an artifact, hot model reload without a deploy, and an evaluation that reports its own sample size."

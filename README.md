@@ -28,7 +28,6 @@ Deployed on Vercel, domain: [saaim.site](https://saaim.site).
 ## Validation
 
 ```bash
-npm run lint
 npm run typecheck
 npm run build
 node scripts/seo-audit.mjs http://localhost:3000

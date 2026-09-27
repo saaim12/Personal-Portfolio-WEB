@@ -6,6 +6,8 @@ interface ProjectCardProps {
   href: string;
   title: string;
   description: string;
+  contribution?: string;
+  result?: string;
   /** Category labels ("Client work", "Data engineering"), rendered as text. */
   tags?: string[];
   /** Canonical technology keys, rendered as an icon-only row. */
@@ -34,6 +36,8 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   href,
   title,
   description,
+  contribution,
+  result,
   tags = [],
   stack = [],
   thumbnail,
@@ -70,9 +74,13 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
     )}
     <h3 className="cardTitle">{title}</h3>
     {description?.trim() && <p className="cardDesc">{description}</p>}
+    {(contribution || result) && <dl className="projectFacts">
+      {contribution && <div><dt>My contribution</dt><dd>{contribution}</dd></div>}
+      {result && <div><dt>Result</dt><dd>{result}</dd></div>}
+    </dl>}
     {/* Scope is the half a reviewer already assumes. This is the half that
         separates a build from a tutorial, so it gets its own rule. */}
-    {hardPart?.trim() && (
+    {!result && hardPart?.trim() && (
       <p className="projHard">
         <span className="projHardLabel">The hard part</span>
         {hardPart}

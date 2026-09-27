@@ -4,9 +4,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "biome-write": "biome format --write src scripts next.config.mjs package.json biome.json tsconfig.json",
     "start": "next start",
-    "lint": "biome lint src scripts next.config.mjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -23,7 +21,6 @@
     "transliteration": "^2.3.5"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
     "@types/node": "^20.17.30",
     "@types/react": "^19.2.4",
     "@types/react-dom": "^19.2.3",

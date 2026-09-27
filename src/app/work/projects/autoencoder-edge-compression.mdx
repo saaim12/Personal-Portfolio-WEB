@@ -1,6 +1,9 @@
 ---
 title: "Autoencoder compression for edge devices"
 publishedAt: "2025-11-15"
+cardSummary: "Reduce the data remote sensors need to transmit on constrained hardware."
+contribution: "Built an on-device encoder and a Flask decoder on AWS."
+result: "7.8:1 compression with 0.0038 reconstruction MSE; encoder fits in 86 KB."
 updatedAt: "2026-08-06"
 seoDescription: "Bandwidth-bound sensors: a TensorFlow Lite Micro autoencoder compresses readings on the microcontroller, a Flask decoder on AWS EC2 rebuilds them server-side."
 summary: "Bandwidth, not compute, is the binding constraint on a remote sensor. The encoder runs on the microcontroller through TensorFlow Lite Micro at 7.8:1, and a Flask decoder on EC2 reconstructs the signal server-side."
