@@ -1,15 +1,18 @@
 import { getPosts } from "@/utils/utils";
 
 import { ProjectCard } from "@/components/ProjectCard";
+import styles from "./Projects.module.css";
+import { ProjectGallery } from "./ProjectGallery";
 
 interface ProjectsProps {
+  showcase?: boolean;
   range?: [number, number?];
   exclude?: string[];
   /** Show exactly these slugs, in this order. Skips date sorting and `range`. */
   only?: string[];
 }
 
-export function Projects({ range, exclude, only }: ProjectsProps) {
+export function Projects({ range, exclude, only, showcase = false }: ProjectsProps) {
   let allProjects = getPosts(["src", "app", "work", "projects"]);
 
   // Exclude by slug (exact match)
@@ -30,18 +33,16 @@ export function Projects({ range, exclude, only }: ProjectsProps) {
       ? sortedProjects.slice(range[0] - 1, range[1] ?? sortedProjects.length)
       : sortedProjects;
 
-  return (
-    // Auto-fit grid: 1-up on phones, 2-up once there's room. No fixed column
-    // count, so nothing overflows at any width.
-    <div className="cardGrid cardGrid--2 projectGrid">
-      {displayedProjects.map((post) => (
+  const card = (post: (typeof displayedProjects)[number], index: number) => (
         <ProjectCard
           key={post.slug}
+          treatment={showcase ? index % 4 === 1 ? "feature" : index % 4 === 2 ? "compact" : "standard" : "standard"}
           href={`/work/${post.slug}`}
           title={post.metadata.title}
           description={post.metadata.cardSummary || post.metadata.summary}
           contribution={post.metadata.contribution}
           result={post.metadata.result}
+          source={post.metadata.link}
           tags={post.metadata.tags}
           stack={post.metadata.stack}
           thumbnail={post.metadata.thumbnail}
@@ -50,7 +51,9 @@ export function Projects({ range, exclude, only }: ProjectsProps) {
           // dashboard when a case study is retitled.
           track={`work_card:${post.slug}`}
         />
-      ))}
-    </div>
   );
+  if (!showcase) return <div className={styles.related}>{displayedProjects.map(card)}</div>;
+  const products = ["fitter-health-platform", "bookstore-platform", "temporary-url-service", "interactive-portfolio"];
+  const experiments = ["esp32-temperature-inference", "autoencoder-edge-compression", "algorithms-in-python", "ml-data-foundations"];
+  return <ProjectGallery items={displayedProjects.map((post, index) => ({ slug: post.slug, category: products.includes(post.slug) ? "Product & web" : experiments.includes(post.slug) ? "Experiments and Learning" : "AI & data", card: card(post, index) }))} />;
 }

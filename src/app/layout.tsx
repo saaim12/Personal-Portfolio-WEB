@@ -7,6 +7,7 @@ import { Column, Flex } from "@once-ui-system/core";
 import { Header } from "@/components/Header";
 import { Providers } from "@/components/Providers";
 import { Footer } from "@/components/Footer";
+import { ScreenCrawler } from "@/components/ScreenCrawler";
 import { fonts } from "@/resources/fonts";
 import { style } from "@/resources/once-ui.config";
 import { home, person } from "@/resources/content";
@@ -133,6 +134,7 @@ export default async function RootLayout({
             </Flex>
           </Flex>
           <Footer />
+          <ScreenCrawler />
           <Analytics />
           <SpeedInsights />
         </Column>

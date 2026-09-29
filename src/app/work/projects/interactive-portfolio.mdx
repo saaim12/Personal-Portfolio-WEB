@@ -1,0 +1,47 @@
+---
+title: "Interactive portfolio with static delivery"
+publishedAt: "2026-09-29"
+updatedAt: "2026-09-29"
+thumbnail: "/images/projects/covers/interactive-portfolio.svg"
+summary: "Present projects and experience through an interactive website that can be served as static files."
+cardSummary: "Present projects and experience through an interactive website that can be served as static files."
+contribution: "Built section-based React composition, navigation state and scroll interactions."
+result: "A Next.js portfolio configured for static export with metadata and observability integrations."
+seoDescription: "Present projects and experience through an interactive website that can be served as static files. Explore the architecture, implementation and trade-offs."
+tags: ["Personal prototype"]
+stack: ["nextjs","react","javascript"]
+images: []
+architecture: ["Content modules","React sections & hooks","Next.js static export","Static hosting"]
+link: "https://github.com/saaim12/Portfolio"
+team: []
+---
+
+## The problem
+
+A portfolio needs to explain work clearly, navigate smoothly between sections and remain straightforward to deploy. This repository explores an interactive presentation with static delivery.
+
+## Architecture
+
+The App Router page renders a client-side Portfolio component. That component composes the hero, skills, projects, timeline, credentials, contact and footer sections. Mobile-menu state lives in the parent; navigation receives the current section and scroll state from dedicated hooks.
+
+An IntersectionObserver-based reveal hook finds reveal elements, adds their visible class and stops observing each one after it appears. Other hooks separate navigation scrolling, section tracking and atmospheric effects from the content components. Content and path helpers live in library modules.
+
+The Next configuration enables static export and supports a configurable base path and asset prefix. Images are configured as unoptimized for this export path. The repository also includes metadata routes and a GitHub Pages workflow; its README describes Vercel Analytics and Speed Insights integration.
+
+## Trade-offs
+
+Static output is portable and needs no application server for page delivery. It also means server-only request features need another service if added later. The client-side composition makes shared interactions convenient but broadens the hydration boundary.
+
+The reveal hook keeps movement separate from content, although timer cleanup and a no-JavaScript visibility fallback are worth checking. Decorative audio and canvas effects need their own accessibility and performance budget.
+
+## Result and next steps
+
+This is a separate portfolio implementation, not another client product. Its source demonstrates component composition and static deployment configuration. No traffic, conversion or performance score is claimed here.
+
+I would keep content server-rendered where possible, isolate interactive islands, test reduced-motion behaviour and validate deployment under both root and subpath hosting. Those checks protect the reading experience while preserving the visual character.
+
+## Source code
+
+- [Section composition](https://github.com/saaim12/Portfolio/blob/main/components/Portfolio.jsx)
+- [Reveal hook](https://github.com/saaim12/Portfolio/blob/main/hooks/useRevealOnScroll.js)
+- [Static export configuration](https://github.com/saaim12/Portfolio/blob/main/next.config.mjs)

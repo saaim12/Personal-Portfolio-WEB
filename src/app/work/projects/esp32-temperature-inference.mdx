@@ -1,0 +1,45 @@
+---
+title: "ESP32 temperature inference experiment"
+publishedAt: "2026-09-29"
+updatedAt: "2026-09-29"
+thumbnail: "/images/projects/covers/esp32-temperature-inference.svg"
+summary: "Connect a model trained in Python to device-side inference and a server-side decoder."
+cardSummary: "Connect a model trained in Python to device-side inference and a server-side decoder."
+contribution: "Implemented model export, ESP32 sensor inference and Flask reconstruction code."
+result: "An academic split-inference prototype; hardware performance and energy savings are not established."
+seoDescription: "Connect a model trained in Python to device-side inference and a server-side decoder. Explore the architecture, implementation and trade-offs."
+tags: ["Personal prototype"]
+stack: ["python","tensorflow","tflitemicro","esp32","flask"]
+images: []
+architecture: ["Synthetic training data","TFLite encoder on ESP32","HTTP latent vector","Flask decoder + scaler"]
+link: "https://github.com/saaim12/FYP"
+team: []
+---
+
+## The problem
+
+A trained model is only one part of an embedded ML system. Its input scaling, exported format, device runtime and server-side counterpart all need to agree. This experiment explores those interfaces with temperature readings.
+
+## Architecture
+
+The inspected training variant generates synthetic temperature samples, fits a scaler over a fixed range and trains a Keras autoencoder. It exports the encoder as a TensorFlow Lite file and C header, and saves the decoder and scaler separately for Python serving.
+
+The ESP32 code reads a DHT11 sensor, scales the temperature using matching constants and invokes TensorFlow Lite Micro. A fixed tensor arena holds the runtime's working memory. The device packages a two-value latent vector as JSON and sends it over Wi-Fi to the Flask /decode endpoint.
+
+The server loads the decoder and scaler, checks the incoming vector shape, predicts a scaled temperature and applies the inverse transformation. The inspected endpoint logs the reconstructed temperature and returns a success message rather than the numeric prediction.
+
+## Constraints and trade-offs
+
+The model artifacts and preprocessing constants form a contract across Python and firmware. A different scaler, latent dimension or unsupported operation can break that contract even when both programs start successfully. Exported symbol names and registered device operations also need verification together.
+
+This particular variant maps one temperature value to two latent values. It demonstrates split inference; it is not evidence of payload compression. It is presented separately from the existing edge-compression case study so their results are not conflated.
+
+## Result and next steps
+
+The repository contains the training, export, firmware and decoder pieces. It does not establish field reliability, energy savings or production deployment. Next I would create a versioned artifact manifest, test Python and device outputs against shared samples, return the reconstructed value explicitly, and measure error on real sensor data. Network retries and authenticated transport would follow before deployment outside a lab.
+
+## Source code
+
+- [Training and export](https://github.com/saaim12/FYP/blob/main/model_training_2.py)
+- [ESP32 firmware](https://github.com/saaim12/FYP/blob/main/esp_code.c)
+- [Flask decoder](https://github.com/saaim12/FYP/blob/main/server_code/server.py)

@@ -34,7 +34,7 @@ export const SITE_NAME = `${person.name}, software engineer`;
  * either, git does not preserve mtimes, so on a Vercel build every file
  * reads as "modified at checkout", which is the same lie with extra steps.
  */
-export const SITE_LAST_MODIFIED = "2026-08-01";
+export const SITE_LAST_MODIFIED = "2026-09-29";
 
 export const ogImageFor = (title: string) =>
   `/api/og/generate?title=${encodeURIComponent(title)}`;

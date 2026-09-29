@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { getPosts } from "@/utils/utils";
 import {
   AvatarGroup,
@@ -16,6 +17,7 @@ import { pageMeta, ogImageFor } from "@/resources/seo";
 import { formatDate } from "@/utils/formatDate";
 import { ScrollToHash } from "@/components/ScrollToHash";
 import { CustomMDX } from "@/components/mdx";
+import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 import { TechList } from "@/components/Tech";
 import type { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
@@ -125,6 +127,7 @@ export default async function Project({
       {post.metadata.link && (
         <Row marginBottom="32" horizontal="center">
           <Button
+            className="btnLift"
             href={post.metadata.link}
             variant="secondary"
             size="s"
@@ -151,6 +154,7 @@ export default async function Project({
           </Row>
         </Column>
       )}
+      {post.metadata.thumbnail && <Image src={post.metadata.thumbnail} alt={`${post.metadata.title}: illustrated cover`} width={800} height={450} sizes="(max-width: 800px) 92vw, 1024px" style={{ width: "100%", height: "auto", borderRadius: 16 }} />}
       {/* Every image, not just `images[0]`. A second diagram added to the
           frontmatter used to be parsed and then silently never rendered. */}
       {post.metadata.images.map((src, i) => (
@@ -168,6 +172,7 @@ export default async function Project({
           src={src}
         />
       ))}
+      {post.metadata.architecture && <Column fillWidth gap="16"><Heading as="h2" variant="heading-strong-l">System architecture</Heading><ArchitectureDiagram slug={post.slug} /></Column>}
       <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
         <CustomMDX source={post.content} />
       </Column>
@@ -176,7 +181,7 @@ export default async function Project({
         <Heading as="h2" variant="heading-strong-xl" marginBottom="24">
           Related projects
         </Heading>
-        <Projects exclude={[post.slug]} range={[2]} />
+        <Projects exclude={[post.slug]} range={[1, 2]} />
       </Column>
 
       {/* Every case study previously terminated with no route to contact. */}

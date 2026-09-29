@@ -25,6 +25,7 @@ type Metadata = {
   cardSummary?: string;
   contribution?: string;
   result?: string;
+  architecture?: string[];
   /**
    * Search-results description, 140 to 160 characters. `summary` is page copy and
    * runs past 200, which Google truncates mid-sentence.
@@ -85,6 +86,7 @@ function readMDXFile(filePath: string) {
     cardSummary: data.cardSummary,
     contribution: data.contribution,
     result: data.result,
+    architecture: data.architecture,
     seoDescription: data.seoDescription || data.summary || "",
     image: data.image || "",
     images: data.images || [],

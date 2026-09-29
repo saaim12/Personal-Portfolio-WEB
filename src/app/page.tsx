@@ -115,6 +115,9 @@ export default function Home() {
               <a className="btn btn--secondary" href="/work" data-track="hero_cta:see_projects">
                 See Projects <HiArrowUpRight aria-hidden="true" />
               </a>
+              <a className="btn btn--secondary" href="https://medium.com/@saymmalik08" target="_blank" rel="noopener noreferrer" data-track="hero_cta:medium">
+                Read My Articles <HiArrowUpRight aria-hidden="true" />
+              </a>
             </div>
             <div className="introDocuments">
               <a
@@ -182,56 +185,12 @@ export default function Home() {
 
           Cards, not a list of titles: the whole card is the click target,
           because people click blocks and do not hunt for links. */}
-      <Column id="work" fillWidth horizontal="center">
-        <Column fillWidth horizontal="center" className="section section--ruled">
-          <Reveal>
-            <div className="sectionHead">
-              <span className="eyebrow">
-                <HiOutlineSquares2X2 aria-hidden="true" />
-                Work
-              </span>
-              <Heading as="h2" variant="display-strong-s" align="center">
-                Systems I&rsquo;ve built
-              </Heading>
-              <Text onBackground="neutral-weak" variant="heading-default-m" wrap="balance">
-                Practical engineering across product development, backend systems, cloud
-                infrastructure, and data. Explore the work to see how I approach complex
-                requirements and turn them into software people can depend on.
-              </Text>
-            </div>
-          </Reveal>
-
-          <Testimonial />
-
-          {/* One from each of the three groups on /work, named rather than sliced
-            by date: the preview should represent the range of work, and a date
-            range would silently reshuffle it on the next case study. */}
-          <Reveal delay={0.08}>
-            <Projects
-              only={[
-                "multilingual-rag-engine",
-                "realtime-ecommerce-etl-pipeline",
-              ]}
-            />
-          </Reveal>
-
-          <Reveal delay={0.12}>
-            <Row fillWidth horizontal="center" paddingTop="32">
-              <a
-                className="extLink"
-                href="/work/fitter-health-platform"
-                data-track="section_outro:fitter_incident"
-              >
-                The notification pipeline on Fitter Health dropped messages silently. Here is what I
-                changed.
-                <HiArrowRight aria-hidden="true" />
-              </a>
-            </Row>
-          </Reveal>
-        </Column>
-      </Column>
-
-      {/* ── 4. SOCIAL PROOF ── */}
+      <section id="work" className="projectShowcase section" aria-labelledby="projects-title">
+        <div className="showcaseHeading"><span className="showcaseBadge">↗ Ideas into working software</span><h2 id="projects-title">Projects with a story.</h2><p>The problem, the build, and the decisions along the way.</p></div>
+        <Projects showcase only={["fitter-health-platform", "bookstore-platform", "multilingual-rag-engine", "temporary-url-service", "realtime-ecommerce-etl-pipeline", "document-rag-backend", "movie-recommender-system", "esp32-temperature-inference", "web-sentiment-pipeline", "autoencoder-edge-compression", "interactive-portfolio", "algorithms-in-python", "ml-data-foundations"]} />
+        <div className="allProjectsAction"><a className="btn btn--primary" href="/work">Explore every project ↗</a><a className="btn btn--secondary" href="https://medium.com/@saymmalik08" target="_blank" rel="noopener noreferrer">Read My Articles ↗</a></div>
+        <Testimonial />
+      </section>
 
       {/* ── 5. STACK ─────────────────────────────────────────────────────
           Was on /about, where the traffic never went. */}

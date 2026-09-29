@@ -2060,3 +2060,39 @@ html:focus-within { scroll-padding-top: 144px; }
   .featuredDelivery { grid-template-columns: 1fr; gap: 24px; }
   .founderQuote { padding: 24px; }
 }
+
+/* Consistent two-column project layouts and visible action affordances. */
+.projectGrid.cardGrid--2,
+#work .projectGrid.cardGrid--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; align-items: stretch; max-width: 1180px; margin-inline: auto; }
+.extLink.extLink {
+  min-height: 44px; padding: 10px 16px; border: 1px solid #8b8379;
+  border-radius: 8px; background: #fff9; color: #24211d; font-size: 14px;
+  font-weight: 600; text-decoration: none; justify-content: center; text-align: center;
+  white-space: normal; line-height: 1.5;
+}
+.extLink.extLink::after { display: none; }
+.extLink.extLink:is(:hover, :focus-visible) { background: linear-gradient(135deg, #ffffffcf, #ffffff30 55%, #ffffff90); color: #111; box-shadow: inset 1px 1px 2px #fff, 0 4px 14px #00000015; border-color: #645d54; }
+.btn.btn--secondary { border-color: #8b8379; background-color: #ffffff50; }
+.btnLift { border: 1px solid #8b8379; border-radius: 8px; min-height: 44px; }
+.repositoryArchive { width: 100%; padding: 32px; border: 1px solid #d8d3cc; border-radius: 16px; margin-block: 32px; }
+.repositoryArchive h2 { font-size: 28px; margin-bottom: 14px; }
+.repositoryArchive p { color: #625e58; line-height: 1.7; max-width: 70ch; }
+.archiveLinks, .allProjectsAction { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+.archiveLinks .btn, .allProjectsAction .btn { margin: 0; white-space: normal; height: auto; padding-block: 12px; text-transform: none; }
+.additionalProjects .sectionHead p { color: #625e58; line-height: 1.7; }
+/* Reveal is progressive enhancement: readable without client JavaScript. */
+.reveal:not(.revealReady) { opacity: 1; transform: none; }
+@media (max-width: 760px) {
+  .projectGrid.cardGrid--2, #work .projectGrid.cardGrid--2 { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .repositoryArchive { padding: 20px; }
+  .archiveLinks .btn { width: 100%; }
+}
+
+/* Project gallery: staggered cards inspired by the supplied reference. */
+.projectShowcase.section { max-width: 1320px; width: 100%; padding-top: 72px; padding-bottom: 72px; }
+.showcaseHeading { text-align: center; margin: 0 auto 42px; max-width: 640px; }
+.showcaseBadge { display: inline-flex; padding: 9px 16px; border: 1px solid #d85b00; color: #9d4300; border-radius: 12px; font-size: 12px; font-weight: 600; }
+.showcaseHeading h2 { font-size: clamp(34px, 4vw, 52px); letter-spacing: -.055em; margin: 14px 0 12px; line-height: 1.05; }
+.showcaseHeading p { font-size: 16px; color: #64605a; }
+.workPage { max-width: 1320px !important; width: 100%; }
+.projectShowcase .allProjectsAction { margin-bottom: 48px; }

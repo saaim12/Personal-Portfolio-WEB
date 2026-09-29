@@ -9,7 +9,7 @@ export function Testimonial() {
   return (
     <div className="featuredDelivery">
       <div className="featuredProduct">
-        {project.metadata.thumbnail && <a href="/work/fitter-health-platform" data-track="work_card:fitter-health-platform"><Image src={project.metadata.thumbnail} alt="Fitter Health's live website" width={1200} height={800} sizes="(max-width: 760px) 100vw, 600px" /></a>}
+        {project.metadata.thumbnail && <a href="/work/fitter-health-platform" data-track="work_card:fitter-health-platform"><Image src={project.metadata.thumbnail} alt="Fitter Health: illustrated project cover" width={800} height={450} sizes="(max-width: 760px) 100vw, 600px" /></a>}
         <span className="introEyebrow">Client work · Shipped &amp; handed over</span>
         <h3>Fitter Health</h3>
         <p>{project.metadata.cardSummary}</p>

@@ -44,6 +44,7 @@ next-env.d.ts
 # That directory reached 14 MB before it was ignored, and a screenshot is a
 # build artefact: it is regenerated on every run and is never worth a diff.
 /.audit/
+/.audit-responsive/
 /.audit-log.txt
 /playwright-report/
 /test-results/

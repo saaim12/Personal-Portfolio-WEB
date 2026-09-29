@@ -7,12 +7,14 @@
 //   node scripts/audit.mjs [baseURL] [outDir]
 
 import { chromium } from "playwright";
-import { mkdir } from "node:fs/promises";
+import { mkdir, readdir } from "node:fs/promises";
 
 const BASE = process.argv[2] ?? "http://localhost:4400";
 const OUT = process.argv[3] ?? "./.audit";
 
 const VIEWPORTS = [
+  { name: "mobile-320", width: 320, height: 740 },
+  { name: "landscape-844", width: 844, height: 390 },
   { name: "mobile-360", width: 360, height: 780 },
   { name: "mobile-390", width: 390, height: 844 },
   { name: "tablet-768", width: 768, height: 1024 },
@@ -25,7 +27,7 @@ const ROUTES = [
   { name: "home", path: "/" },
   { name: "experience", path: "/experience" },
   { name: "work", path: "/work" },
-  { name: "case", path: "/work/fitter-health-platform" },
+  ...(await readdir("src/app/work/projects")).filter(file => file.endsWith(".mdx")).map(file => ({ name: file.replace(".mdx", ""), path: `/work/${file.replace(".mdx", "")}` })),
   { name: "404", path: "/does-not-exist" },
 ];
 
@@ -90,9 +92,9 @@ const run = async () => {
         await page.goto(BASE + route.path, { waitUntil: "networkidle" });
         // Let scroll-reveals settle so screenshots aren't half-faded.
         await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-        await page.waitForTimeout(700);
+        await page.waitForTimeout(100);
         await page.evaluate(() => window.scrollTo(0, 0));
-        await page.waitForTimeout(400);
+        await page.waitForTimeout(100);
 
         const res = await page.evaluate(findOverflow);
         const tag = `${vp.name}/${route.name}`;
@@ -106,7 +108,8 @@ const run = async () => {
             );
           }
         }
-        if (errors.length) {
+        if (errors.filter(error => !error.includes("404") && !error.includes("net::ERR")).length) {
+          problems++;
           console.log(`\nCONSOLE   ${tag}\n  ${errors.slice(0, 3).join("\n  ")}`);
           errors.length = 0;
         }
@@ -116,10 +119,12 @@ const run = async () => {
           fullPage: route.name === "home",
         });
       }
+      console.log(`Checked ${ROUTES.length} routes at ${vp.width} ? ${vp.height}`);
       await ctx.close();
     }
 
   await browser.close();
+  process.exitCode = problems ? 1 : 0;
   console.log(problems === 0 ? "\nNo overflow detected at any breakpoint." : `\n${problems} overflow case(s).`);
 };
 

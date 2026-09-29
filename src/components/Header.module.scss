@@ -70,15 +70,15 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 
-  svg { width: 28px; height: 28px; flex-shrink: 0; transition: transform 250ms ease; }
+  svg { width: 28px; height: 28px; flex-shrink: 0; transform: translateY(-9px); }
   > span {
     position: absolute;
     top: 48px;
     font-size: 12px;
     font-weight: 500;
     line-height: 1.2;
-    opacity: 0;
-    transform: translateY(5px);
+    opacity: 1;
+    transform: translateY(0);
     transition: opacity 200ms ease, transform 250ms ease;
   }
 }
@@ -100,8 +100,8 @@
   .header { top: 26px; height: 62px; }
   .inner { padding: 0 14px; }
   .dockLink.dockLink { height: 62px; }
-  .dockLink svg { width: 23px; height: 23px; }
-  .dockLink > span { top: 40px; font-size: 10px; }
+  .dockLink svg { width: 23px; height: 23px; transform: translateY(-7px); }
+  .dockLink.dockLink > span { top: 40px; font-size: 10px; }
   .glass { top: -11px; height: calc(100% + 22px); width: calc(100% / var(--item-count) + 8px); margin-left: -4px; border-radius: 26px; }
   .glass::after { height: 2px; }
   .dockLink.dockActive { svg { transform: translateY(-7px); } }

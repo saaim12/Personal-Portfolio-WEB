@@ -1,0 +1,43 @@
+---
+title: "Machine learning and data foundations"
+publishedAt: "2026-09-29"
+updatedAt: "2026-09-29"
+thumbnail: "/images/projects/covers/ml-data-foundations.svg"
+summary: "Understand the steps between a dataset, a fitted model and an interpretable evaluation."
+cardSummary: "Understand the steps between a dataset, a fitted model and an interpretable evaluation."
+contribution: "Built regression exercises and supporting NumPy, pandas and plotting experiments."
+result: "A learning workflow that saves and reloads a model before evaluating its predictions."
+seoDescription: "Understand the steps between a dataset, a fitted model and an interpretable evaluation. Explore the architecture, implementation and trade-offs."
+tags: ["Learning project"]
+stack: ["python","pandas","scikitlearn"]
+images: []
+architecture: ["CSV data","Feature / target split","Linear regression","Saved model + evaluation"]
+link: "https://github.com/saaim12/machine-learning-journey"
+team: []
+---
+
+## The problem
+
+Training a model is not enough to understand it. Data selection, evaluation splits and serialization affect whether the result means what it appears to mean. These repositories work through those foundations with small, inspectable examples.
+
+## Architecture of the regression exercise
+
+The Advertising example reads CSV data through pandas. TV, radio and newspaper spending become features and sales becomes the prediction target. A fixed random seed makes the train/test split repeatable. Scikit-learn fits a linear regression, joblib saves the fitted model, and the script reloads it before predicting on held-out rows.
+
+Evaluation prints mean squared error and R-squared and plots actual against predicted sales. Separate labs work through cost functions and gradient descent. The Python_learning repository supports this work with examples of array indexing, broadcasting, dataframe joins, grouping and missing-data handling.
+
+## The important constraint
+
+The inspected regression script explicitly uses 20% of the data for training and 80% for testing. That is the implemented split, even though a reader might expect the reverse. It leaves less data for fitting and is a useful reminder to inspect evaluation code rather than infer a workflow from familiar names.
+
+## Result and next steps
+
+These are learning repositories, not a deployed prediction API. The saved-model round trip makes artifact loading part of the exercise, but the available code does not establish production accuracy or operational readiness.
+
+Next I would compare against a simple baseline, use cross-validation to understand split sensitivity, add feature-schema checks and persist model metadata alongside the artifact. Dataset-specific evaluation would come before claiming the model generalizes beyond this exercise.
+
+## Source code
+
+- [ML exercises](https://github.com/saaim12/machine-learning-journey)
+- [Regression workflow](https://github.com/saaim12/machine-learning-journey/blob/main/Linear_Regression/training_model_with_multiple_inputs_using_sicket_learn/model.py)
+- [Python and data-library exercises](https://github.com/saaim12/Python_learning)

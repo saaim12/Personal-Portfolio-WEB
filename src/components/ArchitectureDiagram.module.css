@@ -1,0 +1,7 @@
+.figure { width: 100%; margin: 0; border: 1px solid #ccc8c0; border-radius: 16px; overflow: hidden; background: #fbfaf7; }
+.scroll { width: 100%; overflow-x: auto; }
+.scroll:focus-visible { outline: 2px solid #365f72; outline-offset: -3px; }
+.diagram { display: block; width: 100%; min-width: 660px; height: auto; font-family: Arial, Helvetica, sans-serif; }
+.figure figcaption { padding: 16px 20px; border-top: 1px solid #dedad2; font-size: 13px; line-height: 1.6; color: #565c60; }
+.hint { display: none; }
+@media (max-width: 700px) { .hint { display: block; font-weight: 600; margin-bottom: 4px; } }

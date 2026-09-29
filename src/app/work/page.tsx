@@ -4,6 +4,7 @@ import { pageMeta, ogImageFor } from "@/resources/seo";
 import { Projects } from "@/components/work/Projects";
 import { Reveal } from "@/components/Reveal";
 import { jsonLd, webPageJsonLd } from "@/resources/schema";
+import { RepositoryArchive } from "@/components/RepositoryArchive";
 
 export async function generateMetadata() {
   return pageMeta({
@@ -28,6 +29,8 @@ const GROUPS = [
     title: "Data engineering",
     slugs: ["realtime-ecommerce-etl-pipeline", "autoencoder-edge-compression"],
   },
+  { title: "More applications and experiments", slugs: ["bookstore-platform", "temporary-url-service", "document-rag-backend", "web-sentiment-pipeline", "esp32-temperature-inference", "interactive-portfolio"] },
+  { title: "Algorithms and learning", slugs: ["algorithms-in-python", "ml-data-foundations"] },
 ];
 
 export default function Work() {
@@ -44,6 +47,7 @@ export default function Work() {
         )}
       />
       <Column fillWidth horizontal="center" align="center" gap="8" marginBottom="40">
+        <span className="showcaseBadge">↗ Ideas into working software</span>
         <Heading variant="display-strong-m" align="center">
           {work.title}
         </Heading>
@@ -53,9 +57,7 @@ export default function Work() {
           align="center"
           wrap="balance"
         >
-          Five projects across full-stack development, backend systems, AI,
-          and data engineering. Explore the problem, architecture, and trade-offs
-          behind each build, from a live client platform to four personal projects.
+          The problem, the build, and the decisions along the way.
         </Text>
         {/* "Shown with the permission of clients" was removed: four of the five
             are personal projects, and a reader who works that out stops
@@ -63,17 +65,9 @@ export default function Work() {
             cards instead. */}
       </Column>
 
-      {GROUPS.map((group, i) => (
-        <Reveal key={group.title} delay={i * 0.06}>
-          <Column fillWidth gap="20" marginBottom="48">
-            <Heading as="h2" variant="heading-strong-l">
-              {group.title}
-            </Heading>
-            <Projects only={group.slugs} />
-          </Column>
-        </Reveal>
-      ))}
+      <Projects only={GROUPS.flatMap(group => group.slugs)} showcase />
 
+      <RepositoryArchive />
       <Reveal delay={0.1}>
         <Column
           fillWidth
@@ -109,7 +103,7 @@ export default function Work() {
               data-border="rounded"
               arrowIcon
             >
-              Read my articles on Medium
+              Read My Articles
             </Button>
             {/* The five systems above are the interesting work, but most loops
                 still open with an algorithms round, and a recruiter screening

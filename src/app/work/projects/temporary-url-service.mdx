@@ -1,0 +1,43 @@
+---
+title: "Temporary URL shortener"
+publishedAt: "2026-09-29"
+updatedAt: "2026-09-29"
+thumbnail: "/images/projects/covers/temporary-url-service.svg"
+summary: "Create short, temporary links that redirect to a longer destination."
+cardSummary: "Create short, temporary links that redirect to a longer destination."
+contribution: "Implemented creation, lookup, redirection and timed expiry in a small Express service."
+result: "A single-process prototype with eight-character IDs and configurable link expiry."
+seoDescription: "Create short, temporary links that redirect to a longer destination. Explore the architecture, implementation and trade-offs."
+tags: ["Personal prototype"]
+stack: ["nodejs","javascript","restcontracts"]
+images: []
+architecture: ["Long URL","Express + Nano ID","In-memory Map","Redirect or expire"]
+link: "https://github.com/saaim12/TINY_URL_SERVER"
+team: []
+---
+
+## The problem
+
+Long URLs are inconvenient to share, and some links only need to work for a limited time. The service creates an alias, resolves it back to the destination and removes the alias after a configured interval.
+
+## Architecture
+
+Express mounts a router at /api/url. A POST request supplies the original URL. The controller generates an eight-character Nano ID, stores the mapping in a JavaScript Map and returns a short URL built from the request host. A timer deletes that mapping after the configured expiration interval.
+
+A GET request to the short-ID route looks up the Map and redirects the browser. A separate fetch route returns the original URL as JSON. Missing IDs return 404, and a health endpoint reports that the process is running.
+
+## Trade-offs
+
+The Map removes the need for a database and keeps the example easy to run. That simplicity also defines its limits: restarting the process loses every link, and multiple server instances would each hold a different set of mappings.
+
+Expiry uses one timer per link. It demonstrates lifecycle management clearly, but timers are not a durable expiry mechanism. Deleting an alias also does not revoke access to its destination: someone who already knows the original URL can still visit it.
+
+## Result and next steps
+
+The repository implements the short-link lifecycle without a persistent store. No throughput or deployment claims are made for this prototype. For a shared service, I would move mappings to a store with expiry support, validate allowed URL schemes, handle ID collisions explicitly and add rate limits. Absolute expiry checks during lookup would make the contract clearer than relying only on scheduled deletion.
+
+## Source code
+
+- [URL controller](https://github.com/saaim12/TINY_URL_SERVER/blob/main/urlControl.js)
+- [Routes](https://github.com/saaim12/TINY_URL_SERVER/blob/main/routes/urlRoutes.js)
+- [Server entry point](https://github.com/saaim12/TINY_URL_SERVER/blob/main/index.js)

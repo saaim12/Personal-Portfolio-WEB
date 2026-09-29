@@ -76,7 +76,7 @@ const social: Social = [
 
 const home: Home = {
   path: "/",
-  image: "/images/og/home.jpg",
+  image: `/api/og/generate?title=${encodeURIComponent(`${person.name} — Software Engineer`)}`,
   label: "Home",
   // The homepage is the one route the title template does not suffix, so this
   // carries the name itself. Kept inside 60 characters: the previous version
@@ -132,7 +132,7 @@ const home: Home = {
     { value: "Fitter Health", label: "a live health platform, built solo and handed over" },
     { value: "1,000 to 3,000", label: "daily users on backend services I owned at Expertflow" },
     { value: "130 ms to 30 ms", label: "admin API latency, on Redis caching and index tuning" },
-    { value: "5 systems", label: "with written architecture breakdowns, not just repos" },
+    { value: "13 projects", label: "case studies across shipped work, prototypes and learning" },
   ],
   practice: {
     display: true,
@@ -666,7 +666,7 @@ const work: Work = {
   title: `Systems I've built`,
   // Search-results copy, not page copy. Kept inside 160 characters so it is
   // not truncated.
-  description: "Five systems with written architecture breakdowns: the constraint that bound, the design it forced, the trade-offs, and what I would build differently now.",
+  description: "Explore Saaim Abdullah's software projects: shipped products, backend systems, data pipelines and experiments, with architecture and implementation notes.",
   // Create new project pages by adding a new .mdx file to src/app/work/projects
   // All projects are listed on the home and /work routes
 };

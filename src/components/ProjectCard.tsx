@@ -1,99 +1,40 @@
-import Image from "next/image";
-import { HiArrowRight } from "react-icons/hi2";
+﻿import Image from "next/image";
 import { TechList } from "./Tech";
+import styles from "./ProjectCard.module.css";
 
-interface ProjectCardProps {
+type ProjectCardProps = {
+  treatment?: "standard" | "feature" | "compact";
   href: string;
   title: string;
   description: string;
   contribution?: string;
   result?: string;
-  /** Category labels ("Client work", "Data engineering"), rendered as text. */
+  source?: string;
   tags?: string[];
-  /** Canonical technology keys, rendered as an icon-only row. */
   stack?: string[];
-  /** 16:9 image. Absent, the monogram tile stands in at the same ratio. */
   thumbnail?: string;
-  /** One line on the part that was actually hard. */
   hardPart?: string;
-  /** Vercel Analytics event name, fired by the delegated listener in Track. */
   track?: string;
-}
+};
 
-// Restrained project card: hairline border, monospace tags, arrow that travels
-// on hover. Replaces a 1.5px gradient frame drawn from six unrelated colour
-// pairs plus a blurred glow and a 25-cell 3D tilt.
-//
-// The whole card is one anchor and always has been, so there is nothing to
-// hunt for and nothing nested inside it that competes for the click.
-//
-// Tags and stack are separate on purpose. The card used to mix category labels
-// and technology names in one text row, which meant "Client work" and "Django"
-// were typeset identically despite being different kinds of fact. Categories
-// stay as text at the top; the stack is a logo strip at the foot, where it can
-// be read at a glance without competing with the title.
-export const ProjectCard: React.FC<ProjectCardProps> = ({
-  href,
-  title,
-  description,
-  contribution,
-  result,
-  tags = [],
-  stack = [],
-  thumbnail,
-  hardPart,
-  track,
-}) => (
-  <a className="card projCard" href={href} data-track={track}>
-    {/* Fixed 16:9 box either way, so a case study gaining a diagram later
-        does not reflow the grid it sits in. */}
-    <div className="projThumb">
-      {thumbnail ? (
-        <Image
-          src={thumbnail}
-          alt=""
-          aria-hidden="true"
-          fill
-          sizes="(max-width: 760px) 100vw, 480px"
-        />
-      ) : (
-        <span className="projThumbMark" aria-hidden="true">
-          {title.charAt(0)}
-        </span>
-      )}
+export function ProjectCard({ href, title, description, contribution, result, source, tags = [], stack = [], thumbnail, hardPart, track, treatment = "standard" }: ProjectCardProps) {
+  return <article className={`${styles.card} ${styles[treatment] ?? ""}`}>
+    <a className={styles.visual} href={href} aria-label={`Explore ${title}`} data-track={track}>
+      <Image src={thumbnail || "/images/projects/covers/interactive-portfolio.svg"} alt={`${title}: illustrated cover`} fill sizes="(max-width: 760px) 90vw, (max-width: 1200px) 45vw, 540px" />
+      <span className={styles.coverAction}>Explore project ↗</span>
+    </a>
+    <div className={styles.body}>
+    <div className={styles.tags}>{tags.map(tag => <span key={tag}>{tag}</span>)}</div>
+    <h3 className={styles.title}>{title}</h3>
+    <p className={styles.description}>{description}</p>
+    <dl className={styles.facts}>
+      {result ? <div><dt>Result &amp; scope</dt><dd>{result}</dd></div> : hardPart && <div><dt>The hard part</dt><dd>{hardPart}</dd></div>}
+    </dl>
+    <div className={styles.stack}><TechList items={stack.slice(0, 3)} variant="chip" label={`${title}: key technologies`} /></div>
+    <div className={styles.actions}>
+      <a className="btn btn--primary" href={href} data-track={track} aria-label={`Read case study: ${title}`}>Read case study <span aria-hidden="true">↗</span></a>
+      {source && <a className="btn btn--secondary" href={source} target="_blank" rel="noopener noreferrer" aria-label={`${source.includes('github.com') ? 'View source' : 'Visit site'}: ${title}`}>{source.includes('github.com') ? 'View source' : 'Visit site'} <span aria-hidden="true">↗</span></a>}
     </div>
-
-    {tags.length > 0 && (
-      <div className="projTags">
-        {tags.map((t) => (
-          <span key={t} className="projTag">
-            {t}
-          </span>
-        ))}
-      </div>
-    )}
-    <h3 className="cardTitle">{title}</h3>
-    {description?.trim() && <p className="cardDesc">{description}</p>}
-    {(contribution || result) && <dl className="projectFacts">
-      {contribution && <div><dt>My contribution</dt><dd>{contribution}</dd></div>}
-      {result && <div><dt>Result</dt><dd>{result}</dd></div>}
-    </dl>}
-    {/* Scope is the half a reviewer already assumes. This is the half that
-        separates a build from a tutorial, so it gets its own rule. */}
-    {!result && hardPart?.trim() && (
-      <p className="projHard">
-        <span className="projHardLabel">The hard part</span>
-        {hardPart}
-      </p>
-    )}
-    {stack.length > 0 && (
-      <div className="projStack">
-        <TechList items={stack} variant="icon" label={`${title}: technologies used`} />
-      </div>
-    )}
-    <span className="projMore">
-      Read case study
-      <HiArrowRight aria-hidden="true" />
-    </span>
-  </a>
-);
+    </div>
+  </article>;
+}

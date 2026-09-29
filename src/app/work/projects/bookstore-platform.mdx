@@ -1,0 +1,46 @@
+---
+title: "Bookstore: catalogue, cart and orders"
+publishedAt: "2026-09-29"
+updatedAt: "2026-09-29"
+thumbnail: "/images/projects/covers/bookstore-platform.svg"
+summary: "Connect a browsable book catalogue to a shopping cart and persisted orders."
+cardSummary: "Connect a browsable book catalogue to a shopping cart and persisted orders."
+contribution: "Built separate React and Express repositories with cart state, catalogue endpoints and order models."
+result: "An e-commerce prototype with server-calculated order totals; authentication remains unfinished."
+seoDescription: "Connect a browsable book catalogue to a shopping cart and persisted orders. Explore the architecture, implementation and trade-offs."
+tags: ["Personal prototype"]
+stack: ["react","nodejs","mongodb","javascript"]
+images: []
+architecture: ["React storefront","Express routes","Mongoose models","MongoDB orders"]
+link: "https://github.com/saaim12/BOOK-STORE-BACKEND"
+team: []
+---
+
+## The problem
+
+A storefront needs more than a list of books. Browsing, cart state, customer details and the order stored by the server must agree. This project explores that boundary through separate frontend and backend repositories.
+
+## Architecture
+
+The Vite/React frontend uses React Router for Home, Shop, Auth and Order screens. User and cart contexts share state across those routes. The order screen sends book IDs, quantities, a delivery address and a payment-method selection to Express.
+
+The backend separates routes, controllers and Mongoose models. Its entry point mounts auth, books and orders routes and starts listening after connecting to MongoDB. The catalogue controller paginates book queries. The order controller retrieves current book prices from the database, calculates the total and saves the order with its line items.
+
+## The engineering decision
+
+Order totals are calculated on the server rather than accepted from the browser. Each order line also stores the price at order time, alongside a reference to the book. That gives the order its own price record when catalogue prices change later.
+
+React Context keeps the small storefront straightforward, but the cart lives in component state and is lost on refresh. Separate repositories make the API boundary explicit while requiring coordinated configuration for deployment.
+
+## Current result and next steps
+
+This is a prototype, not a production checkout. The inspected user model has password hashing and verification commented out, and the order routes do not attach authentication middleware. A selected payment method is stored as data; it is not a payment-provider integration.
+
+Before deployment I would complete authentication, derive order ownership from the authenticated user, validate quantities and unknown book IDs, add inventory transactions, and replace the hardcoded local API address. Those changes are prerequisites for trusting an order, not optional polish.
+
+## Source code
+
+- [React storefront](https://github.com/saaim12/BOOK-STORE-FRONTEND)
+- [Order controller](https://github.com/saaim12/BOOK-STORE-BACKEND/blob/main/src/controllers/orderController.js)
+- [Order schema](https://github.com/saaim12/BOOK-STORE-BACKEND/blob/main/src/models/Order.model.js)
+- [Authentication model](https://github.com/saaim12/BOOK-STORE-BACKEND/blob/main/src/models/User.model.js)
