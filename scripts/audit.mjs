@@ -26,6 +26,7 @@ const VIEWPORTS = [
 const ROUTES = [
   { name: "home", path: "/" },
   { name: "experience", path: "/experience" },
+  { name: "about-redirect", path: "/about" },
   { name: "work", path: "/work" },
   ...(await readdir("src/app/work/projects")).filter(file => file.endsWith(".mdx")).map(file => ({ name: file.replace(".mdx", ""), path: `/work/${file.replace(".mdx", "")}` })),
   { name: "404", path: "/does-not-exist" },
@@ -79,17 +80,20 @@ const run = async () => {
   let problems = 0;
 
     for (const vp of VIEWPORTS) {
+      console.log(`Checking ${vp.name}...`);
       const ctx = await browser.newContext({
         viewport: { width: vp.width, height: vp.height },
         deviceScaleFactor: 1,
       });
       const page = await ctx.newPage();
+      page.setDefaultTimeout(15000);
       const errors = [];
       page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
       page.on("pageerror", (e) => errors.push(String(e)));
 
       for (const route of ROUTES) {
-        await page.goto(BASE + route.path, { waitUntil: "networkidle" });
+        await page.goto(BASE + route.path, { waitUntil: "domcontentloaded" });
+        await page.evaluate(() => Promise.race([document.fonts.ready, new Promise(resolve => setTimeout(resolve, 1500))]));
         // Let scroll-reveals settle so screenshots aren't half-faded.
         await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
         await page.waitForTimeout(100);
@@ -114,9 +118,10 @@ const run = async () => {
           errors.length = 0;
         }
 
-        await page.screenshot({
+        if (["home", "work", "experience", "bookstore-platform"].includes(route.name)) await page.screenshot({
           path: `${OUT}/${vp.name}-${route.name}.png`,
-          fullPage: route.name === "home",
+          fullPage: false,
+          animations: "disabled",
         });
       }
       console.log(`Checked ${ROUTES.length} routes at ${vp.width} ? ${vp.height}`);

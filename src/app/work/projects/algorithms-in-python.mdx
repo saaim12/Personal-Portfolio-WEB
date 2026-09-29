@@ -28,7 +28,7 @@ This is a collection of independent programs rather than a deployed service. Inp
 
 ## A concrete implementation
 
-The inspected Python Dijkstra implementation represents a graph with an adjacency dictionary of weighted neighbours. A heap selects the next candidate with the smallest known distance. The algorithm ignores stale heap entries and pushes an updated candidate when a shorter path is found.
+The Python Dijkstra implementation represents a graph with an adjacency dictionary of weighted neighbours. A heap selects the next candidate with the smallest known distance. The algorithm ignores stale heap entries and pushes an updated candidate when a shorter path is found.
 
 The same file explores a binary maze using a queue and a minimum-effort grid path using a heap. Seeing these alongside each other highlights that the objective determines the state and update rule: number of steps, sum of weights and maximum edge difference are different problems.
 

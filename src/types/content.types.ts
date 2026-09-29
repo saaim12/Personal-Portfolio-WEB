@@ -83,12 +83,6 @@ export interface Home extends BasePageConfig {
   headline: string;
   /** The sub text which appears below the headline */
   subline: React.ReactNode;
-  /** Primary CTA shared by the hero, the navbar and the mobile menu */
-  cta: {
-    label: string;
-    /** External link (mailto / cal.com) or internal path */
-    href: string;
-  };
   /**
    * One compact line under the hero carrying the four facts a recruiter needs
    * before anything else: availability, location and hours, discipline, and
@@ -102,46 +96,6 @@ export interface Home extends BasePageConfig {
     /** What the number refers to */
     label: string;
   }>;
-  /**
-   * "How I work" block. Replaced a six-card Services grid: a services list is
-   * consultancy framing and is the clearest signal to a recruiter that a site
-   * belongs to a freelancer rather than a candidate. Working habits do the
-   * equivalent job of separating this candidate from others with the same
-   * stack, which most portfolios never attempt.
-   */
-  practice: {
-    display: boolean;
-    title: string;
-    /** Eyebrow above the heading */
-    label: string;
-    intro: string;
-    items: Array<{
-      icon?: IconName;
-      title: string;
-      description: React.ReactNode;
-    }>;
-  };
-  /**
-   * "Algorithms in the open". The public DSA repo, shown rather than linked in
-   * passing: almost every loop opens with an algorithms round, and a recruiter
-   * screening for one cannot tell a candidate who practises from one who does
-   * not unless the work is visible.
-   */
-  fundamentals: {
-    display: boolean;
-    title: string;
-    /** Eyebrow above the heading */
-    label: string;
-    intro: string;
-    /** Repository the section points at */
-    link: string;
-    linkLabel: string;
-    items: Array<{
-      icon?: IconName;
-      title: string;
-      description: React.ReactNode;
-    }>;
-  };
   /** Client testimonial block (social-proof stage) */
   testimonial: {
     display: boolean;
@@ -153,101 +107,9 @@ export interface Home extends BasePageConfig {
     /** Optional path to a signed recommendation letter (PDF) */
     letter?: string;
   };
-  /**
-   * "What I'm looking for". Replaced an eight-item FAQ about pricing, project
-   * size and code ownership: those are buyer questions, and answering them
-   * tells a hiring manager they are reading a contractor's site.
-   */
-  looking: {
-    display: boolean;
-    title: string;
-    /** Eyebrow above the heading */
-    label: string;
-    body: React.ReactNode;
-  };
 }
 
-/**
- * About page configuration.
- * @description Configuration for the About page, including sections for table of contents, avatar, calendar, introduction, work experience, studies, and technical skills.
- */
-export interface About extends BasePageConfig {
-  /** Table of contents configuration */
-  tableOfContent: {
-    /** Whether to display the table of contents */
-    display: boolean;
-    /** Whether to show sub-items in the table of contents */
-    subItems: boolean;
-  };
-  /** Avatar section configuration */
-  avatar: {
-    /** Whether to display the avatar */
-    display: boolean;
-  };
-  /** Calendar section configuration */
-  calendar: {
-    /** Whether to display the calendar */
-    display: boolean;
-    /** Link to the calendar */
-    link: string;
-  };
-  /** Introduction section */
-  intro: {
-    /** Whether to display the introduction */
-    display: boolean;
-    /** Title of the introduction section */
-    title: string;
-    /** Description of the introduction section */
-    description: React.ReactNode;
-  };
-  /** Work experience section */
-  work: {
-    /** Whether to display work experience */
-    display: boolean;
-    /** Title for the work experience section */
-    title: string;
-    /** List of work experiences */
-    experiences: Array<{
-      /** Company name */
-      company: string;
-      /** Timeframe of employment */
-      timeframe: string;
-      /** Role or job title */
-      role: string;
-      /** Where the work happened. Kept separate from `role` so the two are laid
-       *  out with spacing rather than joined by a "·" inside one string. */
-      location?: string;
-      /** Achievements at the company */
-      achievements: React.ReactNode[];
-      /** Images related to the experience */
-      images?: Array<{
-        /** Image source path */
-        src: string;
-        /** Image alt text */
-        alt: string;
-        /** Image width ratio */
-        width: number;
-        /** Image height ratio */
-        height: number;
-      }>;
-    }>;
-  };
-  /** Studies/education section */
-  studies: {
-    /** Whether to display studies section */
-    display: boolean;
-    /** Title for the studies section */
-    title: string;
-    /** List of institutions attended */
-    institutions: Array<{
-      /** Institution name */
-      name: string;
-      /** Description of studies */
-      description: React.ReactNode;
-    }>;
-  };
-  /** Technical skills section */
-  technical: {
+export type TechnicalSkills = {
     /** Whether to display technical skills section */
     display: boolean;
     /** Title for the technical skills section */
@@ -278,7 +140,6 @@ export interface About extends BasePageConfig {
       }>;
     }>;
   };
-}
 
 /**
  * Work/projects page configuration.

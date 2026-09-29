@@ -34,7 +34,7 @@ Expiry uses one timer per link. It demonstrates lifecycle management clearly, bu
 
 ## Result and next steps
 
-The repository implements the short-link lifecycle without a persistent store. No throughput or deployment claims are made for this prototype. For a shared service, I would move mappings to a store with expiry support, validate allowed URL schemes, handle ID collisions explicitly and add rate limits. Absolute expiry checks during lookup would make the contract clearer than relying only on scheduled deletion.
+The repository implements the short-link lifecycle without a persistent store. Throughput benchmarking and deployment hardening remain future work. For a shared service, I would move mappings to a store with expiry support, validate allowed URL schemes, handle ID collisions explicitly and add rate limits. Absolute expiry checks during lookup would make the contract clearer than relying only on scheduled deletion.
 
 ## Source code
 

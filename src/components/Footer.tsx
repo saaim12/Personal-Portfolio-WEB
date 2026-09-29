@@ -27,7 +27,7 @@ export function Footer() {
         paddingRight: "clamp(16px, 5vw, 48px)",
       }}
     >
-      <Column fillWidth gap="32" style={{ maxWidth: "1120px" }}>
+      <Column fillWidth gap="32" style={{ maxWidth: "var(--content-max)" }}>
         <Row fillWidth horizontal="between" wrap gap="32">
           <Column gap="8" style={{ maxWidth: "340px" }}>
             <h2 className="footerHeadline">{person.role}</h2>

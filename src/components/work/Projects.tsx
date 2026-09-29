@@ -5,6 +5,7 @@ import styles from "./Projects.module.css";
 import { ProjectGallery } from "./ProjectGallery";
 
 interface ProjectsProps {
+  preview?: boolean;
   showcase?: boolean;
   range?: [number, number?];
   exclude?: string[];
@@ -12,7 +13,7 @@ interface ProjectsProps {
   only?: string[];
 }
 
-export function Projects({ range, exclude, only, showcase = false }: ProjectsProps) {
+export function Projects({ range, exclude, only, showcase = false, preview = false }: ProjectsProps) {
   let allProjects = getPosts(["src", "app", "work", "projects"]);
 
   // Exclude by slug (exact match)
@@ -40,7 +41,6 @@ export function Projects({ range, exclude, only, showcase = false }: ProjectsPro
           href={`/work/${post.slug}`}
           title={post.metadata.title}
           description={post.metadata.cardSummary || post.metadata.summary}
-          contribution={post.metadata.contribution}
           result={post.metadata.result}
           source={post.metadata.link}
           tags={post.metadata.tags}
@@ -52,7 +52,7 @@ export function Projects({ range, exclude, only, showcase = false }: ProjectsPro
           track={`work_card:${post.slug}`}
         />
   );
-  if (!showcase) return <div className={styles.related}>{displayedProjects.map(card)}</div>;
+  if (!showcase) return <div className={preview ? styles.preview : styles.related}>{displayedProjects.map(card)}</div>;
   const products = ["fitter-health-platform", "bookstore-platform", "temporary-url-service", "interactive-portfolio"];
   const experiments = ["esp32-temperature-inference", "autoencoder-edge-compression", "algorithms-in-python", "ml-data-foundations"];
   return <ProjectGallery items={displayedProjects.map((post, index) => ({ slug: post.slug, category: products.includes(post.slug) ? "Product & web" : experiments.includes(post.slug) ? "Experiments and Learning" : "AI & data", card: card(post, index) }))} />;

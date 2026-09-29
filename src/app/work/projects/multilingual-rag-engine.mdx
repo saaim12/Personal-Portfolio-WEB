@@ -37,7 +37,7 @@ matter more than answer quality. It can answer from the wrong tenant's
 documents, which is a security incident rather than a bad answer. And it can
 answer from nothing, generating plausible text when retrieval comes back thin.
 This engine had to serve several tenants and several languages from one
-deployment, guarantee retrieval could never cross a tenant boundary, and ground
+deployment, enforce tenant-scoped retrieval, and ground
 every answer in retrievable, citable sources.
 
 The concrete use case was a localisation Q&A service: several tenants, each with
@@ -50,18 +50,9 @@ re-reads it.
 
 - Tenant isolation is a security boundary, not a filter. A missing `WHERE` clause is a data breach, not a quality regression.
 - Retrieval has to work across languages, not just English.
-- No third-party embedding API. Customer documents leaving the deployment was not acceptable, and per-token costs scale badly against re-indexing.
+- No third-party embedding API. Embedding should run inside the deployment to control re-indexing costs and reduce external data processing.
 
-The third constraint is the one that shaped everything else. Running
-`intfloat/multilingual-e5-base` inside the deployment rather than calling a
-hosted embedding API is what makes "documents never leave" enforceable rather
-than aspirational: there is no egress path for document text to take, so the
-guarantee does not depend on anyone remembering it.
-
-{/* Saaim: this section would land harder with the hardware that model actually
-    runs on and the latency budget it had to sit inside. The numbers under "How
-    it's built" prove the result; these would prove the design was a response to
-    something rather than a preference. */}
+Embedding runs locally with `intfloat/multilingual-e5-base`, avoiding a hosted embedding API and its per-call charges. Generation is a separate boundary: retrieved chunks are sent to Gemini. A deployment handling sensitive documents therefore needs an explicit policy for what context may leave the service.
 
 ## How it's built
 
@@ -83,7 +74,7 @@ usage and health.
 
 <ArchitectureDiagram
   src="/images/projects/multilingual-rag-engine-architecture.png"
-  alt="A query carrying a signed JWT reaches Django and DRF, which reads the tenant claim from the token rather than from the request. The query is embedded locally by multilingual-e5-base at 768 dimensions, a cosine search in PostgreSQL with pgvector is filtered by that tenant claim, and the retrieved chunks go to Gemini 2.5 Flash, which answers only from them."
+  alt="A query carrying a signed JWT reaches Django and DRF, which reads the tenant claim from the token rather than from the request. The query is embedded locally by multilingual-e5-base at 768 dimensions, a cosine search in PostgreSQL with pgvector is filtered by that tenant claim, and the retrieved chunks go to Gemini 2.5 Flash, which is prompted to answer from that context."
   caption="The retrieval path. The tenant claim enters at the token and constrains every query after it, so isolation is a property of the request rather than of remembering a WHERE clause."
   width={2400}
   height={1350}
@@ -105,15 +96,14 @@ and a `reset_quotas` management command clears counters on a monthly cycle.
 - Tenants on a single deployment: 25
 - Languages covered: 18
 - Median query latency: 410 ms
-- External embedding cost: $0, because embeddings are generated locally at 768 dimensions and no document text leaves the deployment
+- External embedding cost: $0, because embeddings are generated locally at 768 dimensions ; generation still sends retrieved context to Gemini
 
 ## Trade-offs I made
 
 **Tenant identity from the JWT, not the request.** The tenant claim is read from
 the verified token and applied as a retrieval filter server-side. The cost is
 stricter auth plumbing and no convenient tenant switch for testing. The benefit
-is that cross-tenant retrieval cannot be caused by anything a client sends,
-because the client never gets a say.
+is that clients cannot choose a retrieval tenant through a query parameter. Token validation, tenant assignment, and every retrieval path still require authorization tests.
 
 **pgvector in PostgreSQL over a dedicated vector database.** Embeddings live next
 to the tenant and document rows they belong to, in one database with one backup
@@ -122,18 +112,14 @@ the data. The cost is a scale and ANN-tuning ceiling that a dedicated store woul
 push higher. At this workload the ceiling is theoretical and the operational
 simplicity is not.
 
-**Local embedding models over hosted embedding APIs.** Documents never leave the
-deployment and there is no per-call cost, at the price of a quality ceiling below
-the best hosted models. For multilingual retrieval over private company
-documents, keeping the data in-tenant won.
+**Local embeddings with hosted generation.** Local embeddings remove embedding API fees and keep indexing within the deployment, but require model memory and capacity planning. Gemini still receives the retrieved context for answer generation. These two data-processing boundaries need separate controls.
 
 **Query-layer isolation over one deployment per tenant.** A deployment per
-customer isolates perfectly and multiplies operational cost by the number of
+customer provides stronger infrastructure separation and multiplies operational cost by the number of
 customers. Scoping retrieval keeps one deployment while making the boundary
 explicit on every path that touches a chunk.
 
-**Grounded generation.** The model answers from retrieved context or says it does
-not know. For a document Q&A tool a confident wrong answer is worse than no
+**Grounded generation.** The prompt instructs the model to use retrieved context and abstain when it is insufficient. Prompting alone does not guarantee correct answers. For a document Q&A tool a confident wrong answer is worse than no
 answer, because it gets shipped downstream and nobody re-reads it.
 
 ## What I'd do differently

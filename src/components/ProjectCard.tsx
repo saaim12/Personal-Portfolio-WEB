@@ -7,7 +7,6 @@ type ProjectCardProps = {
   href: string;
   title: string;
   description: string;
-  contribution?: string;
   result?: string;
   source?: string;
   tags?: string[];
@@ -17,7 +16,7 @@ type ProjectCardProps = {
   track?: string;
 };
 
-export function ProjectCard({ href, title, description, contribution, result, source, tags = [], stack = [], thumbnail, hardPart, track, treatment = "standard" }: ProjectCardProps) {
+export function ProjectCard({ href, title, description, result, source, tags = [], stack = [], thumbnail, hardPart, track, treatment = "standard" }: ProjectCardProps) {
   return <article className={`${styles.card} ${styles[treatment] ?? ""}`}>
     <a className={styles.visual} href={href} aria-label={`Explore ${title}`} data-track={track}>
       <Image src={thumbnail || "/images/projects/covers/interactive-portfolio.svg"} alt={`${title}: illustrated cover`} fill sizes="(max-width: 760px) 90vw, (max-width: 1200px) 45vw, 540px" />

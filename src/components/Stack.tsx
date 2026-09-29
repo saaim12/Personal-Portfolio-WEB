@@ -1,17 +1,12 @@
 import { Column, Heading, Row, Text } from "@once-ui-system/core";
 import type { ReactNode } from "react";
 import { HiArrowRight } from "react-icons/hi2";
-import { about } from "@/resources/content";
+import { technicalSkills } from "@/resources/content";
 import { Reveal } from "./Reveal";
 import { TechList } from "./Tech";
 
-// The technical skills blocks, brought onto the home page.
-//
-// They were written for /about and read by almost nobody, because the traffic
-// never leaves the home page. Same content object, so there is one copy of
-// these four paragraphs and not two to keep in sync.
 export function Stack({ icon }: { icon?: ReactNode }) {
-  const t = about.technical;
+  const t = technicalSkills;
   if (!t.display) return null;
 
   return (

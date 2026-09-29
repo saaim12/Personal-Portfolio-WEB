@@ -17,14 +17,7 @@ stack:
   - "parquet"
   - "objectstorage"
   - "dockercompose"
-# Empty on purpose. Both diagrams used to render here, above the title, with the
-# AWS reference architecture first. That put the system he did not build ahead of
-# the one he did, with nothing distinguishing them. Both now sit inside "How it's
-# built", in the right order and labelled.
 images: []
-# The card thumbnail is the dark redraw, not the two white exports below: a
-# bright rectangle in a row of dark cards reads as a broken image. Both
-# originals still render full-size inside the article, where they belong.
 thumbnail: "/images/projects/covers/realtime-ecommerce-etl-pipeline.svg"
 hardPart: "When the definition of revenue changes, gold has to be rebuildable from silver without re-ingesting a single event. That is what the medallion split is buying."
 link: "https://github.com/saaim12/ETL-Pipeline-with-Batch-Straming-Pipelines"
@@ -47,12 +40,7 @@ whole working day.
 
 ## Constraints
 
-Built solo as a deep engineering project, so the constraint set was chosen
-deliberately: everything runs locally on Docker Compose, reproducible from a
-clone with one command, with no cloud account required. The design still had to
-be honest about scale, which is why the write-up includes a reference
-architecture mapping every component to its managed AWS equivalent rather than
-pretending Compose is production.
+I built this as a reproducible engineering project with containerized compute and configurable storage. The published walkthrough uses cloud object storage and managed PostgreSQL alongside local containers. The AWS diagram below is a proposed managed-service mapping, not a claim that this project was deployed on that architecture.
 
 Two more constraints came from the data rather than from the setup. Raw events
 are messy and the schema drifts, so the pipeline has to survive that without
@@ -82,8 +70,7 @@ attributes analysts otherwise recompute in every query, including a
 />
 
 The same pattern at enterprise scale is a different set of components doing the
-same jobs, and mapping one onto the other is most of what moving this to a
-managed platform involves. I drew that mapping out separately, as a design
+same jobs, but moving to managed services also requires security, cost, capacity, and recovery planning. I drew that mapping out separately, as a design
 exercise rather than as a deployment.
 
 <ArchitectureDiagram
@@ -112,7 +99,7 @@ silver_to_gold` chain. The README states the split rather than hiding it.
 - End-to-end latency, Kafka to gold: 4.7 minutes
 - Full rebuild of silver and gold from bronze: 8 minutes
 - Gold star schema: 4 tables, 3 dimensions around 1 fact, queryable from any BI tool without a join guide
-- Whole stack runs from one `docker compose up`: Kafka in KRaft mode, Airflow, Spark
+- Containerized compute: Kafka in KRaft mode, Airflow, and Spark; storage and database credentials depend on the chosen environment
 
 ## Trade-offs I made
 
@@ -139,8 +126,7 @@ The Airflow metadata database is SQLite, which forces the sequential executor
 and means the DAG cannot run tasks in parallel even where the dependency graph
 allows it. It was the right call for a laptop and the wrong one to leave in
 place, because it silently sets a ceiling that has nothing to do with the
-pipeline. PostgreSQL as the metadata backend is an afternoon of work and removes
-the ceiling entirely.
+pipeline. Moving metadata to PostgreSQL and selecting a suitable executor would allow parallel tasks, subject to worker capacity and connection limits.
 
 I would also add data-quality assertions between silver and gold from the start.
 I caught a broken dimension join by reading output, which does not scale past a

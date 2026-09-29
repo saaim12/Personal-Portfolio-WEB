@@ -34,7 +34,7 @@ React Context keeps the small storefront straightforward, but the cart lives in 
 
 ## Current result and next steps
 
-This is a prototype, not a production checkout. The inspected user model has password hashing and verification commented out, and the order routes do not attach authentication middleware. A selected payment method is stored as data; it is not a payment-provider integration.
+This is a prototype, not a production checkout. The user model has password hashing and verification commented out, and the order routes do not attach authentication middleware. A selected payment method is stored as data; it is not a payment-provider integration.
 
 Before deployment I would complete authentication, derive order ownership from the authenticated user, validate quantities and unknown book IDs, add inventory transactions, and replace the hardcoded local API address. Those changes are prerequisites for trusting an order, not optional polish.
 

@@ -31,32 +31,19 @@ team:
 
 ## The problem
 
-Recommender accuracy is the easy half. What decides whether a recommender ever
-ships is everything around it: what you serve to a user you have no history for,
-how you swap a retrained model without dropping traffic, and how you keep
-latency low enough to sit inside a page render.
-
-Both of the hard cases are the ones a benchmark hides. A model tuned on users
-with long histories scores well and then meets a user with none, and a model
-that has to be redeployed to pick up new weights stops being retrained long
-before anyone admits it. I built this to find out what the serving layer around
-a recommender has to look like for neither of those to happen.
+A useful recommender needs both relevant results and a dependable serving path. I built this project to handle users with no interaction history, separate training from request handling, and reload model artifacts without a full application release.
 
 ## Constraints
 
 - Cold start is the common case, not the edge case. New users and new items arrive constantly, and a model that needs interaction history is unusable on day one.
 - Recommendations render inside a page load, so the serving path has a latency budget.
-- Retraining must not require a deploy, because nobody redeploys to refresh weights and the model goes stale.
+- Retraining must not require a deploy, so model updates can follow a separate schedule from application releases.
 
 The data is MovieLens: ratings, tags, links and movie metadata, and nothing
 else. No user profile beyond interaction history, no item text beyond genres and
 tags, and no way to buy a signal that is not in the files. Every scoring
 decision below is a consequence of that, and a recommender given richer features
 would reasonably make different ones.
-
-{/* Saaim: worth adding the latency budget as a number rather than as "inside a
-    page load". The p95 figures under "How it's built" show what it achieved;
-    a stated budget would show what it had to beat. */}
 
 ## How it's built
 
@@ -81,14 +68,12 @@ loads.
   height={1350}
 />
 
-**The evaluation was lying, quietly.** The holdout split is per user, and the
+**Making the evaluation population explicit.** The holdout split is per user, and the
 evaluation only scores users who have at least one held-out item rated above the
 positive threshold. The first time I ran it end to end, a large share of users
 were skipped and the reported precision was computed over a much smaller
 population than I assumed, which made it look better than it was. The fix was to
-report `evaluated_users` alongside every metric rather than just the metric. A
-precision figure without its sample size is not a result, it is a number, and I
-had been about to believe my own. The evaluation now returns precision, recall,
+report `evaluated_users` alongside every metric rather than just the metric. The evaluated-user count is needed to interpret precision and compare runs. The evaluation now returns precision, recall,
 hit rate, coverage and the evaluated-user count together, so the denominator
 travels with the fraction.
 
@@ -104,8 +89,7 @@ travels with the fraction.
 
 **Training and serving separated by an artifact.** The trainer writes a versioned
 model artifact; the serving process loads it. The cost is a staleness window
-between training and reload. The benefit is that training failures cannot take
-serving down, and either side can be changed, scaled, or rolled back without
+between training and reload. The benefit is that a failed training run need not replace the artifact currently serving requests, and either side can be changed, scaled, or rolled back without
 touching the other.
 
 **Hot model reload instead of redeploys.** New artifacts are picked up by the
@@ -115,9 +99,7 @@ is model iteration decoupled from release cadence.
 
 **A hybrid model rather than pure collaborative filtering.** Content similarity
 works with zero interaction history, co-occurrence captures the behavioural
-signal, and the popularity prior keeps output sane when both are thin. Pure
-collaborative filtering scores better on a benchmark and fails on exactly the
-users you most need to serve.
+signal, and the popularity prior keeps output sane when both are thin. A purely collaborative model would require a separate strategy for users and items without sufficient interaction history.
 
 **API-key auth on a recommender.** Recommendation endpoints leak behavioural data
 by inference and are cheap to scrape. Auth belongs there from the start, not

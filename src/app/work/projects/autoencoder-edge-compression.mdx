@@ -46,11 +46,6 @@ The target is an ESP32 class device, which is what fixes the third constraint in
 place: the encoder has to share flash with the application, so the model budget
 is whatever is left over rather than whatever the model wants.
 
-{/* Saaim: the two numbers that would make this section land are the flash and
-    RAM budget the encoder actually had to fit inside, and the reconstruction
-    error the downstream consumer was willing to accept. The results below prove
-    it hit 86 KB and 0.0038 MSE; these would say what it was aiming at. */}
-
 ## How it's built
 
 An autoencoder is trained offline on representative sensor data. The encoder
@@ -65,7 +60,7 @@ cheap half.
 <ArchitectureDiagram
   src="/images/projects/autoencoder-edge-compression-architecture.png"
   alt="On an ESP32-class device, a 128-value sensor window runs through the encoder half of the autoencoder, converted to TensorFlow Lite Micro, integer-quantised and occupying 86 KB of flash. It emits a 16-float latent vector, a 7.8:1 reduction, which crosses the radio link to a Flask decoder on EC2 that reconstructs the signal at 0.0038 MSE, with S3 holding the encoded payloads."
-  caption="The split that is the whole design: the device runs only the encoder, and the half that costs memory runs where memory is free."
+  caption="The split that is the whole design: the device runs only the encoder, and the decoder runs on a server with a larger memory budget."
   width={2400}
   height={1350}
 />
@@ -93,23 +88,16 @@ available.
 **Lossy learned compression over lossless encoding.** The autoencoder reaches
 7.8:1 by accepting reconstruction error a lossless codec never introduces. The
 cost is that the decoded signal is an approximation and its error tolerance has
-to be stated, not assumed. The benefit is a compression ratio lossless approaches
-cannot reach on this signal.
+to be stated, not assumed. A fair comparison would measure payload size, reconstruction quality, and energy use against lossless baselines on the same samples.
 
 **Splitting the model across the boundary.** The encoder runs on-device through
 TensorFlow Lite Micro; the decoder runs server-side on EC2. The cost is that the
 two halves must stay version-compatible across deployments. The benefit is that
 the device carries only the half that must be small.
 
-**An autoencoder rather than a general-purpose compressor.** Generic compression
-is domain-blind. An autoencoder trained on this sensor's actual distribution
-learns what is signal and what is noise for this data specifically, and reaches a
-much smaller representation at equal fidelity. The cost is that the model is
-useless on a different sensor, which is an acceptable trade for a fixed
-deployment.
+**An autoencoder rather than a general-purpose compressor.** A learned representation can exploit the training data distribution, but its performance may deteriorate on different sensors or operating conditions. A deployment needs representative evaluation data and a strategy for model drift.
 
-**Quantised encoder over a smaller float model.** TF Lite Micro wants integer
-arithmetic, and quantising a well-sized model beat shrinking a float one at the
+**Quantised encoder over a smaller float model.** Integer quantization can reduce the memory and arithmetic costs of a TensorFlow Lite Micro model, and quantising a well-sized model beat shrinking a float one at the
 same footprint.
 
 ## What I'd do differently

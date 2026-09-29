@@ -1,4 +1,5 @@
 import styles from "./ArchitectureDiagram.module.css";
+import Image from "next/image";
 
 type Node = { id: string; x: number; y: number; title: string; detail: string; store?: boolean };
 type Edge = { from: string; to: string; label: string };
@@ -56,7 +57,15 @@ const diagrams: Record<string, Diagram> = {
   },
 };
 
-export function ArchitectureDiagram({ slug }: { slug: string }) {
+type DiagramProps = { slug: string } | { src: string; alt: string; caption?: string; label?: string; width?: number; height?: number };
+
+export function ArchitectureDiagram(props: DiagramProps) {
+  if ("src" in props) return <figure className={styles.figure}>
+    {props.label && <figcaption>{props.label}</figcaption>}
+    <a href={props.src} target="_blank" rel="noopener noreferrer" aria-label="Open full-size architecture diagram"><Image src={props.src} alt={props.alt} width={props.width ?? 1200} height={props.height ?? 675} sizes="(max-width: 700px) 90vw, 720px" style={{ width: "100%", height: "auto" }} /></a>
+    {props.caption && <figcaption>{props.caption} <a href={props.src} target="_blank" rel="noopener noreferrer">Open full-size diagram ↗</a></figcaption>}
+  </figure>;
+  const { slug } = props;
   const data = diagrams[slug];
   if (!data) return null;
   const marker = `arrow-${slug}`;

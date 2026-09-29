@@ -49,7 +49,7 @@ const roles = [
 
 export default function Experience() {
   return (
-    <Column className="experiencePage" maxWidth="m" paddingTop="48" paddingBottom="80" gap="48">
+    <Column className="experiencePage" fillWidth paddingTop="48" paddingBottom="80" gap="48">
       <script
         {...jsonLd(
           webPageJsonLd({

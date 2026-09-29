@@ -85,7 +85,7 @@ export default async function Project({
     })) || [];
 
   return (
-    <Column className="caseStudy" as="section" maxWidth="m" horizontal="center" gap="l">
+    <Column className="caseStudy" as="section" fillWidth horizontal="center" gap="l">
       <script
         {...jsonLd(
           caseStudyJsonLd({
@@ -98,7 +98,7 @@ export default async function Project({
           }),
         )}
       />
-      <Column maxWidth="s" gap="16" horizontal="center" align="center">
+      <Column fillWidth gap="16" horizontal="center" align="center">
         <SmartLink href="/work">
           <Text variant="label-strong-m">Projects</Text>
         </SmartLink>
@@ -173,7 +173,7 @@ export default async function Project({
         />
       ))}
       {post.metadata.architecture && <Column fillWidth gap="16"><Heading as="h2" variant="heading-strong-l">System architecture</Heading><ArchitectureDiagram slug={post.slug} /></Column>}
-      <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
+      <Column className="caseStudyBody" as="article" fillWidth>
         <CustomMDX source={post.content} />
       </Column>
       <Column fillWidth gap="40" horizontal="center" marginTop="40">

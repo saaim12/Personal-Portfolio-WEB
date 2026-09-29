@@ -22,11 +22,11 @@ A trained model is only one part of an embedded ML system. Its input scaling, ex
 
 ## Architecture
 
-The inspected training variant generates synthetic temperature samples, fits a scaler over a fixed range and trains a Keras autoencoder. It exports the encoder as a TensorFlow Lite file and C header, and saves the decoder and scaler separately for Python serving.
+The training variant generates synthetic temperature samples, fits a scaler over a fixed range and trains a Keras autoencoder. It exports the encoder as a TensorFlow Lite file and C header, and saves the decoder and scaler separately for Python serving.
 
 The ESP32 code reads a DHT11 sensor, scales the temperature using matching constants and invokes TensorFlow Lite Micro. A fixed tensor arena holds the runtime's working memory. The device packages a two-value latent vector as JSON and sends it over Wi-Fi to the Flask /decode endpoint.
 
-The server loads the decoder and scaler, checks the incoming vector shape, predicts a scaled temperature and applies the inverse transformation. The inspected endpoint logs the reconstructed temperature and returns a success message rather than the numeric prediction.
+The server loads the decoder and scaler, checks the incoming vector shape, predicts a scaled temperature and applies the inverse transformation. The endpoint logs the reconstructed temperature and returns a success message rather than the numeric prediction.
 
 ## Constraints and trade-offs
 

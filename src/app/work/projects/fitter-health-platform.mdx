@@ -11,12 +11,6 @@ summary: "A Spain-based health team had a validated concept and no engineering f
 tags:
   - "Client work, in production"
   - "Full stack"
-# Redshift and API Gateway were removed from this list. The published
-# architecture diagram shows neither, and a stack list that contradicts the
-# site's own diagram is the first thing a technical reviewer notices.
-# If they genuinely were in the build, the fix is to add them to the diagram
-# first, then restore them here. Omitting a service he used costs nothing;
-# claiming one the diagram contradicts costs the credibility of the whole page.
 stack:
   - "django"
   - "drf"
@@ -33,19 +27,13 @@ stack:
   - "iam"
   - "vpc"
   - "odoo"
-# Empty on purpose. The architecture diagram used to render here, above the
-# title, before the reader knew what they were looking at. It now sits inside
-# "How it's built", next to the paragraphs that explain it.
 images: []
-# Not an architecture diagram: the deployment topology is covered by the NDA
-# and is deliberately absent from this repo. This is the public marketing site,
-# which is the part of the product anyone can already see.
 thumbnail: "/images/projects/covers/fitter-health-platform.svg"
 hardPart: "SNS fanned out to the notification consumers with no durable buffer, so a failed delivery vanished without raising anything. It surfaced as a product complaint, not an alert."
 link: "https://fitter.health/"
 team:
   - name: "Saaim Abdullah"
-    role: "Founding engineer, full-stack through cloud"
+    role: "Software engineer, full-stack and cloud"
     avatar: "/images/avatar.jpg"
     linkedIn: "https://www.linkedin.com/in/saaim-abdullah/"
 ---
@@ -102,24 +90,14 @@ adjustments and the compliance-sensitive record views all have first-class
 screens. The CRM sits inside the platform for the same reason: a lead becoming a
 member is then one system's state change instead of two systems disagreeing.
 
-{/* No architecture diagram on this page. The deployment diagram is covered by
-    the NDA, so it is not published here and the image has been removed from the
-    repository. The prose above stays deliberately at the level of which
-    services are used and why, with no network topology, addressing or
-    implementation detail. Keep it there. */}
-
 **What it does in production.** It is live at
-[fitter.health](https://fitter.health/), built and operated by one engineer.
+[fitter.health](https://fitter.health/), built by me and handed over to the client.
 Entitlement, booking and invoice reconciliation are modelled with
 database-level constraints, so a credit cannot be double-spent by a race
 between two requests. Notification delivery is durable and inspectable after
 the change described below, with failures landing in a dead-letter queue rather
 than vanishing. The infrastructure is defined and reproducible, and the client
 owns the AWS account, the repositories and the domains.
-
-{/* Test count, deploy duration, monthly AWS spend and time to first production
-    release are all real numbers behind the NDA. Sourcing notes are in the
-    handover; add them here if the client is happy for them to be public. */}
 
 ## The incident
 
@@ -130,14 +108,9 @@ inactive members, and the results were published to an SNS topic that fanned out
 to the notification consumers for email and push.
 
 The original design had SNS delivering directly to those consumers. That works
-right up until a consumer fails mid-delivery. From the publisher's side SNS is
-fire and forget: if a subscriber errors or times out, the message is retried
-briefly and then it is simply gone. No exception surfaces in the application, no
-job shows as failed, nothing lands anywhere a human looks. Members who should
-have been nudged just quietly were not.
+right up until a consumer fails mid-delivery. In this implementation, exhausted delivery retries did not leave a durable work item in an application queue for operators to inspect or replay. The missing recovery path made notification failures difficult to trace. SNS retry behavior depends on subscriber configuration; the issue here was the recovery design around our consumers.
 
-It surfaced as a product complaint rather than as an alert, which is the worst
-way for anything to surface: someone on the client's side noticed that members
+It surfaced as a product complaint rather than as an alert, which delayed diagnosis: someone on the client's side noticed that members
 they expected to be nudged had not been. There was no count that disagreed with
 any other count, so there was nothing to reconcile. My first instinct was that
 the scheduling job was selecting the wrong members, and I spent real time
@@ -165,7 +138,7 @@ to be designed on purpose.
 ## Trade-offs I made
 
 **Implementing the client's architecture rather than redesigning it.** The design
-was theirs; my leverage was execution speed and catching gaps, like the
+was theirs; my responsibility was implementation and catching gaps, like the
 notification path above. The cost was living with structural choices I would have
 made differently. The benefit was momentum and a client who fully owned and
 understood their own system, which mattered more, because they keep it after I
@@ -181,8 +154,7 @@ it landed.
 **Integrity in the database, not just the serializer.** Credits, entitlements and
 booking rules are enforced with database-level constraints and transactions
 rather than trusting the API layer. The cost is stricter migrations and less
-flexibility when requirements moved. The benefit is that no code path, including
-future ones nobody has written yet, can corrupt a balance.
+flexibility when requirements moved. The benefit is that writes through different application paths must satisfy the same declared constraints. Transaction boundaries and concurrency tests remain necessary.
 
 ## What I'd do differently
 

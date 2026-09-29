@@ -35,7 +35,7 @@ const GROUPS = [
 
 export default function Work() {
   return (
-    <Column className="workPage" maxWidth="m" paddingTop="24">
+    <Column className="workPage" fillWidth paddingTop="24">
       <script
         {...jsonLd(
           webPageJsonLd({

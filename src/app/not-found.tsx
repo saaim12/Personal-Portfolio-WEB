@@ -9,11 +9,11 @@ export default function NotFound() {
         404
       </Text>
       <Heading variant="display-default-xs" align="center">
-        This route doesn't exist
+        Page not found
       </Heading>
       <Text onBackground="neutral-weak" align="center" wrap="balance">
-        Broken links happen. The systems I ship handle them better than this one
-        did. Have a look at those instead.
+        This page may have moved or the link may be incorrect. Explore my projects
+        or return to the home page.
       </Text>
       <Row gap="12" wrap horizontal="center" paddingTop="12">
         <Button

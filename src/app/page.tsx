@@ -1,10 +1,9 @@
 import Image from "next/image";
-import { Column, Heading, Row, Text } from "@once-ui-system/core";
+import { Column } from "@once-ui-system/core";
 import {
   HiOutlineDocumentText,
   HiArrowRight,
   HiArrowUpRight,
-  HiOutlineSquares2X2,
   HiOutlineRectangleStack,
 } from "react-icons/hi2";
 import { home, person, social } from "@/resources/content";
@@ -23,6 +22,7 @@ import { Track } from "@/components/Track";
 import { Stack } from "@/components/Stack";
 import { PortraitTransition } from "@/components/PortraitTransition";
 import { Projects } from "@/components/work/Projects";
+import { Articles } from "@/components/Articles";
 
 export async function generateMetadata() {
   return pageMeta({
@@ -33,14 +33,6 @@ export async function generateMetadata() {
   });
 }
 
-// The home page carries the whole story.
-//
-// Analytics said what analytics usually says about a portfolio: visitors land
-// here and navigate nowhere. So nothing that matters sits behind a click any
-// more. /work, /about and each case study still exist, but as depth for the
-// few who want it, not as the only place the substance lives. Every section
-// below is full content, and every section ends with exactly one link pointing
-// at the next specific thing rather than a menu of five.
 export default function Home() {
   return (
     <Column fillWidth horizontal="center">
@@ -54,8 +46,6 @@ export default function Home() {
           }),
         )}
       />
-      {/* Person belongs to this page: it is the one that introduces him.
-          FAQPage went with the FAQ section it was generated from. */}
       <script {...jsonLd(personJsonLd)} />
 
       <Track />
@@ -83,7 +73,7 @@ export default function Home() {
       <section className="heroIntro section" aria-labelledby="intro-title">
         <Reveal>
           <h2 id="intro-title">
-            Hey!
+            Engineering with ownership.
           </h2>
         </Reveal>
         <div className="introColumns">
@@ -172,31 +162,18 @@ export default function Home() {
         <ScrollCue />
       </section>
 
-      {/* Texture, not a claim: the stack at a glance, muted enough that the
-          headline above it still wins. The real evidence is the proof bar
-          under it and the write-ups below that. */}
       <SkillsMarquee />
 
-      {/* ── 2 + 3. TRUST AND PROOF ───────────────────────────────────────
-          The anchor opens on the numbers and runs into the cards, because
-          those four tiles are what the cards are evidence for. It also puts
-          the top of #work inside the first screen on a 1440x900 desktop,
-          which is the entire point of capping the hero.
-
-          Cards, not a list of titles: the whole card is the click target,
-          because people click blocks and do not hunt for links. */}
       <section id="work" className="projectShowcase section" aria-labelledby="projects-title">
-        <div className="showcaseHeading"><span className="showcaseBadge">↗ Ideas into working software</span><h2 id="projects-title">Projects with a story.</h2><p>The problem, the build, and the decisions along the way.</p></div>
-        <Projects showcase only={["fitter-health-platform", "bookstore-platform", "multilingual-rag-engine", "temporary-url-service", "realtime-ecommerce-etl-pipeline", "document-rag-backend", "movie-recommender-system", "esp32-temperature-inference", "web-sentiment-pipeline", "autoencoder-edge-compression", "interactive-portfolio", "algorithms-in-python", "ml-data-foundations"]} />
-        <div className="allProjectsAction"><a className="btn btn--primary" href="/work">Explore every project ↗</a><a className="btn btn--secondary" href="https://medium.com/@saymmalik08" target="_blank" rel="noopener noreferrer">Read My Articles ↗</a></div>
+        <div className="showcaseHeading"><span className="showcaseBadge">↗ Ideas into working software</span><h2 id="projects-title">Selected engineering work.</h2><p>Three projects covering product delivery, retrieval systems, and data engineering.</p></div>
+        <Projects preview only={["fitter-health-platform", "multilingual-rag-engine", "realtime-ecommerce-etl-pipeline"]} />
+        <div className="allProjectsAction"><a className="btn btn--primary" href="/work">View all projects ↗</a><a className="btn btn--secondary" href="https://medium.com/@saymmalik08" target="_blank" rel="noopener noreferrer">Read My Articles ↗</a></div>
         <Testimonial />
       </section>
 
-      {/* ── 5. STACK ─────────────────────────────────────────────────────
-          Was on /about, where the traffic never went. */}
+      <Articles />
       <Stack icon={<HiOutlineRectangleStack aria-hidden="true" />} />
 
-      {/* Final action */}
       <Contact />
     </Column>
   );

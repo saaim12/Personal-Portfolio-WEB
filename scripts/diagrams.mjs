@@ -2,17 +2,7 @@
 //
 //   node scripts/diagrams.mjs
 //
-// The diagrams are the card thumbnails and are meant to be read at about
-// 380px wide, so each one is at most six nodes with labels sized to survive
-// that reduction. They are generated rather than drawn by hand so that when a
-// case study changes, the picture of it is one edit away and reproducible.
-//
-// Fitter Health is deliberately absent: its deployment diagram is covered by
-// the NDA and was removed from this repository on purpose. Its thumbnail is a
-// screenshot of the live product, which is public.
-//
-// Palette and type are the site's own: pure black ground, glass panels with a
-// 10%-white hairline, Space Grotesk for titles and Manrope for labels.
+// Generates the raster diagrams embedded in the original case studies.
 
 import { chromium } from "playwright";
 
@@ -118,24 +108,6 @@ const DIAGRAMS = {
   // white-on-white exports, which is fine at full size behind a figure frame
   // and wrong as a card thumbnail: a bright rectangle in a row of dark ones
   // reads as a broken image. This is the card's version, same pipeline.
-  "realtime-ecommerce-etl-pipeline": frame(
-    "REAL-TIME E-COMMERCE ETL PIPELINE",
-    `
-    ${box(C[0], 150, CW, BH, "Kafka topic", ["orders · KRaft mode,", "no ZooKeeper to operate"])}
-    ${box(C[1], 150, CW, BH, "Structured Streaming", ["PySpark · 2,800 events/sec"])}
-    ${box(C[2], 150, CW, BH, "Bronze", ["raw Parquet, immutable,", "on object storage"])}
-    ${arrow(C[0] + CW, 209, C[1] - 14, 209)}
-    ${arrow(C[1] + CW, 209, C[2] - 14, 209)}
-    ${arrow(C[2] + CW / 2, 150 + BH, C[2] + CW / 2, 386)}
-    ${box(C[2], 400, CW, BH, "Silver", ["validated, deduplicated"])}
-    ${box(C[1], 400, CW, BH, "Gold", ["4-table star schema", "in PostgreSQL"], true)}
-    ${box(C[0], 400, CW, BH, "Any BI tool", ["no join guide required"])}
-    ${arrow(C[2] - 14, 459, C[1] + CW, 459)}
-    ${arrow(C[1] - 14, 459, C[0] + CW, 459)}
-  `,
-    "Airflow owns only the hourly bronze → silver → gold chain. The streaming job runs as a service, because a scheduler built around tasks that finish cannot own one that never does.",
-  ),
-
   "autoencoder-edge-compression": frame(
     "AUTOENCODER COMPRESSION FOR EDGE DEVICES",
     `

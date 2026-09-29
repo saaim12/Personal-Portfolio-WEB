@@ -19,7 +19,7 @@ export function ProjectGallery({ items }: { items: Item[] }) {
     </div>
     <div className={styles.gallery} id={id}>
       {[0, 1, 2].map(column => <div className={styles.column} key={column}>
-        {column === 0 && selected === "All projects" && <div className={styles.highlight}><strong>{items.length}<span> projects</span></strong><h3>Built with curiosity. Explained with care.</h3><p>Client work, personal prototypes and learning experiments. Explore what went into each one.</p><a href="https://github.com/saaim12" target="_blank" rel="noopener noreferrer">Visit my GitHub ↗</a></div>}
+        {column === 0 && selected === "All projects" && <div className={styles.highlight}><strong>{items.length}<span> projects</span></strong><h3>The problem. The decisions. The result.</h3><p>Client work, personal prototypes and learning experiments. Explore what went into each one.</p><a href="https://github.com/saaim12" target="_blank" rel="noopener noreferrer">Visit my GitHub ↗</a></div>}
         {visible.map((item, index) => index % 3 === column ? <div key={item.slug}>{item.card}</div> : null)}
       </div>)}
     </div>
