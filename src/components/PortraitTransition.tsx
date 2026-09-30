@@ -27,7 +27,10 @@ export function PortraitTransition({ src, alt }: PortraitTransitionProps) {
       const targetRect = target.getBoundingClientRect();
       const sourceTop = sourceRect.top + window.scrollY;
       const targetTop = targetRect.top + window.scrollY;
-      const start = sourceTop - window.innerHeight * 0.48;
+      // The transition must never begin before the page has scrolled. On tall
+      // tablet viewports a negative start showed the floating portrait over
+      // the proof cards even at scroll position zero.
+      const start = Math.max(0, sourceTop - window.innerHeight * 0.48);
       const end = Math.max(start + 1, targetTop - window.innerHeight * 0.34);
       const rawProgress = Math.min(1, Math.max(0, (window.scrollY - start) / (end - start)));
       const progress = rawProgress * rawProgress * (3 - 2 * rawProgress);

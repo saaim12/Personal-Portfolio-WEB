@@ -99,10 +99,10 @@ export function Contact() {
         <div className="availability">
           <span className="availabilityItem">
             <span className="availableDot" aria-hidden="true" />
-            Open to full-time roles
+            Open to full time roles
           </span>
-          <span className="availabilityItem">Replies within 24 hours</span>
-          <span className="availabilityItem">EU and US-East hours</span>
+          <span className="availabilityItem">Usually replies within a day</span>
+          <span className="availabilityItem">European and US Eastern overlap</span>
         </div>
       </Reveal>
     </Column>

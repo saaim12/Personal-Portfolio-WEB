@@ -123,7 +123,7 @@ export const personJsonLd = {
   // job-seeking status in markup rather than only in the copy.
   seeks: {
     "@type": "Demand",
-    name: "Full-time backend, platform or data engineering role",
+    name: "Full time backend, platform or data engineering role",
   },
   address: {
     "@type": "PostalAddress",
@@ -165,7 +165,7 @@ export const personJsonLd = {
     "Microservices",
     "System Design",
     "Distributed Systems",
-    "Event-Driven Architecture",
+    "Event driven architecture",
     "Data Structures and Algorithms",
     "Apache Kafka",
     "Apache Spark",
@@ -176,7 +176,7 @@ export const personJsonLd = {
     "React",
     "TypeScript",
     "Machine Learning",
-    "Retrieval-Augmented Generation",
+    "Retrieval augmented generation",
     "Recommender Systems",
     "pgvector",
     "Redis",

@@ -1,13 +1,13 @@
 ---
 title: "Interactive portfolio with static delivery"
 publishedAt: "2026-09-29"
-updatedAt: "2026-09-29"
+updatedAt: "2026-09-30"
 thumbnail: "/images/projects/covers/interactive-portfolio.svg"
-summary: "Present projects and experience through an interactive website that can be served as static files."
-cardSummary: "Present projects and experience through an interactive website that can be served as static files."
-contribution: "Built section-based React composition, navigation state and scroll interactions."
+summary: "Built an interactive Next.js portfolio with reusable sections and static export configuration."
+cardSummary: "Built an interactive Next.js portfolio with reusable sections and static export configuration."
+contribution: "Built React sections, navigation state and scroll interactions."
 result: "A Next.js portfolio configured for static export with metadata and observability integrations."
-seoDescription: "Present projects and experience through an interactive website that can be served as static files. Explore the architecture, implementation and trade-offs."
+seoDescription: "A separate Next.js portfolio project with React sections, scroll interactions, static export configuration, and metadata for deployment."
 tags: ["Personal prototype"]
 stack: ["nextjs","react","javascript"]
 images: []
@@ -22,26 +22,26 @@ A portfolio needs to explain work clearly, navigate smoothly between sections an
 
 ## Architecture
 
-The App Router page renders a client-side Portfolio component. That component composes the hero, skills, projects, timeline, credentials, contact and footer sections. Mobile-menu state lives in the parent; navigation receives the current section and scroll state from dedicated hooks.
+The App Router page renders a Portfolio component rendered in the browser. That component composes the hero, skills, projects, timeline, credentials, contact and footer sections. Mobile menu state lives in the parent. Navigation receives the current section and scroll state from dedicated hooks.
 
-An IntersectionObserver-based reveal hook finds reveal elements, adds their visible class and stops observing each one after it appears. Other hooks separate navigation scrolling, section tracking and atmospheric effects from the content components. Content and path helpers live in library modules.
+A reveal hook built with IntersectionObserver finds reveal elements, adds their visible class and stops observing each one after it appears. Other hooks separate navigation scrolling, section tracking and atmospheric effects from the content components. Content and path helpers live in library modules.
 
-The Next configuration enables static export and supports a configurable base path and asset prefix. Images are configured as unoptimized for this export path. The repository also includes metadata routes and a GitHub Pages workflow; its README describes Vercel Analytics and Speed Insights integration.
+The Next configuration enables static export and supports a configurable base path and asset prefix. Images are configured as unoptimized for this export path. The repository also includes metadata routes and a GitHub Pages workflow. Its README describes Vercel Analytics and Speed Insights integration.
 
-## Trade-offs
+## Engineering decisions
 
-Static output is portable and needs no application server for page delivery. It also means server-only request features need another service if added later. The client-side composition makes shared interactions convenient but broadens the hydration boundary.
+Static output is portable and needs no application server for page delivery. It also means features that require request processing on a server need another service if added later. The browser component composition makes shared interactions convenient but broadens the hydration boundary.
 
-The reveal hook keeps movement separate from content, although timer cleanup and a no-JavaScript visibility fallback are worth checking. Decorative audio and canvas effects need their own accessibility and performance budget.
+The reveal hook keeps movement separate from content, although timer cleanup and a visibility fallback when JavaScript is unavailable are worth checking. Decorative audio and canvas effects need their own accessibility and performance budget.
 
 ## Result and next steps
 
 This is a separate portfolio implementation, not another client product. Its source demonstrates component composition and static deployment configuration. Traffic and performance benchmarking are outside the scope of this implementation.
 
-I would keep content server-rendered where possible, isolate interactive islands, test reduced-motion behaviour and validate deployment under both root and subpath hosting. Those checks protect the reading experience while preserving the visual character.
+I would keep content server rendered where possible, isolate interactive islands, test behavior with reduced motion enabled and validate deployment under both root and subpath hosting. Those checks protect the reading experience while preserving the visual character.
 
 ## Source code
 
-- [Section composition](https://github.com/saaim12/Portfolio/blob/main/components/Portfolio.jsx)
-- [Reveal hook](https://github.com/saaim12/Portfolio/blob/main/hooks/useRevealOnScroll.js)
-- [Static export configuration](https://github.com/saaim12/Portfolio/blob/main/next.config.mjs)
+* [Section composition](https://github.com/saaim12/Portfolio/blob/main/components/Portfolio.jsx)
+* [Reveal hook](https://github.com/saaim12/Portfolio/blob/main/hooks/useRevealOnScroll.js)
+* [Static export configuration](https://github.com/saaim12/Portfolio/blob/main/next.config.mjs)

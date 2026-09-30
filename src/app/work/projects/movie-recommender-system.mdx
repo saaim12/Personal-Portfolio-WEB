@@ -1,14 +1,13 @@
 ---
-title: "Hybrid recommender, built as a service"
+title: "Hybrid movie recommendation service"
 publishedAt: "2026-07-01"
-cardSummary: "Serve useful recommendations for new users and refresh models without downtime."
-contribution: "Built a hybrid model, FastAPI serving, Redis caching and hot model reloads."
-result: "11 ms cached p95 latency; 97% of the catalogue covered in evaluation."
-updatedAt: "2026-08-06"
-seoDescription: "A hybrid recommender shipped as a service: cold-start handling, a FastAPI serving layer with API-key auth, hot model reloads, Redis caching and CI tests."
-summary: "A recommender with the parts that usually get skipped: cold start handled by design, training and serving separated by an artifact, hot model reload without a deploy, and an evaluation that reports its own sample size."
-tags:
-  - "Machine learning"
+cardSummary: "Built a recommendation service with separate training, evaluation, and API serving workflows."
+contribution: "Combined content similarity, item interactions, and popularity with FastAPI serving and caching."
+result: "Recommendation, similar item, health, and model reload endpoints with API key protection."
+updatedAt: "2026-09-30"
+seoDescription: "A hybrid MovieLens recommendation service with modular training and evaluation, FastAPI endpoints, model reloading, and optional Redis caching."
+summary: "A MovieLens recommendation project combining content similarity, item interactions, and popularity, served through FastAPI with optional Redis caching."
+tags: ["Machine learning project"]
 stack:
   - "python"
   - "fastapi"
@@ -20,106 +19,43 @@ stack:
   - "pytest"
 images: []
 thumbnail: "/images/projects/covers/movie-recommender-system.svg"
-hardPart: "Swapping a retrained model without dropping traffic. Hot reload inside the running service, version skew and reload safety handled there rather than by a deploy."
+hardPart: "Keeping model updates separate from application releases while maintaining a consistent serving contract."
 link: "https://github.com/saaim12/Recommender-System"
 team:
   - name: "Saaim Abdullah"
     role: "ML / backend engineer"
     avatar: "/images/avatar.jpg"
     linkedIn: "https://www.linkedin.com/in/saaim-abdullah/"
+seoTitle: "Movie recommendation service"
+architecture: ["MovieLens data", "Hybrid training", "Model artifact", "FastAPI serving"]
 ---
 
 ## The problem
 
-A useful recommender needs both relevant results and a dependable serving path. I built this project to handle users with no interaction history, separate training from request handling, and reload model artifacts without a full application release.
+A recommendation model needs a serving workflow that applications can use. I built this project to combine MovieLens data preparation, model training, evaluation, and API serving, with a fallback signal for users who have little interaction history.
 
-## Constraints
+## What I built
 
-- Cold start is the common case, not the edge case. New users and new items arrive constantly, and a model that needs interaction history is unusable on day one.
-- Recommendations render inside a page load, so the serving path has a latency budget.
-- Retraining must not require a deploy, so model updates can follow a separate schedule from application releases.
+The pipeline combines ratings, tags, links, and movie metadata into an item catalogue. Scoring blends content similarity, item cooccurrence, and popularity. These signals cover different cases, from movies with shared attributes to items that appear together in user histories.
 
-The data is MovieLens: ratings, tags, links and movie metadata, and nothing
-else. No user profile beyond interaction history, no item text beyond genres and
-tags, and no way to buy a signal that is not in the files. Every scoring
-decision below is a consequence of that, and a recommender given richer features
-would reasonably make different ones.
+Training and evaluation run separately from request handling. The trained model is saved as an artifact that the FastAPI application loads. The API exposes recommendation, similar item, health, and model reload endpoints with API key protection.
 
-## How it's built
+The project includes optional Redis caching, Docker configuration, structured logging, request tracing, and testing workflows. Airflow coordinates the training pipeline.
 
-Ingestion, feature engineering, training, evaluation and serving are separate
-layers over MovieLens ratings, tags, links and movie metadata, not one notebook.
-`build_catalog` merges the four sources into a single item catalogue with
-aggregated rating statistics and tag text per movie.
+## Engineering decisions
 
-Scoring blends three signals: content similarity over genres and aggregated
-statistics, a lightweight collaborative signal from item co-occurrence, and a
-popularity prior. Serving is FastAPI with four routes behind API-key auth:
-health, recommend, similar items and model reload. Redis or an in-memory cache
-sits in front of the hot paths with a configurable TTL. Airflow runs the
-training DAG, and the trained model is pickled to disk as an artifact the API
-loads.
+**Separate training from serving.** A saved artifact gives the API a defined model version to load. It also creates an explicit place to validate a candidate model before replacing the current one.
 
-<ArchitectureDiagram
-  src="/images/projects/movie-recommender-system-architecture.png"
-  alt="The four MovieLens sources are merged by build_catalog and trained into a blend of content similarity, item co-occurrence and a popularity prior, on a schedule driven by an Airflow DAG. Training writes a versioned model artifact. The FastAPI serving layer, behind API-key auth with four routes and a Redis or in-memory cache in front of it, hot-reloads that artifact without a deploy."
-  caption="Training on top, serving underneath, and the versioned artifact as the only thing that crosses between them."
-  width={2400}
-  height={1350}
-/>
+**Combine complementary signals.** Content and popularity help when interaction history is sparse. Item cooccurrence adds a behavioral signal. Their relative value needs to be tested against simple baselines rather than assumed from the model design.
 
-**Making the evaluation population explicit.** The holdout split is per user, and the
-evaluation only scores users who have at least one held-out item rated above the
-positive threshold. The first time I ran it end to end, a large share of users
-were skipped and the reported precision was computed over a much smaller
-population than I assumed, which made it look better than it was. The fix was to
-report `evaluated_users` alongside every metric rather than just the metric. The evaluated-user count is needed to interpret precision and compare runs. The evaluation now returns precision, recall,
-hit rate, coverage and the evaluated-user count together, so the denominator
-travels with the fraction.
+**Make model reload an explicit operation.** Reloading supports a model release schedule separate from application releases. Safe rollout still requires artifact validation, cache invalidation, and concurrent request testing.
 
-**Measured:**
+## Result and next steps
 
-- p95 recommendation latency: 11 ms cached, 74 ms cold
-- Precision@10 and recall@10 on held-out interactions: 0.36 and 0.24
-- Cold-start coverage: 97% of the catalogue receives non-trivial recommendations
-- Model reload swaps the artifact with zero dropped requests
-- 4 serving routes behind API-key auth
+The project provides a modular path from MovieLens data to recommendation APIs. It demonstrates the serving and operational concerns around a model as well as the scoring logic.
 
-## Trade-offs I made
+My next steps would be evaluation with a chronological split, comparisons that remove each scoring signal in turn, and load tests for cold requests, cached requests, and model reloads. Evaluation reports should include the number of eligible users so quality metrics can be interpreted in context.
 
-**Training and serving separated by an artifact.** The trainer writes a versioned
-model artifact; the serving process loads it. The cost is a staleness window
-between training and reload. The benefit is that a failed training run need not replace the artifact currently serving requests, and either side can be changed, scaled, or rolled back without
-touching the other.
+## Explore this project
 
-**Hot model reload instead of redeploys.** New artifacts are picked up by the
-running service. The cost is having to handle version skew and reload safety
-inside the service rather than leaning on a deploy pipeline to do it. The benefit
-is model iteration decoupled from release cadence.
-
-**A hybrid model rather than pure collaborative filtering.** Content similarity
-works with zero interaction history, co-occurrence captures the behavioural
-signal, and the popularity prior keeps output sane when both are thin. A purely collaborative model would require a separate strategy for users and items without sufficient interaction history.
-
-**API-key auth on a recommender.** Recommendation endpoints leak behavioural data
-by inference and are cheap to scrape. Auth belongs there from the start, not
-after someone notices.
-
-## What I'd do differently
-
-The split is random per user, not time-based. Item co-occurrence built from the
-full ratings table can therefore see interactions that happen after the ones it
-is being asked to predict, which inflates the collaborative signal in evaluation
-and not in production. A time-based split would cost little and would make the
-offline numbers mean what they appear to mean.
-
-I would also stop treating the three scoring signals as a fixed blend. Content
-similarity, co-occurrence and the popularity prior are combined with weights I
-chose by hand and never revisited, which means I cannot say what any one of them
-contributes. Ablating each signal against the evaluation set would tell me
-whether the collaborative component earns its complexity at all, and I have no
-evidence either way.
-
-## Links
-
-- Code: [github.com/saaim12/Recommender-System](https://github.com/saaim12/Recommender-System)
+* [View source](https://github.com/saaim12/Recommender-System)

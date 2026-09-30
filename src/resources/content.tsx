@@ -58,31 +58,31 @@ const social: Social = [
 
 const home: Home = {
   path: "/",
-  image: `/api/og/generate?title=${encodeURIComponent(`${person.name} — Software Engineer`)}`,
+  image: `/api/og/generate?title=${encodeURIComponent(`${person.name}, Software Engineer`)}`,
   label: "Home",
-  title: `${person.name} — Software Engineer`,
+  title: `${person.name}, Software Engineer`,
   description: "Saaim Abdullah is a software engineer in Lahore who turns complex software problems into dependable products, APIs, and data systems.",
-  headline: "Software Engineer — Backend & Full Stack",
-  subline: <>I own the path from requirements to production: API contracts, data models, backend workflows, cloud deployment, and handover. My work spans a health platform built from zero and backend services at Expertflow, with a focus on reliability, clear trade-offs, and maintainable delivery.</>,
+  headline: "Backend and full stack engineering",
+  subline: <>I build backend services, web applications, and data pipelines, taking work from requirements through deployment and handover. At Fitter Health, I delivered a health platform as the sole engineer. At Expertflow, I built APIs, improved response times, and worked across cloud, data, and communication systems.</>,
   status: [
     "Open to software engineering roles and product development",
-    "Based in Lahore, working European and US-East hours",
-    "Backend, full-stack, cloud, and data engineering",
+    "Based in Lahore with European and US Eastern overlap",
+    "Backend, full stack, cloud, and data engineering",
     "Reliable delivery from architecture to handover",
   ],
   proof: [
-    { value: "Fitter Health", label: "a live health platform, built solo and handed over" },
-    { value: "1,000 to 3,000", label: "daily users on backend services I owned at Expertflow" },
-    { value: "130 ms to 30 ms", label: "admin API latency, on Redis caching and index tuning" },
-    { value: "13 projects", label: "case studies across shipped work, prototypes and learning" },
+    { value: "Fitter Health", label: "platform delivered as the sole engineer" },
+    { value: "1,000 to 3,000", label: "daily users served by APIs I built at Expertflow" },
+    { value: "130 ms to 30 ms", label: "admin response time after caching and index tuning" },
+    { value: "13 projects", label: "across product delivery, prototypes, and learning" },
   ],
   testimonial: {
     display: true,
-    context: "The founder of the health platform I built and handed over:",
+    context: "From the founder of Fitter Health",
     quote:
-      "He frequently delivered ahead of scope and raised considerations we had not thought to ask about.",
+      "He frequently delivered ahead of scope and raised architectural considerations we had not thought to ask about.",
     author: "Beth Iriarte",
-    role: "Co-founder & CEO, Fitter Health",
+    role: "Cofounder and CEO, Fitter Health",
     letter: "/Fitter-Recommendation-Letter.pdf",
   },
 };
@@ -92,7 +92,7 @@ const technicalSkills: TechnicalSkills = {
     title: "Technical skills",
     skills: [
       {
-        title: "Architecture & distributed systems",
+        title: "Architecture and distributed systems",
         description: "I design around failure modes, ownership boundaries, and operational constraints. My work includes durable messaging, tenant isolation, API contracts, container orchestration, and data models that support both transactional and analytical workloads.",
         stack: [
           "systemdesign",
@@ -108,12 +108,12 @@ const technicalSkills: TechnicalSkills = {
         stack: ["python", "typescript", "sql", "javascript"],
       },
       {
-        title: "Backend & APIs",
+        title: "Backend and APIs",
         description: "I build APIs and workflows for accounts, permissions, payments, bookings, and integrations. I use Django, DRF, FastAPI, Flask, and Express, with explicit validation, error handling, and background processing.",
         stack: ["django", "drf", "fastapi", "flask", "nodejs", "webrtc", "celery"],
       },
       {
-        title: "Data Engineering",
+        title: "Data engineering",
         description: "I build batch and streaming pipelines with Kafka, PySpark, and Airflow. I structure raw, validated, and reporting data separately so pipelines can be inspected, replayed, and extended as requirements change.",
         stack: [
           "kafka",
@@ -127,7 +127,7 @@ const technicalSkills: TechnicalSkills = {
         ],
       },
       {
-        title: "Cloud & DevOps",
+        title: "Cloud and delivery",
         description: "I deploy and operate containerized applications on AWS, with scoped access, network boundaries, automated delivery, and recovery paths. My experience includes ECS, EKS, EC2, RDS, S3, queues, and scheduled workloads.",
         stack: [
           "aws",
@@ -150,8 +150,8 @@ const technicalSkills: TechnicalSkills = {
         stack: ["postgresql", "pgvector", "mongodb", "dynamodb", "redis"],
       },
       {
-        title: "AI & ML",
-        description: "I build retrieval and recommendation workflows with explicit evaluation criteria and fallback behavior. My projects cover multilingual embeddings, tenant-scoped retrieval, hybrid recommendation, and embedded inference.",
+        title: "AI and machine learning",
+        description: "My projects cover multilingual document retrieval, hybrid recommendation, and embedded inference. I work on the services around these models, including data preparation, API serving, and fallback behavior.",
         stack: ["rag", "recommenders", "pgvector", "scikitlearn", "tensorflow"],
       },
       {
@@ -160,7 +160,7 @@ const technicalSkills: TechnicalSkills = {
         stack: ["react", "nextjs", "typescript", "angular"],
       },
       {
-        title: "Testing & quality",
+        title: "Testing and quality",
         description: "I use automated tests, migration checks, database constraints, and CI to make changes safer. Documentation, observability, and a clear handover are part of delivering a system another engineer can maintain.",
         stack: ["pytest", "cicd", "githubactions", "migrations"],
       },
@@ -171,7 +171,7 @@ const work: Work = {
   path: "/work",
   label: "Work",
   title: `Systems I've built`,
-  description: "Explore Saaim Abdullah's software projects: shipped products, backend systems, data pipelines and experiments, with architecture and implementation notes.",
+  description: "Explore Saaim Abdullah's software projects, from product delivery and backend services to data pipelines, AI applications, and engineering experiments.",
 };
 
 export { person, social, home, technicalSkills, work, bookingLink };

@@ -1,14 +1,13 @@
 ---
 title: "Autoencoder compression for edge devices"
 publishedAt: "2025-11-15"
-cardSummary: "Reduce the data remote sensors need to transmit on constrained hardware."
-contribution: "Built an on-device encoder and a Flask decoder on AWS."
-result: "7.8:1 compression with 0.0038 reconstruction MSE; encoder fits in 86 KB."
-updatedAt: "2026-08-06"
-seoDescription: "Bandwidth-bound sensors: a TensorFlow Lite Micro autoencoder compresses readings on the microcontroller, a Flask decoder on AWS EC2 rebuilds them server-side."
-summary: "Bandwidth, not compute, is the binding constraint on a remote sensor. The encoder runs on the microcontroller through TensorFlow Lite Micro at 7.8:1, and a Flask decoder on EC2 reconstructs the signal server-side."
-tags:
-  - "Edge ML"
+cardSummary: "Built an encoder and decoder workflow for sending compact sensor representations from an edge device."
+contribution: "Converted the encoder for device inference and served the decoder through Flask on AWS EC2."
+result: "An edge ML prototype connecting TensorFlow Lite Micro, a Flask decoder, and S3 payload storage."
+updatedAt: "2026-09-30"
+seoDescription: "An edge ML project using TensorFlow Lite Micro for sensor encoding and a Flask decoder on AWS EC2, with S3 integration for encoded payloads."
+summary: "An autoencoder project that moves encoding onto an edge device and reconstructs sensor data through a Flask service on AWS EC2."
+tags: ["Edge ML prototype"]
 stack:
   - "python"
   - "tensorflow"
@@ -20,103 +19,41 @@ stack:
   - "esp32"
 images: []
 thumbnail: "/images/projects/covers/autoencoder-edge-compression.svg"
-hardPart: "The encoder had to fit in flash beside the application on microcontroller-class hardware and still cost less power to run than the bytes it saves to send."
+hardPart: "Balancing representation size, reconstruction quality, and the device memory budget."
 link: "https://github.com/saaim12/AutoEncoders_based_encryption_training_and_fitting_in_devices_such_as_esp_or_rasberry-pi"
 team:
   - name: "Saaim Abdullah"
     role: "ML / cloud engineer"
     avatar: "/images/avatar.jpg"
     linkedIn: "https://www.linkedin.com/in/saaim-abdullah/"
+seoTitle: "Autoencoder for edge sensor data"
+architecture: ["Sensor data", "Device encoder", "Encoded payload", "Cloud decoder"]
 ---
 
 ## The problem
 
-On a remote sensor the binding constraint is not compute, it is bandwidth.
-Sending raw signal is what drains the budget, so the question is how much of the
-signal can be reconstructed after squeezing it through a model small enough to
-run on the microcontroller itself.
+Remote sensors have limited memory, power, and network capacity. I built an autoencoder workflow to explore compact representations of sensor data, with encoding on the device and reconstruction on a server.
 
-## Constraints
+## What I built
 
-- Microcontroller-class hardware. Kilobytes of RAM, no room for a general-purpose runtime, and a model that has to fit in flash alongside the application.
-- Reconstruction has to stay faithful. Compression that loses the signal defeats the point of collecting it.
-- The budget is power, not time. Encoding has to cost less energy than transmitting the bytes it saves, or the whole exercise is negative.
+I trained an autoencoder and tuned the latent representation used to carry sensor information. I converted the encoder for TensorFlow Lite Micro inference on an ESP32 and exposed the decoder through a Flask API on AWS EC2. S3 integration supported encoded payload handling.
 
-The target is an ESP32 class device, which is what fixes the third constraint in
-place: the encoder has to share flash with the application, so the model budget
-is whatever is left over rather than whatever the model wants.
+The device and server share a model contract. Input scaling, latent dimensions, and compatible encoder and decoder versions must remain aligned for reconstruction to work.
 
-## How it's built
+## Engineering decisions
 
-An autoencoder is trained offline on representative sensor data. The encoder
-half is converted to TensorFlow Lite Micro and flashed to the device, where it
-turns each reading window into a small latent vector that goes over the radio.
-The decoder half sits behind a Flask API on AWS EC2 and reconstructs the
-original signal server-side, with S3 holding encoded payloads.
+**Split the model across device and server.** The device runs the encoder while the server handles decoding. This keeps the reconstruction workload off the device but makes artifact compatibility part of deployment.
 
-The asymmetry is the entire design. The constrained side only ever runs the
-cheap half.
+**Treat reconstruction quality as a requirement.** A smaller latent representation is useful only if the reconstructed signal retains the information the application needs. Evaluation should include important changes in the signal alongside aggregate error.
 
-<ArchitectureDiagram
-  src="/images/projects/autoencoder-edge-compression-architecture.png"
-  alt="On an ESP32-class device, a 128-value sensor window runs through the encoder half of the autoencoder, converted to TensorFlow Lite Micro, integer-quantised and occupying 86 KB of flash. It emits a 16-float latent vector, a 7.8:1 reduction, which crosses the radio link to a Flask decoder on EC2 that reconstructs the signal at 0.0038 MSE, with S3 holding the encoded payloads."
-  caption="The split that is the whole design: the device runs only the encoder, and the decoder runs on a server with a larger memory budget."
-  width={2400}
-  height={1350}
-/>
+**Measure transmission savings directly.** A compact representation does not automatically establish lower energy use. Encoding cost, payload serialization, and radio transmission all contribute to the result.
 
-**Sizing the latent vector, and getting it wrong first.** The first latent size I
-tried was too aggressive. It fit comfortably and reconstructed badly, in a way
-that was easy to miss because average error looked acceptable while the sharp
-transitions in the signal, the part actually worth transmitting, were being
-smoothed away. Mean error is the wrong lens for this: it rewards a model that
-reproduces the boring middle of the distribution. Widening the latent vector
-fixed the reconstruction and moved the problem to memory, which is where the
-quantisation work came in. The final encoder is integer-quantised and sized to
-leave headroom in flash for the application rather than consuming everything
-available.
+## Result and next steps
 
-**Measured:**
+The project connects model training, device inference, and cloud reconstruction. It demonstrates the deployment interfaces involved in running parts of one model across different environments.
 
-- Compression ratio: 7.8:1 versus raw readings
-- Reconstruction error: 0.0038 MSE at that ratio
-- Latent vector: 16 floats, down from 128 raw values
-- Encoder footprint on-device: 86 KB
+My next steps would be to compare serialized payload sizes with a simple compression baseline, measure reconstruction quality on representative sensor data, and record device memory and energy use. Those measurements would determine whether this approach suits a particular sensor workload.
 
-## Trade-offs I made
+## Explore this project
 
-**Lossy learned compression over lossless encoding.** The autoencoder reaches
-7.8:1 by accepting reconstruction error a lossless codec never introduces. The
-cost is that the decoded signal is an approximation and its error tolerance has
-to be stated, not assumed. A fair comparison would measure payload size, reconstruction quality, and energy use against lossless baselines on the same samples.
-
-**Splitting the model across the boundary.** The encoder runs on-device through
-TensorFlow Lite Micro; the decoder runs server-side on EC2. The cost is that the
-two halves must stay version-compatible across deployments. The benefit is that
-the device carries only the half that must be small.
-
-**An autoencoder rather than a general-purpose compressor.** A learned representation can exploit the training data distribution, but its performance may deteriorate on different sensors or operating conditions. A deployment needs representative evaluation data and a strategy for model drift.
-
-**Quantised encoder over a smaller float model.** Integer quantization can reduce the memory and arithmetic costs of a TensorFlow Lite Micro model, and quantising a well-sized model beat shrinking a float one at the
-same footprint.
-
-## What I'd do differently
-
-I tuned latent size against reconstruction error alone. The metric that actually
-decides whether this project pays for itself is energy per encode measured
-against energy saved per transmission, and I never measured it. A model that
-compresses 7.8:1 while costing more power to run than the radio saves is a net
-loss, and I cannot currently prove it is not. That measurement comes first next
-time.
-
-I would also have chosen the error metric before the latent size rather than
-after. Mean squared error was the default, and it is the metric that hid the
-first failure: it rewarded a model that smoothed away exactly the sharp
-transitions the sensor exists to capture. I found that by looking at
-reconstructions, not by measuring. Picking a metric that weights transitions
-properly would have made the first attempt fail loudly instead of quietly, which
-is the whole point of having a metric.
-
-## Links
-
-- Code: [github.com/saaim12](https://github.com/saaim12/AutoEncoders_based_encryption_training_and_fitting_in_devices_such_as_esp_or_rasberry-pi)
+* [View source](https://github.com/saaim12/AutoEncoders_based_encryption_training_and_fitting_in_devices_such_as_esp_or_rasberry-pi)

@@ -1,7 +1,7 @@
 const forks = [
   ["alexandria-cover-designer", "Alexandria cover designer"],
   ["RedirectingTinyUrl", "Redirecting Tiny URL"],
-  ["sdk-for-customer-facing-channels", "Customer-facing channels SDK"],
+  ["sdk-for-customer-facing-channels", "Customer communication SDK"],
 ] as const;
 
 export function RepositoryArchive() {

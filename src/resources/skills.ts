@@ -47,8 +47,6 @@ export const skills: Skill[] = [
   // AI
   { tech: "rag", label: "RAG" },
   { tech: "claude", label: "Claude" },
-  { tech: "openai", label: "OpenAI" },
-  { tech: "pinecone", label: "Pinecone" },
 
   // Cloud
   { tech: "aws", label: "AWS" },

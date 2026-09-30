@@ -6,7 +6,7 @@ export async function generateMetadata() {
   return pageMeta({
     title: "Experience",
     description:
-      "Review Saaim Abdullah's software engineering experience across backend APIs, full-stack products, cloud infrastructure, and data systems.",
+      "Review Saaim Abdullah's software engineering experience across backend APIs, full stack products, cloud infrastructure, and data systems.",
     path: "/experience",
   });
 }
@@ -14,34 +14,34 @@ export async function generateMetadata() {
 const roles = [
   {
     company: "Fitter Health",
-    title: "Software Engineer, Full-stack and Cloud · Contract",
-    dates: "2026",
-    location: "Remote · Spain-based team",
+    title: "Software Engineer · Contract",
+    dates: "May 2026 to July 2026",
+    location: "Remote · Team based in Spain",
     bullets: [
-      "Took a validated health-tech concept from zero to a live product used by patients and providers. Designed and built the frontend, backend, database, cloud infrastructure, and data layer, then documented and handed over the system.",
-      "Shipped the AWS estate across ECS, RDS, S3, SNS, SQS, IAM, and VPC with containerisation, least-privilege access, and multi-availability-zone deployment.",
-      "Defined API contracts and backend workflows; built notification and file-handling architecture on Celery and Redis, backed by 135 passing tests, reversible migrations, and database-level integrity constraints.",
-      "Modelled membership and entitlement workflows across a 106-table PostgreSQL schema covering credit balances, session booking, e-commerce, admin CRM, and invoice status synchronisation with Odoo.",
-      "Designed an ETL pipeline into a star-schema PostgreSQL warehouse for data-science workflows, product analytics, and partner reporting.",
-      "Automated member lifecycle email with EventBridge-scheduled Lambda and SES, including renewal reminders and inactivity re-engagement.",
-      "Diagnosed silent notification loss and added SQS between SNS and consumers so failed delivery became retryable with a dead-letter path.",
+      "Delivered a preventive health platform as the sole engineer, covering Django services, a Next.js frontend, PostgreSQL, AWS infrastructure, and a documented handover.",
+      "Deployed containerized services on AWS ECS with RDS and S3, using IAM and VPC controls to scope access.",
+      "Defined API contracts, built background workflows with Celery and Redis, and delivered 135 passing tests with documented services, migrations, and database integrity constraints.",
+      "Modeled membership credits, session booking, commerce, and an admin CRM across 106 PostgreSQL tables. Integrated Odoo invoicing and synchronized payment status with platform records.",
+      "Delivered ETL into a PostgreSQL warehouse with a star schema for ML features, product analytics, and aggregated partner reporting.",
+      "Automated renewal reminders and member engagement email using EventBridge, Lambda, and SES, replacing manual follow up.",
+      "Resolved silent notification loss by buffering SNS through SQS, with retries, a dead letter queue, and queue depth alarms.",
     ],
     tech: "Django · Next.js · PostgreSQL · Celery · Redis · AWS · Docker",
     link: "/work/fitter-health-platform",
   },
   {
     company: "Expertflow",
-    title: "Software Engineer, Backend and Cloud",
-    dates: "2024 – 2026",
+    title: "Software Engineer",
+    dates: "June 2024 to February 2026",
     location: "Lahore · Cisco UCCE solution partner",
     bullets: [
-      "Owned backend REST APIs serving 1,000–3,000 daily users, deployed as Docker containers on AWS EC2 behind an Application Load Balancer with rate limiting, scoped IAM, and VPC isolation.",
-      "Re-deployed the backend as a distributed system on AWS EKS with Horizontal Pod Autoscaler policies that scale replicas with request throughput.",
-      "Reduced admin panel response time from 130 ms to 30 ms through Redis caching and database-index tuning after profiling identified query cost.",
-      "Designed and shipped event-driven batch and streaming ETL pipelines using AWS Lambda, MWAA, EMR, PySpark, Glue, and S3, producing analytics-ready Parquet for BI and ML workflows.",
-      "Developed a real-time voice and video communication SDK on WebRTC and the REST APIs connecting frontend clients, SDK modules, and third-party platforms.",
-      "Implemented a chatbot workflow, SQL-based customer-insight analytics, and time-bound permission controls.",
-      "Worked across Angular frontend, backend, and SDK teams to deliver features end to end.",
+      "Built and maintained REST APIs serving 1,000 to 3,000 daily users, deployed as Docker containers on AWS EC2 behind an Application Load Balancer with rate limiting, scoped IAM, and VPC isolation.",
+      "Deployed the backend as a distributed system on AWS EKS with Horizontal Pod Autoscaler policies that scale replicas with request throughput.",
+      "Reduced admin panel response time from 130 ms to 30 ms through Redis caching and database index tuning after profiling identified query cost.",
+      "Designed and shipped event driven batch and streaming ETL pipelines using AWS Lambda, MWAA, EMR, PySpark, Glue, and S3, producing Parquet datasets for BI and ML workflows.",
+      "Developed a WebRTC SDK for voice and video communication and the REST APIs connecting frontend clients, SDK modules, and external platforms.",
+      "Implemented a chatbot workflow, SQL customer insight analytics, and time limited permission controls.",
+      "Worked across Angular frontend, backend, and SDK teams to deliver features. The role began as an internship and converted to full time employment.",
     ],
     tech: "Python · Django · REST APIs · AWS · EKS · Redis · PySpark · WebRTC",
   },
@@ -55,7 +55,7 @@ export default function Experience() {
           webPageJsonLd({
             title: "Experience",
             description:
-              "Review Saaim Abdullah's software engineering experience across backend APIs, full-stack products, cloud infrastructure, and data systems.",
+              "Review Saaim Abdullah's software engineering experience across backend APIs, full stack products, cloud infrastructure, and data systems.",
             path: "/experience",
             image: ogImageFor("Experience"),
           }),
@@ -69,7 +69,7 @@ export default function Experience() {
           Experience
         </Heading>
         <Text variant="heading-default-m" onBackground="neutral-weak">
-          Software engineering work across backend systems, full-stack products, and data-heavy
+          Software engineering work across backend systems, full stack products, and data intensive
           applications.
         </Text>
       </Column>
@@ -123,9 +123,9 @@ export default function Experience() {
           Education
         </Heading>
         <Text variant="body-default-m">
-          <strong>BS Computer Engineering</strong>
+          <strong>Bachelor of Science in Computer Engineering</strong>
           <br />
-          COMSATS University Islamabad, Lahore Campus · 2021 – 2025
+          COMSATS University Islamabad, Lahore Campus · 2021 to 2025
         </Text>
       </Column>
       <Column as="section" gap="20">
@@ -150,10 +150,10 @@ export default function Experience() {
       </Column>
       <Column as="section" gap="16">
         <Heading as="h2" variant="display-strong-s">
-          Courses & Certifications
+          Completed courses
         </Heading>
         <Text variant="body-default-m">
-          AWS Cloud Technical Essentials · Introduction to Data Engineering · Claude Code 101
+          AWS Cloud Technical Essentials · Introduction to Data Engineering · Getting Started with Git and GitHub · Claude Code 101
         </Text>
       </Column>
     </Column>

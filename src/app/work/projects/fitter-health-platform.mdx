@@ -1,15 +1,15 @@
 ---
-title: "Fitter Health: a production platform, built from zero"
-seoTitle: "Fitter Health: a platform built from zero"
+title: "Fitter Health from concept to delivery"
+seoTitle: "Fitter Health platform"
 publishedAt: "2026-07-15"
-cardSummary: "A health-tech team had a validated concept and needed its first production platform."
-contribution: "Sole engineer across Next.js, Django, PostgreSQL, integrations and AWS."
-result: "Launched for patients and providers; documented and handed over to the team."
-updatedAt: "2026-08-06"
-seoDescription: "How I built a Spain-based health-tech platform solo: Next.js, Django REST, PostgreSQL, Celery and the full AWS estate, from empty repo to production."
-summary: "A Spain-based health team had a validated concept and no engineering function. I built the platform and took it to production alone: entitlements and credits, two-sided booking, invoice reconciliation with Odoo, and the AWS estate under it. Handed over documented."
+cardSummary: "Built a preventive health platform covering memberships, booking, commerce, and operations."
+contribution: "Sole engineer across Django, Next.js, PostgreSQL, AWS, and business integrations."
+result: "Delivered a platform with 135 passing tests and a documented handover."
+updatedAt: "2026-09-30"
+seoDescription: "How Saaim Abdullah delivered Fitter Health with Django, Next.js, PostgreSQL, and AWS, including booking, reliable notifications, and handover."
+summary: "I delivered Fitter Health as the sole engineer, connecting membership credits, session booking, commerce, and an admin CRM with cloud infrastructure and reporting."
 tags:
-  - "Client work, in production"
+  - "Client delivery"
   - "Full stack"
 stack:
   - "django"
@@ -29,150 +29,50 @@ stack:
   - "odoo"
 images: []
 thumbnail: "/images/projects/covers/fitter-health-platform.svg"
-hardPart: "SNS fanned out to the notification consumers with no durable buffer, so a failed delivery vanished without raising anything. It surfaced as a product complaint, not an alert."
+hardPart: "Making notification failures visible and recoverable without losing the work when a consumer failed."
 link: "https://fitter.health/"
 team:
   - name: "Saaim Abdullah"
-    role: "Software engineer, full-stack and cloud"
+    role: "Software engineer, full stack and cloud"
     avatar: "/images/avatar.jpg"
     linkedIn: "https://www.linkedin.com/in/saaim-abdullah/"
 ---
 
-## The problem
+## The brief
 
-A Spain-based preventive health team had a validated concept, paying intent from
-both sides of their market, and no engineering function. They needed the whole
-platform: patient and provider accounts, two-sided session booking, a membership
-and credits model, invoicing reconciled with the Odoo system their operations
-already ran on, an admin panel, a custom CRM for leads, and the infrastructure
-underneath, built and run by one person.
+Fitter Health needed a preventive health platform for a team based in Spain. As the sole engineer on the contract, I delivered the application, backend services, cloud infrastructure, and data workflows. The engagement ran from May to July 2026 and ended with a documented handover.
 
-The architecture was specified by the client. My job was to implement all of it
-as the only engineer, and to catch what the specification had not accounted for.
+The platform connected patient and provider accounts, membership credits, session booking, commerce, and an admin CRM. Odoo handled invoicing, with payment status synchronized back to the platform.
 
-The code and the model are under NDA. What follows is architecture and
-reasoning, with no implementation detail or client data.
+## What I built
 
-## Constraints
+I built Django and Django REST Framework services over a PostgreSQL schema of 106 tables and connected them to a Next.js frontend. The data model covered membership entitlements, credit balances, booking, orders, and operational records.
 
-Sole engineer, a non-technical client, and a timezone gap, so every requirement
-had to survive being written down: decisions were made on calls, confirmed in
-writing, and built in slices the founders could review as working software
-rather than documents. Clinical compliance rules and a large role-based access
-matrix constrained the data model from day one. Invoicing had to reconcile with
-an Odoo instance that already existed and was not going to change. And the
-handover was a requirement, not an afterthought: the client had to be able to
-run, rebuild, and extend the system without me.
+Celery and Redis handled background work. I deployed containerized services on AWS ECS with RDS and S3, using IAM and VPC controls to scope access. EventBridge, Lambda, and SES supported scheduled renewal reminders and member engagement email.
 
-The domain carried its own constraints, and they were the hard part rather than
-the stack:
+I also delivered an ETL pipeline into a PostgreSQL warehouse with a star schema. It provided a shared data model for ML features, product analytics, and aggregated partner reporting.
 
-- **Memberships are entitlements, not subscriptions.** A member holds a balance of credits that different session types consume at different rates, with expiry and carry-over rules. Booking has to check entitlement, not just availability.
-- **Two-sided booking.** Coaches and members each have calendars, and a session is only real when both sides hold. Cancellation has to return the credit under some conditions and not others.
-- **Invoice state lives in Odoo.** Payment status originates in more than one payment rail and has to reconcile against the platform's view of what a member is owed or owes.
+## Fixing notification delivery
 
-## How it's built
+The member engagement workflow was losing notifications without a clear recovery path. I traced the issue to the delivery path between SNS and its consumers and added SQS buffering.
 
-Django and Django REST Framework behind a Next.js frontend, PostgreSQL as the
-primary store, Celery and Redis for anything that must not block a request. On
-AWS: containerised application instances behind a load balancer across two
-availability zones, RDS for PostgreSQL, S3 for files, SES for transactional
-mail, and SNS with SQS on the eventing path, all inside a VPC with scoped IAM
-roles and no public database path.
+The revised flow gave consumers queued work to retry. Repeated failures went to a dead letter queue, and queue depth alarms made stalled processing visible. This addressed the implementation's missing recovery path and gave the team a way to inspect failed work.
 
-- A Next.js frontend covering both sides of the product: the customer-facing panel and a full admin panel for operations and content.
-- A custom CRM module for leads and pipeline, built into the platform rather than bolted on from a third-party tool.
+## Engineering decisions
 
-The admin panel is not a convenience. A non-technical team that has to file a
-ticket with their only engineer to correct a booking or adjust a credit balance
-does not have a working product, so operations, content, scheduling, entitlement
-adjustments and the compliance-sensitive record views all have first-class
-screens. The CRM sits inside the platform for the same reason: a lead becoming a
-member is then one system's state change instead of two systems disagreeing.
+**Keep business rules close to the data.** Membership credits, booking, and invoice status involve related writes. Database integrity constraints and migrations helped protect those relationships across application workflows.
 
-**What it does in production.** It is live at
-[fitter.health](https://fitter.health/), built by me and handed over to the client.
-Entitlement, booking and invoice reconciliation are modelled with
-database-level constraints, so a credit cannot be double-spent by a race
-between two requests. Notification delivery is durable and inspectable after
-the change described below, with failures landing in a dead-letter queue rather
-than vanishing. The infrastructure is defined and reproducible, and the client
-owns the AWS account, the repositories and the domains.
+**Separate request handling from background work.** Celery and Redis supported application tasks while scheduled AWS workflows handled member lifecycle email. Each path needed clear failure handling and operational ownership.
 
-## The incident
+**Make the system transferable.** I documented the API surface and delivered 135 passing tests. The handover needed to give the team enough context to operate and extend the platform after the contract ended.
 
-The platform had a re-engagement requirement: members inactive for 21 days or
-more should get an email and a push notification nudging them back. The pipeline
-was event driven. A scheduled EventBridge rule ran daily, a Lambda picked out the
-inactive members, and the results were published to an SNS topic that fanned out
-to the notification consumers for email and push.
+## Result
 
-The original design had SNS delivering directly to those consumers. That works
-right up until a consumer fails mid-delivery. In this implementation, exhausted delivery retries did not leave a durable work item in an application queue for operators to inspect or replay. The missing recovery path made notification failures difficult to trace. SNS retry behavior depends on subscriber configuration; the issue here was the recovery design around our consumers.
+I delivered the platform and its supporting infrastructure, resolved the notification recovery issue, and handed over the documented system. The founder's recommendation describes my backend, cloud, and data architecture work, along with how I communicated decisions and prepared the handover.
 
-It surfaced as a product complaint rather than as an alert, which delayed diagnosis: someone on the client's side noticed that members
-they expected to be nudged had not been. There was no count that disagreed with
-any other count, so there was nothing to reconcile. My first instinct was that
-the scheduling job was selecting the wrong members, and I spent real time
-verifying that query before accepting that the messages were being generated
-correctly and lost after publication.
+For a similar engagement, I would review retry behavior, failure visibility, and recovery procedures during the initial design. Those decisions affect both implementation and the team's ability to operate the product.
 
-The diagnosis was the uncomfortable kind: the system was behaving exactly as
-built. Nothing was broken in the code. The architecture had no durable place for
-an undelivered notification to exist, so an undelivered notification did not
-exist.
+## Explore this project
 
-The fix was to put SQS between SNS and the consumers. SNS fans out to queues
-instead of directly to workers, the workers consume at their own pace, failed
-deliveries return to the queue and retry, and anything that keeps failing lands
-in a dead letter queue where it is visible, inspectable, and replayable.
-CloudWatch alarms on queue depth mean a stuck consumer now announces itself
-instead of hiding.
-
-What it changed for me is that I stopped treating durability as an optimisation.
-A queue gets its dead letter path before it gets traffic, and "what happens when
-this fails" is a design question, not an operations question. Silent success and
-silent failure look identical from the outside, which is why the failure path has
-to be designed on purpose.
-
-## Trade-offs I made
-
-**Implementing the client's architecture rather than redesigning it.** The design
-was theirs; my responsibility was implementation and catching gaps, like the
-notification path above. The cost was living with structural choices I would have
-made differently. The benefit was momentum and a client who fully owned and
-understood their own system, which mattered more, because they keep it after I
-leave.
-
-**Two async systems instead of one.** Celery on Redis handles application
-background work; EventBridge with Lambda handles the scheduled re-engagement
-scan. Running both means two things to operate and monitor. Collapsing everything
-into one would have meant either dragging scheduled infra concerns into the app
-workers or moving app tasks out to Lambda, and each job sat more naturally where
-it landed.
-
-**Integrity in the database, not just the serializer.** Credits, entitlements and
-booking rules are enforced with database-level constraints and transactions
-rather than trusting the API layer. The cost is stricter migrations and less
-flexibility when requirements moved. The benefit is that writes through different application paths must satisfy the same declared constraints. Transaction boundaries and concurrency tests remain necessary.
-
-## What I'd do differently
-
-I would have built the notification path with the queue in it from the first
-day. The SNS-direct version was not a shortcut I took knowingly, it was a
-default I did not question, and questioning it would have cost an hour against
-the days it eventually took to find.
-
-I would also have separated two things I treated as one: accepting the client's
-architecture, and accepting its data model. Taking the architecture as given was
-the right call and I would make it again, but I extended that deference to
-structural decisions underneath it that were mine to question, and the
-trade-offs section above is honest that I then lived with choices I would have
-made differently. The failure-path review I now run before building a feature is
-the same instrument, and it works just as well pointed at a specification as at
-my own design.
-
-## Links
-
-- Live: [fitter.health](https://fitter.health/)
-- Recommendation letter: [signed by the co-founder and CEO](/Fitter-Recommendation-Letter.pdf)
+* [Visit Fitter Health](https://fitter.health/)
+* [Read the signed recommendation](/Fitter-Recommendation-Letter.pdf)

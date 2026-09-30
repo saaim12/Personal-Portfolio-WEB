@@ -82,7 +82,7 @@ export default function Work() {
           align="center"
         >
           <Heading as="h2" variant="heading-strong-l" align="center">
-            Engineering write-ups
+            Engineering articles
           </Heading>
           <Text
             onBackground="neutral-weak"
@@ -103,7 +103,7 @@ export default function Work() {
               data-border="rounded"
               arrowIcon
             >
-              Read My Articles
+              Read my articles
             </Button>
             {/* The five systems above are the interesting work, but most loops
                 still open with an algorithms round, and a recruiter screening

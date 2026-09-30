@@ -1,38 +1,39 @@
 ---
 title: "Document Q&A with Django and pgvector"
 publishedAt: "2026-09-29"
-updatedAt: "2026-09-29"
+updatedAt: "2026-09-30"
 thumbnail: "/images/projects/covers/document-rag-backend.svg"
-summary: "Answer questions from an existing Q&A dataset and avoid generating answers when retrieval finds no relevant context."
-cardSummary: "Answer questions from an existing Q&A dataset and avoid generating answers when retrieval finds no relevant context."
+summary: "Built a Django backend that retrieves stored Q&A pairs and uses relevant context to answer questions."
+cardSummary: "Built a Django backend that retrieves stored Q&A pairs and uses relevant context to answer questions."
 contribution: "Separated ingestion, retrieval and generation behind Django REST endpoints."
-result: "A source-grounded Q&A prototype with category filtering and a no-context fallback."
-seoDescription: "A Django Q&A backend using Gemini embeddings and pgvector. Explore ingestion, filtered retrieval, answer generation, and the no-context fallback."
+result: "A Q&A prototype using retrieved source text with category filtering and a fallback when context is missing."
+seoDescription: "A Django Q&A backend using Gemini embeddings and pgvector. Explore ingestion, filtered retrieval, answer generation, and fallback behavior."
 tags: ["Personal prototype"]
 stack: ["django","drf","postgresql","pgvector","gemini"]
 images: []
 architecture: ["CSV Q&A pairs","Gemini embeddings","PostgreSQL + pgvector","Retrieved context → answer"]
 link: "https://github.com/saaim12/Rag-in-django-Backend"
+article: "https://medium.com/@saymmalik08/i-built-a-rag-back-end-in-django-on-postgresql-18-windows-heres-every-way-it-broke-626cb8010fd2"
 team: []
 ---
 
 ## The problem
 
-A general language model does not automatically know the contents of a private dataset. This backend makes stored Q&A pairs searchable by meaning, then supplies matching text as context for generation. It is a separate project from the multilingual, multi-tenant RAG engine.
+A general language model does not automatically know the contents of a private dataset. This backend makes stored Q&A pairs searchable by meaning, then supplies matching text as context for generation. It is a separate project from the multilingual, RAG engine for separate customer datasets.
 
 ## Architecture
 
-The ingestion service validates CSV columns, formats question-and-answer rows, requests Gemini embeddings in batches and stores content, source, category and vectors in PostgreSQL through Django models. Failed embedding batches are logged and counted as skipped.
+The ingestion service validates CSV columns, formats question and answer rows, requests Gemini embeddings in batches and stores content, source, category and vectors in PostgreSQL through Django models. Failed embedding batches are logged and counted as skipped.
 
-At query time, the retrieval service embeds the question using the same embedding path. A pgvector cosine-distance query orders candidates, optionally filters by category and keeps candidates within a relevance threshold. The RAG service builds a prompt from that context and calls Gemini for the answer. If nothing meets the retrieval threshold, it returns a fallback without making the generation call.
+At query time, the retrieval service embeds the question using the same embedding path. A pgvector cosine distance query orders candidates, optionally filters by category and keeps candidates within a relevance threshold. The RAG service builds a prompt from that context and calls Gemini for the answer. If nothing meets the retrieval threshold, it returns a fallback without making the generation call.
 
 REST views expose query, ingest and health operations. Model names, dimensions, thresholds and retry settings live in configuration rather than being repeated throughout the services.
 
-## Trade-offs
+## Engineering decisions
 
-pgvector keeps content and vectors in the same database. This reduces the number of services to operate, but vector indexing and retrieval quality still need workload-specific measurement. Using a hosted embedding API simplifies local infrastructure while adding external latency, quotas and a data-processing dependency.
+pgvector keeps content and vectors in the same database. This reduces the number of services to operate, but vector indexing and retrieval quality still need measurement against the expected workload. Using a hosted embedding API simplifies local infrastructure while adding external latency, quotas and a data processing dependency.
 
-A relevance threshold helps reject weak context; it cannot guarantee hallucination-free answers. The threshold needs evaluation against representative questions, including questions the dataset cannot answer.
+A relevance threshold helps reject weak context. It cannot guarantee answers without unsupported claims. The threshold needs evaluation against representative questions, including questions the dataset cannot answer.
 
 ## Current result and next steps
 
@@ -40,6 +41,6 @@ The repository documents authentication as unfinished and the Celery task as a d
 
 ## Source code
 
-- [Architecture document](https://github.com/saaim12/Rag-in-django-Backend/blob/main/ARCHITECTURE.md)
-- [Retrieval service](https://github.com/saaim12/Rag-in-django-Backend/blob/main/documents/services/retrieval.py)
-- [Ingestion service](https://github.com/saaim12/Rag-in-django-Backend/blob/main/documents/services/ingestion.py)
+* [Architecture document](https://github.com/saaim12/Rag-in-django-Backend/blob/main/ARCHITECTURE.md)
+* [Retrieval service](https://github.com/saaim12/Rag-in-django-Backend/blob/main/documents/services/retrieval.py)
+* [Ingestion service](https://github.com/saaim12/Rag-in-django-Backend/blob/main/documents/services/ingestion.py)

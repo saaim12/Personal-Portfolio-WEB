@@ -1,13 +1,13 @@
 ---
-title: "Bookstore: catalogue, cart and orders"
+title: "Bookstore catalogue, cart, and orders"
 publishedAt: "2026-09-29"
-updatedAt: "2026-09-29"
+updatedAt: "2026-09-30"
 thumbnail: "/images/projects/covers/bookstore-platform.svg"
-summary: "Connect a browsable book catalogue to a shopping cart and persisted orders."
-cardSummary: "Connect a browsable book catalogue to a shopping cart and persisted orders."
+summary: "Built a React and Express bookstore with catalogue browsing, cart state, and stored orders."
+cardSummary: "Built a React and Express bookstore with catalogue browsing, cart state, and stored orders."
 contribution: "Built separate React and Express repositories with cart state, catalogue endpoints and order models."
-result: "An e-commerce prototype with server-calculated order totals; authentication remains unfinished."
-seoDescription: "Connect a browsable book catalogue to a shopping cart and persisted orders. Explore the architecture, implementation and trade-offs."
+result: "A storefront prototype with order totals calculated on the server. Authentication remains unfinished."
+seoDescription: "A React and Express bookstore prototype with MongoDB, shared cart state, and order totals calculated from stored prices on the server."
 tags: ["Personal prototype"]
 stack: ["react","nodejs","mongodb","javascript"]
 images: []
@@ -22,7 +22,7 @@ A storefront needs more than a list of books. Browsing, cart state, customer det
 
 ## Architecture
 
-The Vite/React frontend uses React Router for Home, Shop, Auth and Order screens. User and cart contexts share state across those routes. The order screen sends book IDs, quantities, a delivery address and a payment-method selection to Express.
+The Vite/React frontend uses React Router for Home, Shop, Auth and Order screens. User and cart contexts share state across those routes. The order screen sends book IDs, quantities, a delivery address and a payment method selection to Express.
 
 The backend separates routes, controllers and Mongoose models. Its entry point mounts auth, books and orders routes and starts listening after connecting to MongoDB. The catalogue controller paginates book queries. The order controller retrieves current book prices from the database, calculates the total and saves the order with its line items.
 
@@ -34,13 +34,13 @@ React Context keeps the small storefront straightforward, but the cart lives in 
 
 ## Current result and next steps
 
-This is a prototype, not a production checkout. The user model has password hashing and verification commented out, and the order routes do not attach authentication middleware. A selected payment method is stored as data; it is not a payment-provider integration.
+This is a prototype, not a production checkout. The user model has password hashing and verification commented out, and the order routes do not attach authentication middleware. A selected payment method is stored as data. It is not a payment provider integration.
 
 Before deployment I would complete authentication, derive order ownership from the authenticated user, validate quantities and unknown book IDs, add inventory transactions, and replace the hardcoded local API address. Those changes are prerequisites for trusting an order, not optional polish.
 
 ## Source code
 
-- [React storefront](https://github.com/saaim12/BOOK-STORE-FRONTEND)
-- [Order controller](https://github.com/saaim12/BOOK-STORE-BACKEND/blob/main/src/controllers/orderController.js)
-- [Order schema](https://github.com/saaim12/BOOK-STORE-BACKEND/blob/main/src/models/Order.model.js)
-- [Authentication model](https://github.com/saaim12/BOOK-STORE-BACKEND/blob/main/src/models/User.model.js)
+* [React storefront](https://github.com/saaim12/BOOK-STORE-FRONTEND)
+* [Order controller](https://github.com/saaim12/BOOK-STORE-BACKEND/blob/main/src/controllers/orderController.js)
+* [Order schema](https://github.com/saaim12/BOOK-STORE-BACKEND/blob/main/src/models/Order.model.js)
+* [Authentication model](https://github.com/saaim12/BOOK-STORE-BACKEND/blob/main/src/models/User.model.js)

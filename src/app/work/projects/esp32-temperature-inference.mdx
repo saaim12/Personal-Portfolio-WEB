@@ -1,13 +1,13 @@
 ---
 title: "ESP32 temperature inference experiment"
 publishedAt: "2026-09-29"
-updatedAt: "2026-09-29"
+updatedAt: "2026-09-30"
 thumbnail: "/images/projects/covers/esp32-temperature-inference.svg"
-summary: "Connect a model trained in Python to device-side inference and a server-side decoder."
-cardSummary: "Connect a model trained in Python to device-side inference and a server-side decoder."
+summary: "Connected Python model training to ESP32 inference and temperature reconstruction through Flask."
+cardSummary: "Connected Python model training to ESP32 inference and temperature reconstruction through Flask."
 contribution: "Implemented model export, ESP32 sensor inference and Flask reconstruction code."
-result: "An academic split-inference prototype; hardware performance and energy savings are not established."
-seoDescription: "Connect a model trained in Python to device-side inference and a server-side decoder. Explore the architecture, implementation and trade-offs."
+result: "An academic prototype connecting training, device inference, and server reconstruction."
+seoDescription: "An ESP32 temperature experiment connecting Python model training, TensorFlow Lite Micro inference, and a Flask decoder with shared preprocessing."
 tags: ["Personal prototype"]
 stack: ["python","tensorflow","tflitemicro","esp32","flask"]
 images: []
@@ -18,21 +18,21 @@ team: []
 
 ## The problem
 
-A trained model is only one part of an embedded ML system. Its input scaling, exported format, device runtime and server-side counterpart all need to agree. This experiment explores those interfaces with temperature readings.
+A trained model is only one part of an embedded ML system. Its input scaling, exported format, device runtime and server counterpart all need to agree. This experiment explores those interfaces with temperature readings.
 
 ## Architecture
 
-The training variant generates synthetic temperature samples, fits a scaler over a fixed range and trains a Keras autoencoder. It exports the encoder as a TensorFlow Lite file and C header, and saves the decoder and scaler separately for Python serving.
+The training variant generates synthetic temperature samples, fits a scaler over a fixed range and trains a Keras autoencoder. It exports the encoder as a TensorFlow Lite file and C header, and saves the decoder and scaler separately for the Python service.
 
-The ESP32 code reads a DHT11 sensor, scales the temperature using matching constants and invokes TensorFlow Lite Micro. A fixed tensor arena holds the runtime's working memory. The device packages a two-value latent vector as JSON and sends it over Wi-Fi to the Flask /decode endpoint.
+The ESP32 code reads a DHT11 sensor, scales the temperature using matching constants and invokes TensorFlow Lite Micro. A fixed tensor arena holds the runtime's working memory. The device packages a latent vector with two values as JSON and sends it over a wireless connection to the Flask /decode endpoint.
 
 The server loads the decoder and scaler, checks the incoming vector shape, predicts a scaled temperature and applies the inverse transformation. The endpoint logs the reconstructed temperature and returns a success message rather than the numeric prediction.
 
-## Constraints and trade-offs
+## Constraints and engineering decisions
 
 The model artifacts and preprocessing constants form a contract across Python and firmware. A different scaler, latent dimension or unsupported operation can break that contract even when both programs start successfully. Exported symbol names and registered device operations also need verification together.
 
-This particular variant maps one temperature value to two latent values. It demonstrates split inference; it is not evidence of payload compression. It is presented separately from the existing edge-compression case study so their results are not conflated.
+This particular variant maps one temperature value to two latent values. It demonstrates split inference. It is not evidence of payload compression. It is presented separately from the existing edge compression case study so their results are not conflated.
 
 ## Result and next steps
 
@@ -40,6 +40,6 @@ The repository contains the training, export, firmware and decoder pieces. It do
 
 ## Source code
 
-- [Training and export](https://github.com/saaim12/FYP/blob/main/model_training_2.py)
-- [ESP32 firmware](https://github.com/saaim12/FYP/blob/main/esp_code.c)
-- [Flask decoder](https://github.com/saaim12/FYP/blob/main/server_code/server.py)
+* [Training and export](https://github.com/saaim12/FYP/blob/main/model_training_2.py)
+* [ESP32 firmware](https://github.com/saaim12/FYP/blob/main/esp_code.c)
+* [Flask decoder](https://github.com/saaim12/FYP/blob/main/server_code/server.py)

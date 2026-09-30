@@ -1,15 +1,13 @@
 ---
-title: "Multilingual, multi-tenant RAG engine"
+title: "Multilingual RAG for separate customer datasets"
 publishedAt: "2026-05-10"
-cardSummary: "Answer questions from private documents without mixing customer data."
-contribution: "Built tenant-isolated retrieval, local embeddings and a Django API."
-result: "86% precision@5 on a hand-labelled evaluation set, across 18 languages."
-updatedAt: "2026-08-06"
-seoDescription: "A multi-tenant RAG backend in Django and PostgreSQL: isolated per-customer retrieval, local multilingual embeddings, answers grounded in retrieved context."
-summary: "Several tenants on one deployment with fully isolated retrieval. The tenant claim lives in the JWT rather than the request, because cross-tenant retrieval is a security bug rather than a quality one. Local embeddings, grounded answers with citations."
-tags:
-  - "RAG / AI"
-  - "Multi-tenant"
+cardSummary: "Built document retrieval and answer generation with a separate knowledge base for each customer."
+contribution: "Implemented authenticated retrieval, local multilingual embeddings, ingestion, and usage quotas."
+result: "A Django service with customer scoped retrieval and six prompt templates."
+updatedAt: "2026-09-30"
+seoDescription: "A Django RAG project with local multilingual embeddings, customer scoped retrieval in pgvector, usage quotas, and Gemini answer generation."
+summary: "A Django and PostgreSQL RAG service with local multilingual embeddings, authenticated retrieval, usage quotas, and Gemini answer generation."
+tags: ["RAG and AI", "Customer data isolation"]
 stack:
   - "django"
   - "postgresql"
@@ -21,122 +19,47 @@ stack:
   - "javascript"
 images: []
 thumbnail: "/images/projects/covers/multilingual-rag-engine.svg"
-hardPart: "Cross-tenant retrieval is a security incident, not a bad answer. The tenant claim had to come from the verified JWT, so a client can never ask for someone else's documents."
+hardPart: "Applying the authenticated customer identity consistently throughout retrieval and ingestion."
 link: "https://github.com/saaim12/Multi-Tenant-Multi-Lingual-Retrieval-Augmented-Generation-RAG-System"
+article: "https://medium.com/@saymmalik08/building-a-multilingual-multi-tenant-rag-engine-in-django-c975aecf599a"
 team:
   - name: "Saaim Abdullah"
     role: "Backend engineer"
     avatar: "/images/avatar.jpg"
     linkedIn: "https://www.linkedin.com/in/saaim-abdullah/"
+seoTitle: "Multilingual RAG engine"
+architecture: ["Document ingestion", "Local embeddings", "Filtered retrieval", "Gemini answer"]
 ---
 
 ## The problem
 
-A question-answering service over company documents has two failure modes that
-matter more than answer quality. It can answer from the wrong tenant's
-documents, which is a security incident rather than a bad answer. And it can
-answer from nothing, generating plausible text when retrieval comes back thin.
-This engine had to serve several tenants and several languages from one
-deployment, enforce tenant-scoped retrieval, and ground
-every answer in retrievable, citable sources.
+A document Q&A service needs to retrieve relevant material without mixing customer datasets. I built this project for multilingual questions over separate knowledge bases, with authentication, usage quotas, and answers based on retrieved context.
 
-The concrete use case was a localisation Q&A service: several tenants, each with
-their own corpus, several languages, and answers traceable to a source rather
-than confidently invented. For a localisation tool a confident wrong answer is
-worse than no answer, because it gets shipped into a translation and nobody
-re-reads it.
+## What I built
 
-## Constraints
+Django exposes ingestion and query workflows over PostgreSQL with pgvector. Documents are divided into chunks and embedded locally using a multilingual E5 model. The service stores each chunk with its customer association and uses that association when searching for context.
 
-- Tenant isolation is a security boundary, not a filter. A missing `WHERE` clause is a data breach, not a quality regression.
-- Retrieval has to work across languages, not just English.
-- No third-party embedding API. Embedding should run inside the deployment to control re-indexing costs and reduce external data processing.
+At query time, the service embeds the question, retrieves relevant chunks for the authenticated customer, and sends the selected context to Gemini for answer generation. A browser interface supports the query workflow.
 
-Embedding runs locally with `intfloat/multilingual-e5-base`, avoiding a hosted embedding API and its per-call charges. Generation is a separate boundary: retrieved chunks are sent to Gemini. A deployment handling sensitive documents therefore needs an explicit policy for what context may leave the service.
+Six prompt templates cover question answering, summarization, translation, glossary creation, extraction, and explanation. Usage quotas provide a limit on requests per customer.
 
-## How it's built
+## Engineering decisions
 
-Django over PostgreSQL with the pgvector extension, enabled in the first
-migration so the vector column exists before any model that needs it. Documents
-are chunked, embedded locally with `intfloat/multilingual-e5-base` at 768
-dimensions, and stored per tenant. A query embeds the same way and runs a cosine
-similarity search scoped to the caller's tenant. Retrieved chunks go to Gemini
-2.5 Flash with a prompt that constrains the answer to the supplied context.
+**Carry identity through retrieval.** The verified token supplies the customer identity used by the query layer. This boundary also depends on registration, token issuance, and authorization checks across ingestion and retrieval. Assigning a customer from an email domain alone does not prove membership of that organization.
 
-Tenant identity is written into the JWT at login and is never read from a
-request parameter. Every retrieval query filters by the tenant claim on that
-token, which is the isolation boundary. On registration the tenant is assigned
-from the email domain, so a user cannot pick their own.
+**Keep embeddings local.** Local embedding avoids a separate embedding API and its request charges. It still requires memory and compute within the deployment. Gemini receives retrieved context for generation, so the service has a separate external data processing boundary.
 
-Six prompt templates ship with it: qa, summarize, translate, glossary, extract
-and explain. Seven endpoints cover register, login, refresh, query, ingest,
-usage and health.
+**Store vectors with their source records.** PostgreSQL and pgvector keep document metadata and embeddings together. This simplifies the data model and operations, while retrieval performance still depends on indexing and the size of each dataset.
 
-<ArchitectureDiagram
-  src="/images/projects/multilingual-rag-engine-architecture.png"
-  alt="A query carrying a signed JWT reaches Django and DRF, which reads the tenant claim from the token rather than from the request. The query is embedded locally by multilingual-e5-base at 768 dimensions, a cosine search in PostgreSQL with pgvector is filtered by that tenant claim, and the retrieved chunks go to Gemini 2.5 Flash, which is prompted to answer from that context."
-  caption="The retrieval path. The tenant claim enters at the token and constrains every query after it, so isolation is a property of the request rather than of remembering a WHERE clause."
-  width={2400}
-  height={1350}
-/>
+**Use context to guide generation.** Retrieved passages give the model relevant material to work from. They do not guarantee that every generated statement is supported, so answer quality needs evaluation alongside retrieval quality.
 
-**The quota race, and the fix.** The first version enforced quotas by reading the
-tenant's usage counter, comparing it, then incrementing it. Under concurrent
-requests that is a read-modify-write race, and a tenant near their limit could
-exceed it by however many requests were in flight. It is the classic version of
-the bug and it does not show up in single-user testing at all. The fix was to
-make the check and the increment one atomic database operation, so the limit is
-enforced by the database rather than by application logic that happens to run
-first. Over-quota requests now return HTTP 429 rather than quietly succeeding,
-and a `reset_quotas` management command clears counters on a monthly cycle.
+## Result and next steps
 
-**Measured:**
+The project brings authentication, multilingual retrieval, ingestion, quotas, and prompt templates into one service. The accompanying article explains the implementation and setup decisions.
 
-- Retrieval precision@5: 86% on a hand-labelled evaluation set
-- Tenants on a single deployment: 25
-- Languages covered: 18
-- Median query latency: 410 ms
-- External embedding cost: $0, because embeddings are generated locally at 768 dimensions ; generation still sends retrieved context to Gemini
+My next priorities would be a representative multilingual evaluation set, authorization tests for every data access path, and concurrent quota tests. Retrieval precision, response latency, and operating cost should be measured against a documented workload before setting service targets.
 
-## Trade-offs I made
+## Explore this project
 
-**Tenant identity from the JWT, not the request.** The tenant claim is read from
-the verified token and applied as a retrieval filter server-side. The cost is
-stricter auth plumbing and no convenient tenant switch for testing. The benefit
-is that clients cannot choose a retrieval tenant through a query parameter. Token validation, tenant assignment, and every retrieval path still require authorization tests.
-
-**pgvector in PostgreSQL over a dedicated vector database.** Embeddings live next
-to the tenant and document rows they belong to, in one database with one backup
-story, and tenant isolation is enforced by the same layer that owns the rest of
-the data. The cost is a scale and ANN-tuning ceiling that a dedicated store would
-push higher. At this workload the ceiling is theoretical and the operational
-simplicity is not.
-
-**Local embeddings with hosted generation.** Local embeddings remove embedding API fees and keep indexing within the deployment, but require model memory and capacity planning. Gemini still receives the retrieved context for answer generation. These two data-processing boundaries need separate controls.
-
-**Query-layer isolation over one deployment per tenant.** A deployment per
-customer provides stronger infrastructure separation and multiplies operational cost by the number of
-customers. Scoping retrieval keeps one deployment while making the boundary
-explicit on every path that touches a chunk.
-
-**Grounded generation.** The prompt instructs the model to use retrieved context and abstain when it is insufficient. Prompting alone does not guarantee correct answers. For a document Q&A tool a confident wrong answer is worse than no
-answer, because it gets shipped downstream and nobody re-reads it.
-
-## What I'd do differently
-
-I tuned chunk size by reading outputs before I had an evaluation set. That makes
-every tuning decision a judgment call rather than a measurement, and it means I
-cannot tell you whether the current chunking is better than the first thing I
-tried. Building a small hand-labelled question set first would have cost a day
-and made the rest of the work measurable.
-
-I would also have caught the quota race by writing the test before the feature.
-Read-modify-write under concurrency is a known bug with a known shape, and I
-wrote it anyway because single-user testing cannot see it. Anything that reads a
-counter, decides on it, and writes it back now gets a concurrent test first, on
-the grounds that it is the only kind of test that would ever have failed.
-
-## Links
-
-- Code: [github.com/saaim12/Multi-Tenant-Multi-Lingual-Retrieval-Augmented-Generation-RAG-System](https://github.com/saaim12/Multi-Tenant-Multi-Lingual-Retrieval-Augmented-Generation-RAG-System)
-- Write-up: [Building a multilingual, multi-tenant RAG engine in Django](https://medium.com/@saymmalik08/building-a-multilingual-multi-tenant-rag-engine-in-django-c975aecf599a)
+* [View source](https://github.com/saaim12/Multi-Tenant-Multi-Lingual-Retrieval-Augmented-Generation-RAG-System)
+* [Read the article](https://medium.com/@saymmalik08/building-a-multilingual-multi-tenant-rag-engine-in-django-c975aecf599a)

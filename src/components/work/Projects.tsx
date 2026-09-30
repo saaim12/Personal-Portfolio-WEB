@@ -43,6 +43,7 @@ export function Projects({ range, exclude, only, showcase = false, preview = fal
           description={post.metadata.cardSummary || post.metadata.summary}
           result={post.metadata.result}
           source={post.metadata.link}
+          article={post.metadata.article}
           tags={post.metadata.tags}
           stack={post.metadata.stack}
           thumbnail={post.metadata.thumbnail}
@@ -55,5 +56,5 @@ export function Projects({ range, exclude, only, showcase = false, preview = fal
   if (!showcase) return <div className={preview ? styles.preview : styles.related}>{displayedProjects.map(card)}</div>;
   const products = ["fitter-health-platform", "bookstore-platform", "temporary-url-service", "interactive-portfolio"];
   const experiments = ["esp32-temperature-inference", "autoencoder-edge-compression", "algorithms-in-python", "ml-data-foundations"];
-  return <ProjectGallery items={displayedProjects.map((post, index) => ({ slug: post.slug, category: products.includes(post.slug) ? "Product & web" : experiments.includes(post.slug) ? "Experiments and Learning" : "AI & data", card: card(post, index) }))} />;
+  return <ProjectGallery items={displayedProjects.map((post, index) => ({ slug: post.slug, category: products.includes(post.slug) ? "Product & web" : experiments.includes(post.slug) ? "Experiments and learning" : "AI & data", card: card(post, index) }))} />;
 }

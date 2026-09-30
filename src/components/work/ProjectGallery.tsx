@@ -4,7 +4,7 @@ import { useId, useState, type ReactNode } from "react";
 import styles from "./Projects.module.css";
 
 type Item = { slug: string; category: string; card: ReactNode };
-const categories = ["All projects", "Product & web", "AI & data", "Experiments and Learning"];
+const categories = ["All projects", "Product & web", "AI & data", "Experiments and learning"];
 
 export function ProjectGallery({ items }: { items: Item[] }) {
   const [selected, setSelected] = useState("All projects");

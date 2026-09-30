@@ -107,7 +107,7 @@ export default async function Project({
         </Text>
         <Heading variant="display-strong-m">{post.metadata.title}</Heading>
       </Column>
-      <Row marginBottom="32" horizontal="center">
+      {post.metadata.team.length > 0 && <Row marginBottom="32" horizontal="center">
         <Row gap="16" vertical="center">
           {post.metadata.team && <AvatarGroup reverse avatars={avatars} size="s" />}
           <Text variant="label-default-m" onBackground="brand-weak">
@@ -123,10 +123,10 @@ export default async function Project({
             ))}
           </Text>
         </Row>
-      </Row>
-      {post.metadata.link && (
-        <Row marginBottom="32" horizontal="center">
-          <Button
+      </Row>}
+      {(post.metadata.link || post.metadata.article) && (
+        <Row marginBottom="32" horizontal="center" gap="12" wrap>
+          {post.metadata.link && <Button
             className="btnLift"
             href={post.metadata.link}
             variant="secondary"
@@ -134,7 +134,15 @@ export default async function Project({
             prefixIcon={post.metadata.link.includes("github.com") ? "github" : "globe"}
             suffixIcon="arrowUpRight"
             label={post.metadata.link.includes("github.com") ? "View source" : "Visit site"}
-          />
+          />}
+          {post.metadata.article && <Button
+            className="btnLift"
+            href={post.metadata.article}
+            variant="secondary"
+            size="s"
+            suffixIcon="arrowUpRight"
+            label="Read article"
+          />}
         </Row>
       )}
       {/* The stack, which used to be a comma-separated "**Stack:** …" line
@@ -154,7 +162,7 @@ export default async function Project({
           </Row>
         </Column>
       )}
-      {post.metadata.thumbnail && <Image src={post.metadata.thumbnail} alt={`${post.metadata.title}: illustrated cover`} width={800} height={450} sizes="(max-width: 800px) 92vw, 1024px" style={{ width: "100%", height: "auto", borderRadius: 16 }} />}
+      {post.metadata.thumbnail && <Image src={post.metadata.thumbnail} alt={`Illustrated cover for ${post.metadata.title}`} width={800} height={450} sizes="(max-width: 800px) 92vw, 1024px" style={{ width: "100%", height: "auto", borderRadius: 16 }} />}
       {/* Every image, not just `images[0]`. A second diagram added to the
           frontmatter used to be parsed and then silently never rendered. */}
       {post.metadata.images.map((src, i) => (
@@ -166,8 +174,8 @@ export default async function Project({
           // Was alt="image", useless to a screen reader and to image search.
           alt={
             post.metadata.images.length > 1
-              ? `${post.metadata.title}: architecture diagram ${i + 1} of ${post.metadata.images.length}`
-              : `${post.metadata.title}: architecture diagram`
+              ? `${post.metadata.title} architecture diagram ${i + 1} of ${post.metadata.images.length}`
+              : `${post.metadata.title} architecture diagram`
           }
           src={src}
         />
@@ -202,7 +210,7 @@ export default async function Project({
         </Heading>
         <Text onBackground="neutral-weak" align="center" wrap="balance">
           I&rsquo;m open to software engineering roles across backend, platform,
-          and data teams. Get in touch to discuss the architecture, trade-offs,
+          and data teams. Get in touch to discuss the architecture, decisions,
           or how this experience could help your team.
         </Text>
         <Button

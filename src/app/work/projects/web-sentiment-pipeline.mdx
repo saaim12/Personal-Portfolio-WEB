@@ -1,13 +1,13 @@
 ---
 title: "Web collection and sentiment pipeline"
 publishedAt: "2026-09-29"
-updatedAt: "2026-09-29"
+updatedAt: "2026-09-30"
 thumbnail: "/images/projects/covers/web-sentiment-pipeline.svg"
-summary: "Collect scattered topic coverage into a consistent dataset with basic sentiment labels."
-cardSummary: "Collect scattered topic coverage into a consistent dataset with basic sentiment labels."
+summary: "Built a Python pipeline that collects topic coverage and exports article data with sentiment labels."
+cardSummary: "Built a Python pipeline that collects topic coverage and exports article data with sentiment labels."
 contribution: "Connected source collectors, article extraction, URL deduplication and sentiment analysis."
 result: "A sequential Python pipeline that exports collected records to JSON."
-seoDescription: "Collect scattered topic coverage into a consistent dataset with basic sentiment labels. Explore the architecture, implementation and trade-offs."
+seoDescription: "A Python collection experiment combining web and RSS sources, article extraction, URL deduplication, and VADER sentiment labels in a JSON dataset."
 tags: ["Personal prototype"]
 stack: ["python"]
 images: []
@@ -18,17 +18,17 @@ team: []
 
 ## The problem
 
-Topic research spans multiple pages and feeds with inconsistent layouts. This script brings collected records into a common shape: source, title, URL, content and a sentiment label.
+Topic research spans multiple pages and feeds with inconsistent layouts. This script brings collected records into a common structure with source, title, URL, content and a sentiment label.
 
 ## Architecture
 
-A topic configuration expands categories into entities and search keywords. The pipeline calls collectors for news search, web search, Reddit headings and Google News RSS. Requests fetches HTML with a timeout; BeautifulSoup parses links and text, while feedparser handles RSS entries.
+A topic configuration expands categories into entities and search keywords. The pipeline calls collectors for news search, web search, Reddit headings and Google News RSS. Requests fetches HTML with a timeout. BeautifulSoup parses links and text, while feedparser handles RSS entries.
 
-For articles, newspaper extraction is attempted first. If it fails or produces insufficient text, paragraph extraction provides a fallback. Text is bounded before analysis. VADER assigns positive, negative or neutral labels from its compound score. A process-local visited set prevents repeated URL extraction, and the accumulated list is written to dataset.json.
+For articles, newspaper extraction is attempted first. If it fails or produces insufficient text, paragraph extraction provides a fallback. Text is bounded before analysis. VADER assigns positive, negative or neutral labels from its compound score. A visited set stored in process memory prevents repeated URL extraction, and the accumulated list is written to dataset.json.
 
-## Trade-offs
+## Engineering decisions
 
-Sequential collection and a pause between keyword batches make the control flow easy to inspect. The cost is limited throughput and no durable progress if the run stops. An exact-URL set does not detect the same article under tracking links or syndicated copies.
+Sequential collection and a pause between keyword batches make the control flow easy to inspect. The cost is limited throughput and no durable progress if the run stops. A set of exact URLs does not detect the same article under tracking links or syndicated copies.
 
 The Reddit collector uses headings rather than full article bodies, so not every sentiment label is based on the same amount of text. VADER is a lightweight baseline, not a validated measure of opinion for every topic or language.
 
@@ -36,8 +36,8 @@ The Reddit collector uses headings rather than full article bodies, so not every
 
 This is an extraction experiment with a JSON output, not a continuously operated crawler. HTML collectors can break when page structure changes or a source requires JavaScript. Several errors are swallowed, which makes a small output difficult to distinguish from failed collection.
 
-The next iteration would record per-source failures, preserve category and keyword provenance on every row, checkpoint progress and normalize URLs. I would prefer supported feeds or APIs where available and add per-source request policies before scheduling repeated runs.
+The next iteration would record failures for each source, preserve category and keyword provenance on every row, checkpoint progress and normalize URLs. I would prefer supported feeds or APIs where available and add request policies for each source before scheduling repeated runs.
 
 ## Source code
 
-- [Collection, extraction and sentiment pipeline](https://github.com/saaim12/web_Scrapper/blob/main/Scrapper.py)
+* [Collection, extraction and sentiment pipeline](https://github.com/saaim12/web_Scrapper/blob/main/Scrapper.py)

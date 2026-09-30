@@ -32,7 +32,7 @@ export function Footer() {
           <Column gap="8" style={{ maxWidth: "340px" }}>
             <h2 className="footerHeadline">{person.role}</h2>
             <Text variant="body-default-s" onBackground="neutral-weak">
-              {person.city ?? person.location}. Working EU and US-East hours.
+              {person.city ?? person.location}. Working European and US Eastern overlap.
             </Text>
           </Column>
 
@@ -65,6 +65,7 @@ export function Footer() {
                   <a
                     key={s.name}
                     className="footerBtn"
+                    data-platform={s.icon}
                     href={s.link}
                     target="_blank"
                     rel="noopener noreferrer"

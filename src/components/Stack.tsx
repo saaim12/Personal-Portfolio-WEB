@@ -37,7 +37,7 @@ export function Stack({ icon }: { icon?: ReactNode }) {
                 <TechList
                   items={skill.stack}
                   variant="chip"
-                  label={`${skill.title}: technologies`}
+                  label={`${skill.title} technologies`}
                 />
               )}
             </div>
@@ -54,8 +54,7 @@ export function Stack({ icon }: { icon?: ReactNode }) {
             href="/work/realtime-ecommerce-etl-pipeline"
             data-track="section_outro:etl_writeup"
           >
-            I write up every build in full. Start with the Kafka to Spark
-            pipeline.
+            Explore the Kafka and Spark pipeline case study.
             <HiArrowRight aria-hidden="true" />
           </a>
         </Row>

@@ -121,7 +121,7 @@ export const TECH = {
   starschema: { label: "Star schema", icon: HiOutlineTableCells, generic: true },
   medallion: { label: "Medallion", icon: HiOutlineSquares2X2, generic: true },
   objectstorage: {
-    label: "S3-compatible storage",
+    label: "Storage compatible with S3",
     icon: HiOutlineCircleStack,
     generic: true,
   },
@@ -162,7 +162,7 @@ export const TECH = {
   // ── AI and ML ──────────────────────────────────────────────────────────
   tensorflow: { label: "TensorFlow", icon: SiTensorflow, color: "#FF6F00" },
   tflitemicro: { label: "TensorFlow Lite Micro", icon: SiTensorflow, color: "#FF6F00" },
-  scikitlearn: { label: "scikit-learn", icon: SiScikitlearn, color: "#F7931E" },
+  scikitlearn: { label: "Scikit Learn", icon: SiScikitlearn, color: "#F7931E" },
   gemini: { label: "Gemini 2.5 Flash", icon: SiGooglegemini, color: "#8E75B2" },
   rag: { label: "RAG", icon: HiOutlineSparkles, generic: true },
   claude: { label: "Claude", icon: SiClaude, color: "#D97757" },
@@ -173,12 +173,12 @@ export const TECH = {
   pinecone: { label: "Pinecone", icon: HiOutlineCircleStack, generic: true },
   recommenders: { label: "Recommenders", icon: HiOutlineSparkles, generic: true },
   embeddings: { label: "Multilingual embeddings", icon: HiOutlineSparkles, generic: true },
-  e5: { label: "multilingual-e5-base", icon: HiOutlineSparkles, generic: true },
+  e5: { label: "Multilingual E5", icon: HiOutlineSparkles, generic: true },
 
   // ── Architecture ───────────────────────────────────────────────────────
   systemdesign: { label: "System design", icon: HiOutlineSquares2X2, generic: true },
-  eventdriven: { label: "Event-driven", icon: HiOutlineArrowsRightLeft, generic: true },
-  multitenancy: { label: "Multi-tenancy", icon: HiOutlineBuildingOffice2, generic: true },
+  eventdriven: { label: "Event driven", icon: HiOutlineArrowsRightLeft, generic: true },
+  multitenancy: { label: "Multitenancy", icon: HiOutlineBuildingOffice2, generic: true },
   restcontracts: { label: "REST contracts", icon: HiOutlineArrowsRightLeft, generic: true },
 
   // ── Other products ─────────────────────────────────────────────────────

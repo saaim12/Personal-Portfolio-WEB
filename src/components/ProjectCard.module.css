@@ -1,4 +1,12 @@
-.card.card { min-width: 0; overflow: hidden; border: 4px solid #d9d5ce; border-radius: 22px; background: #fff; color: #1e1d1a; box-shadow: 0 3px 20px #27221b03; }
+.card.card { position: relative; min-width: 0; overflow: hidden; border: 4px solid #d9d5ce; border-radius: 22px; background: #fff; color: #1e1d1a; box-shadow: 0 4px 0 #cbc4b9, 0 14px 28px #29231d19, inset 0 1px 0 #fff; }
+.cardHit { position: absolute; inset: 0; z-index: 1; cursor: pointer; }
+.topLinks { position: relative; z-index: 2; display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; border-bottom: 1px solid #e9e6e1; }
+.topLinks a { min-height: 44px; height: auto; margin: 0; padding: 10px 12px; font-size: 12px; letter-spacing: 0; text-transform: none; border-radius: 9px; }
+.feature .topLinks { border-color: #ffffff25; }
+.feature .topLinks a { color: #fff; border-color: #ffffff80; background: #ffffff0d; }
+.feature .topLinks a:hover, .feature .topLinks a:focus-visible { color: #111; background: #fff; }
+.visual, .actions a { z-index: 2; }
+.actions a { position: relative; }
 .visual { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; background: #e9e5df; color: #fff; }
 .visual::after, .actions a::after { display: none; }
 .visual img { object-fit: cover; transition: transform 350ms ease; }
@@ -30,11 +38,11 @@
 @media (max-width: 700px) { .body { padding: 22px; } .feature .visual { aspect-ratio: 16 / 9; } .compact .visual { aspect-ratio: 16 / 9; } .actions a { flex: 1; } }
 @media (prefers-reduced-motion: reduce) { .visual img { transition: none; } .card:hover .visual img { transform: none; } }
 .card.card { transition: border-color 220ms ease, box-shadow 220ms ease; }
-.card.card:hover, .card.card:focus-within { border-color: #b7ab9b; box-shadow: 0 12px 32px #3930220c; }
+.card.card:hover, .card.card:focus-within { border-color: #b7ab9b; box-shadow: 0 2px 0 #b9aea0, 0 9px 18px #29231d26, inset 0 1px 0 #fff; transform: translateY(2px); }
 .card.feature:hover, .card.feature:focus-within { border-color: #8c7c64; }
 .visual:focus-visible { outline: 3px solid #dc6307; outline-offset: -5px; }
 .coverAction { backdrop-filter: blur(10px); background: #191a1be8; }
 .actions a { border-radius: 9px; }
-.feature .actions a:first-child:hover, .feature .actions a:first-child:focus-visible { color: #18130d; background: #ff943d; }
-.feature .actions a:last-child:hover, .feature .actions a:last-child:focus-visible { color: white; background: #ffffff20; }
+.feature .actions a:first-child:hover, .feature .actions a:first-child:focus-visible { color: #111; background: #fff; }
+.feature .actions a:last-child:hover, .feature .actions a:last-child:focus-visible { color: #111; background: #fff; }
 @media (prefers-reduced-motion: reduce) { .card.card { transition: none; } }

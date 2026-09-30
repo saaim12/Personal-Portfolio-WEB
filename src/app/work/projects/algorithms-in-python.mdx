@@ -1,13 +1,13 @@
 ---
 title: "Algorithms in Python and Java"
 publishedAt: "2026-09-29"
-updatedAt: "2026-09-29"
+updatedAt: "2026-09-30"
 thumbnail: "/images/projects/covers/algorithms-in-python.svg"
-summary: "Understand how data structures and algorithm choices change the cost of solving a problem."
-cardSummary: "Understand how data structures and algorithm choices change the cost of solving a problem."
+summary: "Implemented data structures and algorithms in Python and Java to study correctness and computational cost."
+cardSummary: "Implemented data structures and algorithms in Python and Java to study correctness and computational cost."
 contribution: "Organized implementations and practice problems across Python and a separate Java repository."
 result: "A public learning collection covering graphs, dynamic programming, trees, searching and more."
-seoDescription: "Understand how data structures and algorithm choices change the cost of solving a problem. Explore the architecture, implementation and trade-offs."
+seoDescription: "Python and Java algorithm exercises covering graphs, trees, dynamic programming, and pathfinding, with implementation notes and next steps."
 tags: ["Learning project"]
 stack: ["python"]
 images: []
@@ -22,7 +22,7 @@ Knowing a library call is different from understanding the work it performs. The
 
 ## Organization
 
-DSA-Python is organized by topic: arrays, graphs, trees, linked lists, stacks, queues, recursion, tries and dynamic programming. The separate DSA repository contains Java exercises, including collections, sorting, linked lists, trees and object-oriented programming examples.
+The Python collection is organized by topic, covering arrays, graphs, trees, linked lists, stacks, queues, recursion, tries and dynamic programming. The separate DSA repository contains Java exercises, including collections, sorting, linked lists, trees and object oriented programming examples.
 
 This is a collection of independent programs rather than a deployed service. Inputs and example calls live near the implementations, which makes individual techniques easier to study without setting up an application stack.
 
@@ -30,16 +30,16 @@ This is a collection of independent programs rather than a deployed service. Inp
 
 The Python Dijkstra implementation represents a graph with an adjacency dictionary of weighted neighbours. A heap selects the next candidate with the smallest known distance. The algorithm ignores stale heap entries and pushes an updated candidate when a shorter path is found.
 
-The same file explores a binary maze using a queue and a minimum-effort grid path using a heap. Seeing these alongside each other highlights that the objective determines the state and update rule: number of steps, sum of weights and maximum edge difference are different problems.
+The same file explores a binary maze using a queue and a minimum effort grid path using a heap. Seeing these alongside each other highlights that the objective determines the state and update rule. The number of steps, sum of weights, and maximum edge difference define different problems.
 
-## Trade-offs and next steps
+## Engineering decisions and next steps
 
-Standalone scripts make experiments approachable, but repeated helpers and print-driven examples do not provide a uniform regression suite. Some files contain alternative or unfinished approaches. This collection is presented as engineering practice, not a production algorithm package or a claim of comprehensive test coverage.
+Standalone scripts make experiments approachable, but repeated helpers and examples that print results do not provide a uniform regression suite. Some files contain alternative or unfinished approaches. This collection is presented as engineering practice, not a production algorithm package or a claim of comprehensive test coverage.
 
-The next improvement would be parameterized tests for edge cases and explicit algorithm preconditions, including non-negative edge weights for Dijkstra. Packaging reusable structures separately would reduce duplication while preserving the worked examples.
+The next improvement would be parameterized tests for edge cases and explicit algorithm preconditions, including edge weights of zero or greater for Dijkstra. Packaging reusable structures separately would reduce duplication while preserving the worked examples.
 
 ## Source code
 
-- [Python collection](https://github.com/saaim12/DSA-Python)
-- [Graph and path implementations](https://github.com/saaim12/DSA-Python/blob/main/Graphs/Path%20Algos/Dijkstra/dijkstra_algorithm.py)
-- [Java collection](https://github.com/saaim12/DSA)
+* [Python collection](https://github.com/saaim12/DSA-Python)
+* [Graph and path implementations](https://github.com/saaim12/DSA-Python/blob/main/Graphs/Path%20Algos/Dijkstra/dijkstra_algorithm.py)
+* [Java collection](https://github.com/saaim12/DSA)

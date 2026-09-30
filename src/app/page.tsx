@@ -50,7 +50,7 @@ export default function Home() {
 
       <Track />
       <section className="editorialHero recruiterHero" aria-label="Introduction">
-        <p className="heroAvailability"><span className="availableDot" aria-hidden="true" />Open to software engineering roles &amp; product work</p>
+        <p className="heroAvailability"><span className="availableDot" aria-hidden="true" />Open to software engineering roles and product work</p>
         <div className="heroType">
           <span className="heroSpark" aria-hidden="true">
             &#10022;
@@ -61,10 +61,10 @@ export default function Home() {
           </svg>
         </div>
         <div className="heroBaseline">
-          <div className="heroIdentity"><strong>{person.name}</strong><span>Backend &amp; Full-Stack Engineer</span><small>{person.city} · EU &amp; US-East hours</small></div>
+          <div className="heroIdentity"><strong>{person.name}</strong><span>Backend and full stack engineer</span><small>{person.city} · European and US Eastern overlap</small></div>
           <PortraitTransition src={person.avatar} alt={person.name} />
           <div className="heroAudienceActions">
-            <a className="btn btn--primary" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer" data-track="hero_link:resume">View résumé <HiOutlineDocumentText aria-hidden="true" /></a>
+            <a className="btn btn--primary" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer" data-track="hero_link:resume">View resume <HiOutlineDocumentText aria-hidden="true" /></a>
             <a className="btn btn--secondary" href={`mailto:${person.email}?subject=Let%E2%80%99s%20discuss%20a%20product`} data-track="hero_cta:discuss_product">Discuss a product <HiArrowUpRight aria-hidden="true" /></a>
           </div>
         </div>
@@ -73,7 +73,7 @@ export default function Home() {
       <section className="heroIntro section" aria-labelledby="intro-title">
         <Reveal>
           <h2 id="intro-title">
-            Engineering with ownership.
+            From requirements to working software.
           </h2>
         </Reveal>
         <div className="introColumns">
@@ -103,10 +103,10 @@ export default function Home() {
                 View experience <HiArrowRight aria-hidden="true" />
               </a>
               <a className="btn btn--secondary" href="/work" data-track="hero_cta:see_projects">
-                See Projects <HiArrowUpRight aria-hidden="true" />
+                View projects <HiArrowUpRight aria-hidden="true" />
               </a>
               <a className="btn btn--secondary" href="https://medium.com/@saymmalik08" target="_blank" rel="noopener noreferrer" data-track="hero_cta:medium">
-                Read My Articles <HiArrowUpRight aria-hidden="true" />
+                Read my articles <HiArrowUpRight aria-hidden="true" />
               </a>
             </div>
             <div className="introDocuments">
@@ -118,7 +118,7 @@ export default function Home() {
                 data-track="hero_link:resume"
               >
                 <HiOutlineDocumentText aria-hidden="true" />
-                <span><strong>View Resume</strong><small>Experience &amp; skills · PDF</small></span>
+                <span><strong>View resume</strong><small>Experience &amp; skills · PDF</small></span>
                 <HiArrowUpRight aria-hidden="true" />
               </a>
               <a
@@ -129,7 +129,7 @@ export default function Home() {
                 data-track="hero_link:recommendation"
               >
                 <HiOutlineDocumentText aria-hidden="true" />
-                <span><strong>Client Recommendation</strong><small>A note from the founder · PDF</small></span>
+                <span><strong>Client recommendation</strong><small>A note from the founder · PDF</small></span>
                 <HiArrowUpRight aria-hidden="true" />
               </a>
             </div>
@@ -165,9 +165,9 @@ export default function Home() {
       <SkillsMarquee />
 
       <section id="work" className="projectShowcase section" aria-labelledby="projects-title">
-        <div className="showcaseHeading"><span className="showcaseBadge">↗ Ideas into working software</span><h2 id="projects-title">Selected engineering work.</h2><p>Three projects covering product delivery, retrieval systems, and data engineering.</p></div>
+        <div className="showcaseHeading"><span className="showcaseBadge">↗ Ideas into working software</span><h2 id="projects-title">Selected engineering work</h2><p>Three projects covering product delivery, retrieval systems, and data engineering.</p></div>
         <Projects preview only={["fitter-health-platform", "multilingual-rag-engine", "realtime-ecommerce-etl-pipeline"]} />
-        <div className="allProjectsAction"><a className="btn btn--primary" href="/work">View all projects ↗</a><a className="btn btn--secondary" href="https://medium.com/@saymmalik08" target="_blank" rel="noopener noreferrer">Read My Articles ↗</a></div>
+        <div className="allProjectsAction"><a className="btn btn--primary" href="/work">View all projects ↗</a><a className="btn btn--secondary" href="https://medium.com/@saymmalik08" target="_blank" rel="noopener noreferrer">Read my articles ↗</a></div>
         <Testimonial />
       </section>
 
