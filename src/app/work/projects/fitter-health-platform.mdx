@@ -30,6 +30,7 @@ stack:
 images: []
 thumbnail: "/images/projects/covers/fitter-health-platform.svg"
 hardPart: "Making notification failures visible and recoverable without losing the work when a consumer failed."
+architecture: ["Next.js / Django REST", "PostgreSQL + Redis / Celery", "ECS and AWS services", "SNS → SQS recovery"]
 link: "https://fitter.health/"
 team:
   - name: "Saaim Abdullah"
@@ -71,6 +72,32 @@ The revised flow gave consumers queued work to retry. Repeated failures went to 
 I delivered the platform and its supporting infrastructure, resolved the notification recovery issue, and handed over the documented system. The founder's recommendation describes my backend, cloud, and data architecture work, along with how I communicated decisions and prepared the handover.
 
 For a similar engagement, I would review retry behavior, failure visibility, and recovery procedures during the initial design. Those decisions affect both implementation and the team's ability to operate the product.
+
+
+## System boundaries and technology responsibilities
+
+**Next.js and Django REST Framework.** The frontend exposed member, provider and administration workflows, while Django handled booking, entitlement, commerce and operational API logic. The API and client remain separate application components; their interactions need consistent authentication and validation.
+
+**PostgreSQL / RDS.** Membership credit balances, bookings, invoice synchronization and operational records belong to transactional relational workflows. The 106-table schema reported for this engagement covers multiple domains, not 106 independent microservices.
+
+**AWS ECS, S3 and network permissions.** Containerized application services were deployed to ECS with RDS and object storage integrations. IAM and VPC controls bounded infrastructure access. Exact private topology is intentionally omitted from the public overview.
+
+**Redis / Celery and AWS messaging.** Application background jobs used Celery and Redis; scheduled engagement email used AWS services. The SNS-to-SQS notification path is a separate durability boundary and should not be confused with the Celery task queue.
+
+## Notification recovery: before and after
+
+| Concern | Earlier delivery path | Revised delivery path |
+| --- | --- | --- |
+| Fan-out | SNS routed notifications toward consumers | SNS continued to distribute notifications |
+| Failure isolation | Consumer failures could lead to silent missed work | SQS retained pending delivery for retries |
+| Repeated failures | No clearly inspectable recovery path | Dead-letter handling exposed repeatedly failing messages |
+| Operational visibility | Failures were difficult to observe | Queue depth alarms identified stalled processing |
+
+The change addressed a specific reliability gap. It does not establish an exactly-once guarantee: any consumer facing redelivery should be designed to avoid duplicating side effects. The public case study does not claim measured availability or delivery-rate improvements.
+
+## Delivery evidence
+
+The engagement reported **135 passing tests** during documented handover. That figure is a test count, not a coverage percentage or a load-test result. The founder recommendation linked below provides third-party context on delivery, architecture discussions and handover.
 
 ## Explore this project
 
