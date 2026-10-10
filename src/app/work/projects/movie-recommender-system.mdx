@@ -56,6 +56,23 @@ The project provides a modular path from MovieLens data to recommendation APIs. 
 
 My next steps would be evaluation with a chronological split, comparisons that remove each scoring signal in turn, and load tests for cold requests, cached requests, and model reloads. Evaluation reports should include the number of eligible users so quality metrics can be interpreted in context.
 
+## Training and serving interfaces
+
+| Layer | Technology / data | Responsibility |
+| --- | --- | --- |
+| Source | MovieLens ratings, tags and metadata | Build catalogue and interaction signals |
+| Model preparation | Python and data processing | Construct item features and co-occurrence signals |
+| Ranking signals | Content similarity, co-occurrence, popularity | Combine complementary recommendation evidence |
+| Artifact | Serialized trained model | Separate model preparation from API deployment |
+| API | FastAPI | Serve recommendations and related-item responses |
+| Operations | Health, reload, optional Redis | Support process observability and cache-backed responses |
+
+A model reload endpoint is an implementation capability, not proof of zero-downtime model replacement. Safe reload must validate candidate artifacts and account for concurrent requests, cache invalidation and rollback.
+
+## Evaluation considerations
+
+Popularity-based results provide an understandable fallback for sparse interactions. Strong evidence of ranking quality would require a reproducible train/evaluation split, appropriate ranking metrics and a baseline comparison. The current portfolio does not assert an unverified improvement in precision, recall or click-through rate.
+
 ## Explore this project
 
 * [View source](https://github.com/saaim12/Recommender-System)
