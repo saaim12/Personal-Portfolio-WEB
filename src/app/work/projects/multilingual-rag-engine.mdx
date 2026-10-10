@@ -59,6 +59,30 @@ The project brings authentication, multilingual retrieval, ingestion, quotas, an
 
 My next priorities would be a representative multilingual evaluation set, authorization tests for every data access path, and concurrent quota tests. Retrieval precision, response latency, and operating cost should be measured against a documented workload before setting service targets.
 
+## Architecture: ingestion versus authenticated retrieval
+
+| Stage | Component | Engineering responsibility |
+| --- | --- | --- |
+| Ingestion | Django administrative endpoints | Accept and associate supported source documents with a customer |
+| Preparation | Text extraction and chunking | Produce searchable source passages |
+| Embedding | Local multilingual E5 model | Encode passages without calling an external embedding API |
+| Storage | PostgreSQL + pgvector | Store vectors together with tenant-linked source records |
+| Authentication | JWT verification | Establish caller identity from validated claims |
+| Retrieval | Tenant-scoped similarity query | Restrict candidate chunks before answer generation |
+| Generation | Gemini + prompt template | Generate a response using selected context |
+
+## Security and correctness boundaries
+
+**Tenant identity is not a search parameter.** Retrieval must use the authenticated customer's identity rather than trusting a client-supplied tenant ID. This must be enforced consistently in ingestion permissions, chunk ownership, vector search and any subsequent source-document access. A vector rank alone is not an authorization check.
+
+**Embedding and generation have different external dependencies.** The multilingual embedding model runs locally, whereas selected retrieval context is sent to Gemini for generation. This makes the model-provider boundary relevant to what source material can leave the service.
+
+**Quotas are separate from isolation.** Per-customer request limits constrain usage; they do not replace tenant-aware database filtering. Concurrent requests and quota enforcement should be tested independently.
+
+## Validation and limitations
+
+Six prompt templates support distinct tasks, but the existence of multiple prompts does not itself measure answer quality. Useful follow-up evaluation includes cross-tenant negative tests, multilingual retrieval precision, unsupported-answer behavior, concurrency under quotas and observed request latency. Do not claim benchmark scores or production-scale reliability without a published evaluation methodology.
+
 ## Explore this project
 
 * [View source](https://github.com/saaim12/Multi-Tenant-Multi-Lingual-Retrieval-Augmented-Generation-RAG-System)
