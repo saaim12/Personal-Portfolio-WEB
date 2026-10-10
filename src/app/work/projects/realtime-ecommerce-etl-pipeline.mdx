@@ -57,6 +57,30 @@ The implementation connects order ingestion, validation, deduplication, and sche
 
 My next priorities would be data quality checks between layers, recovery tests for interrupted jobs, and benchmarks with documented event volumes and hardware. A managed AWS deployment would require its own capacity, access, cost, and recovery design.
 
+## Technical architecture: component responsibilities
+
+| Component | Responsibility | Operational consideration |
+| --- | --- | --- |
+| Event producer | Emit order events into Kafka | Event schema and replay inputs |
+| Kafka | Decouple producers and consumers | Retention, partitions and consumer offsets |
+| Spark Structured Streaming | Read events and write partitioned Parquet | Checkpoint location and restart behavior |
+| Bronze object storage | Preserve ingested raw data | Reprocessing and source traceability |
+| Airflow | Orchestrate hourly batch transformations | Dependency failures and scheduled freshness |
+| Silver transformation | Validate, standardize and deduplicate | Deterministic handling of duplicate records |
+| PostgreSQL gold | Persist sales facts and dimensions | Relational keys and analytical consistency |
+
+## Warehouse model and consistency
+
+The gold layer centers on a sales fact table with customer, product and date dimensions, giving the implementation **four warehouse tables**. A star schema separates descriptive attributes from the measures needed by reports. The bronze/silver/gold stages are logical responsibilities of this pipeline; they are not evidence of a separately managed lakehouse product.
+
+**Failure boundary:** continuous Kafka/Spark ingestion and hourly Airflow runs do not share the same schedule. A successful event ingest does not mean it has already appeared in the reporting tables. Checkpoints help Spark recover processing progress; warehouse load semantics, business-level deduplication, and backfill correctness are independent concerns that should be tested explicitly.
+
+**Environment boundary:** the published example uses local containerized computation, S3-compatible object storage, and a configured PostgreSQL target. It should not be presented as a production-managed AWS Kafka or EMR deployment.
+
+## Evidence and next experiments
+
+The source repository documents runnable pipeline components and the linked Medium article walks through the architectural trade-offs. End-to-end throughput, recovery time, and warehouse freshness are not published as measured service-level targets. The next useful benchmark would record event rate, batch sizes, job duration and reproducible hardware/configuration alongside data-quality checks.
+
 ## Explore this project
 
 * [View source](https://github.com/saaim12/ETL-Pipeline-with-Batch-Straming-Pipelines)
