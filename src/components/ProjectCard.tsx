@@ -25,7 +25,7 @@ export function ProjectCard({ href, title, description, result, source, article,
       {article && <a className="btn btn--secondary" href={article} target="_blank" rel="noopener noreferrer" aria-label={`Read article about ${title}`}>Read article <span aria-hidden="true">↗</span></a>}
     </div>}
     <a className={styles.visual} href={href} aria-label={`Explore ${title}`} data-track={track}>
-      <Image src={thumbnail || "/images/projects/covers/interactive-portfolio.svg"} alt={`Illustrated cover for ${title}`} fill sizes="(max-width: 760px) 90vw, (max-width: 1200px) 45vw, 540px" />
+      <Image src={thumbnail || "/images/projects/covers/interactive-portfolio.svg"} alt={`Architecture overview for ${title}`} fill sizes="(max-width: 760px) 90vw, (max-width: 1200px) 45vw, 540px" />
       <span className={styles.coverAction}>Explore project ↗</span>
     </a>
     <div className={styles.body}>

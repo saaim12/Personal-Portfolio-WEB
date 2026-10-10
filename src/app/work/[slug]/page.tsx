@@ -162,14 +162,14 @@ export default async function Project({
           </Row>
         </Column>
       )}
-      {post.metadata.thumbnail && <Image src={post.metadata.thumbnail} alt={`Illustrated cover for ${post.metadata.title}`} width={800} height={450} sizes="(max-width: 800px) 92vw, 1024px" style={{ width: "100%", height: "auto", borderRadius: 16 }} />}
+      {post.metadata.thumbnail && post.metadata.images.length === 0 && <Image src={post.metadata.thumbnail} alt={`Illustrated cover for ${post.metadata.title}`} width={800} height={450} sizes="(max-width: 800px) 92vw, 1024px" style={{ width: "100%", height: "auto", borderRadius: 16 }} />}
       {/* Every image, not just `images[0]`. A second diagram added to the
           frontmatter used to be parsed and then silently never rendered. */}
       {post.metadata.images.map((src, i) => (
         <Media
           key={src}
           priority={i === 0}
-          aspectRatio="16 / 9"
+          aspectRatio={src.endsWith(".svg") ? "1280 / 860" : "16 / 9"}
           radius="m"
           // Was alt="image", useless to a screen reader and to image search.
           alt={

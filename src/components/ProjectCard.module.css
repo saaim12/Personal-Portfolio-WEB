@@ -9,8 +9,8 @@
 .actions a { position: relative; }
 .visual { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; background: #e9e5df; color: #fff; }
 .visual::after, .actions a::after { display: none; }
-.visual img { object-fit: cover; transition: transform 350ms ease; }
-.card:hover .visual img { transform: scale(1.035); }
+.visual img { object-fit: contain; transition: transform 350ms ease; }
+.card:hover .visual img { transform: none; }
 .coverAction { position: absolute; right: 12px; bottom: 12px; border-radius: 8px; background: #191a1b; color: #fff; padding: 9px 12px; font-size: 11px; font-weight: 600; border: 1px solid #ffffff50; }
 .body { padding: 24px; }
 .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
@@ -33,7 +33,7 @@
 .feature .actions a:first-child { background: #ff7508; color: #18130d; }
 .feature .actions a:last-child { background: #ffffff0d; color: white; border-color: #ffffff80; }
 .compact .visual { aspect-ratio: 16 / 9; }
-.compact .visual img { object-fit: cover; }
+.compact .visual img { object-fit: contain; }
 .compact .facts { display: none; }
 @media (max-width: 700px) { .body { padding: 22px; } .feature .visual { aspect-ratio: 16 / 9; } .compact .visual { aspect-ratio: 16 / 9; } .actions a { flex: 1; } }
 @media (prefers-reduced-motion: reduce) { .visual img { transition: none; } .card:hover .visual img { transform: none; } }
