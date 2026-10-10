@@ -54,6 +54,20 @@ The project connects model training, device inference, and cloud reconstruction.
 
 My next steps would be to compare serialized payload sizes with a simple compression baseline, measure reconstruction quality on representative sensor data, and record device memory and energy use. Those measurements would determine whether this approach suits a particular sensor workload.
 
+## Model-to-device architecture
+
+The encoder and decoder represent two distinct deployment artifacts. The embedded side processes sensor measurements and sends a latent representation; the backend reconstructs from that representation. Both sides must agree on preprocessing, model versions and the meaning and ordering of transmitted values.
+
+| Stage | Runtime | Responsibility |
+| --- | --- | --- |
+| Preparation | TensorFlow training | Train a compatible encoder and decoder |
+| Edge inference | ESP32 / TensorFlow Lite Micro | Encode sensor readings within device limits |
+| Transport | Device-to-backend request | Transfer the encoded representation |
+| Reconstruction | Flask on EC2 | Decode the representation using the matching artifact |
+| Storage | S3 integration | Handle data artifacts where implemented |
+
+**Compression versus encryption:** an encoded latent representation is not automatically secure encryption. Compression claims need to include the full transmitted payload, not only the count of latent values. Reconstruction error, inference time, model size and energy usage require measurements under a defined test setup.
+
 ## Explore this project
 
 * [View source](https://github.com/saaim12/AutoEncoders_based_encryption_training_and_fitting_in_devices_such_as_esp_or_rasberry-pi)
