@@ -1,60 +1,29 @@
+import Image from "next/image";
 import { getPosts } from "@/utils/utils";
-
-import { ProjectCard } from "@/components/ProjectCard";
-import styles from "./Projects.module.css";
+import { projectArt } from "@/resources/project-art";
+import { Handles, Mark } from "@/components/Studio";
 import { ProjectGallery } from "./ProjectGallery";
-
-interface ProjectsProps {
-  preview?: boolean;
-  showcase?: boolean;
-  range?: [number, number?];
-  exclude?: string[];
-  /** Show exactly these slugs, in this order. Skips date sorting and `range`. */
-  only?: string[];
-}
-
-export function Projects({ range, exclude, only, showcase = false, preview = false }: ProjectsProps) {
-  let allProjects = getPosts(["src", "app", "work", "projects"]);
-
-  // Exclude by slug (exact match)
-  if (exclude && exclude.length > 0) {
-    allProjects = allProjects.filter((post) => !exclude.includes(post.slug));
-  }
-
-  const sortedProjects = allProjects.sort((a, b) => {
-    return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime();
+interface ProjectsProps { preview?: boolean; showcase?: boolean; range?: [number, number?]; exclude?: string[]; only?: string[]; }
+export function Projects({ range, exclude = [], only, showcase = false, preview = false }: ProjectsProps) {
+  const posts = getPosts(["src", "app", "work", "projects"]).filter(p => !exclude.includes(p.slug)).sort((a,b) => b.metadata.publishedAt.localeCompare(a.metadata.publishedAt));
+  const selected = only ? only.flatMap(slug => posts.filter(p => p.slug === slug)) : range ? posts.slice(range[0] - 1, range[1]) : posts;
+  const cards = selected.map((post, index) => {
+    const art = projectArt[post.slug];
+    const title = art?.title || post.metadata.title;
+    const image = art?.image || post.metadata.thumbnail || "/images/projects/covers/interactive-portfolio.svg";
+    const color = art?.color || ["blue", "black", "yellow", "pink"][index % 4];
+    const href = "/work/" + post.slug;
+    const date = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(new Date(post.metadata.publishedAt));
+    const card = <article className={`folderProject ${preview ? "folderFeature" : "folderSmall"} folder-${color}`} key={post.slug}>
+      <div className="folderTab"><Mark kind="steps" /><span>{preview ? `Project ${String(index+1).padStart(2,"0")}` : date}</span></div>
+      <div className="folderContent">
+        <div className="folderCopy"><span className="projectDate"><i />{date}</span><h3><a href={href}>{title}</a></h3><p>{post.metadata.cardSummary || post.metadata.summary}</p><a href={href} className="projectLink">View project <span aria-hidden="true">↗</span></a><div className="projectTags">{post.metadata.tags?.slice(0,2).map(tag => <span key={tag}>{tag}</span>)}</div></div>
+        <a href={href} className={`projectPicture ${!art ? "diagramPicture" : ""}`} aria-label={`View ${title} case study`}><Image src={image} alt={art ? "" : `Architecture overview for ${title}`} fill sizes={preview ? "(max-width: 760px) 90vw, 45vw" : "(max-width: 760px) 90vw, 42vw"} /><span className="imageLabel" aria-hidden="true">▧ {art ? "IMAGE.JPG" : "SYSTEM.SVG"}</span><Handles /></a>
+      </div>
+    </article>;
+    const products = ["fitter-health-platform", "bookstore-platform", "temporary-url-service", "interactive-portfolio"];
+    const experiments = ["esp32-temperature-inference", "autoencoder-edge-compression", "algorithms-in-python", "ml-data-foundations"];
+    return { slug: post.slug, category: products.includes(post.slug) ? "Product & web" : experiments.includes(post.slug) ? "Experiments" : "AI & data", card };
   });
-
-  // Named selection: the caller decides both the set and the order. Grouping
-  // projects by kind is not something a publish date can express, and a
-  // date-sliced preview silently reshuffles itself on the next case study.
-  const displayedProjects = only
-    ? only.flatMap((slug) => sortedProjects.filter((post) => post.slug === slug))
-    : range
-      ? sortedProjects.slice(range[0] - 1, range[1] ?? sortedProjects.length)
-      : sortedProjects;
-
-  const card = (post: (typeof displayedProjects)[number], index: number) => (
-        <ProjectCard
-          key={post.slug}
-          treatment={showcase ? index % 4 === 1 ? "feature" : index % 4 === 2 ? "compact" : "standard" : "standard"}
-          href={`/work/${post.slug}`}
-          title={post.metadata.title}
-          description={post.metadata.cardSummary || post.metadata.summary}
-          result={post.metadata.result}
-          source={post.metadata.link}
-          article={post.metadata.article}
-          tags={post.metadata.tags}
-          stack={post.metadata.stack}
-          thumbnail={post.metadata.thumbnail}
-          hardPart={post.metadata.hardPart}
-          // Slug, not title: the event name has to stay stable in the
-          // dashboard when a case study is retitled.
-          track={`work_card:${post.slug}`}
-        />
-  );
-  if (!showcase) return <div className={preview ? styles.preview : styles.related}>{displayedProjects.map(card)}</div>;
-  const products = ["fitter-health-platform", "bookstore-platform", "temporary-url-service", "interactive-portfolio"];
-  const experiments = ["esp32-temperature-inference", "autoencoder-edge-compression", "algorithms-in-python", "ml-data-foundations"];
-  return <ProjectGallery items={displayedProjects.map((post, index) => ({ slug: post.slug, category: products.includes(post.slug) ? "Product & web" : experiments.includes(post.slug) ? "Experiments and learning" : "AI & data", card: card(post, index) }))} />;
+  return showcase ? <ProjectGallery items={cards} /> : <div className={preview ? "featuredProjects" : "relatedProjects"}>{cards.map(item => item.card)}</div>;
 }

@@ -1,0 +1,6 @@
+export const articles = [
+  { category: "Distributed systems", title: "When a payment succeeds but the server crashes", description: "Payment recovery with idempotency, webhooks, an outbox, and compensating actions.", slug: "what-happens-when-stripe-charges-the-customer-but-your-server-crashes-cea86ebab065" },
+  { category: "Data engineering", title: "Building an order data pipeline with Kafka, Spark, and Airflow", description: "Following order events from streaming ingestion through layered storage to a warehouse ready for reporting.", slug: "building-a-real-time-e-commerce-etl-pipeline-with-kafka-spark-and-airflow-2baa9090ab3e" },
+  { category: "AI architecture", title: "Building multilingual RAG with customer data isolation", description: "The decisions behind tenant isolation, multilingual retrieval, and answers grounded in customer data.", slug: "building-a-multilingual-multi-tenant-rag-engine-in-django-c975aecf599a" },
+  { category: "Engineering lessons", title: "Debugging a Django RAG backend on PostgreSQL and Windows", description: "A practical account of configuration, permissions, and pgvector problems encountered along the way.", slug: "i-built-a-rag-back-end-in-django-on-postgresql-18-windows-heres-every-way-it-broke-626cb8010fd2" },
+];

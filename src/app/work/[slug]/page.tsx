@@ -1,230 +1,30 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { getPosts } from "@/utils/utils";
-import {
-  AvatarGroup,
-  Button,
-  Column,
-  Heading,
-  Media,
-  Text,
-  SmartLink,
-  Row,
-  Line,
-} from "@once-ui-system/core";
-import { work } from "@/resources/content";
 import { pageMeta, ogImageFor } from "@/resources/seo";
 import { formatDate } from "@/utils/formatDate";
-import { ScrollToHash } from "@/components/ScrollToHash";
 import { CustomMDX } from "@/components/mdx";
-import { ArchitectureDiagram } from "@/components/ArchitectureDiagram";
 import { TechList } from "@/components/Tech";
-import type { Metadata } from "next";
 import { Projects } from "@/components/work/Projects";
+import { Handles } from "@/components/Studio";
+import { Contact } from "@/components/Contact";
 import { jsonLd, caseStudyJsonLd } from "@/resources/schema";
-
-export async function generateStaticParams(): Promise<{ slug: string }[]> {
-  const posts = getPosts(["src", "app", "work", "projects"]);
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+import { projectArt } from "@/resources/project-art";
+type Params = { params: Promise<{ slug: string }> };
+export async function generateStaticParams(){return getPosts(["src","app","work","projects"]).map(p=>({slug:p.slug}));}
+export async function generateMetadata({params}:Params){
+ const {slug}=await params;const post=getPosts(["src","app","work","projects"]).find(p=>p.slug===slug);if(!post)return {};
+ return pageMeta({title:post.metadata.seoTitle,description:post.metadata.seoDescription,path:"/work/"+slug,image:post.metadata.image||post.metadata.thumbnail||ogImageFor(post.metadata.title),type:"article",publishedTime:post.metadata.publishedAt,modifiedTime:post.metadata.updatedAt});
 }
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string | string[] }>;
-}): Promise<Metadata> {
-  const routeParams = await params;
-  const slugPath = Array.isArray(routeParams.slug)
-    ? routeParams.slug.join("/")
-    : routeParams.slug || "";
-
-  const posts = getPosts(["src", "app", "work", "projects"]);
-  const post = posts.find((post) => post.slug === slugPath);
-
-  if (!post) return {};
-
-  // Per-slug, never inherited from /work. `seoDescription` rather than
-  // `summary`: the summaries are page copy and run past 200 characters, which
-  // Google truncates mid-sentence.
-  return pageMeta({
-    title: post.metadata.seoTitle,
-    description: post.metadata.seoDescription,
-    path: `${work.path}/${post.slug}`,
-    // The card thumbnail before the generated title card: an architecture
-    // diagram or a shot of the live product says more in a link preview than
-    // the title rendered on a black rectangle, and the title is already in the
-    // preview's own title line.
-    image: post.metadata.image || post.metadata.thumbnail || ogImageFor(post.metadata.title),
-    type: "article",
-    publishedTime: post.metadata.publishedAt,
-    modifiedTime: post.metadata.updatedAt,
-  });
-}
-
-export default async function Project({
-  params,
-}: {
-  params: Promise<{ slug: string | string[] }>;
-}) {
-  const routeParams = await params;
-  const slugPath = Array.isArray(routeParams.slug)
-    ? routeParams.slug.join("/")
-    : routeParams.slug || "";
-
-  const post = getPosts(["src", "app", "work", "projects"]).find((post) => post.slug === slugPath);
-
-  if (!post) {
-    notFound();
-  }
-
-  const avatars =
-    post.metadata.team?.map((person) => ({
-      src: person.avatar,
-    })) || [];
-
-  return (
-    <Column className="caseStudy" as="section" fillWidth horizontal="center" gap="l">
-      <script
-        {...jsonLd(
-          caseStudyJsonLd({
-            title: post.metadata.title,
-            description: post.metadata.seoDescription,
-            path: `${work.path}/${post.slug}`,
-            image: post.metadata.image || post.metadata.thumbnail || ogImageFor(post.metadata.title),
-            datePublished: post.metadata.publishedAt,
-            dateModified: post.metadata.updatedAt,
-          }),
-        )}
-      />
-      <Column fillWidth gap="16" horizontal="center" align="center">
-        <SmartLink href="/work">
-          <Text variant="label-strong-m">Projects</Text>
-        </SmartLink>
-        <Text variant="body-default-xs" onBackground="neutral-weak" marginBottom="12">
-          {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
-        </Text>
-        <Heading variant="display-strong-m">{post.metadata.title}</Heading>
-      </Column>
-      {post.metadata.team.length > 0 && <Row marginBottom="32" horizontal="center">
-        <Row gap="16" vertical="center">
-          {post.metadata.team && <AvatarGroup reverse avatars={avatars} size="s" />}
-          <Text variant="label-default-m" onBackground="brand-weak">
-            {post.metadata.team?.map((member, idx) => (
-              <span key={member.linkedIn}>
-                {idx > 0 && (
-                  <Text as="span" onBackground="neutral-weak">
-                    ,{" "}
-                  </Text>
-                )}
-                <SmartLink href={member.linkedIn}>{member.name}</SmartLink>
-              </span>
-            ))}
-          </Text>
-        </Row>
-      </Row>}
-      {(post.metadata.link || post.metadata.article) && (
-        <Row marginBottom="32" horizontal="center" gap="12" wrap>
-          {post.metadata.link && <Button
-            className="btnLift"
-            href={post.metadata.link}
-            variant="secondary"
-            size="s"
-            prefixIcon={post.metadata.link.includes("github.com") ? "github" : "globe"}
-            suffixIcon="arrowUpRight"
-            label={post.metadata.link.includes("github.com") ? "View source" : "Visit site"}
-          />}
-          {post.metadata.article && <Button
-            className="btnLift"
-            href={post.metadata.article}
-            variant="secondary"
-            size="s"
-            suffixIcon="arrowUpRight"
-            label="Read article"
-          />}
-        </Row>
-      )}
-      {/* The stack, which used to be a comma-separated "**Stack:** …" line
-          buried at the bottom of the body. It belongs above the fold: it is
-          the first thing a technical reader looks for. */}
-      {post.metadata.stack.length > 0 && (
-        <Column maxWidth="s" gap="12" horizontal="center" marginBottom="32">
-          <Text variant="body-default-xs" onBackground="neutral-weak">
-            Built with
-          </Text>
-          <Row horizontal="center">
-            <TechList
-              items={post.metadata.stack}
-              variant="chip"
-              label="Technologies used on this project"
-            />
-          </Row>
-        </Column>
-      )}
-      {post.metadata.thumbnail && post.metadata.images.length === 0 && <Image src={post.metadata.thumbnail} alt={`Illustrated cover for ${post.metadata.title}`} width={800} height={450} sizes="(max-width: 800px) 92vw, 1024px" style={{ width: "100%", height: "auto", borderRadius: 16 }} />}
-      {/* Every image, not just `images[0]`. A second diagram added to the
-          frontmatter used to be parsed and then silently never rendered. */}
-      {post.metadata.images.map((src, i) => (
-        <Media
-          key={src}
-          priority={i === 0}
-          aspectRatio={src.endsWith(".svg") ? "1280 / 860" : "16 / 9"}
-          radius="m"
-          // Was alt="image", useless to a screen reader and to image search.
-          alt={
-            post.metadata.images.length > 1
-              ? `${post.metadata.title} architecture diagram ${i + 1} of ${post.metadata.images.length}`
-              : `${post.metadata.title} architecture diagram`
-          }
-          src={src}
-        />
-      ))}
-      {post.metadata.architecture && <Column fillWidth gap="16"><Heading as="h2" variant="heading-strong-l">System architecture</Heading><ArchitectureDiagram slug={post.slug} /></Column>}
-      <Column className="caseStudyBody" as="article" fillWidth>
-        <CustomMDX source={post.content} />
-      </Column>
-      <Column fillWidth gap="40" horizontal="center" marginTop="40">
-        <Line maxWidth="40" />
-        <Heading as="h2" variant="heading-strong-xl" marginBottom="24">
-          Related projects
-        </Heading>
-        <Projects exclude={[post.slug]} range={[1, 2]} />
-      </Column>
-
-      {/* Every case study previously terminated with no route to contact. */}
-      <Column
-        fillWidth
-        marginTop="40"
-        padding="40"
-        className="pageCallout"
-        gap="16"
-        radius="l"
-        border="neutral-alpha-weak"
-        background="surface"
-        horizontal="center"
-        align="center"
-      >
-        <Heading as="h2" variant="heading-strong-l" align="center">
-          Let’s talk about the engineering
-        </Heading>
-        <Text onBackground="neutral-weak" align="center" wrap="balance">
-          I&rsquo;m open to software engineering roles across backend, platform,
-          and data teams. Get in touch to discuss the architecture, decisions,
-          or how this experience could help your team.
-        </Text>
-        <Button
-          className="btnLift"
-          href="/#contact"
-          variant="primary"
-          size="m"
-          data-border="rounded"
-          arrowIcon
-        >
-          Get in touch
-        </Button>
-      </Column>
-      <ScrollToHash />
-    </Column>
-  );
+export default async function Project({params}:Params){
+ const {slug}=await params;const post=getPosts(["src","app","work","projects"]).find(p=>p.slug===slug);if(!post)notFound();
+ const {metadata:m}=post;const art=projectArt[slug];const cover=art?.image||m.thumbnail;const title=art?.title||m.title;
+ return <div className="studioPage"><article className="casePage studioContainer">
+ <script {...jsonLd(caseStudyJsonLd({title:m.title,description:m.seoDescription,path:"/work/"+slug,image:m.image||m.thumbnail||ogImageFor(m.title),datePublished:m.publishedAt,dateModified:m.updatedAt}))}/>
+ <header className="caseHero"><div><span className="projectDate"><i/>{formatDate(m.publishedAt)}</span><h1 className="displayType">{title}</h1><p className="caseSummary">{m.summary}</p><div className="projectTags">{m.tags?.map(t=><span key={t}>{t}</span>)}</div><div className="caseHeroActions">{m.link&&<a className="quietLink" href={m.link} target="_blank" rel="noopener noreferrer">{m.link.includes("github.com")?"View source":"Visit site"} ↗</a>}{m.article&&<a className="quietLink" href={m.article} target="_blank" rel="noopener noreferrer">Read article ↗</a>}<a href="/work" className="quietLink">All projects ↗</a></div></div>
+ <dl className="caseNotes"><div><dt>Role</dt><dd>{m.team[0]?.role||"Software engineer"}</dd></div><div><dt>Published</dt><dd>{new Intl.DateTimeFormat("en-US",{month:"long",year:"numeric",timeZone:"UTC"}).format(new Date(m.publishedAt))}</dd></div><div><dt>Focus</dt><dd>{m.tags?.join(" / ")||"Engineering"}</dd></div><div><dt>Engineer</dt><dd>Saaim Abdullah</dd></div></dl></header>
+ {cover&&<div className={"caseCover "+(!art?"diagramPicture":"")}><Image src={cover} alt={art?"":m.title+" system overview"} fill priority sizes="(max-width: 800px) 95vw, 90vw"/><Handles/></div>}
+ <div className="caseLayout"><aside className="caseSidebar"><h2>Built with</h2><TechList items={m.stack} variant="chip" label="Project technologies"/><a href="/contact">Discuss a project ↗</a><a href="/work">← All case studies</a></aside><div><div className="caseStudyBody"><CustomMDX source={post.content}/></div>{m.images.map((src,i)=><Image className="caseDiagram" key={src} src={src} alt={m.title+" architecture diagram "+(i+1)} width={1280} height={860} sizes="(max-width: 800px) 95vw, 70vw"/>)}</div></div>
+ <section className="caseMore"><h2 className="displayType">More to explore</h2><Projects exclude={[slug]} range={[1,2]}/></section>
+ </article><Contact/></div>;
 }

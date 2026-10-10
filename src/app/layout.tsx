@@ -7,8 +7,7 @@ import { Column, Flex } from "@once-ui-system/core";
 import { Header } from "@/components/Header";
 import { Providers } from "@/components/Providers";
 import { Footer } from "@/components/Footer";
-import { ScreenCrawler } from "@/components/ScreenCrawler";
-import { fonts } from "@/resources/fonts";
+import { fonts, handwriting } from "@/resources/fonts";
 import { style } from "@/resources/once-ui.config";
 import { home, person } from "@/resources/content";
 import { pageMeta } from "@/resources/seo";
@@ -53,6 +52,7 @@ export default async function RootLayout({
         fonts.heading.variable,
         fonts.body.variable,
         fonts.code.variable,
+        handwriting.variable,
       ].join(" ")}
     >
       <head>
@@ -125,8 +125,8 @@ export default async function RootLayout({
             // Fluid gutters: 16px on phones → 48px on desktop. Content still
             // caps at each page's maxWidth, so nothing exceeds the viewport.
             style={{
-              paddingLeft: "clamp(16px, 5vw, 48px)",
-              paddingRight: "clamp(16px, 5vw, 48px)",
+              paddingLeft: 0,
+              paddingRight: 0,
             }}
           >
             <Flex horizontal="center" fillWidth minHeight="0">
@@ -134,7 +134,6 @@ export default async function RootLayout({
             </Flex>
           </Flex>
           <Footer />
-          <ScreenCrawler />
           <Analytics />
           <SpeedInsights />
         </Column>

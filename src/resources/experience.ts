@@ -1,0 +1,35 @@
+export const roles = [
+  {
+    company: "Fitter Health",
+    title: "Software Engineer · Contract",
+    dates: "May 2026 to July 2026",
+    location: "Remote · Team based in Spain",
+    bullets: [
+      "Delivered a preventive health platform as the sole engineer, covering Django services, a Next.js frontend, PostgreSQL, AWS infrastructure, and a documented handover.",
+      "Deployed containerized services on AWS ECS with RDS and S3, using IAM and VPC controls to scope access.",
+      "Defined API contracts, built background workflows with Celery and Redis, and delivered 135 passing tests with documented services, migrations, and database integrity constraints.",
+      "Modeled membership credits, session booking, commerce, and an admin CRM across 106 PostgreSQL tables. Integrated Odoo invoicing and synchronized payment status with platform records.",
+      "Delivered ETL into a PostgreSQL warehouse with a star schema for ML features, product analytics, and aggregated partner reporting.",
+      "Automated renewal reminders and member engagement email using EventBridge, Lambda, and SES, replacing manual follow up.",
+      "Resolved silent notification loss by buffering SNS through SQS, with retries, a dead letter queue, and queue depth alarms.",
+    ],
+    tech: "Django · Next.js · PostgreSQL · Celery · Redis · AWS · Docker",
+    link: "/work/fitter-health-platform",
+  },
+  {
+    company: "Expertflow",
+    title: "Software Engineer",
+    dates: "June 2024 to February 2026",
+    location: "Lahore · Cisco UCCE solution partner",
+    bullets: [
+      "Built and maintained REST APIs serving 1,000 to 3,000 daily users, deployed as Docker containers on AWS EC2 behind an Application Load Balancer with rate limiting, scoped IAM, and VPC isolation.",
+      "Deployed the backend as a distributed system on AWS EKS with Horizontal Pod Autoscaler policies that scale replicas with request throughput.",
+      "Reduced admin panel response time from 130 ms to 30 ms through Redis caching and database index tuning after profiling identified query cost.",
+      "Designed and shipped event driven batch and streaming ETL pipelines using AWS Lambda, MWAA, EMR, PySpark, Glue, and S3, producing Parquet datasets for BI and ML workflows.",
+      "Developed a WebRTC SDK for voice and video communication and the REST APIs connecting frontend clients, SDK modules, and external platforms.",
+      "Implemented a chatbot workflow, SQL customer insight analytics, and time limited permission controls.",
+      "Worked across Angular frontend, backend, and SDK teams to deliver features. The role began as an internship and converted to full time employment.",
+    ],
+    tech: "Python · Django · REST APIs · AWS · EKS · Redis · PySpark · WebRTC",
+  },
+];

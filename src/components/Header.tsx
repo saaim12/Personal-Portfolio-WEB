@@ -1,81 +1,53 @@
 "use client";
-
+import Image from "next/image";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import type { CSSProperties } from "react";
-import {
-  HiOutlineHome,
-  HiOutlineUser,
-  HiOutlineSquares2X2,
-  HiOutlineDocumentText,
-  HiOutlineEnvelope,
-} from "react-icons/hi2";
-import { routes } from "@/resources/once-ui.config";
-import styles from "./Header.module.scss";
-
-const NAV = [
-  { href: "/", label: "Home", icon: HiOutlineHome, key: "/" },
-  { href: "/experience", label: "Experience", icon: HiOutlineUser, key: "/experience" },
-  { href: "/work", label: "Projects", icon: HiOutlineSquares2X2, key: "/work" },
-  { href: "/#contact", label: "Contact", icon: HiOutlineEnvelope, key: "/contact" },
-  { href: "/SaaimCV.pdf", label: "Resume", icon: HiOutlineDocumentText, key: "/resume" },
-] as const;
-const items = NAV.filter((item) =>
-  routes[item.key as keyof typeof routes] || item.key === "/contact" || item.key === "/resume"
-);
-
+import { useEffect, useRef, useState } from "react";
+import { HiHome, HiHeart, HiBars2, HiXMark } from "react-icons/hi2";
+import { person } from "@/resources/content";
+import { Mark, Ruler } from "./Studio";
+const links = [
+  { href: "/", label: "Home", symbol: "home" },
+  { href: "/about", label: "About", symbol: "flower" },
+  { href: "/work", label: "Case study", symbol: "spool" },
+  { href: "/services", label: "Services", symbol: "stack" },
+  { href: "/journal", label: "Journal", symbol: "tree" },
+  { href: "/playground", label: "Playground", symbol: "steps" },
+];
 export function Header({ name }: { name: string }) {
-  const pathname = usePathname() ?? "";
-  const [preview, setPreview] = useState<number | null>(null);
-  const [contactActive, setContactActive] = useState(false);
-
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const toggle = useRef<HTMLButtonElement>(null);
+  const header = useRef<HTMLElement>(null);
+  useEffect(() => { setOpen(false); }, [pathname]);
   useEffect(() => {
-    const updateHash = () => setContactActive(pathname === "/" && window.location.hash === "#contact");
-    updateHash();
-    window.addEventListener("hashchange", updateHash);
-    return () => window.removeEventListener("hashchange", updateHash);
-  }, [pathname]);
-
-  const activeIndex = items.findIndex((item) => {
-    if (item.key === "/contact") return pathname === "/" && contactActive;
-    if (item.key === "/") return pathname === "/" && !contactActive;
-    return pathname.startsWith(item.key);
-  });
-  const highlighted = preview ?? activeIndex;
-
-  return (
-    <header className={styles.header}>
-      <div className={styles.inner}>
-        <nav
-          className={styles.dock}
-          aria-label={`${name}, main navigation`}
-          style={{ "--active-index": Math.max(0, highlighted), "--item-count": items.length } as CSSProperties}
-          onMouseLeave={() => setPreview(null)}
-          onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setPreview(null); }}
-        >
-          <span className={styles.glass} aria-hidden="true" style={{ opacity: highlighted < 0 ? 0 : 1 }} />
-          {items.map((item, index) => {
-            const Icon = item.icon;
-            const resume = item.key === "/resume";
-            return (
-              <a
-                key={item.href}
-                href={item.href}
-                className={`${styles.dockLink} ${highlighted === index ? styles.dockActive : ""}`}
-                aria-label={resume ? "Resume (PDF, opens in a new tab)" : item.label}
-                aria-current={index === activeIndex ? "page" : undefined}
-                {...(resume ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                onMouseEnter={() => setPreview(index)}
-                onFocus={() => setPreview(index)}
-                onClick={() => { if (!resume) setContactActive(item.key === "/contact"); }}
-              >
-                <Icon aria-hidden="true" />
-                <span>{item.label}</span>
-              </a>
-            );
-          })}
-        </nav>
+    if (!open) return;
+    const close = (event: KeyboardEvent) => {
+      if (event.key === "Escape") { setOpen(false); toggle.current?.focus(); }
+    };
+    const outside = (event: PointerEvent) => {
+      if (!header.current?.contains(event.target as Node)) setOpen(false);
+    };
+    document.addEventListener("keydown", close);
+    document.addEventListener("pointerdown", outside);
+    return () => { document.removeEventListener("keydown", close); document.removeEventListener("pointerdown", outside); };
+  }, [open]);
+  return <header className="studioHeader" ref={header}>
+    <div className="navBar">
+      <Link href="/" className="brandMark" aria-label={`${name}, home`}><Mark kind="rainbow" /></Link>
+      <nav id="main-navigation" className={`navLinks ${open ? "isOpen" : ""}`} aria-label="Main navigation">
+        {links.map(item => <Link href={item.href} key={item.href} onClick={() => setOpen(false)} aria-current={(item.href === "/" ? pathname === "/" : pathname?.startsWith(item.href) || item.href === "/about" && pathname === "/experience") ? "page" : undefined}>
+          {item.symbol === "home" ? <HiHome aria-hidden="true" /> : <Mark kind={item.symbol} />}<span>{item.label}</span>
+        </Link>)}
+        <Link href="/contact" className="mobileContact" onClick={() => setOpen(false)}><HiHeart />Contact</Link>
+      </nav>
+      <div className="navActions">
+        <a className="navCircle" href={`mailto:${person.email}`} aria-label="Email Saaim">EM</a>
+        <a className="navCircle" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer" aria-label="Resume PDF">CV</a>
+        <Link href="/about" className="navAvatar" aria-label="About Saaim"><Image src={person.avatar} width={32} height={32} alt="" /></Link>
+        <Link href="/contact" className="navContact"><HiHeart aria-hidden="true" />Contact</Link>
       </div>
-    </header>
-  );
+      <button ref={toggle} className="menuToggle" aria-expanded={open} aria-controls="main-navigation" onClick={() => setOpen(!open)}>{open ? "Close" : "Menu"}{open ? <HiXMark /> : <HiBars2 />}</button>
+    </div><Ruler />
+  </header>;
 }

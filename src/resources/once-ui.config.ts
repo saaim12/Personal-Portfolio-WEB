@@ -7,6 +7,11 @@ const routes: RoutesConfig = {
   "/": true,
   "/experience": true,
   "/work": true,
+  "/about": true,
+  "/services": true,
+  "/journal": true,
+  "/playground": true,
+  "/contact": true,
 };
 
 // default customization applied to the HTML in the main layout.tsx
