@@ -1,15 +1,9 @@
 "use client";
 
-import { IconProvider, LayoutProvider, ThemeProvider, ToastProvider } from "@once-ui-system/core";
+import { LayoutProvider, ThemeProvider, ToastProvider } from "@once-ui-system/core";
 import { style } from "@/resources/once-ui.config";
-import { iconLibrary } from "@/resources/icons";
 
-// DataThemeProvider used to wrap this tree as well. The site renders no
-// charts, so it was client bundle with nothing behind it.
-//
-// ToastProvider stays: the MDX components on the case-study pages call
-// useToast (the copy-to-clipboard confirmations), and removing it fails the
-// prerender of /work/[slug] rather than anything at runtime.
+// MDX heading permalinks use ToastProvider for clipboard feedback.
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <LayoutProvider>
@@ -25,7 +19,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         scaling={style.scaling}
       >
         <ToastProvider>
-          <IconProvider icons={iconLibrary}>{children}</IconProvider>
+          {children}
         </ToastProvider>
       </ThemeProvider>
     </LayoutProvider>

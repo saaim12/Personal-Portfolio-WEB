@@ -1,11 +1,11 @@
 import Image from "next/image";
-import { getPosts } from "@/utils/utils";
+import { getProjects } from "@/utils/projects";
 import { projectArt } from "@/resources/project-art";
 import { Handles, Mark } from "@/components/Studio";
 import { ProjectGallery } from "./ProjectGallery";
 interface ProjectsProps { preview?: boolean; showcase?: boolean; range?: [number, number?]; exclude?: string[]; only?: string[]; }
 export function Projects({ range, exclude = [], only, showcase = false, preview = false }: ProjectsProps) {
-  const posts = getPosts(["src", "app", "work", "projects"]).filter(p => !exclude.includes(p.slug)).sort((a,b) => b.metadata.publishedAt.localeCompare(a.metadata.publishedAt));
+  const posts = getProjects().filter(p => !exclude.includes(p.slug)).sort((a,b) => b.metadata.publishedAt.localeCompare(a.metadata.publishedAt));
   const selected = only ? only.flatMap(slug => posts.filter(p => p.slug === slug)) : range ? posts.slice(range[0] - 1, range[1]) : posts;
   const cards = selected.map((post, index) => {
     const art = projectArt[post.slug];

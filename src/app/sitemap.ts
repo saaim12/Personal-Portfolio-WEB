@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-import { getPosts } from "@/utils/utils";
+import { getProjects } from "@/utils/projects";
 import { baseURL, routes as routesConfig } from "@/resources/once-ui.config";
 import { SITE_LAST_MODIFIED } from "@/resources/seo";
 
@@ -27,7 +27,7 @@ type RouteMeta = {
 //     /work inherits the newest of them, and the two hand-written pages use
 //     SITE_LAST_MODIFIED.
 export default function sitemap(): MetadataRoute.Sitemap {
-  const posts = getPosts(["src", "app", "work", "projects"]);
+  const posts = getProjects();
 
   const works = posts.map((post) => ({
     url: `${baseURL}/work/${post.slug}`,
