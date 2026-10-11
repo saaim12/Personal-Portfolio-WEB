@@ -9,23 +9,6 @@ type RouteMeta = {
   changeFrequency: "monthly" | "yearly";
   priority: number;
 };
-
-// Enumerates every route that actually exists: the three static pages plus one
-// entry per case study under /work.
-//
-// Two things this has to get exactly right, or it works against the site:
-//
-//   - URLs must match each page's `alternates.canonical` character for
-//     character. No trailing slash anywhere, root included: Next normalises
-//     canonicals against `trailingSlash: false`, so the root renders as a bare
-//     "https://saaim.site" whatever pageMeta passes it, and this has to match.
-//     A mismatch has Search Console report the sitemap URL as "alternate page
-//     with proper canonical tag" and drop it.
-//   - lastModified must be a real content date. `new Date()`, which this used
-//     for the static routes, moves on every deploy and teaches crawlers the
-//     field is noise. Case studies carry `updatedAt` in their frontmatter,
-//     /work inherits the newest of them, and the two hand-written pages use
-//     SITE_LAST_MODIFIED.
 export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getProjects();
 
@@ -41,10 +24,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       .map((p) => p.metadata.updatedAt)
       .sort()
       .at(-1) ?? SITE_LAST_MODIFIED;
-
-  // Priority is only a relative hint within one site, so it is spent on the
-  // site's actual shape: landing page, then the section index, then the
-  // individual case studies.
   const meta: Record<string, RouteMeta> = {
     "/": { lastModified: SITE_LAST_MODIFIED, changeFrequency: "monthly", priority: 1 },
     "/work": { lastModified: newestPost, changeFrequency: "monthly", priority: 0.9 },

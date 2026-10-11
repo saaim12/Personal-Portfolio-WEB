@@ -2,7 +2,6 @@ import "@once-ui-system/core/css/styles.css";
 import "@once-ui-system/core/css/tokens.css";
 import "@/resources/custom.css";
 
-
 import { Column, Flex } from "@once-ui-system/core";
 import { Header } from "@/components/Header";
 import { Providers } from "@/components/Providers";
@@ -18,26 +17,20 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export async function generateMetadata() {
   return {
-    // Carries metadataBase, so every route's relative OG image resolves
-    // against https://saaim.site rather than against the deploy host.
     ...pageMeta({
       title: home.title,
       description: home.description,
       path: home.path,
       image: home.image,
     }),
-    // Every page previously fell back to the home title, so /work's browser tab
-    // read "Selected work (shown with the permission of clients)".
     title: {
       default: home.title,
       template: `%s | ${person.name}`,
     },
-    // The `keywords` meta tag was removed: Google has ignored it since 2009 and
-    // 35 stuffed terms is a spam signal to the crawlers that still read it.
   };
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -58,14 +51,11 @@ export default async function RootLayout({
       <head>
         <script
           id="theme-init"
-          // Static theme initialization uses trusted local config.
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
                   const root = document.documentElement;
-
-                  // Set defaults from config
                   const config = ${JSON.stringify({
                     brand: style.brand,
                     accent: style.accent,
@@ -77,13 +67,9 @@ export default async function RootLayout({
                     transition: style.transition,
                     scaling: style.scaling,
                   })};
-                  
-                  // Apply default values
                   Object.entries(config).forEach(([key, value]) => {
                     root.setAttribute('data-' + key, value);
                   });
-                  
-                  // Match the editorial palette before hydration, including returning visitors.
                   try { localStorage.setItem('data-theme', 'light'); } catch (e) {}
                   root.setAttribute('data-theme', 'light');
                 } catch (e) {
@@ -94,9 +80,7 @@ export default async function RootLayout({
             `,
           }}
         />
-        {/* Site-wide. Person and FAQPage used to sit here too and so were
-            emitted on every route; they now render from the pages they
-            actually describe. */}
+
         <script {...jsonLd(webSiteJsonLd)} />
       </head>
       <Providers>
@@ -109,8 +93,7 @@ export default async function RootLayout({
           padding="0"
           horizontal="center"
         >
-          {/* First tab stop on every page, lets keyboard and screen-reader
-              users skip the nav instead of tabbing through it each time. */}
+
           <a href="#main" className="skipLink">
             Skip to content
           </a>
@@ -122,8 +105,6 @@ export default async function RootLayout({
             fillWidth
             horizontal="center"
             flex={1}
-            // Fluid gutters: 16px on phones → 48px on desktop. Content still
-            // caps at each page's maxWidth, so nothing exceeds the viewport.
             style={{
               paddingLeft: 0,
               paddingRight: 0,
