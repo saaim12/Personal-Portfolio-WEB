@@ -18,7 +18,6 @@ import {
   Line,
 } from "@once-ui-system/core";
 
-import { ArchitectureDiagram } from "./ArchitectureDiagram";
 
 type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
@@ -183,7 +182,6 @@ const components = {
   CodeBlock,
   InlineCode,
   Row,
-  ArchitectureDiagram,
 } as NonNullable<MDXRemoteProps["components"]>;
 
 type CustomMDXProps = MDXRemoteProps & {
