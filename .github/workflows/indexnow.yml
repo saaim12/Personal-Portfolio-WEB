@@ -3,7 +3,6 @@ name: Notify IndexNow after production deployment
 on:
   repository_dispatch:
     types: [vercel.deployment.success]
-  status:
   workflow_dispatch:
   schedule:
     - cron: '17 8 * * *'
@@ -20,7 +19,6 @@ jobs:
     if: >-
       github.event_name == 'workflow_dispatch' ||
       github.event_name == 'schedule' ||
-      (github.event_name == 'status' && github.event.context == 'Vercel' && github.event.state == 'success') ||
       (github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'production')
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -34,14 +32,10 @@ jobs:
         id: gate
         env:
           EVENT_NAME: ${{ github.event_name }}
-          STATUS_SHA: ${{ github.event.sha }}
           DEPLOYMENT_SHA: ${{ github.event.client_payload.git.sha }}
         run: |
           CURRENT_SHA=$(git rev-parse HEAD)
-          if [ "$EVENT_NAME" = status ] && [ -n "$STATUS_SHA" ] && [ "$STATUS_SHA" != "$CURRENT_SHA" ]; then
-            echo "Not current main deployment; skipping."
-            echo "run=false" >> "$GITHUB_OUTPUT"
-          elif [ "$EVENT_NAME" = repository_dispatch ] && [ -n "$DEPLOYMENT_SHA" ] && [ "$DEPLOYMENT_SHA" != "$CURRENT_SHA" ]; then
+          if [ "$EVENT_NAME" = repository_dispatch ] && [ -n "$DEPLOYMENT_SHA" ] && [ "$DEPLOYMENT_SHA" != "$CURRENT_SHA" ]; then
             echo "Not current main deployment; skipping."
             echo "run=false" >> "$GITHUB_OUTPUT"
           else
