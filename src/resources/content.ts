@@ -11,6 +11,12 @@ export const person = {
 export const portraits = {
   playful: "/images/avatar_2.jpeg",
   casual: "/images/avatar_3.jpeg",
+  withDog: "/images/avatar 5.jpeg",
+  smiling: "/images/avatar 4.jpeg",
+  withChicken: "/images/avatar 7.jpeg",
+  withChickenSmiling: "/images/avatart 8.jpeg",
+  withDuckVideo: "/images/avatart 6.mp4",
+  duckVideoPoster: "/images/duck-video-poster.webp",
 };
 
 export const bookingLink = "https://cal.com/saaim-abdullah-gm3ck6";
@@ -27,14 +33,13 @@ export const social = [
 
 export const home = {
   path: "/",
-  image: `/api/og/generate?title=${encodeURIComponent(`${person.name}, Software Engineer`)}`,
+  image: "/images/social-preview.png",
   title: `${person.name}, Software Engineer`,
   description: "Saaim Abdullah is a software engineer in Lahore who turns complex software problems into dependable products, APIs, and data systems.",
-  subline: "I build backend services, web applications, and data pipelines, taking work from requirements through deployment and handover. At Fitter Health, I delivered a health platform as the sole engineer. At Expertflow, I built APIs, improved response times, and worked across cloud, data, and communication systems.",
 };
 
 export const work = {
-  path: "/work",
-  title: "Systems I've built",
+  path: "/projects",
+  title: "Projects",
   description: "Explore Saaim Abdullah's software projects, from product delivery and backend services to data pipelines, AI applications, and engineering experiments.",
 };

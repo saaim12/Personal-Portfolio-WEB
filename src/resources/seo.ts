@@ -10,8 +10,7 @@ export const SITE_NAME = `${person.name}, software engineer`;
 
 export const SITE_LAST_MODIFIED = "2026-10-11";
 
-export const ogImageFor = (title: string) =>
-  `/api/og/generate?title=${encodeURIComponent(title)}`;
+export const ogImageFor = (_title: string) => "/images/social-preview.png";
 
 type PageMetaInput = {
   title: string;
@@ -35,7 +34,9 @@ export function pageMeta({
   modifiedTime,
 }: PageMetaInput): Metadata {
   const canonical = `${baseURL}${path === "/" ? "" : path}`;
-  const ogImage = image ?? ogImageFor(title);
+  const relativeImage = image ?? ogImageFor(title);
+  // Resolve against the site path too (GitHub project sites have a URL prefix).
+  const ogImage = relativeImage.startsWith("/") ? `${baseURL}${relativeImage}` : relativeImage;
 
   const base = Meta.generate({
     title,

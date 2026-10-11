@@ -1,0 +1,5 @@
+.journalPage .journalChapters{margin-top:28px;border-top:1px solid #ddd;padding-top:20px}
+.journalPage .journalChapters h3{font:14px var(--font-code);text-transform:uppercase;margin-bottom:16px}
+.journalPage .journalChapters ol{margin:0;padding-left:26px;line-height:1.6}
+.journalPage .journalChapters li{padding-left:6px;margin-bottom:10px;overflow-wrap:anywhere}
+.journalPage .journalChapters li::marker{color:#666;font-family:var(--font-code);font-size:12px}

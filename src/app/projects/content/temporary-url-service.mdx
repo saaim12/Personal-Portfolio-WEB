@@ -1,0 +1,95 @@
+---
+title: "Expiring URL service — designing a small API around explicit failure modes"
+seoTitle: "Temporary URL service with Express"
+publishedAt: "2026-09-29"
+updatedAt: "2026-10-11"
+thumbnail: "/images/projects/covers/temporary-url-service.png"
+summary: "Built an Express URL shortener with eight-character Nano ID aliases, ephemeral Map storage, redirects, JSON lookup, timer-based expiry, and documented scale-up design."
+cardSummary: "Implemented 8-character aliases, create/redirect/lookup operations, scheduled expiry, and a health endpoint in Express."
+seoDescription: "Express URL shortener with eight-character aliases, create/redirect/lookup APIs, in-memory storage, expiry timers, and documented reliability limits."
+tags: ["Personal prototype"]
+stack: ["nodejs","javascript","restcontracts"]
+images:
+  - "/images/projects/diagrams/temporary-url-service.png"
+link: "https://github.com/saaim12/TINY_URL_SERVER"
+team: []
+---
+
+## Small products still require real systems thinking
+
+A URL shortener looks like a one-table CRUD exercise until you ask what happens after an alias expires, whether a generated ID collides, how multiple servers find the same link, what a redirect is allowed to target, and whether a reboot should invalidate existing URLs. I built a small **Express/Node.js temporary-link service** and used its constrained design to make those questions explicit.
+
+The implementation is intentionally simple: a **JavaScript `Map`** stores aliases within one process; **Nano ID** generates short keys; and a timer removes each record at expiry. Its value is a complete request lifecycle with transparent trade-offs—not an invented claim of millions of requests per second.
+
+## Numbers that are actually grounded
+
+| Metric | Implementation | Why it matters |
+| --- | --- | --- |
+| Alias length | **8 characters** | Short links with a defined identifier size |
+| Primary URL actions | **3** — create, redirect, fetch original | End-to-end link lifecycle and inspection |
+| Additional operational route | **1 health endpoint** | Basic process liveness check |
+| Persistence stores | **1 in-process Map** | Constant-time-style lookup without network database overhead |
+| Expiration scheduling | **1 timer per created link** | Simple lifecycle behavior, bounded by process lifetime |
+| Process durability | **0** after restart | Links do not survive a fresh process |
+
+That final figure is important: **zero persistence across a process restart** is a documented trade-off of the prototype, not an uptime measure.
+
+## Request lifecycle, step by step
+
+| Action | Client request | Server behavior | Response / outcome |
+| --- | --- | --- | --- |
+| Create | POST original destination to `/api/url` | Generate 8-character ID and store mapping | Return short URL based on request host |
+| Redirect | GET the short-ID route | Find destination in `Map` | Redirect if present; otherwise `404` |
+| Inspect | GET fetch endpoint for ID | Look up original destination | JSON result or `404` |
+| Expire | Scheduled per-link timer | Delete mapping from `Map` | Future lookup returns `404` |
+| Health | GET health route | Check server process is active | Liveness response |
+
+### Why a Map was the correct first implementation
+
+For a self-contained prototype, in-memory storage avoids provisioning a database and keeps the path from request to lookup easy to inspect. JavaScript `Map` is a natural fit for key-to-value lookup in a single event-loop process. That makes it straightforward to reason about functionality and isolate API behavior from infrastructure.
+
+But it creates clear limits: **the process is the database**. A restart drops all links. Two Node.js replicas would have different contents. A successful creation response does not mean the alias is durable. Describing that boundary precisely is more persuasive than treating a tiny demo as a distributed platform.
+
+## Expiry is a correctness contract, not merely a timer
+
+The prototype schedules deletion when the link is created. This works while its process remains alive, but process timers are not durable queues and do not replace an absolute expiry timestamp. If this were a shared service, I would store `expires_at` and enforce expiry **during every lookup**. A background cleanup process could then reclaim old rows without becoming part of the correctness condition.
+
+| Requirement | Current mechanism | Production-oriented design |
+| --- | --- | --- |
+| Alias persistence | Process-local `Map` | PostgreSQL or Redis with an explicit durability policy |
+| Expiry | `setTimeout` per link | Stored absolute expiration + lookup-time check |
+| Multiple replicas | Separate incompatible Maps | Shared store accessed by all replicas |
+| ID collision | Nano ID generated alias | Unique index + retry on duplicate key |
+| Redirect safety | URL supplied by caller | Validate HTTP(S) scheme and destination policy |
+| Abuse protection | Simple HTTP interface | Rate limits, logging, bot/abuse response |
+| Idempotent creation | New alias for each request | Optional client idempotency key if needed |
+
+## Is an eight-character alias enough?
+
+The **8-character** length is a design fact. It does not automatically make the service collision-free or secure. Collision probability depends on the actual character alphabet and number of stored IDs, and a public short URL should be treated as discoverable unless access control is explicitly added. The correct implementation response is **a uniqueness constraint and collision retry**, not confidence in random generation alone.
+
+Similarly, a temporary short link is not an access-control token: deleting its mapping stops *that redirect*, but a recipient who already has the original URL can still visit the destination. Temporary links and revocable content authorization are different product requirements.
+
+## Failure and security review
+
+| Failure | User impact | Design response |
+| --- | --- | --- |
+| Server process restarts | Existing aliases disappear | Move mappings to shared persistence |
+| Two replicas handle different requests | Alias created on A is missing on B | Centralize state |
+| Timer fires late under heavy event-loop work | Expired alias may remain temporarily resolvable | Check expiry on reads |
+| Unsafe redirect destination | Users can be sent to unwanted schemes/sites | Normalize and validate URL destinations |
+| High create rate | Memory and timer count grow without bound | Rate limiting, storage TTL, quotas |
+| A generated ID already exists | Existing destination can be overwritten | Atomic uniqueness check and retry |
+
+## What the implementation proves
+
+The service implements the **complete temporary-alias lifecycle**: create, return, resolve, inspect, and expire. It is a good compact demonstration of REST contracts, ID generation, routing, process-local state, and lifecycle behavior. Its limitations also demonstrate that I distinguish functional correctness in a prototype from durability, horizontal scaling, and security in production.
+
+**Next validation plan:** create reproducible tests for expiry boundaries, collision injection, malformed URLs, restart behavior, and two-instance consistency; then benchmark memory use versus active link count. Only after shared persistence is in place would I publish throughput and availability figures for a deployment.
+
+## Source
+
+* [GitHub repository](https://github.com/saaim12/TINY_URL_SERVER)
+* [Controller implementation](https://github.com/saaim12/TINY_URL_SERVER/blob/main/urlControl.js)
+* [HTTP routes](https://github.com/saaim12/TINY_URL_SERVER/blob/main/routes/urlRoutes.js)
+* [Server entry point](https://github.com/saaim12/TINY_URL_SERVER/blob/main/index.js)

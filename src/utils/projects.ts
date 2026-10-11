@@ -14,7 +14,7 @@ type ProjectMetadata = {
   seoDescription: string;
   image?: string;
   images: string[];
-  thumbnail?: string;
+  thumbnail: string;
   tags: string[];
   stack: TechKey[];
   role?: string;
@@ -24,7 +24,7 @@ type ProjectMetadata = {
 
 /** Project content is local and cached across reads within a server render. */
 export const getProjects = cache(() => {
-  const directory = path.join(process.cwd(), "src", "app", "work", "projects");
+  const directory = path.join(process.cwd(), "src", "app", "projects", "content");
   return fs.readdirSync(directory)
     .filter(file => file.endsWith(".mdx"))
     .map(file => {

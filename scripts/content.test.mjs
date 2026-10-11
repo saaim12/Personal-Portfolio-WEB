@@ -4,8 +4,10 @@ import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
 import { headingId } from "../src/utils/headingId.ts";
+import { compileMDX } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 
-const directory = "src/app/work/projects";
+const directory = "src/app/projects/content";
 const projects = fs.readdirSync(directory).filter(file => file.endsWith(".mdx"))
   .map(file => ({ slug: path.basename(file, ".mdx"), ...matter(fs.readFileSync(path.join(directory, file), "utf8")) }));
 
@@ -20,7 +22,7 @@ test("existing heading permalink forms stay stable", () => {
 });
 
 test("all projects retain their routes, content, and final diagrams", () => {
-  assert.equal(projects.length, 12);
+  assert.equal(projects.length, 10);
   for (const { slug, data, content } of projects) {
     for (const key of ["title", "summary", "seoDescription", "publishedAt"]) {
       assert.equal(typeof data[key], "string", slug + ": " + key);
@@ -36,7 +38,7 @@ test("all projects retain their routes, content, and final diagrams", () => {
     }
     assert.ok(content.includes("## "), slug);
     assert.ok(!/<[A-Z][A-Za-z]*\b/.test(content), "MDX contains only Markdown: " + slug);
-    const headings = [...content.matchAll(/^## (.+)$/gm)].map(match => headingId(match[1]));
+    const headings = [...content.matchAll(/^#{2,3} (.+)$/gm)].map(match => headingId(match[1]));
     assert.equal(new Set(headings).size, headings.length, slug + " has unique anchors");
     for (const match of content.matchAll(/\]\((\/[^)#]+)(?:#[^)]*)?\)/g)) {
       if (/\.[a-z]+$/i.test(match[1])) assert.ok(fs.existsSync("public" + match[1]), match[1]);
@@ -44,9 +46,16 @@ test("all projects retain their routes, content, and final diagrams", () => {
   }
 });
 
-test("project image paths and heading syntax stay within renderer support", () => {
+test("project Markdown compiles with subheadings and structured tables", async () => {
+  for (const { slug, content } of projects) {
+    const { content: rendered } = await compileMDX({ source: content, options: { mdxOptions: { remarkPlugins: [remarkGfm] } } });
+    assert.ok(rendered, slug + " compiles");
+    if (slug !== "algorithms-in-python") assert.ok(/^\| ---/m.test(content), slug + " retains its facts tables");
+  }
+});
+
+test("project image paths retain supported final assets", () => {
   for (const { slug, content, data } of projects) {
-    assert.ok(!/^#{1,1} |^#{3,6} |^\x60\x60\x60|^!\[/m.test(content), slug);
     for (const asset of data.images) {
       const image = fs.readFileSync("public" + asset);
       if (asset.endsWith(".svg")) assert.ok(image.toString("utf8").includes("<svg"), asset);

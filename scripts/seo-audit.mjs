@@ -52,8 +52,7 @@ for (const url of urls) {
   const canonical = pick(html, /<link[^>]+rel="canonical"[^>]+href="([^"]*)"/i);
   const ogImage = decode(meta(html, "og:image"));
 
-  // OG image reachability. The generated cards are a dynamic route, so this
-  // is the only way to know the URL in the tag actually resolves.
+  // Verify that local social previews and project covers can be fetched.
   let ogStatus = "—";
   if (ogImage) {
     const imgUrl = ogImage.startsWith("http") ? ogImage.replace(CANONICAL_HOST, origin) : origin + ogImage;

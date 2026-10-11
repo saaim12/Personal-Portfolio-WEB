@@ -14,7 +14,7 @@ export const roles = [
       "Resolved silent notification loss by buffering SNS through SQS, with retries, a dead letter queue, and queue depth alarms.",
     ],
     tech: "Django · Next.js · PostgreSQL · Celery · Redis · AWS · Docker",
-    link: "/work/fitter-health-platform",
+    link: "/projects/fitter-health-platform",
   },
   {
     company: "Expertflow",
@@ -24,11 +24,11 @@ export const roles = [
     bullets: [
       "Built and maintained REST APIs serving 1,000 to 3,000 daily users, deployed as Docker containers on AWS EC2 behind an Application Load Balancer with rate limiting, scoped IAM, and VPC isolation.",
       "Deployed the backend as a distributed system on AWS EKS with Horizontal Pod Autoscaler policies that scale replicas with request throughput.",
-      "Reduced admin panel response time from 130 ms to 30 ms through Redis caching and database index tuning after profiling identified query cost.",
+      "Reduced admin panel response time from 130 ms to 30 ms, a 77% improvement, through Redis caching and database index tuning after profiling identified query cost.",
       "Designed and shipped event driven batch and streaming ETL pipelines using AWS Lambda, MWAA, EMR, PySpark, Glue, and S3, producing Parquet datasets for BI and ML workflows.",
-      "Developed a WebRTC SDK for voice and video communication and the REST APIs connecting frontend clients, SDK modules, and external platforms.",
+      "Developed a WebRTC SDK for customer voice, chat, and video interactions, connecting frontend clients and third-party APIs. Packaged, versioned, and published customer-js-sdk-expertflow npm modules.",
       "Implemented a chatbot workflow, SQL customer insight analytics, and time limited permission controls.",
-      "Worked across Angular frontend, backend, and SDK teams to deliver features. The role began as an internship and converted to full time employment.",
+      "Enhanced Angular admin interfaces and built survey forms rendered dynamically in vanilla JavaScript, supporting multiple question types and backend integration. Worked across frontend, backend, and SDK teams to deliver features.",
     ],
     tech: "Python · Django · REST APIs · AWS · EKS · Redis · PySpark · WebRTC",
   },

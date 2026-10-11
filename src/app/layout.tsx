@@ -1,3 +1,4 @@
+import { SiteAnchor } from "@/components/SiteAnchor";
 import "@once-ui-system/core/css/styles.css";
 import "@once-ui-system/core/css/tokens.css";
 import "@/resources/custom.css";
@@ -13,8 +14,7 @@ import { home, person } from "@/resources/content";
 import { pageMeta } from "@/resources/seo";
 import { jsonLd, webSiteJsonLd } from "@/resources/schema";
 
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { VercelMonitoring } from "@/components/VercelMonitoring";
 
 export async function generateMetadata() {
   return {
@@ -95,9 +95,9 @@ export default function RootLayout({
           horizontal="center"
         >
 
-          <a href="#main" className="skipLink">
+          <SiteAnchor href="#main" className="skipLink">
             Skip to content
-          </a>
+          </SiteAnchor>
           <Header name={person.name} />
           <StudioMotion />
           <Flex
@@ -117,8 +117,8 @@ export default function RootLayout({
             </Flex>
           </Flex>
           <Footer />
-          <Analytics />
-          <SpeedInsights />
+          {process.env.VERCEL_ENV === "production" &&
+            process.env.NEXT_PUBLIC_STATIC_EXPORT !== "true" && <VercelMonitoring />}
         </Column>
       </Providers>
     </Flex>

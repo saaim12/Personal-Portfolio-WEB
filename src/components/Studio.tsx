@@ -1,3 +1,4 @@
+import { SiteAnchor } from "@/components/SiteAnchor";
 import type { ReactNode } from "react";
 export function Mark({ kind = "flower", className = "" }: { kind?: string; className?: string }) {
   const paths: Record<string, ReactNode> = {
@@ -13,11 +14,14 @@ export function Mark({ kind = "flower", className = "" }: { kind?: string; class
   return <svg className={`mark ${className}`} viewBox="0 0 32 32" aria-hidden="true">{paths[kind] || paths.flower}</svg>;
 }
 export function Handles() { return <span className="handles" aria-hidden="true"><i /><i /><i /><i /></span>; }
-export function Ruler({ bottom = false }: { bottom?: boolean }) { return <div className={`ruler ${bottom ? "rulerBottom" : ""}`} aria-hidden="true">{Array.from({ length: 28 }, (_, i) => <span key={i}>{i * 100}</span>)}</div>; }
+export function Ruler({ bottom = false }: { bottom?: boolean }) { return <div className={`ruler ${bottom ? "rulerBottom" : ""}`} aria-hidden="true"><div className="rulerTrack">{Array.from({ length: 30 }, (_, i) => <span key={i}>{i > 0 ? (i - 1) * 100 : ""}</span>)}</div></div>; }
 export function Action({ href, children, external = false, className = "" }: { href: string; children: ReactNode; external?: boolean; className?: string }) {
-  return <a href={href} className={`studioButton ${className}`} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}><Handles /><span className="buttonIcon" aria-hidden="true">↠</span><span>{children}</span></a>;
+  return <SiteAnchor href={href} className={`studioButton ${className}`} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}><Handles /><span className="buttonIcon" aria-hidden="true">↠</span><span>{children}</span></SiteAnchor>;
+}
+export function RevealText({ text }: { text: string }) {
+  return <><span className="screenReaderText">{text}</span><span aria-hidden="true">{text.split(" ").map((word, index) => <span key={index}>{index > 0 && " "}<span className="revealWord">{Array.from(word).map((letter, i) => <span className="revealCharacter" key={i}>{letter}</span>)}</span></span>)}</span></>;
 }
 export function PageHeading({ title, note, children }: { title: string; note?: string; children?: ReactNode }) {
-  return <div className="pageHeading">{note && <p className="handwritten">{note}</p>}<h1 className="displayType">{title}</h1>{children && <div className="pageHeadingIntro">{children}</div>}</div>;
+  return <div className="pageHeading">{note && <p className="handwritten">{note}</p>}<h1 className="displayType"><RevealText text={title} /></h1>{children && <div className="pageHeadingIntro">{children}</div>}</div>;
 }
 export function Mascot() { return <svg className="mascot" viewBox="0 0 360 360" aria-hidden="true"><path d="M180 62C70-30-28 24 65 180-40 310 54 392 180 300c128 93 220 5 116-120C393 26 287-35 180 62Z" fill="var(--green)" stroke="var(--ink)" strokeWidth="2"/><g className="mascotEyes" fill="var(--ink)"><rect x="145" y="112" width="26" height="58" rx="13"/><rect x="189" y="112" width="26" height="58" rx="13"/></g></svg>; }

@@ -1,0 +1,95 @@
+---
+title: "ESP32 temperature inference — proving the model/firmware contract"
+seoTitle: "ESP32 temperature inference"
+publishedAt: "2026-09-29"
+updatedAt: "2026-10-11"
+thumbnail: "/images/projects/covers/esp32-temperature-inference.svg"
+summary: "Connected Python model training and export with a real ESP32 inference path and Flask reconstruction, including a fixed scaler and a two-value latent vector."
+cardSummary: "Integrated a DHT11 sensor, TFLite Micro encoder, 2-value latent payload, and a Flask decoding endpoint."
+seoDescription: "ESP32 inference connecting DHT11 readings, TensorFlow Lite Micro, two-value latent payloads, and Flask reconstruction with shared model artifacts."
+tags: ["Personal prototype"]
+stack: ["python","tensorflow","tflitemicro","esp32","flask"]
+images:
+  - "/images/projects/diagrams/esp32-temperature-inference.svg"
+link: "https://github.com/saaim12/FYP"
+team: []
+---
+
+## Getting a model onto a microcontroller is a systems problem
+
+A TensorFlow model that behaves correctly in Python can fail on an ESP32 for reasons unrelated to predictive quality: incompatible operator sets, memory allocation, different preprocessing, wrong tensor dimensions, or a mismatch between the firmware and server decoder. I built this experiment to make those interfaces explicit using a **DHT11 temperature sensor**, TensorFlow Lite Micro, and a Flask reconstruction endpoint.
+
+This is a focused embedded-inference project, distinct from the broader edge compression case study. Its result is the **device-to-server model pipeline**, not an assertion that temperature data was efficiently compressed.
+
+## What the implementation contains
+
+| Engineering fact | Value in this variant | Why it matters |
+| --- | --- | --- |
+| Sensor | **DHT11** | Physical device input, not just an offline CSV |
+| Scalar sensor value used | **1 temperature reading** | Defines the shape of the model's input |
+| Latent vector width | **2 values** | Defines the device-to-Flask interface |
+| Model deployment runtimes | **2** — ESP32 and Python service | Export/decoder compatibility must be maintained |
+| Decode API | **`/decode`** | HTTP boundary for reconstructed inference |
+| Firmware model runtime | TensorFlow Lite Micro | Embedded tensor arena and operator registration |
+| Server runtime | Flask with saved decoder/scaler | Inverse transform and output handling |
+
+A single scalar becoming **two latent numbers** does **not** demonstrate compression. Before JSON keys and numerical text formatting, it expands the logical count of scalar values from one to two.
+
+## End-to-end execution path
+
+| Step | Where it happens | What I engineered |
+| --- | --- | --- |
+| 1. Create data | Python training script | Synthetic temperature examples for repeatable training |
+| 2. Scale values | Training pipeline | Establish fixed numerical transform expected by both runtimes |
+| 3. Train | Keras | Learn encoder and compatible decoder weights |
+| 4. Export | Python / TFLite tooling | Generate device model file and C header |
+| 5. Read input | ESP32 firmware | Sample temperature from DHT11 |
+| 6. Encode | TFLite Micro | Run model within allocated tensor arena |
+| 7. Send | ESP32 network client | Serialize two-value vector as JSON |
+| 8. Decode | Flask `/decode` | Check vector shape, predict and inverse-scale temperature |
+| 9. Respond | Flask API | Return success response; currently does not expose numeric reconstruction |
+
+### Training and artifact packaging
+
+The training script constructs synthetic data and fits a scaler to a known temperature range. It exports the encoder for the device while leaving the decoder and scaler available to Python. That establishes **three connected artifacts**: the embedded encoder, the server decoder, and the normalization definition. A bug in any one can change the semantic meaning of the request.
+
+### On-device inference
+
+The firmware reads the sensor, applies the expected scale, invokes TFLite Micro, and serializes the two latent values for transport. TFLite Micro does not manage memory like a general desktop Python process: the **tensor arena is explicitly allocated** and the operation set must support the exported model. When debugging device inference, I would verify model initialization, tensor types, input/output shapes, and memory use before assuming the network is at fault.
+
+### Reconstruction and contract checking
+
+The Flask service loads the matching decoder and scaler, validates the incoming latent shape, reconstructs the scaled value, then applies the inverse transform. Its published response is an acknowledgment rather than the reconstructed number. This is a conscious distinction in the case study: the code demonstrates the internal reconstruction path; publishing the numeric output in the response would require an API change.
+
+## The difficult engineering decisions
+
+| Decision | Reason | Risk addressed |
+| --- | --- | --- |
+| Keep preprocessing constants aligned | Different scales produce incorrect outputs | Silent model drift across environments |
+| Export a compact firmware-compatible model | Embedded runtime supports fewer operations | Model initialization failure |
+| Use a fixed tensor arena | Predictable bounded memory allocation | Runtime memory pressure |
+| Validate a **2-value** payload | Server must know the latent shape | Invalid decoder inputs |
+| Separate device encoder and server decoder | Experiments with split inference | Full model need not run on microcontroller |
+| Track artifacts as a single release | Interdependent versions must match | Firmware/server compatibility errors |
+
+## How I would test it as an engineering system
+
+1. **Parity tests:** run the same input through the Python encoder and the ESP32-compiled model; compare outputs within a documented tolerance.
+2. **Schema tests:** reject a zero-length, one-value, or three-value latent request when two values are required.
+3. **Range tests:** feed temperatures at the boundaries of the fitted scaler and beyond its intended range.
+4. **Hardware tests:** record inference time, tensor arena utilization, wireless retry behavior, and failure recovery on a named ESP32 board.
+5. **Model-quality tests:** compare original sensor values against reconstructed values and report MAE/RMSE on held-out *real* readings.
+
+These are a concrete **five-part test plan**, not five completed benchmark suites.
+
+## What the result proves
+
+The repository connects model training, embedded export, ESP32 sensor input, JSON transport, and Flask-side reconstruction. It is evidence that I can work across **Python ML tooling, C/C++-adjacent firmware constraints, memory-bound inference, and backend contracts** without treating those layers as independent demos.
+
+The result does not currently prove power reduction, production uptime, wireless security, or payload compression. The next improvement would be a versioned artifact manifest and an API that returns the reconstructed number so automated end-to-end tests can compare it directly to the sensor input.
+
+## Code
+
+* [Training and export](https://github.com/saaim12/FYP/blob/main/model_training_2.py)
+* [ESP32 firmware](https://github.com/saaim12/FYP/blob/main/esp_code.c)
+* [Flask decoder](https://github.com/saaim12/FYP/blob/main/server_code/server.py)

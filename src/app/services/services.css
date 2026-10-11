@@ -1,0 +1,96 @@
+/* Services-only proportions measured from the 1918 × 908 recording. */
+.servicesPage .servicesHero{padding:125px 0 35px;min-height:calc(100svh - 88px);align-items:start}
+.servicesPage .servicesAvailability{font-size:16px;gap:12px;padding:10px 18px 10px 10px;margin-bottom:20px}
+.servicesPage .servicesAvailability img{width:44px;height:44px;object-fit:cover}
+.servicesPage .servicesHero h1{font-size:180px;line-height:.95}
+.servicesPage .servicesSelection{height:175px;padding:10px 28px;gap:28px;margin-top:-6px;--selection-bg:#ade8f4;--selection-ink:#34c4e4;background:var(--selection-bg);animation:servicesBandPalette 1.2s steps(1,end) infinite}
+.servicesPage .servicesSelection>.mark{color:var(--selection-ink);width:105px;height:105px;flex-shrink:0;animation:servicesSymbolTurn 1.2s linear infinite}
+.servicesPage .servicesSelection .handles i{background:var(--selection-bg)}
+.servicesPage .servicesHeroSummary{font-size:20px;line-height:1.4;margin:38px auto 70px}
+.servicesPage .servicesHero .studioButton{font-size:20px;padding:10px;gap:10px}
+.servicesPage .servicesHero .buttonIcon{width:50px;height:50px;font-size:32px}
+@keyframes servicesBandPalette{0%,100%{--selection-bg:#ade8f4;--selection-ink:#34c4e4}25%{--selection-bg:#f5dda1;--selection-ink:#edb329}50%{--selection-bg:#f8b8cf;--selection-ink:#e91459}75%{--selection-bg:#a1dfc5;--selection-ink:#2fbd83}}
+@keyframes servicesSymbolTurn{to{transform:rotate(360deg)}}
+.servicesPage .serviceChapters{position:relative;overflow:clip;padding-top:100px;padding-bottom:100px}
+.servicesPage .servicePanel{min-height:0;isolation:isolate}
+.servicesPage .servicePanelInner{width:87%;padding:95px 0 190px}
+.servicesPage .chapterArtworkLayer{position:absolute;inset:0;overflow:clip;z-index:-1;pointer-events:none}
+.servicesPage .serviceBoundary{height:102px;top:-100px;z-index:2}
+.servicesPage .serviceBoundary .boundaryStroke{stroke-width:2}
+.servicesPage .serviceBoundaryLast{--panel-bg:white;top:auto;bottom:0;background:#a1dfc5}
+.servicesPage .servicePanelInner>.serviceNumber{width:70px;height:70px;font-size:20px;margin-bottom:42px}
+.servicesPage .chapterArtwork{position:absolute;width:1000px;height:1000px;max-width:none;top:-340px;left:50%;transform:translateX(-50%);transform-origin:center;opacity:.14;color:var(--panel-accent);z-index:-1;pointer-events:none;animation:servicesChapterTurn 14s linear infinite}
+@keyframes servicesChapterTurn{from{transform:translateX(-50%) rotate(0deg)}to{transform:translateX(-50%) rotate(360deg)}}
+.servicesPage .servicePanel h2{font-size:140px;line-height:.88;max-width:none}
+.servicesPage .chapterTitleLine{display:block}
+.servicesPage .servicePanelInner>p{font-size:20px;line-height:1.4;max-width:650px;margin:32px auto 70px}
+.servicesPage .servicePanelCapabilities{gap:20px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.servicesPage .servicePanelCapabilities span{min-height:75px;padding:30px 20px 16px;font-size:20px;clip-path:polygon(0 0,40px 0,56px 15px,100% 15px,100% 100%,0 100%)}
+.servicesPage .servicePanel:nth-child(3) .servicePanelCapabilities{color:white}
+.servicesPage .serviceProcess{height:360svh;margin:60px 0 120px}
+.servicesPage .processSticky{height:calc(100svh - 88px);gap:0}
+.servicesPage .processSticky>.serviceSectionHeading{flex-basis:48vw;padding:0 5vw}
+.servicesPage .processRail{gap:9.6vw;padding-right:3vw}
+.servicesPage .processCard{flex-basis:440px;width:440px;height:calc(100svh - 145px);min-height:0;max-height:780px;border-width:5px;border-radius:60px;padding:40px 45px 160px;overflow:visible}
+.servicesPage .processCard:before{height:30px;border-radius:0 0 32px 32px}
+.servicesPage .processArtwork{display:block;flex:none;width:110px;height:100px;max-width:none;margin:0 auto 26px;color:var(--ink)}
+.servicesPage .processCard h3{font-size:48px;line-height:1.2;margin:0 0 14px;letter-spacing:-2px}
+.servicesPage .processCard p{font-size:18px;line-height:1.5}
+.servicesPage .processIndex{right:-48px;bottom:110px;font-size:16px;padding:8px 18px;background:var(--blue);border-radius:0 22px 22px;transform:rotate(-3deg)}
+.servicesPage .processCard:nth-child(2) .processIndex{background:var(--yellow);transform:rotate(-10deg)}
+.servicesPage .processCard:nth-child(3) .processIndex{background:var(--pink);transform:rotate(-10deg)}
+.servicesPage .processCard:nth-child(4) .processIndex{background:var(--green);transform:rotate(6deg)}
+.servicesPage .processIndex .stepPointer{position:absolute;left:-36px;top:-26px;width:36px;height:36px;color:var(--blue)}
+.servicesPage .processCard:nth-child(2) .stepPointer{color:var(--yellow)}
+.servicesPage .processCard:nth-child(3) .stepPointer{color:var(--pink)}
+.servicesPage .processCard:nth-child(4) .stepPointer{color:var(--green)}
+.servicesPage .processArrow{width:66px;height:66px;right:28px;bottom:26px;border:2px solid var(--ink);font:48px/1 var(--font-body)}
+.servicesPage .processArrow svg{width:42px;height:42px}
+.servicesPage .capabilitiesSection{padding:110px 0}
+.servicesPage .capabilityGroup{min-height:650px;padding:70px;border-color:#444}
+.servicesPage .capabilityGroup h3{font-size:20px;padding:24px 12px 12px;clip-path:polygon(0 0,40px 0,55px 15px,100% 15px,100% 100%,0 100%)}
+.servicesPage .capabilityTone4 h3{color:white}
+.servicesPage .capabilityChip{font-size:20px;padding:20px;max-width:36%;overflow-wrap:anywhere;top:250px;left:18%;transform:rotate(-6deg)}
+.servicesPage .capabilityChip:nth-of-type(2){left:56%;top:160px;transform:rotate(10deg)}
+.servicesPage .capabilityChip:nth-of-type(3){left:60%;top:350px;transform:rotate(-10deg)}
+.servicesPage .capabilityChip:nth-of-type(4){left:18%;top:410px;transform:rotate(2deg)}
+.servicesPage .capabilityChip:nth-of-type(5){left:50%;top:525px;transform:rotate(-8deg)}
+.servicesPage .serviceFaqGrid{gap:70px 110px}
+.servicesPage .serviceFaq{padding:24px;box-shadow:0 0 70px #0000000c}
+.servicesPage .serviceFaq:nth-child(even){margin-top:120px}
+.servicesPage .faqLabel,.servicesPage .faqUsername{font-size:20px}
+.servicesPage .faqUser{width:60px;height:60px;overflow:hidden}
+.servicesPage .faqUser svg{width:48px;height:48px;fill:var(--blue)}
+.servicesPage .faqTone1 svg{fill:var(--green)}
+.servicesPage .faqTone2 svg{fill:var(--yellow)}
+.servicesPage .faqTone3 svg{fill:var(--pink)}
+.servicesPage .faqQuestion,.servicesPage .faqAnswer{gap:20px}
+.servicesPage .faqAnswer img{width:60px;height:60px;object-fit:cover}
+.servicesPage .faqReaction{font-size:20px}
+.servicesPage .contactSection{width:87%;padding-top:190px}
+.servicesPage .contactIntro{padding:0 9% 170px;gap:100px}
+.servicesPage .contactIntro .mascot{width:480px;max-width:100%}
+.servicesPage .contactIntro h2{font-size:140px;margin-bottom:30px}
+.servicesPage .contactIntro p{max-width:500px;font-size:20px}
+.servicesPage .contactBoard{min-height:800px;border-radius:40px}
+.servicesPage .boardShape{overflow:hidden;clip-path:inset(0 round 40px);background:transparent}
+.servicesPage .boardShapeOne{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1670 800' preserveAspectRatio='none'%3E%3Cg fill='%23522e29'%3E%3Cpath d='M0 0H270L0 230Z'/%3E%3Cpath d='M214 800 630 228Q500 440 350 800Z'/%3E%3Cpath d='M1160 0H1640Q1370 280 760 800Q1120 200 1160 0Z'/%3E%3Cpath d='M1550 800H1670V680Z'/%3E%3C/g%3E%3C/svg%3E") center/100% 100% no-repeat}
+.servicesPage .boardShapeOne:after,.servicesPage .boardShapeTwo:after{display:none}
+.servicesPage .contactSticker{font-size:140px;line-height:.8;gap:24px;padding:24px 18px;transition:background .2s,color .2s;transform:none}
+.servicesPage .contactSticker:hover{background:var(--ink);color:var(--blue);transform:none}
+.servicesPage .contactSticker>span{position:relative;width:100px;height:100px;padding:0;display:grid;place-items:center;isolation:isolate;font-size:55px}
+.servicesPage .contactSticker>span:before{content:"";position:absolute;inset:14px;background:var(--ink);transform:rotate(45deg);z-index:-1}
+.servicesPage .commentNote{width:438px;left:7.5%;padding:20px;font-size:20px}
+.servicesPage .commentNote p,.servicesPage .commentLabel{font-size:20px}
+@media(max-width:1400px) and (min-width:1001px){.servicesPage .contactIntro h2,.servicesPage .contactSticker{font-size:100px}.servicesPage .contactIntro{gap:50px}.servicesPage .servicePanel h2{font-size:120px}.servicesPage .servicePanelCapabilities span{font-size:16px}.servicesPage .capabilityGroup{padding:45px}.servicesPage .capabilityChip{font-size:17px}}
+@media(max-width:1000px){.servicesPage .servicesHero{padding-top:65px}.servicesPage .servicesHero h1{font-size:130px}.servicesPage .servicesSelection{height:140px}.servicesPage .servicesSelection>.mark{width:65px;height:65px}.servicesPage .servicePanel h2{font-size:85px}.servicesPage .servicePanelInner{padding:70px 0 140px}.servicesPage .servicePanelCapabilities{grid-template-columns:1fr 1fr}.servicesPage .servicePanelCapabilities span{font-size:16px}.servicesPage .chapterArtwork{width:700px;height:700px;top:-150px}.servicesPage .serviceProcess{height:auto;margin:80px 0;padding:0 5%}.servicesPage .processSticky{height:auto;display:block}.servicesPage .processRail{gap:35px;padding:0}.servicesPage .processCard{height:600px;width:100%;padding:30px}.servicesPage .processArtwork{width:90px;height:90px}.servicesPage .processCard h3{font-size:38px}.servicesPage .processIndex{right:-15px;font-size:13px}.servicesPage .capabilityGroup{padding:30px;min-height:500px}.servicesPage .capabilityGroup h3{font-size:16px}.servicesPage .capabilityChip{font-size:14px;padding:15px;left:10%;top:210px}.servicesPage .capabilityChip:nth-of-type(2){left:50%;top:130px}.servicesPage .capabilityChip:nth-of-type(3){left:50%;top:290px}.servicesPage .capabilityChip:nth-of-type(4){left:10%;top:340px}.servicesPage .capabilityChip:nth-of-type(5){left:45%;top:420px}.servicesPage .contactIntro{gap:40px;padding-inline:0}.servicesPage .contactIntro h2{font-size:70px}.servicesPage .contactSticker{font-size:70px}.servicesPage .contactSticker>span{width:65px;height:65px;font-size:35px}.servicesPage .contactBoard{min-height:600px}}
+@media(max-width:600px){.servicesPage .servicesHero{padding:40px 0;min-height:620px}.servicesPage .servicesAvailability{font-size:10px;gap:8px}.servicesPage .servicesAvailability img{width:30px;height:30px}.servicesPage .servicesHero h1{font-size:80px}.servicesPage .servicesSelection{height:100px;gap:12px;padding:10px}.servicesPage .servicesSelection>.mark{width:35px;height:35px}.servicesPage .servicesHeroSummary{font-size:16px}.servicesPage .servicePanel h2{font-size:52px}.servicesPage .servicePanelInner>p{font-size:16px;margin:25px auto 35px}.servicesPage .servicePanelInner{padding:45px 0 120px}.servicesPage .servicePanelInner>.serviceNumber{width:50px;height:50px;font-size:15px;margin-bottom:28px}.servicesPage .servicePanelCapabilities{grid-template-columns:1fr;gap:12px}.servicesPage .servicePanelCapabilities span{min-height:60px;font-size:14px;padding:27px 15px 12px}.servicesPage .serviceBoundary{height:62px;top:-60px}.servicesPage .serviceBoundaryLast{top:auto}.servicesPage .serviceChapters{padding-top:60px;padding-bottom:60px}.servicesPage .chapterArtwork{width:450px;height:450px;top:-70px}.servicesPage .processCard{height:540px;max-width:330px;min-height:0}.servicesPage .processCard p{font-size:16px}.servicesPage .capabilityGroup{min-height:480px}.servicesPage .serviceFaqGrid{gap:40px}.servicesPage .serviceFaq:nth-child(even){margin-top:0}.servicesPage .serviceFaq{padding:18px}.servicesPage .faqUser,.servicesPage .faqAnswer img{width:40px;height:40px}.servicesPage .faqUser svg{width:36px;height:36px}.servicesPage .faqLabel,.servicesPage .faqUsername{font-size:16px}.servicesPage .faqAnswer p{font-size:14px}.servicesPage .faqQuestion,.servicesPage .faqAnswer{gap:12px}.servicesPage .contactSection{padding-top:100px}.servicesPage .contactIntro{padding-bottom:130px}.servicesPage .contactIntro .mascot{width:240px}.servicesPage .contactIntro h2{font-size:62px}.servicesPage .contactIntro p{font-size:16px}.servicesPage .contactBoard{min-height:440px}.servicesPage .contactSticker{font-size:40px;gap:8px;padding:12px 8px}.servicesPage .contactSticker>span{width:38px;height:38px;font-size:24px}.servicesPage .contactSticker>span:before{inset:5px}.servicesPage .commentNote{width:260px;padding:14px;left:5%}.servicesPage .commentNote p,.servicesPage .commentLabel{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.servicesPage .servicesSelection,.servicesPage .servicesSelection>.mark{animation:none}.servicesPage .serviceProcess{height:auto}.servicesPage .processSticky{height:auto;position:relative}.servicesPage .processRail{transform:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px}.servicesPage .processCard{width:100%;max-width:440px}.servicesPage .processSticky>.serviceSectionHeading{transform:none}@media(max-width:600px){.servicesPage .processRail{grid-template-columns:1fr}}}
+/* Keep the complete hero title together at every viewport width. */
+.servicesPage .servicesHeroContent{width:min(1100px,100%)}
+.servicesPage .servicesHero h1{display:flex;align-items:center;justify-content:center;gap:clamp(10px,2vw,36px);font-size:clamp(26px,7.5vw,140px);white-space:nowrap}
+.servicesPage .servicesSelection{flex:none;height:auto;margin:0;padding:clamp(8px,1vw,18px);gap:clamp(8px,1.6vw,28px)}
+.servicesPage .servicesSelection>.mark{width:clamp(20px,4.5vw,80px);height:clamp(20px,4.5vw,80px)}
+.servicesPage .servicesSelection .handles i{width:clamp(8px,1vw,16px);height:clamp(8px,1vw,16px)}
+@media(max-width:1000px){.servicesPage .processCard{padding:30px 30px 160px}.servicesPage .capabilityChip{max-width:40%;padding:12px;left:8%}.servicesPage .capabilityChip:nth-of-type(2),.servicesPage .capabilityChip:nth-of-type(3){left:55%}.servicesPage .capabilityChip:nth-of-type(4){left:8%}}
+@media(max-width:600px){.servicesPage .capabilityGroup{min-height:520px}}

@@ -1,0 +1,23 @@
+/* The final contact treatment shared by Home and Services only. */
+.contactBoard.contactBoardAnimated{background:#522e29}
+.contactBoardAnimated .contactBackdrop{position:absolute;inset:0;width:100%;height:100%;max-width:none;z-index:-1;border-radius:inherit;overflow:hidden;pointer-events:none}
+.contactBoardAnimated[data-contact-pending] .contactBackdrop{clip-path:inset(0 100% 0 0)}
+.contactBoardAnimated .contactStickerAnimated[data-contact-sticker-pending]{opacity:0}
+.contactBoardAnimated .contactStickerAnimated[data-contact-sticker-pending]:focus-visible{opacity:1}
+.contactBoardAnimated .contactSticker.contactStickerAnimated{position:relative;transform:none;transition:background-color 180ms ease,color 180ms ease,border-color 180ms ease,scale 220ms cubic-bezier(.22,1,.36,1)}
+.contactBoardAnimated .contactSticker.contactStickerAnimated:is(:hover,:focus-visible){background:var(--ink);color:var(--blue);border-color:white;transform:none;scale:1.01;outline:none}
+.contactBoardAnimated .contactStickerAnimated>.contactBadge{flex:none;padding:0;isolation:auto;display:grid;place-items:center;width:clamp(38px,5.2vw,100px);height:clamp(38px,5.2vw,100px);background:var(--pink);border:1px solid var(--ink)}
+.contactBoardAnimated .contactStickerAnimated>.contactBadge:before{content:none}
+.contactBoardAnimated .contactBadge svg{display:block;width:100%;height:100%;overflow:hidden}
+.contactBoardAnimated .contactBadgeDiamond{transform-box:fill-box;transform-origin:center;transform:rotate(45deg)}
+.contactBoardAnimated .contactStickerAnimated:is(:hover,:focus-visible) .contactBadgeDiamond{animation:contactDiamondTurn 1400ms linear infinite}
+.contactBoardAnimated .contactStickerAnimated>.handles{position:absolute;inset:-2px;display:block;width:auto;height:auto;padding:0;background:transparent;opacity:0;transition:opacity 120ms ease}
+.contactBoardAnimated .contactStickerAnimated>.handles:before{content:none}
+.contactBoardAnimated .contactStickerAnimated:is(:hover,:focus-visible)>.handles{opacity:1}
+.contactBoardAnimated .contactStickerAnimated>.handles i{width:clamp(12px,1.5vw,28px);height:clamp(12px,1.5vw,28px);background:var(--ink);border:3px solid white}
+.contactBoardAnimated .contactStickerAnimated>.handles i:nth-child(-n+2){top:calc(clamp(12px,1.5vw,28px) / -2)}
+.contactBoardAnimated .contactStickerAnimated>.handles i:nth-child(n+3){bottom:calc(clamp(12px,1.5vw,28px) / -2)}
+.contactBoardAnimated .contactStickerAnimated>.handles i:nth-child(odd){left:calc(clamp(12px,1.5vw,28px) / -2)}
+.contactBoardAnimated .contactStickerAnimated>.handles i:nth-child(even){right:calc(clamp(12px,1.5vw,28px) / -2)}
+@keyframes contactDiamondTurn{from{transform:rotate(45deg)}to{transform:rotate(405deg)}}
+@media(prefers-reduced-motion:reduce){.contactBoardAnimated[data-contact-pending] .contactBackdrop{clip-path:none}.contactBoardAnimated .contactStickerAnimated .contactBadgeDiamond{animation:none!important}.contactBoardAnimated .contactSticker.contactStickerAnimated{transition:none;scale:1}}

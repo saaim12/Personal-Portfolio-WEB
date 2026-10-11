@@ -1,13 +1,11 @@
-const baseURL: string = "https://saaim.site";
+const baseURL: string = (process.env.NEXT_PUBLIC_SITE_URL || "https://saaim.site").replace(/\/$/, "");
 
 const routes = {
   "/": true,
-  "/experience": true,
-  "/work": true,
-  "/about": true,
+  "/professional-experience": true,
+  "/projects": true,
   "/services": true,
   "/journal": true,
-  "/playground": true,
   "/contact": true,
 };
 const style = {

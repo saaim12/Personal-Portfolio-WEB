@@ -13,7 +13,7 @@ const authorNode = {
   "@type": "Person",
   "@id": PERSON_ID,
   name: person.name,
-  url: `${baseURL}/experience`,
+  url: `${baseURL}/professional-experience`,
 };
 
 export const webPageJsonLd = ({

@@ -1,11 +1,11 @@
 import type { MetadataRoute } from "next";
 
 import { baseURL } from "@/resources/once-ui.config";
+export const dynamic = "force-static";
 
 export default function robots(): MetadataRoute.Robots {
-  // Preview deploys and the old *.vercel.app host must not be indexed as
-  // duplicates of saaim.site.
-  if (process.env.VERCEL_ENV !== "production") {
+  // Keep Vercel preview and development deployments out of search indexes.
+  if (process.env.VERCEL_ENV === "preview" || process.env.VERCEL_ENV === "development") {
     return { rules: [{ userAgent: "*", disallow: "/" }] };
   }
 
@@ -14,10 +14,6 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        // /api is the OG image renderer, /_next is the build output. Both are
-        // referenced from tags crawlers fetch regardless of robots; this only
-        // keeps them from being indexed as pages of their own.
-        disallow: ["/api/", "/_next/"],
       },
     ],
     sitemap: `${baseURL}/sitemap.xml`,

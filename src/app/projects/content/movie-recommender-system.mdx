@@ -1,0 +1,110 @@
+---
+title: "Recommendation engineering — from raw ratings to a serving API"
+publishedAt: "2026-07-01"
+cardSummary: "Built a 3-signal hybrid recommender with separate training, versionable artifacts, FastAPI serving, and optional Redis cache."
+updatedAt: "2026-10-11"
+seoDescription: "Hybrid MovieLens recommender combining three ranking signals, Airflow training, FastAPI serving, model reload, and optional Redis caching."
+summary: "Designed an ML serving workflow combining content similarity, item co-occurrence, and popularity; orchestrated training and exposed recommendations behind a FastAPI contract."
+tags: ["Machine learning project"]
+stack:
+  - "python"
+  - "fastapi"
+  - "pandas"
+  - "scikitlearn"
+  - "airflow"
+  - "redis"
+  - "docker"
+  - "pytest"
+images:
+  - "/images/projects/diagrams/movie-recommender-system.png"
+thumbnail: "/images/projects/covers/movie-recommender-system.png"
+link: "https://github.com/saaim12/Recommender-System"
+role: "ML systems and backend engineer"
+seoTitle: "Movie recommendation service"
+---
+
+## A recommender is a product system, not a similarity function
+
+A good recommendation model is worthless if a product cannot load it, make repeatable requests, handle a new user, or replace a model without breaking the API. I approached MovieLens as a **full ML-systems problem**: ingestion, feature preparation, ranking signals, artifact lifecycle, serving, and operational behaviors all belong in the design.
+
+I built a recommendation service that combines **three complementary signals**—content similarity, item co-occurrence, and popularity—and exposes them through **FastAPI**. Training runs separately from requests, with **Airflow** coordinating the workflow. Redis caching is optional; model artifacts can be reloaded through an explicit service operation.
+
+## Scope in numbers
+
+| Area | Implemented architecture | Engineering benefit |
+| --- | --- | --- |
+| Ranking signals | **3** — content, co-occurrence, popularity | Different evidence for familiar items and cold starts |
+| Main API capabilities | **4 groups** — recommend, similar items, health, model reload | Clear serving and operational contracts |
+| Model lifecycles | **2** — offline training and online serving | Training failures do not block every live request |
+| Source families | Ratings, tags, links, and movie metadata | Join user behavior with item context |
+| Optional cache systems | **1** — Redis | Avoid repeat work where cache keys are safe |
+| Scheduling | Airflow workflow | Repeatable feature/model preparation |
+
+The counts describe components, **not measured precision, click-through, or online user activity**.
+
+## How the system works, from file to response
+
+| Phase | Engineering work | Output |
+| --- | --- | --- |
+| Ingest | Read MovieLens ratings, tags, links, metadata | Consistent movie and interaction records |
+| Prepare | Clean identifiers, merge catalogue attributes, derive features | Content and behavior inputs |
+| Train | Build content, co-occurrence, popularity scoring structures | Candidate ranking signals |
+| Evaluate | Apply offline ranking checks to saved outputs | Comparable model candidate information |
+| Package | Serialize model and its dependencies | Explicit loadable artifact |
+| Serve | FastAPI loads artifact and validates request | Recommendation/similar-item response |
+| Optimize | Optional Redis lookup, structured logs, traces | Controlled latency and observable requests |
+| Refresh | Operator invokes model reload | Change model independently from API code |
+
+### Signal 1: content similarity
+
+Content-based ranking uses descriptive movie attributes to find items with comparable characteristics. It remains useful for a user with little interaction history, but it can overconcentrate on attributes already seen and miss collaborative taste patterns.
+
+### Signal 2: item co-occurrence
+
+Movies that occur together in user interaction histories can be related even when their metadata differs. This helps capture collective behavior that content features alone miss. The quality depends on sufficient interaction density and on preventing very popular items from dominating the signal.
+
+### Signal 3: popularity
+
+Popularity provides a stable fallback when personalization evidence is missing. It is especially valuable for new or anonymous users, but it can overrepresent mainstream items. I treat it as **one input into a ranking policy**, not as proof that a blended score is automatically better than a simple baseline.
+
+## The serving contract matters as much as the model
+
+The API includes recommendation and similar-item responses, health checking, and a model-reload operation. API-key protection creates a basic access boundary. Container configuration, test workflows, structured logging, and request tracing make this more than a notebook experiment. An optional Redis cache can reduce repeated calculations, but the cached result must be tied to the relevant model version and user/context inputs.
+
+A reload endpoint alone does not give atomic zero-downtime releases. In a stronger deployment, I would load the candidate into a separate object, validate schema and sample predictions, swap references atomically, and invalidate stale cache entries. Those are **operational acceptance criteria**, not undocumented claims about the current code.
+
+## Trade-offs and what they cost
+
+| Engineering choice | Why it is useful | Hidden cost |
+| --- | --- | --- |
+| Blend three signals | Covers content, behavior, and sparse-history cases | Weight selection needs offline testing |
+| Artifacts separate from requests | Training can be reproducible and scheduled | Versioning and compatibility become mandatory |
+| FastAPI | Clear, typed HTTP serving layer | Request concurrency and artifact memory require testing |
+| Optional Redis | Potentially reduces repeated ranking work | Cache invalidation on model changes |
+| Model reload operation | Model iteration without full service rewrite | Thread safety, rollback, deployment coordination |
+| Airflow training | Observable stage dependencies | Scheduler is unnecessary for the smallest local experiments |
+
+## How I would prove ranking quality
+
+An impressive recommender screenshot is not an evaluation. I would use **chronological user-level holdout data** to avoid training on future behavior, then compare the hybrid model against popularity-only and each individual signal.
+
+| Metric | Question it answers | What to report |
+| --- | --- | --- |
+| Recall@10 | Were relevant held-out items retrieved? | Score and eligible-user count |
+| NDCG@10 | Were relevant items near the top? | Score by user segment |
+| Coverage | How much of the catalogue is actually recommended? | Percentage of distinct recommended items |
+| Cold-start hit rate | How does the service perform with sparse history? | Separate cohorts, not blended overall average |
+| API p50/p95 latency | How quickly do users receive results? | Warm, cold, and cached separately |
+| Reload failure recovery | Does an invalid artifact disrupt requests? | Test outcome, rollback path |
+
+`@10` represents the **proposed evaluation cutoff**, not a published result. I would also run ablation tests: remove each signal and measure its marginal contribution instead of assuming all three deserve equal weight.
+
+## Result
+
+The implemented project demonstrates a **complete recommendation-serving shape**: multiple ranking signals, offline preparation, persistent artifacts, API access, reload hooks, and optional caching. It shows how I think about the boundary between a data-science experiment and a service that another application can integrate.
+
+It does **not** claim an unmeasured “30% better recommendations” or commercial deployment. The next improvement is an evaluation report tied to a reproducible dataset split, plus load/reload testing. That would turn the existing implementation into a quantitatively defensible ML case study.
+
+## Source
+
+* [GitHub — Recommender System](https://github.com/saaim12/Recommender-System)
