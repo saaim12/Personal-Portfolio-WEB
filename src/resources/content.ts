@@ -8,6 +8,11 @@ export const person = {
   locale: "en",
 };
 
+export const portraits = {
+  playful: "/images/avatar_2.jpeg",
+  casual: "/images/avatar_3.jpeg",
+};
+
 export const bookingLink = "https://cal.com/saaim-abdullah-gm3ck6";
 
 // All profiles also appear in Person structured data, even if absent from the footer.

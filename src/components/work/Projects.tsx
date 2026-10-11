@@ -21,7 +21,7 @@ export function Projects({ range, exclude = [], only, showcase = false, preview 
         <a href={href} className="projectPicture diagramPicture" aria-label={`View ${title} case study`}><Image src={image} alt={`System overview for ${title}`} fill sizes={preview ? "(max-width: 760px) 90vw, 45vw" : "(max-width: 760px) 90vw, 42vw"} /><span className="imageLabel" aria-hidden="true">▧ COVER</span><Handles /></a>
       </div>
     </article>;
-    const products = ["fitter-health-platform", "bookstore-platform", "temporary-url-service", "interactive-portfolio"];
+    const products = ["fitter-health-platform", "temporary-url-service", "interactive-portfolio"];
     const experiments = ["esp32-temperature-inference", "autoencoder-edge-compression", "algorithms-in-python", "ml-data-foundations"];
     return { slug: post.slug, category: products.includes(post.slug) ? "Product & web" : experiments.includes(post.slug) ? "Experiments" : "AI & data", card };
   });

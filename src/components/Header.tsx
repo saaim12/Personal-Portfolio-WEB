@@ -22,15 +22,20 @@ export function Header({ name }: { name: string }) {
   useEffect(() => { setOpen(false); }, [pathname]);
   useEffect(() => {
     if (!open) return;
+    header.current?.querySelector<HTMLAnchorElement>(".navLinks a")?.focus({ preventScroll: true });
     const close = (event: KeyboardEvent) => {
       if (event.key === "Escape") { setOpen(false); toggle.current?.focus(); }
     };
     const outside = (event: PointerEvent) => {
       if (!header.current?.contains(event.target as Node)) setOpen(false);
     };
+    const leave = (event: FocusEvent) => {
+      if (!header.current?.contains(event.target as Node)) setOpen(false);
+    };
     document.addEventListener("keydown", close);
     document.addEventListener("pointerdown", outside);
-    return () => { document.removeEventListener("keydown", close); document.removeEventListener("pointerdown", outside); };
+    document.addEventListener("focusin", leave);
+    return () => { document.removeEventListener("keydown", close); document.removeEventListener("pointerdown", outside); document.removeEventListener("focusin", leave); };
   }, [open]);
   return <header className="studioHeader" ref={header}>
     <div className="navBar">
@@ -39,7 +44,7 @@ export function Header({ name }: { name: string }) {
         {links.map(item => <Link href={item.href} key={item.href} onClick={() => setOpen(false)} aria-current={(item.href === "/" ? pathname === "/" : pathname?.startsWith(item.href) || item.href === "/about" && pathname === "/experience") ? "page" : undefined}>
           {item.symbol === "home" ? <HiHome aria-hidden="true" /> : <Mark kind={item.symbol} />}<span>{item.label}</span>
         </Link>)}
-        <Link href="/contact" className="mobileContact" onClick={() => setOpen(false)}><HiHeart />Contact</Link>
+        <Link href="/contact" className="mobileContact" onClick={() => setOpen(false)}><HiHeart aria-hidden="true" />Contact</Link>
       </nav>
       <div className="navActions">
         <a className="navCircle" href={`mailto:${person.email}`} aria-label="Email Saaim">EM</a>

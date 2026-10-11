@@ -14,7 +14,7 @@ npm run dev
 ## Content and source
 
 - `src/app`: active pages, metadata routes, and the Open Graph image endpoint.
-- `src/app/work/projects`: 13 Markdown project documents and their frontmatter.
+- `src/app/work/projects`: 12 Markdown project documents and their frontmatter.
 - `src/components`: shared navigation, project cards, contact form, and MDX rendering.
 - `src/resources/content.ts`: identity and page metadata.
 - `src/resources/experience.ts`: employment, education, and skills.

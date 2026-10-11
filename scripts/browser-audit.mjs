@@ -41,13 +41,14 @@ await page.setViewportSize({width:390,height:844});
 await page.goto(base+'/');
 await page.getByRole('button',{name:'Menu',exact:true}).click();
 assert.equal(await page.getByRole('button',{name:'Close',exact:true}).getAttribute('aria-expanded'),'true');
+assert.equal(await page.locator('a:focus').getAttribute('href'),'/','Opening the mobile menu focuses its first link');
 await page.keyboard.press('Escape');
 assert.equal(await page.getByRole('button',{name:'Menu',exact:true}).getAttribute('aria-expanded'),'false');
 await page.getByRole('button',{name:'Menu',exact:true}).click();
 await page.getByRole('navigation',{name:'Main navigation'}).getByRole('link',{name:'Case study',exact:true}).click();
 await page.waitForURL('**/work');
 assert.equal(await page.getByRole('button',{name:'Menu',exact:true}).getAttribute('aria-expanded'),'false');
-for(const [name,count]of [['Product & web',4],['AI & data',5],['Experiments',4],['All projects',13]]){
+for(const [name,count]of [['Product & web',3],['AI & data',5],['Experiments',4],['All projects',12]]){
  await page.getByRole('button',{name:new RegExp(name.replace('&','\\&'))}).click();
  assert.equal(await page.locator('.galleryGrid .folderProject').count(),count);
 }
@@ -67,12 +68,24 @@ await page.goto(base+'/work/fitter-health-platform');
 await page.locator('.caseStudyBody h2').first().click();
 assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),base+'/work/fitter-health-platform#the-brief');
 const missing=await page.goto(base+'/does-not-exist');assert.equal(missing.status(),404);
-await page.emulateMedia({reducedMotion:'reduce'});await page.goto(base+'/');
+await page.setViewportSize({width:1440,height:1000});
+await page.goto(base+'/',{waitUntil:'networkidle'});
+assert.equal(await page.locator('.folderFeature').first().evaluate(e=>getComputedStyle(e).position),'sticky');
+assert.ok((await page.locator('body').evaluate(e=>getComputedStyle(e).backgroundImage)).includes('linear-gradient'),'Grid texture is present');
+await page.mouse.move(400,220);
+assert.equal(await page.locator('html').getAttribute('data-studio-cursor'),'');
+await page.locator('.homeAbout').scrollIntoViewIfNeeded();
+await page.waitForTimeout(800);
+assert.equal(await page.locator('#about-intro').evaluate(e=>getComputedStyle(e).opacity),'1','Scroll reveal finishes');
+await page.emulateMedia({reducedMotion:'reduce'});
+assert.equal(await page.locator('html').getAttribute('data-studio-cursor'),null,'Reduced motion restores the native cursor');
+assert.equal(await page.locator('[data-motion-pending]').count(),0,'Reduced motion reveals all content');
+assert.equal(await page.locator('.folderFeature').first().evaluate(e=>getComputedStyle(e).position),'relative');
+await page.goto(base+'/');
 assert.equal(await page.locator('.floatingAvatar').first().evaluate(e=>getComputedStyle(e).animationName),'none');
 await writeFile(out+'/report.json',JSON.stringify({results,errors,interactions:'passed'},null,2));
 await browser.close();
 assert.equal(errors.length,0,'Runtime errors');
-const knownOverflow = r => r.width === 1024 && ['/', '/contact'].includes(r.route) && r.scroll <= 1039 && r.overflow.every(e => e.cls.includes('polaroid') || (r.route === '/' && e.tag === 'FIGCAPTION' && e.cls === ''));
-assert.equal(results.filter(r=>r.broken.length || ((r.scroll>r.width+2||r.overflow.length) && !knownOverflow(r))).length,0,'New layout or asset failures');
+assert.equal(results.filter(r=>r.broken.length || r.scroll>r.width+2 || r.overflow.length).length,0,'New layout or asset failures');
 console.log('PASS: '+results.length+' route/viewport checks; menu, keyboard, filters, contact validation, permalink copying, PDFs, sitemap, 404, and reduced motion.');
 

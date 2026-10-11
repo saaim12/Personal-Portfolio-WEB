@@ -3,6 +3,7 @@ import "@once-ui-system/core/css/tokens.css";
 import "@/resources/custom.css";
 
 import { Column, Flex } from "@once-ui-system/core";
+import { StudioMotion } from "@/components/StudioMotion";
 import { Header } from "@/components/Header";
 import { Providers } from "@/components/Providers";
 import { Footer } from "@/components/Footer";
@@ -98,6 +99,7 @@ export default function RootLayout({
             Skip to content
           </a>
           <Header name={person.name} />
+          <StudioMotion />
           <Flex
             id="main"
             as="main"

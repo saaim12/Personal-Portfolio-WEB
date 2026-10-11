@@ -1,7 +1,7 @@
 import { PageHeading, Mark, Action } from "@/components/Studio";
 import { Contact } from "@/components/Contact";
 import { pageMeta } from "@/resources/seo";
-export async function generateMetadata(){return pageMeta({title:"Services",description:"Backend engineering, full stack product delivery, data systems, and cloud infrastructure by Saaim Abdullah.",path:"/services"});}
+export async function generateMetadata(){return pageMeta({title:"Services",description:"Software engineering by Saaim Abdullah: backend APIs, full stack products, data and AI systems, and cloud delivery from architecture to handover.",path:"/services"});}
 const services=[
  ["Backend systems","APIs and workflows for accounts, permissions, payments, bookings, and integrations. Built with explicit contracts, validation, error handling, and background processing.","yellow","pinwheel"],
  ["Full stack products","From requirements to working software: React and Next.js interfaces connected to dependable Django services, with deployment, documentation, and handover.","green","flower"],

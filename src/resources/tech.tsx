@@ -1,6 +1,6 @@
 import type { IconType } from "react-icons";
 import { HiOutlineArrowsRightLeft, HiOutlineCircleStack, HiOutlineCpuChip, HiOutlineSparkles } from "react-icons/hi2";
-import { SiAmazonec2, SiAmazonecs, SiAmazoniam, SiAmazonrds, SiAmazons3, SiAmazonsqs, SiAmazonwebservices, SiApacheairflow, SiApachekafka, SiApacheparquet, SiApachespark, SiCelery, SiDjango, SiDocker, SiEspressif, SiFastapi, SiFlask, SiGooglegemini, SiHtml5, SiJavascript, SiJsonwebtokens, SiMongodb, SiNextdotjs, SiNodedotjs, SiOdoo, SiPandas, SiPostgresql, SiPytest, SiPython, SiReact, SiRedis, SiScikitlearn, SiTensorflow } from "react-icons/si";
+import { SiAmazonec2, SiAmazonecs, SiAmazoniam, SiAmazonrds, SiAmazons3, SiAmazonsqs, SiAmazonwebservices, SiApacheairflow, SiApachekafka, SiApacheparquet, SiApachespark, SiCelery, SiDjango, SiDocker, SiEspressif, SiFastapi, SiFlask, SiGooglegemini, SiHtml5, SiJavascript, SiJsonwebtokens, SiNextdotjs, SiNodedotjs, SiOdoo, SiPandas, SiPostgresql, SiPytest, SiPython, SiReact, SiRedis, SiScikitlearn, SiTensorflow } from "react-icons/si";
 
 type TechEntry = { label: string; icon: IconType };
 
@@ -24,7 +24,6 @@ const TECH = {
   parquet: { label: "Parquet", icon: SiApacheparquet },
   objectstorage: { label: "Storage compatible with S3", icon: HiOutlineCircleStack },
   postgresql: { label: "PostgreSQL", icon: SiPostgresql },
-  mongodb: { label: "MongoDB", icon: SiMongodb },
   redis: { label: "Redis", icon: SiRedis },
   pgvector: { label: "pgvector", icon: SiPostgresql },
   aws: { label: "AWS", icon: SiAmazonwebservices },

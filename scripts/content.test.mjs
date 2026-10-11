@@ -20,7 +20,7 @@ test("existing heading permalink forms stay stable", () => {
 });
 
 test("all projects retain their routes, content, and final diagrams", () => {
-  assert.equal(projects.length, 13);
+  assert.equal(projects.length, 12);
   for (const { slug, data, content } of projects) {
     for (const key of ["title", "summary", "seoDescription", "publishedAt"]) {
       assert.equal(typeof data[key], "string", slug + ": " + key);

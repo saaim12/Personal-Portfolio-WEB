@@ -15,7 +15,7 @@ export function Mark({ kind = "flower", className = "" }: { kind?: string; class
 export function Handles() { return <span className="handles" aria-hidden="true"><i /><i /><i /><i /></span>; }
 export function Ruler({ bottom = false }: { bottom?: boolean }) { return <div className={`ruler ${bottom ? "rulerBottom" : ""}`} aria-hidden="true">{Array.from({ length: 28 }, (_, i) => <span key={i}>{i * 100}</span>)}</div>; }
 export function Action({ href, children, external = false, className = "" }: { href: string; children: ReactNode; external?: boolean; className?: string }) {
-  return <a href={href} className={`studioButton ${className}`} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}><span className="buttonIcon" aria-hidden="true">↠</span><span>{children}</span></a>;
+  return <a href={href} className={`studioButton ${className}`} {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}><Handles /><span className="buttonIcon" aria-hidden="true">↠</span><span>{children}</span></a>;
 }
 export function PageHeading({ title, note, children }: { title: string; note?: string; children?: ReactNode }) {
   return <div className="pageHeading">{note && <p className="handwritten">{note}</p>}<h1 className="displayType">{title}</h1>{children && <div className="pageHeadingIntro">{children}</div>}</div>;
