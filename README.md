@@ -25,6 +25,8 @@ npm run dev
 - `public`: local fonts, photos, final covers and diagrams, and document downloads.
 
 About, Experience, Services, Journal, Playground, and Contact are active pages.
+Project frontmatter selects covers through thumbnail and detail diagrams through images. Put new media in public/images/projects/covers or diagrams, using the project slug as the filename. Diagram links open the full-resolution originals.
+
 Project Markdown is read with gray-matter and rendered using next-mdx-remote/rsc.
 Once UI supplies shared layout, typography, heading permalink copying, and toast feedback; it requires Sass.
 
