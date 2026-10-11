@@ -1,195 +1,49 @@
-import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
-import React from "react";
-import type { ReactNode } from "react";
-import { slugify as transliterate } from "transliteration";
+import { SiteAnchor } from "@/components/SiteAnchor";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
+import type { ComponentProps, ReactNode } from "react";
+import { HeadingLink } from "@once-ui-system/core/modules";
+import { List } from "@once-ui-system/core/components/List";
+import { ListItem } from "@once-ui-system/core/components/ListItem";
+import { Text } from "@once-ui-system/core/components/Text";
+import { headingId } from "@/utils/headingId";
 
-import {
-  HeadingLink,
-  Text,
-  InlineCode,
-  CodeBlock,
-  type TextProps,
-  type MediaProps,
-  Row,
-  Media,
-  SmartLink,
-  List,
-  ListItem,
-  Line,
-} from "@once-ui-system/core";
-
-import { ArchitectureDiagram } from "./ArchitectureDiagram";
-
-type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-  href: string;
-  children: ReactNode;
-};
-
-function CustomLink({ href, children, ...props }: CustomLinkProps) {
-  if (href.startsWith("/")) {
-    return (
-      <SmartLink href={href} {...props}>
-        {children}
-      </SmartLink>
-    );
-  }
-
-  if (href.startsWith("#")) {
-    return (
-      <a href={href} {...props}>
-        {children}
-      </a>
-    );
-  }
-
-  return (
-    <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
-      {children}
-    </a>
-  );
-}
-
-function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
-  if (!src) {
-    console.error("Media requires a valid 'src' property.");
-    return null;
-  }
-
-  return (
-    <Media
-      marginTop="8"
-      marginBottom="16"
-      enlarge
-      radius="m"
-      border="neutral-alpha-medium"
-      sizes="(max-width: 960px) 100vw, 960px"
-      alt={alt}
-      src={src}
-      {...props}
-    />
-  );
-}
-
-function slugify(str: string): string {
-  const strWithAnd = str.replace(/&/g, " and "); // Replace & with 'and'
-  return transliterate(strWithAnd, {
-    lowercase: true,
-    separator: "-", // Replace spaces with -
-  }).replace(/\-\-+/g, "-"); // Replace multiple - with single -
-}
-
-function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
-  const CustomHeading = ({
-    children,
-    ...props
-  }: Omit<React.ComponentProps<typeof HeadingLink>, "as" | "id">) => {
-    const slug = slugify(children as string);
-    return (
-      <HeadingLink marginTop="24" marginBottom="12" as={as} id={slug} {...props}>
-        {children}
-      </HeadingLink>
-    );
-  };
-
-  CustomHeading.displayName = `${as}`;
-
-  return CustomHeading;
-}
-
-function createParagraph({ children }: TextProps) {
-  return (
-    <Text
-      style={{ lineHeight: "175%" }}
-      variant="body-default-m"
-      onBackground="neutral-medium"
-      marginTop="8"
-      marginBottom="12"
-    >
-      {children}
-    </Text>
-  );
-}
-
-function createInlineCode({ children }: { children: ReactNode }) {
-  return <InlineCode>{children}</InlineCode>;
-}
-
-function createCodeBlock(props: React.ComponentProps<"pre">) {
-  // For pre tags that contain code blocks
-  if (React.isValidElement<{ className?: string; children: string }>(props.children) && props.children.props.className) {
-    const { className, children } = props.children.props;
-
-    // Extract language from className (format: language-xxx)
-    const language = className.replace("language-", "");
-    const label = language.charAt(0).toUpperCase() + language.slice(1);
-
-    return (
-      <CodeBlock
-        marginTop="8"
-        marginBottom="16"
-        codes={[
-          {
-            code: children,
-            language,
-            label,
-          },
-        ]}
-        copyButton={true}
-      />
-    );
-  }
-
-  // Fallback for other pre tags or empty code blocks
-  return <pre {...props} />;
-}
-
-function createList(as: "ul" | "ol") {
-  return ({ children }: { children: ReactNode }) => <List as={as}>{children}</List>;
-}
-
-function createListItem({ children }: { children: ReactNode }) {
-  return (
-    <ListItem marginTop="4" marginBottom="8" style={{ lineHeight: "175%" }}>
-      {children}
-    </ListItem>
-  );
-}
-
-function createHR() {
-  return (
-    <Row fillWidth horizontal="center">
-      <Line maxWidth="40" />
-    </Row>
-  );
+function ContentLink({ href, children, ...props }: ComponentProps<"a"> & { href: string }) {
+  if (href.startsWith("/")) return <SiteAnchor href={href} {...props}>{children}</SiteAnchor>;
+  if (href.startsWith("#")) return <SiteAnchor href={href} {...props}>{children}</SiteAnchor>;
+  return <SiteAnchor href={href} target="_blank" rel="noopener noreferrer" {...props}>{children}</SiteAnchor>;
 }
 
 const components = {
-  p: createParagraph,
-  h1: createHeading("h1"),
-  h2: createHeading("h2"),
-  h3: createHeading("h3"),
-  h4: createHeading("h4"),
-  h5: createHeading("h5"),
-  h6: createHeading("h6"),
-  img: createImage,
-  a: CustomLink,
-  code: createInlineCode,
-  pre: createCodeBlock,
-  ol: createList("ol"),
-  ul: createList("ul"),
-  li: createListItem,
-  hr: createHR,
-  Text,
-  CodeBlock,
-  InlineCode,
-  Row,
-  ArchitectureDiagram,
-} as NonNullable<MDXRemoteProps["components"]>;
-
-type CustomMDXProps = MDXRemoteProps & {
-  components?: MDXRemoteProps["components"];
+  h2: ({ children }: { children?: ReactNode }) => (
+    <HeadingLink marginTop="24" marginBottom="12" as="h2" id={headingId(String(children))}>
+      {children}
+    </HeadingLink>
+  ),
+  h3: ({ children }: { children?: ReactNode }) => (
+    <HeadingLink marginTop="24" marginBottom="12" as="h3" id={headingId(String(children))}>
+      {children}
+    </HeadingLink>
+  ),
+  table: ({ children, ...props }: ComponentProps<"table">) => (
+    <div className="caseTableScroll" role="region" aria-label="Project details table" tabIndex={0}>
+      <table {...props}>{children}</table>
+    </div>
+  ),
+  p: ({ children }: { children?: ReactNode }) => (
+    <Text style={{ lineHeight: "175%" }} variant="body-default-m" onBackground="neutral-medium" marginTop="8" marginBottom="12">
+      {children}
+    </Text>
+  ),
+  a: ContentLink,
+  ul: ({ children }: { children?: ReactNode }) => <List as="ul">{children}</List>,
+  ol: ({ children }: { children?: ReactNode }) => <List as="ol">{children}</List>,
+  li: ({ children }: { children?: ReactNode }) => (
+    <ListItem marginTop="4" marginBottom="8" style={{ lineHeight: "175%" }}>{children}</ListItem>
+  ),
 };
 
-export function CustomMDX(props: CustomMDXProps) {
-  return <MDXRemote options={{ blockJS: false }} {...props} components={{ ...components, ...(props.components || {}) }} />;
+// Current project documents use Markdown only; JSX execution is not enabled.
+export function CustomMDX({ source }: { source: string }) {
+  return <MDXRemote source={source} components={components} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />;
 }

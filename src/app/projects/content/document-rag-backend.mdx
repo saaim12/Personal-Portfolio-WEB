@@ -1,0 +1,110 @@
+---
+title: "Document Q&A — building a retrieval system that knows when not to answer"
+seoTitle: "Document Q&A with Django and pgvector"
+publishedAt: "2026-09-29"
+updatedAt: "2026-10-11"
+thumbnail: "/images/projects/covers/document-rag-backend.png"
+summary: "Built Django document Q&A with configured 768-dimensional embeddings, top-5 retrieval, batch imports, category filtering, retry handling, and a no-context fallback."
+cardSummary: "Designed a 768-dimensional pgvector search pipeline with 3 API operations, bounded retrieval, batch ingestion, and failure-aware generation."
+seoDescription: "Django RAG backend using PostgreSQL and pgvector, Gemini embeddings, top-5 retrieval, batch CSV ingestion, retries, and a no-context fallback."
+tags: ["Personal prototype"]
+stack: ["django","drf","postgresql","pgvector","gemini"]
+images:
+  - "/images/projects/diagrams/document-rag-backend.png"
+link: "https://github.com/saaim12/Rag-in-django-Backend"
+article: "https://medium.com/@saymmalik08/i-built-a-rag-back-end-in-django-on-postgresql-18-windows-heres-every-way-it-broke-626cb8010fd2"
+team: []
+---
+
+## The product problem: answer from the dataset, not from a guess
+
+A language model can write an excellent-sounding response while knowing nothing about a company's private documents. I built this backend to make answer generation depend on **retrieved source records**. The service accepts structured Q&A material, turns it into searchable embeddings, selects relevant records for a question, and then asks Gemini to answer from the selected context. If the search finds nothing credible, the request returns a fallback rather than paying for an unsupported generated answer.
+
+The project demonstrates a practical backend-engineering point: the most important part of RAG is not the prompt. It is the **data contract, retrieval boundary, dependency failure handling, and decision to decline weak answers**.
+
+## System facts and configured numbers
+
+| Metric or configuration | Documented value | Interpretation |
+| --- | --- | --- |
+| Public API operations | **3** — query, ingest, health | Separate serving, data administration, and readiness paths |
+| Embedding width | **768 dimensions** | Vector schema and embedding model must agree |
+| Candidate limit | **Top 5** | Bound the context admitted to generation by default |
+| Cosine distance threshold | **0.7** | Filter candidates with distance above the configured cutoff |
+| Ingestion batch size | **20 records** | Bound each embedding request during CSV import |
+| API quota retry setting | **3 attempts** | Recover from transient provider rate limits with backoff |
+| Required input columns | **4** — name, category, question, answer | Explicit and testable ingestion contract |
+| Generation service | Gemini | External inference dependency, distinct from PostgreSQL |
+
+These values describe **repository configuration**, not an accuracy score or load-test result. The source README documents them; deployments can tune them.
+
+## End-to-end request and data flow
+
+| Step | Input | Work performed | What can fail |
+| --- | --- | --- | --- |
+| 1. Import | CSV file | Validate required columns and normalize Q&A rows | Schema errors, malformed content |
+| 2. Embed | Text batches | Request Gemini embeddings | Quotas, model changes, network errors |
+| 3. Persist | Content + metadata + vectors | Store in PostgreSQL with pgvector | Partial imports, incompatible dimensions |
+| 4. Query | User question + optional category | Embed query with same model family | Provider latency, unavailable API |
+| 5. Retrieve | Query vector | Rank stored vectors by cosine distance; filter by category | Poor matches, unbounded search cost |
+| 6. Gate | Retrieved candidates | Apply top-K and distance cutoff | Relevant evidence absent |
+| 7. Generate | Selected Q&A records | Build constrained prompt and call Gemini | Unsupported assertions, timeout |
+| 8. Respond | Answer + context | Return answer and source context, or fallback | Client contract, sensitive source exposure |
+
+### Import is part of the product, not a one-off script
+
+The same ingestion service can be reached through the web API and management command. It validates the required schema before embedding, processes the input in **20-record batches**, and stores the source/category metadata needed by retrieval. The repository implements replacement semantics for the same source filename, reducing duplicate accumulation on repeated imports.
+
+Replacement has a subtle correctness risk: deleting an old source before an entire replacement succeeds can lose previously searchable records. The published code should not be represented as a fully transactional, atomic blue/green ingestion pipeline. A stronger next version would stage a source revision, confirm row and embedding counts, then switch the active revision in one database transaction.
+
+### Retrieval has a refusal boundary
+
+For a query, Django first requests an embedding, then uses **pgvector cosine distance** to rank nearby rows. The optional category filter constrains the candidate pool. A distance threshold and top-K cap bound how much evidence enters the prompt; if no row passes the threshold, the system follows a defined no-context path.
+
+The distance cutoff is **not a probability of correctness**. A `0.7` cutoff is a retrieval parameter that should be calibrated against question sets and expected false positives. I would separately measure relevance of retrieved records and faithfulness of the generated answer; good search results do not automatically guarantee good generation.
+
+### The API is deliberately smaller than the architecture
+
+| Endpoint | Role | Contract |
+| --- | --- | --- |
+| `POST /query/` | Query a stored knowledge base | Question, optional category; answer and retrieved context |
+| `POST /ingest/` | Import Q&A CSV | Validates columns and reports ingested/skipped records |
+| `GET /health/` | Health inspection | Includes database connectivity and stored chunk count |
+
+Thin API views call reusable services for embedding, ingestion, retrieval, and prompt construction. That division matters because a management command, synchronous request, and future worker should not each implement different versions of the same data rules.
+
+## The engineering trade-offs
+
+| Choice | Why I made it | Cost or limitation |
+| --- | --- | --- |
+| PostgreSQL + pgvector | One database stores content, source metadata, and vectors | Index strategy matters as corpus grows |
+| Hosted embeddings | Simplifies local model operations and deployment | Adds provider latency, quotas, and data boundary |
+| Top-K + threshold | Keeps generation grounded in bounded evidence | Needs dataset-specific relevance calibration |
+| Source/category metadata | Makes results inspectable and filterable | Import mapping must be consistent |
+| Provider retry logic | Handles transient 429 errors | Retries need budgets and can increase latency |
+| Refusal without retrieved context | Reduces unsupported, costly generation calls | May decline answerable questions if retrieval misses |
+
+## A concrete operational failure scenario
+
+Imagine a **20-row batch** where the embedding provider succeeds for some work but the network fails before the import finishes. “Try the whole CSV again” sounds straightforward until you consider duplicated rows or prematurely deleted previous content. I designed the code with source-level re-import behavior and explicit skipped counts, while recognizing that correctness under partial replacement requires staged revisions and integration tests. This is the difference between a happy-path demo and a system one can reason about under failure.
+
+## What is implemented, and what is not
+
+**Implemented in the repository:** Django/DRF entry points, Q&A CSV ingestion, 768-dimensional vector storage, source/category metadata, cosine ranking, configured relevance cutoff, Gemini-based generation, quota backoff, and health output.
+
+**Not presented as completed production hardening:** required authentication, safe limits for uploaded data, atomic source replacement, a running Celery ingestion worker, measured latency/accuracy, or a deployed high-scale benchmark. The Celery task is a disabled stub. Those are clear follow-up tasks, not achievements I am claiming.
+
+## Result and measurable next milestone
+
+The delivered result is an **end-to-end, runnable retrieval-and-generation service** with explicit configuration and inspectable source context. The most valuable behavioral result is deterministic handling when retrieval finds no acceptable evidence: it can return a fallback without a generation call.
+
+I would evaluate it with at least four test groups: answerable in-category questions, semantically related but unanswerable questions, category mismatches, and provider failures. Report **Recall@5**, context precision, answer faithfulness, p50/p95 latency, and failed import recovery against a named dataset. Until those evaluations run, the project claims the implementation—not invented success percentages.
+
+For a broader ownership boundary, see my [multilingual, multi-tenant RAG engine](/projects/multilingual-rag-engine).
+
+## Source and technical walkthrough
+
+* [GitHub repository](https://github.com/saaim12/Rag-in-django-Backend)
+* [Architecture and service boundaries](https://github.com/saaim12/Rag-in-django-Backend/blob/main/ARCHITECTURE.md)
+* [Retrieval implementation](https://github.com/saaim12/Rag-in-django-Backend/blob/main/documents/services/retrieval.py)
+* [Ingestion implementation](https://github.com/saaim12/Rag-in-django-Backend/blob/main/documents/services/ingestion.py)
+* [Production lessons from building on PostgreSQL 18](https://medium.com/@saymmalik08/i-built-a-rag-back-end-in-django-on-postgresql-18-windows-heres-every-way-it-broke-626cb8010fd2)

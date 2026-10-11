@@ -1,35 +1,9 @@
-import type { FontsConfig } from "@/types/config.types";
-
-// Import and set font for each variant
-import { Archivo, Plus_Jakarta_Sans, IBM_Plex_Mono } from "next/font/google";
-
-// Archivo matches the reference display typography; next/font self-hosts it.
-const heading = Archivo({
-  variable: "--font-heading",
-  weight: ["500", "600", "700", "800"],
-  subsets: ["latin"],
-  display: "swap",
-});
-
-// Body copy
-const body = Plus_Jakarta_Sans({
-  variable: "--font-body",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-// Mono, small labels, section markers, tech tags, code.
-// Space Mono is not a variable font, so weights must be explicit.
-const code = IBM_Plex_Mono({
-  variable: "--font-code",
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  display: "swap",
-});
-
-export const fonts: FontsConfig = {
-  heading: heading,
-  body: body,
-  code: code,
-};
-
+import localFont from "next/font/local";
+const heading = localFont({ src: "../../public/fonts/flux.woff2", variable: "--font-heading", weight: "1000", display: "swap" });
+const body = localFont({ src: [
+  { path: "../../public/fonts/inter-display.woff2", weight: "400 600", style: "normal" },
+  { path: "../../public/fonts/inter-display-bold.woff2", weight: "700 900", style: "normal" },
+], variable: "--font-body", display: "swap" });
+const code = localFont({ src: "../../public/fonts/dm-mono.woff2", variable: "--font-code", weight: "400 700", display: "swap" });
+export const handwriting = localFont({ src: "../../public/fonts/handwriting.woff2", variable: "--font-hand", weight: "400", display: "swap" });
+export const fonts = { heading, body, code };

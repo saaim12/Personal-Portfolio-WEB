@@ -9,6 +9,8 @@
 // before fetching. Exits non-zero if anything fails a check, which makes it
 // usable as a CI step.
 
+import fs from "node:fs";
+
 const origin = (process.argv[2] ?? "http://localhost:3000").replace(/\/$/, "");
 
 const CANONICAL_HOST = "https://saaim.site";
@@ -52,8 +54,7 @@ for (const url of urls) {
   const canonical = pick(html, /<link[^>]+rel="canonical"[^>]+href="([^"]*)"/i);
   const ogImage = decode(meta(html, "og:image"));
 
-  // OG image reachability. The generated cards are a dynamic route, so this
-  // is the only way to know the URL in the tag actually resolves.
+  // Verify that local social previews and project covers can be fetched.
   let ogStatus = "—";
   if (ogImage) {
     const imgUrl = ogImage.startsWith("http") ? ogImage.replace(CANONICAL_HOST, origin) : origin + ogImage;
@@ -80,6 +81,16 @@ for (const url of urls) {
       }
     });
 
+  const expectedTypes = path === "/" ? ["WebSite", "Person", "WebPage"]
+    : path === "/professional-experience" ? ["WebSite", "Person", "ProfilePage", "BreadcrumbList"]
+    : path === "/journal" ? ["WebSite", "CollectionPage", "BreadcrumbList"]
+    : path.startsWith("/projects/") ? ["WebSite", "BreadcrumbList"]
+    : ["WebSite", "WebPage", "BreadcrumbList"];
+  for (const type of expectedTypes) if (!ldTypes.includes(type)) fail(path, `missing ${type} schema`);
+  if (path.startsWith("/projects/") && !ldTypes.some(type => type === "CreativeWork" || type === "SoftwareSourceCode")) fail(path, "missing project schema");
+  if (meta(html, "robots")?.includes("noindex")) fail(path, "production page is noindex");
+  if (meta(html, "author") !== "Saaim Abdullah") fail(path, "missing author metadata");
+
   // Assertions
   if (!title) fail(path, "no <title>");
   else if (title.length > TITLE_MAX) fail(path, `title ${title.length} chars (> ${TITLE_MAX})`);
@@ -105,6 +116,8 @@ for (const url of urls) {
     descLen: description?.length ?? 0,
     canonical: canonical ?? "—",
     og: ogStatus,
+    description,
+    ogImage,
     jsonLd: ldTypes.join(", ") || "—",
   });
 }
@@ -139,6 +152,8 @@ for (const r of rows) {
 }
 
 console.log(`\n${urls.length} URLs checked.`);
+fs.mkdirSync(".audit", { recursive: true });
+fs.writeFileSync(".audit/seo.json", JSON.stringify({ rows, problems }, null, 2));
 if (problems.length) {
   console.log(`\n${problems.length} problem(s):`);
   for (const p of problems) console.log(`  ✗ ${p}`);

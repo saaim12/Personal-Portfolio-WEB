@@ -1,71 +1,63 @@
+import { SiteAnchor } from "@/components/SiteAnchor";
 import "@once-ui-system/core/css/styles.css";
 import "@once-ui-system/core/css/tokens.css";
 import "@/resources/custom.css";
 
-
-import { Column, Flex } from "@once-ui-system/core";
+import { StudioMotion } from "@/components/StudioMotion";
 import { Header } from "@/components/Header";
-import { Providers } from "@/components/Providers";
 import { Footer } from "@/components/Footer";
-import { ScreenCrawler } from "@/components/ScreenCrawler";
-import { fonts } from "@/resources/fonts";
+import { fonts, handwriting } from "@/resources/fonts";
 import { style } from "@/resources/once-ui.config";
 import { home, person } from "@/resources/content";
 import { pageMeta } from "@/resources/seo";
 import { jsonLd, webSiteJsonLd } from "@/resources/schema";
 
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import { VercelMonitoring } from "@/components/VercelMonitoring";
 
 export async function generateMetadata() {
   return {
-    // Carries metadataBase, so every route's relative OG image resolves
-    // against https://saaim.site rather than against the deploy host.
     ...pageMeta({
       title: home.title,
       description: home.description,
       path: home.path,
       image: home.image,
     }),
-    // Every page previously fell back to the home title, so /work's browser tab
-    // read "Selected work (shown with the permission of clients)".
     title: {
       default: home.title,
       template: `%s | ${person.name}`,
     },
-    // The `keywords` meta tag was removed: Google has ignored it since 2009 and
-    // 35 stuffed terms is a spam signal to the crawlers that still read it.
+    verification: {
+      ...(process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : {}),
+      ...(process.env.BING_SITE_VERIFICATION ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } } : {}),
+    },
   };
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <Flex
+    <html
       suppressHydrationWarning
-      as="html"
       lang={person.locale ?? "en"}
-      fillWidth
       className={[
         fonts.heading.variable,
         fonts.body.variable,
         fonts.code.variable,
+        handwriting.variable,
+        "display-flex position-relative min-width-0 fill-width",
       ].join(" ")}
     >
       <head>
         <script
           id="theme-init"
-          // Static theme initialization uses trusted local config.
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
                 try {
                   const root = document.documentElement;
-
-                  // Set defaults from config
                   const config = ${JSON.stringify({
                     brand: style.brand,
                     accent: style.accent,
@@ -77,13 +69,9 @@ export default async function RootLayout({
                     transition: style.transition,
                     scaling: style.scaling,
                   })};
-                  
-                  // Apply default values
                   Object.entries(config).forEach(([key, value]) => {
                     root.setAttribute('data-' + key, value);
                   });
-                  
-                  // Match the editorial palette before hydration, including returning visitors.
                   try { localStorage.setItem('data-theme', 'light'); } catch (e) {}
                   root.setAttribute('data-theme', 'light');
                 } catch (e) {
@@ -94,51 +82,36 @@ export default async function RootLayout({
             `,
           }}
         />
-        {/* Site-wide. Person and FAQPage used to sit here too and so were
-            emitted on every route; they now render from the pages they
-            actually describe. */}
+
         <script {...jsonLd(webSiteJsonLd)} />
       </head>
-      <Providers>
-        <Column
-          as="body"
-          background="page"
-          fillWidth
+        <body
+          className="display-flex position-relative p-0 m-0 page-background flex-column align-center min-width-0 fill-width"
           style={{ minHeight: "100vh" }}
-          margin="0"
-          padding="0"
-          horizontal="center"
         >
-          {/* First tab stop on every page, lets keyboard and screen-reader
-              users skip the nav instead of tabbing through it each time. */}
-          <a href="#main" className="skipLink">
+
+          <SiteAnchor href="#main" className="skipLink">
             Skip to content
-          </a>
+          </SiteAnchor>
           <Header name={person.name} />
-          <Flex
+          <StudioMotion />
+          <main
             id="main"
-            as="main"
-            zIndex={0}
-            fillWidth
-            horizontal="center"
-            flex={1}
-            // Fluid gutters: 16px on phones → 48px on desktop. Content still
-            // caps at each page's maxWidth, so nothing exceeds the viewport.
+            className="display-flex position-relative flex-1 justify-center min-width-0 fill-width"
             style={{
-              paddingLeft: "clamp(16px, 5vw, 48px)",
-              paddingRight: "clamp(16px, 5vw, 48px)",
+              paddingLeft: 0,
+              paddingRight: 0,
+              zIndex: 0,
             }}
           >
-            <Flex horizontal="center" fillWidth minHeight="0">
+            <div className="display-flex position-relative justify-center min-width-0 fill-width" style={{ minHeight: "var(--static-space-0)" }}>
               {children}
-            </Flex>
-          </Flex>
+            </div>
+          </main>
           <Footer />
-          <ScreenCrawler />
-          <Analytics />
-          <SpeedInsights />
-        </Column>
-      </Providers>
-    </Flex>
+          {process.env.VERCEL_ENV === "production" &&
+            process.env.NEXT_PUBLIC_STATIC_EXPORT !== "true" && <VercelMonitoring />}
+        </body>
+    </html>
   );
 }

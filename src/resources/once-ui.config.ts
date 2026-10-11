@@ -1,32 +1,23 @@
-import type { RoutesConfig, StyleConfig } from "@/types/config.types";
+const baseURL: string = (process.env.NEXT_PUBLIC_SITE_URL || "https://saaim.site").replace(/\/$/, "");
 
-// IMPORTANT: Replace with your own domain address - it's used for SEO in meta tags and schema
-const baseURL: string = "https://saaim.site";
-
-const routes: RoutesConfig = {
+const routes = {
   "/": true,
-  "/experience": true,
-  "/work": true,
+  "/professional-experience": true,
+  "/projects": true,
+  "/services": true,
+  "/journal": true,
+  "/contact": true,
 };
-
-// default customization applied to the HTML in the main layout.tsx
-const style: StyleConfig = {
-  theme: "light",
+const style = {
   neutral: "slate",
-  // Once UI's `Schemes` type has no neutral option, so brand/accent have to
-  // name a hue here. The design is monochrome, and custom.css repoints both
-  // --function-brand-* and --function-accent-* at the gray ramp, which is
-  // what actually renders. These two values are inert.
   brand: "indigo",
   accent: "indigo",
   solid: "contrast",
   solidStyle: "flat",
-  // "conservative" over "playful": tighter radii read as engineering tooling
-  // rather than as a consumer landing page.
   border: "conservative",
   surface: "translucent",
   transition: "micro",
   scaling: "100",
-};
+} as const;
 
 export { routes, baseURL, style };

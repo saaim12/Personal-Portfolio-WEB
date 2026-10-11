@@ -2,44 +2,20 @@ import { baseURL } from "@/resources/once-ui.config";
 import { home, person, social } from "@/resources/content";
 import { SITE_NAME } from "./seo";
 
-// JSON-LD graph nodes, one export per schema type.
-//
-// These lived in layout.tsx, which meant Person and FAQPage were emitted on
-// every route, including each case study, which is not about a person and
-// has no FAQ. Structured data should describe the page it is on. They are
-// mounted per route now:
-//
-//   layout   -> WebSite        (describes the site, correct everywhere)
-//   /        -> Person
-//   /about   -> Person
-//   /work/*  -> BlogPosting
-//
-// Person carries a stable @id so the homepage and About copies resolve to one
-// node rather than two competing entities.
+const PERSON_ID = `${baseURL}/#person`;
 
-export const PERSON_ID = `${baseURL}/#person`;
-
-/**
- * Helper for the <script type="application/ld+json"> props.
- *
- * A plain <script>, not Once UI's <Schema> component. <Schema> renders through
- * next/script, which injects the tag after hydration, so none of the WebPage
- * or BlogPosting markup was in the server HTML at all, only in the RSC
- * payload. Structured data has to be in the response a crawler is served.
- */
 export const jsonLd = (data: unknown) => ({
   type: "application/ld+json" as const,
-  dangerouslySetInnerHTML: { __html: JSON.stringify(data) },
+  dangerouslySetInnerHTML: { __html: JSON.stringify(data).replace(/</g, "\\u003c") },
 });
 
 const authorNode = {
   "@type": "Person",
   "@id": PERSON_ID,
   name: person.name,
-  url: `${baseURL}/experience`,
+  url: `${baseURL}/professional-experience`,
 };
 
-/** WebPage node for the hand-written routes. */
 export const webPageJsonLd = ({
   title,
   description,
@@ -63,7 +39,6 @@ export const webPageJsonLd = ({
   about: { "@id": PERSON_ID },
 });
 
-/** BlogPosting node for a case study. */
 export const caseStudyJsonLd = ({
   title,
   description,
@@ -71,6 +46,8 @@ export const caseStudyJsonLd = ({
   image,
   datePublished,
   dateModified,
+  repository,
+  technologies,
 }: {
   title: string;
   description: string;
@@ -78,19 +55,23 @@ export const caseStudyJsonLd = ({
   image: string;
   datePublished: string;
   dateModified: string;
+  repository?: string;
+  technologies?: string[];
 }) => ({
   "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "@id": `${baseURL}${path}#article`,
+  "@type": repository?.startsWith("https://github.com/") ? "SoftwareSourceCode" : "CreativeWork",
+  "@id": `${baseURL}${path}#project`,
   mainEntityOfPage: `${baseURL}${path}`,
   url: `${baseURL}${path}`,
-  headline: title,
+  name: title,
   description,
   image: image.startsWith("http") ? image : `${baseURL}${image}`,
   datePublished,
   dateModified,
   author: authorNode,
   publisher: authorNode,
+  ...(repository?.startsWith("https://github.com/") ? { codeRepository: repository } : {}),
+  ...(technologies?.length ? { about: technologies } : {}),
   isPartOf: { "@id": `${baseURL}/#website` },
   inLanguage: "en",
 });
@@ -106,9 +87,6 @@ export const webSiteJsonLd = {
   inLanguage: "en",
   publisher: { "@id": PERSON_ID },
 };
-
-// Helps Google associate the name "Saaim Abdullah" with the role and skills,
-// and link the social profiles.
 export const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -119,21 +97,12 @@ export const personJsonLd = {
   jobTitle: "Software Engineer",
   description: home.description,
   email: person.email,
-  // Parsed by sourcing tools, which is the only reason it is worth stating a
-  // job-seeking status in markup rather than only in the copy.
-  seeks: {
-    "@type": "Demand",
-    name: "Full time backend, platform or data engineering role",
-  },
   address: {
     "@type": "PostalAddress",
     addressLocality: "Lahore",
     addressCountry: "PK",
   },
   sameAs: social.filter((s) => s.name !== "Email").map((s) => s.link),
-  // No `worksFor`: the Fitter Health engagement ended in July 2026, and a
-  // current-employer claim the reader can check and find finished is worse than
-  // no claim at all.
   alumniOf: {
     "@type": "CollegeOrUniversity",
     name: "COMSATS University Islamabad",
@@ -182,4 +151,27 @@ export const personJsonLd = {
     "Redis",
     "Celery",
   ],
+};
+
+export const breadcrumbJsonLd = (items: { name: string; path: string }[]) => ({
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "@id": `${baseURL}${items.at(-1)?.path || ""}#breadcrumbs`,
+  itemListElement: items.map((item, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: item.name,
+    item: `${baseURL}${item.path === "/" ? "" : item.path}`,
+  })),
+});
+
+export const profilePageJsonLd = {
+  ...webPageJsonLd({
+    title: "Professional Experience and Story",
+    description: "Saaim Abdullah's software engineering experience, education, and story.",
+    path: "/professional-experience",
+    image: person.avatar,
+  }),
+  "@type": "ProfilePage",
+  mainEntity: { "@id": PERSON_ID },
 };

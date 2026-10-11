@@ -1,0 +1,16 @@
+.bioFrame .personalGallery{margin-top:42px}
+.personalGallery>h3{font:28px var(--font-hand);text-align:center;margin-bottom:24px}
+.personalMediaGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:30px;max-width:540px;margin:auto}
+.personalMediaCard{min-width:0;margin:0;padding:10px 10px 6px;background:white;box-shadow:0 5px 20px #0002;transform:rotate(-3deg)}
+.personalMediaCard:nth-child(even){transform:rotate(3deg)}
+.personalMediaCard img,.personalMediaCard video{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:contain;background:var(--sand)}
+.personalMediaCard figcaption{text-align:center;font:20px/1.5 var(--font-hand);padding-top:6px}
+.personalMediaCard.personalVideo video{aspect-ratio:448/848;max-height:310px;background:var(--ink)}
+.personalVideo{align-self:start}
+.personalGallery .personalMediaCard:first-child img{object-fit:cover}
+.educationEntry+.educationEntry{margin-top:28px}
+.educationEntry p{line-height:1.7}
+.storyIntro>h3{font-size:28px;line-height:1.25;margin-bottom:24px}
+.storyIntro>p+p{margin-top:20px}
+@media(max-width:1199px){.experienceFrame .frameSticker{right:12px}}
+@media(max-width:520px){.personalMediaGrid{gap:22px;grid-template-columns:1fr;max-width:240px}.personalGallery>h3{font-size:25px}.personalMediaCard.personalVideo video{max-height:none}}

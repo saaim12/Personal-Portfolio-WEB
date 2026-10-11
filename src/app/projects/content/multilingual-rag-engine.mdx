@@ -1,0 +1,116 @@
+---
+title: "Multilingual, multi-tenant RAG — isolation before intelligence"
+publishedAt: "2026-05-10"
+cardSummary: "Designed tenant-scoped retrieval with local multilingual embeddings, 6 task templates, JWT identity, usage quotas, and grounded generation."
+updatedAt: "2026-10-11"
+seoDescription: "Multi-tenant multilingual RAG architecture in Django: E5 embeddings, tenant-scoped pgvector retrieval, JWT, quotas, six prompt workflows, and Gemini generation."
+summary: "Engineered a Django/PostgreSQL knowledge service that separates customer datasets, embeds multilingual documents locally, and constrains generated answers to authorized retrieval context."
+tags: ["RAG and AI", "Customer data isolation"]
+stack:
+  - "django"
+  - "postgresql"
+  - "pgvector"
+  - "e5"
+  - "gemini"
+  - "jwt"
+  - "html"
+  - "javascript"
+images:
+  - "/images/projects/diagrams/multilingual-rag-engine-1.png"
+  - "/images/projects/diagrams/multilingual-rag-engine-2.png"
+thumbnail: "/images/projects/covers/multilingual-rag-engine.png"
+link: "https://github.com/saaim12/Multi-Tenant-Multi-Lingual-Retrieval-Augmented-Generation-RAG-System"
+article: "https://medium.com/@saymmalik08/building-a-multilingual-multi-tenant-rag-engine-in-django-c975aecf599a"
+role: "Backend and ML systems engineer"
+seoTitle: "Multilingual RAG engine"
+---
+
+## The risk is not a bad answer. It is the wrong customer's answer.
+
+A multilingual knowledge assistant becomes a different engineering problem when multiple customers share its infrastructure. Incorrect retrieval might return an unhelpful paragraph; incorrect **tenant isolation** might return another company's private document. I designed this project around that distinction: every stage from upload to vector similarity to answer generation needs an unambiguous ownership boundary.
+
+The outcome is a Django-backed retrieval system with local multilingual embeddings, PostgreSQL/pgvector storage, authenticated customer-scoped lookup, request quotas, and Gemini-based responses. It covers **six distinct text workflows** while keeping source ownership part of the data model rather than an optional query hint.
+
+## Delivery and scope in numbers
+
+| Design dimension | Implemented scope | What it demonstrates |
+| --- | --- | --- |
+| Supported prompt workflows | **6** | Q&A, summary, translation, glossary, extraction, explanation |
+| Knowledge ownership | **Tenant-associated** documents and chunks | Query scope belongs to authenticated identity |
+| Embedding provider type | **1 local multilingual E5 path** | Source text can be vectorized without an embedding API request |
+| Generation provider type | **1 external Gemini path** | Only selected context is passed to the generation dependency |
+| Principal security gates | **3** — identity, authorization, retrieval scope | Each protects a different part of the lifecycle |
+| Persistence | PostgreSQL plus pgvector | Metadata and vectors share a relational model |
+| Usage control | Per-tenant quotas | Limit consumption independently from data isolation |
+
+No client count, measured query latency, accuracy, or cross-language benchmark was supplied with the project, so none is invented here.
+
+## End-to-end architecture
+
+| Stage | Input and operation | Required invariant |
+| --- | --- | --- |
+| 1. Authenticate | Verify token and resolve caller identity | Never trust a tenant ID supplied merely as user input |
+| 2. Authorize ingestion | Accept document for permitted customer | Caller must have rights to write that knowledge base |
+| 3. Extract and chunk | Convert supported content to passages | Preserve source and owner for every chunk |
+| 4. Embed locally | Apply multilingual E5 encoding | Use compatible preprocessing for documents and queries |
+| 5. Persist | Write content, metadata, vectors and tenant relationship | Tenant ownership survives all data transformations |
+| 6. Check quota | Count/limit permitted requests | Quota decisions do not bypass authorization |
+| 7. Retrieve | Search only authorized vectors in pgvector | Filter by tenant **inside** retrieval, not after results are returned |
+| 8. Generate | Give relevant passages to Gemini | Bound external context to authorized retrieved material |
+| 9. Return | Render answer and supporting context | User receives only their own accessible information |
+
+### Why PostgreSQL is central to the architecture
+
+I kept source records, chunk metadata, customer ownership, and vectors together in **PostgreSQL**. That allows the query to combine ordinary relational predicates with vector similarity. The tenant predicate has to constrain the candidate set before results are used for answer generation; it cannot be a cosmetic filter added to the client response.
+
+This also simplifies application ownership: there is one place to understand the relationship between a source document and the vectors created from it. It does **not** remove the need to tune indexes, test expensive searches, or audit every data-access path.
+
+### Why the embedding and generation models are deliberately separate
+
+E5 runs locally for multilingual embeddings; Gemini handles response generation from retrieved passages. These are different trust and operating boundaries. Local embeddings reduce dependency on a third-party embedding API for each document and question. Generation still sends selected context to an external model provider. A production privacy review would decide which customers and document classifications permit that transfer.
+
+The boundary matters for performance as well: embedding cost, database lookup, and generation latency contribute differently to an end-to-end request. I would trace those stages separately rather than reporting one opaque “AI response time.”
+
+## Six capabilities, one retrieval discipline
+
+| Workflow | Example use | Key quality check |
+| --- | --- | --- |
+| Question answering | Ask a factual question about uploaded content | Answer is supported by retrieved passage |
+| Summarization | Summarize material in a customer's knowledge base | Important facts are preserved |
+| Translation | Transform text across supported languages | Meaning is retained, not invented |
+| Glossary creation | Explain domain terms from documents | Terms trace back to permitted material |
+| Information extraction | Pull named fields or facts | Missing fields are handled explicitly |
+| Explanation | Clarify technical source passages | Readability improves without fabricating claims |
+
+Six templates are a product capability, not evidence that all six tasks reached a particular BLEU, recall, or answer-quality score.
+
+## Threat model and design reasoning
+
+| Failure mode | Impact | Architectural response or required verification |
+| --- | --- | --- |
+| Forged `tenant_id` in request | Cross-customer exposure | Resolve tenant from verified server-side identity |
+| Ingestion under wrong owner | Permanent data misclassification | Authorize writes and store immutable provenance |
+| Vector search omits owner filter | Foreign chunks enter prompt | Add negative cross-tenant tests on every retrieval path |
+| Email domain assumed to imply membership | Unauthorized tenant assignment | Verify organization membership independently |
+| Concurrent requests race a quota counter | Usage exceeds intended limit | Use atomic accounting and concurrency tests |
+| Prompt injection inside a retrieved document | Model follows untrusted content as instructions | Separate system policy from retrieved source content |
+| External generation service receives sensitive text | Unintended data egress | Apply explicit provider/data classification policy |
+
+**Isolation and quotas solve different problems.** A customer with no quota remaining should not query. A customer with plenty of quota must still be unable to query someone else's information. Treating these as the same middleware check would be a security design mistake.
+
+## Key trade-offs
+
+I chose a familiar Django relational service rather than splitting ingestion, retrieval, billing, and authentication into new services. At this scale, **consistent identity propagation** matters more than multiplying deployments. PostgreSQL plus pgvector trades a specialized vector-only database for simpler transactional association with users and documents. Local E5 saves hosted embedding calls but creates a CPU/memory deployment responsibility. Every trade-off is visible in the operating model.
+
+## What the implementation establishes
+
+The project joins authenticated retrieval, customer-linked data, multilingual embedding, six prompt workflows, and usage limits into one API-backed product prototype. The article and repository provide the architectural walkthrough. The public material does not establish a commercial deployment, a named number of customers, a measured zero-leak result, or a published multilingual accuracy score.
+
+**Acceptance criteria for the next hardening iteration:** 100% rejection in a deliberately constructed cross-tenant access test suite; documented retrieval Recall@K by language; bounded per-tenant concurrency; recorded p50/p95 stage latency; and a reviewed data-flow policy for the generation provider. These are proposed targets and tests, **not observed achievements**.
+
+Compare this tenant-aware architecture with my [smaller document Q&A backend](/projects/document-rag-backend), which focuses on ingestion, configured embeddings, retrieval, and a refusal boundary.
+
+## Explore the work
+
+* [GitHub source](https://github.com/saaim12/Multi-Tenant-Multi-Lingual-Retrieval-Augmented-Generation-RAG-System)
+* [Engineering walkthrough](https://medium.com/@saymmalik08/building-a-multilingual-multi-tenant-rag-engine-in-django-c975aecf599a)

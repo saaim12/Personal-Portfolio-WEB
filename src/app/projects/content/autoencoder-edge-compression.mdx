@@ -1,0 +1,106 @@
+---
+title: "Edge ML — splitting an autoencoder between a device and the cloud"
+publishedAt: "2025-11-15"
+cardSummary: "Designed a 5-stage sensor pipeline spanning model training, ESP32 inference, transport, Flask reconstruction, and S3-backed artifacts."
+updatedAt: "2026-10-11"
+seoDescription: "Edge ML case study connecting TensorFlow training, ESP32 inference, Flask reconstruction on AWS EC2, and S3 artifacts, with deployment trade-offs."
+summary: "Trained a compatible encoder/decoder pair, deployed the encoder toward embedded inference, and connected encoded sensor payloads to a Flask decoder on AWS EC2."
+tags: ["Edge ML prototype"]
+stack:
+  - "python"
+  - "tensorflow"
+  - "tflitemicro"
+  - "flask"
+  - "aws"
+  - "ec2"
+  - "s3"
+  - "esp32"
+images:
+  - "/images/projects/diagrams/autoencoder-edge-compression.png"
+thumbnail: "/images/projects/covers/autoencoder-edge-compression.png"
+link: "https://github.com/saaim12/AutoEncoders_based_encryption_training_and_fitting_in_devices_such_as_esp_or_rasberry-pi"
+role: "Embedded ML and cloud engineer"
+seoTitle: "Autoencoder for edge sensor data"
+---
+
+## The design question: what belongs on a constrained device?
+
+Embedded devices are not smaller laptops. Their memory budgets, compute characteristics, wireless links, and firmware deployment model force architectural decisions that a server-side ML engineer can often ignore. I built this project to explore a **split autoencoder**: encode a sensor reading close to its source and reconstruct that representation on a cloud service.
+
+My responsibility spanned both halves of the system: model development in Python/TensorFlow, conversion for **TensorFlow Lite Micro**, ESP32-side integration, a **Flask decoder** running on **AWS EC2**, and **S3** integration for encoded payload artifacts. The important achievement is creating a connected edge-to-cloud inference contract—not making an unsupported claim that every autoencoder reduces energy or encrypts data.
+
+## Architecture, in five accountable stages
+
+| Stage | Runtime | Input → output | Contract I had to manage |
+| --- | --- | --- | --- |
+| **1. Train** | Python / TensorFlow | Sensor features → trained encoder + decoder | Data scaling, model compatibility |
+| **2. Export** | TFLite / embedded build | Encoder model → device-compatible artifact | Supported operators, tensor shapes |
+| **3. Encode** | ESP32 / TFLite Micro | Scaled sensor values → latent vector | RAM arena, expected numerical ranges |
+| **4. Transmit** | Device/network boundary | Latent vector → request payload | Serialization overhead, loss, retries |
+| **5. Decode** | Flask / EC2 + S3 integration | Latent vector → reconstructed value/artifact | Matching decoder version and inverse preprocessing |
+
+These **five stages** are verifiable parts of the architectural workflow; they are not five independent production services.
+
+## The most important engineering principle: a model is a distributed contract
+
+The Python training process and ESP32 firmware must agree on **input order, feature scaling, latent vector width, numeric type, and model version**. A silent disagreement can produce plausible-looking but incorrect values. I designed the project around the fact that shipping only an `.tflite` file is insufficient: the scaler and decoder are also part of the release.
+
+For example, if the firmware scales an input to `[0, 1]` but the decoder expects training inputs normalized to `[-1, 1]`, the request can be well-formed while the reconstruction is wrong. The fix is not “more training”; it is a reproducible artifact interface and parity tests across environments.
+
+| Interface property | Device responsibility | Server responsibility |
+| --- | --- | --- |
+| Scaling | Apply exact training-time transform | Invert the agreed transform |
+| Shape | Emit latent vector with correct width | Reject unexpected widths |
+| Version | Identify compatible encoder release | Load matching decoder release |
+| Numeric format | Serialize values predictably | Parse without implicit shape changes |
+| Failure behavior | Retry or retain failed transmissions | Validate and report failed decodes |
+
+## Why the model was split
+
+Device-side encoding keeps the representation step close to the measurement and avoids hosting the full reconstruction model on a microcontroller. The trade-off is obvious: the device is now dependent on **network transport** and the backend must deploy a compatible decoder. This is a sensible experiment when the question is whether smaller transferred representations can justify the added complexity.
+
+But compressed **latent size** alone does not settle that question. A fair comparison measures complete serialized payload bytes, inference time, radio use, reconstruction error, and memory pressure on the *same* workload.
+
+## Quantifying compression without inventing a benchmark
+
+I would calculate an on-wire compression ratio as:
+
+`compression ratio = original serialized payload bytes / latent serialized payload bytes`
+
+For a **clearly hypothetical** example, if the original payload occupied 100 bytes and the encoded request occupied 40 bytes, then the ratio would be **2.5:1**, and the network payload would be **60% smaller**. Those are example arithmetic values **not results from this device**. Device power savings might still be negative if inference consumes more energy than the radio saves.
+
+| Measurement | Required method | Published result |
+| --- | --- | --- |
+| Reconstruction MAE / RMSE | Compare decoded and original held-out sensor traces | Not established in attached case study |
+| On-wire byte ratio | Measure full real JSON/binary payload sizes | Not established |
+| Encoder latency | Benchmark repeated inference on ESP32 | Not established |
+| Peak memory usage | Record tensor arena + stack + model footprint | Not established |
+| Energy per sample | Measure encode and transmit under fixed conditions | Not established |
+| Decoder reliability | Inject bad shape, mismatched version, network failures | Not established |
+
+## Two implementation decisions I would defend in review
+
+**First: use an explicit edge/server split, not hidden remote inference.** Even when the server reconstructs the result, the ESP32 must perform meaningful local model work. That exposes real deployment issues—operator support, exported model format, memory allocation, and firmware/model version coupling.
+
+**Second: separate representation learning from confidentiality.** The repository title references encryption, but an autoencoder's latent representation is **not cryptographic encryption**. If payload secrecy is needed, I would use authenticated transport and appropriately managed encryption keys, independent of model design. Compressibility and secrecy are different properties with different acceptance tests.
+
+## Failure analysis and hardening path
+
+| What goes wrong | Observable effect | Engineering response |
+| --- | --- | --- |
+| Encoder/decoder versions differ | Reconstructed values drift | Versioned artifact manifest and compatibility check |
+| Unsupported TFLite op on firmware | Inference cannot initialize | Operator audit and on-device smoke test |
+| Latent payload is malformed | Decoder crashes or returns nonsense | Strict schema/shape validation |
+| Wireless connectivity drops | Samples fail to reach server | Bounded local buffering and retry policy |
+| Latent serialization is verbose | No transmission benefit | Compare binary and JSON encodings on real messages |
+| Sensor characteristics shift | Reconstruction error increases | Drift monitoring and periodic calibration |
+
+## Result and why it demonstrates engineering depth
+
+This is a **working architectural demonstration of split ML inference and its cross-platform interfaces**: training, export, microcontroller runtime, network payload, cloud reconstruction, and storage integration. It exercises firmware, backend, cloud, and machine-learning integration in one project.
+
+The next milestone is a public benchmark with named ESP32 board, compiler/TFLite versions, representative readings, model size, and measured error/bytes/latency/energy. That would establish whether the approach is economically useful for a real sensor deployment; the current project establishes the design and implementation path.
+
+## Source
+
+* [Edge autoencoder repository](https://github.com/saaim12/AutoEncoders_based_encryption_training_and_fitting_in_devices_such_as_esp_or_rasberry-pi)

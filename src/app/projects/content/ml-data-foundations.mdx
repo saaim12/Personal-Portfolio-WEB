@@ -1,0 +1,89 @@
+---
+title: "ML foundations — reproducible experiments before model complexity"
+seoTitle: "Machine learning foundations"
+publishedAt: "2026-09-29"
+updatedAt: "2026-10-11"
+thumbnail: "/images/projects/covers/ml-data-foundations.svg"
+summary: "Built inspectable pandas/scikit-learn regression workflows, trained and reloaded a persisted model, and examined how evaluation splits affect claims of model quality."
+cardSummary: "Built regression experiments with 3 predictors, explicit 20/80 train/test allocation, model serialization, and 2 evaluation metrics."
+seoDescription: "ML foundations with pandas and scikit-learn: three-feature regression, explicit train/test allocation, model persistence, MSE, and R-squared."
+tags: ["Learning project"]
+stack: ["python","pandas","scikitlearn"]
+images:
+  - "/images/projects/diagrams/ml-data-foundations.svg"
+link: "https://github.com/saaim12/machine-learning-journey"
+team: []
+---
+
+## Knowing the algorithm is not enough; the experiment must be correct
+
+I built these machine learning exercises to understand what a trained model actually means. It is easy to call `.fit()` and print a score. It is harder—and much more useful—to explain what data the model saw, how inputs were shaped, whether the score is comparable across experiments, and whether an artifact behaves the same way after it is loaded again.
+
+This body of work is **foundational engineering practice**, not a deployed commercial ML platform. I include it because the discipline behind evaluation, preprocessing, and reproducibility is the same discipline required in larger data and machine learning systems.
+
+## Quantified scope
+
+| Component | Exact structure in the exercise | Engineering significance |
+| --- | --- | --- |
+| Regression input features | **3** — TV, radio, newspaper spending | Multi-input feature matrix |
+| Regression target | **1** — sales | Supervised continuous prediction |
+| Split recorded in script | **20% train / 80% test** | Implementation fact, not an assumed standard 80/20 split |
+| Named evaluation measures | **2** — MSE and R² | Error magnitude and explained variance |
+| Artifact lifecycle | **2 steps** — save and reload via joblib | Test that inference can run from a persisted model |
+| Scientific stack | pandas, NumPy, scikit-learn | Data manipulation, numerical computation, ML pipeline |
+
+## From raw CSV to an evaluated prediction
+
+| Stage | Implementation | What I check |
+| --- | --- | --- |
+| Load | Read advertising CSV with pandas | Column names, row counts, nulls, data types |
+| Select | Build `X` from 3 spending columns and `y` from sales | No target leakage into predictors |
+| Split | Use deterministic random seed and test/train allocation | Repeatability and proper holdout separation |
+| Train | Fit linear regression with scikit-learn | Feature shape and coefficient stability |
+| Save | Serialize model with joblib | Artifact survives process boundaries |
+| Reload | Load saved estimator | Predictions use saved parameters, not a new fit |
+| Evaluate | Compute MSE and R²; actual-vs-predicted plot | Error and systematic residual patterns |
+
+### Why I call out the unusual split
+
+The implementation uses **20% for training and 80% for testing**. A reader might assume it is the opposite. I do not silently “correct” that fact in my project story. Fewer training rows can make coefficient estimates less stable, especially as model complexity rises. It can also make evaluation results sensitive to the particular sampled records. A mature analysis would rerun the experiment with multiple seeds, compare allocation strategies, and report distributions rather than highlighting one lucky metric.
+
+### Interpreting the numbers instead of merely printing them
+
+**Mean squared error (MSE)** is the average squared prediction error; it is affected by the target's units and penalizes larger misses disproportionately. **R²** measures relative explanatory performance compared with predicting the mean, and can be negative on a held-out set. Neither alone establishes business usefulness, causal effect, or out-of-sample robustness.
+
+| Metric | Mathematical idea | Failure mode it helps reveal |
+| --- | --- | --- |
+| MSE | Average of `(actual - predicted)²` | Occasional very large misses |
+| R² | `1 - SS_res / SS_tot` | Model not beating a simple mean baseline |
+| Residual visualization | Inspect error across observed sales | Trends or nonlinearity ignored by linear model |
+
+I would also add MAE and confidence intervals in a future report—but I do not claim that those are already published results.
+
+## The principles behind the smaller Python labs
+
+The related Python and data-library exercises cover array shapes, broadcasting, dataframe joins, grouping, and missing-value workflows. Those concepts sound elementary until a production pipeline silently joins records on the wrong key or broadcasts a vector across the wrong axis. In my larger data projects, the same fundamentals determine whether a feature pipeline returns trustworthy records.
+
+The separate gradient-descent and cost-function exercises clarify optimization rather than relying solely on a library API. My goal was to understand where model parameters come from, what objective the training process minimizes, and what numerical behavior means when the optimization path diverges or converges.
+
+## Evaluation and deployment boundaries
+
+| What is established | What still needs evidence |
+| --- | --- |
+| A reproducible training/test split exists | Sensitivity across multiple random seeds |
+| A linear regression model is trained | Better-than-baseline behavior across datasets |
+| A model artifact can be saved and loaded | Input schema/version metadata embedded in the artifact |
+| MSE and R² are computed | Repeated cross-validation and uncertainty ranges |
+| Basic data operations are exercised | Automated pipeline and production inference service |
+
+## Result
+
+The deliverable is a set of **readable, reproducible ML and data-processing exercises** that make choices visible rather than hiding them behind a high-level notebook. Their value is technical precision: controlled splits, explicit features, model persistence, and metrics that can be interpreted critically.
+
+**Next milestone:** build a scikit-learn `Pipeline` that owns preprocessing and prediction together, add schema validation, compare against a `DummyRegressor`, and run repeated validation with recorded seeds. That would make this foundation a stronger quantitative case study without pretending it is already a production ML service.
+
+## Code and experiments
+
+* [Machine learning journey](https://github.com/saaim12/machine-learning-journey)
+* [Three-feature regression implementation](https://github.com/saaim12/machine-learning-journey/blob/main/Linear_Regression/training_model_with_multiple_inputs_using_sicket_learn/model.py)
+* [Python and data-library exercises](https://github.com/saaim12/Python_learning)

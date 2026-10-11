@@ -1,110 +1,17 @@
-import { Column, Heading, Row, Text } from "@once-ui-system/core";
-import { HiOutlineEnvelope, HiOutlineCalendarDays } from "react-icons/hi2";
-import { bookingLink, person, social } from "@/resources/content";
-import { iconLibrary } from "@/resources/icons";
-import { Reveal } from "./Reveal";
-
-// Direct-contact CTAs only. No form, no email backend.
-//
-// WhatsApp used to be the primary button here and in the hero. It is in the
-// icon row now and nowhere else: a recruiter will not open WhatsApp to message
-// an unknown international number, and a messaging app as the front door reads
-// freelance regardless of what the copy around it says.
-const SECONDARY = ["GitHub", "LinkedIn", "Medium", "WhatsApp"];
-
-export function Contact() {
-  const byName = (name: string) => social.find((s) => s.name === name);
-
-  return (
-    <Column
-      fillWidth
-      horizontal="center"
-      align="center"
-      gap="32"
-      id="contact"
-      className="section section--ruled"
-    >
-      <Reveal>
-        <Column gap="12" horizontal="center" align="center" style={{ maxWidth: "620px", marginInline: "auto" }}>
-          <Heading as="h2" variant="display-strong-m" align="center">
-            Get in touch
-          </Heading>
-          <Text
-            onBackground="neutral-weak"
-            variant="heading-default-m"
-            align="center"
-            wrap="balance"
-          >
-            Have a software engineering role or a product in mind? Email me to
-            start a conversation. I usually reply within a day.
-          </Text>
-        </Column>
-      </Reveal>
-
-      <Reveal delay={0.08}>
-        <Row gap="12" wrap horizontal="center">
-          {/* The address is the label, not "Email me". A recruiter who wants to
-              paste it into their own client should not have to hover a button
-              to find out what it is. */}
-          <a
-            className="btn btn--primary btn--lg"
-            href={`mailto:${person.email}`}
-            data-track="contact:email"
-          >
-            <HiOutlineEnvelope aria-hidden="true" />
-            {person.email}
-          </a>
-          {/* Kept, demoted. Some recruiters would rather book a slot than open
-              a thread, and it costs one secondary button to serve them. */}
-          <a
-            className="btn btn--secondary btn--lg"
-            href={bookingLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-track="contact:book_a_call"
-          >
-            <HiOutlineCalendarDays aria-hidden="true" />
-            Book a call
-          </a>
-        </Row>
-      </Reveal>
-
-      <Reveal delay={0.12}>
-        <Row gap="8" wrap horizontal="center">
-          {SECONDARY.map((name) => {
-            const s = byName(name);
-            if (!s) return null;
-            const Icon = iconLibrary[s.icon];
-            return (
-              <a
-                key={name}
-                className={`heroSocial socialBtn-${name.toLowerCase()}`}
-                href={s.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={name}
-                title={name}
-              >
-                <Icon aria-hidden="true" />
-              </a>
-            );
-          })}
-        </Row>
-      </Reveal>
-
-      {/* Three separate facts laid out with spacing and rules, not joined by
-          "·" inside one string. Working hours are a top-three objection for
-          European and US teams hiring from Pakistan. */}
-      <Reveal delay={0.16}>
-        <div className="availability">
-          <span className="availabilityItem">
-            <span className="availableDot" aria-hidden="true" />
-            Open to full time roles
-          </span>
-          <span className="availabilityItem">Usually replies within a day</span>
-          <span className="availabilityItem">European and US Eastern overlap</span>
-        </div>
-      </Reveal>
-    </Column>
-  );
+import { SiteAnchor } from "@/components/SiteAnchor";
+import Image from "@/components/SiteImage";
+import { bookingLink, person } from "@/resources/content";
+import { Handles, Mascot, RevealText } from "./Studio";
+import { ContactBackdrop, ContactBadge } from "./ContactArtwork";
+import "./contact-motion.css";
+export function Contact({ animated = false }: { animated?: boolean }) {
+  return <section id="contact" className="contactSection studioContainer" aria-labelledby="contact-heading">
+    <div className="contactIntro"><Mascot /><div><h2 id="contact-heading" className="displayType">{animated ? <RevealText text="Let’s talk" /> : "Let’s talk"}</h2><p>I like working through complex problems with people who care about the details. Have a product to build, an engineering role, or an interesting challenge? Let’s start a conversation.</p></div></div>
+    <div className={`contactBoard${animated ? " contactBoardAnimated" : ""}`}>
+      <div className="commentNote"><span className="commentLabel">A little note</span><div><Image src={person.avatar} width={48} height={48} alt="" /><p><strong>{person.firstName}</strong>Open to full-time roles, contract work, and conversations about things worth building.</p></div><span className="reaction">ϟ 1</span></div>
+      {animated ? <ContactBackdrop/> : <><div className="boardShape boardShapeOne" aria-hidden="true" /><div className="boardShape boardShapeTwo" aria-hidden="true" /></>}
+      <SiteAnchor href="/contact" className={`contactSticker${animated ? " contactStickerAnimated" : ""}`}>{animated ? <ContactBadge/> : <span aria-hidden="true">↠</span>}Contact{animated ? <><ContactBadge/><Handles/></> : <span aria-hidden="true">↞</span>}</SiteAnchor>
+      <div className="boardLinks"><SiteAnchor href={`mailto:${person.email}`}>Email me ↗</SiteAnchor><SiteAnchor href={bookingLink} target="_blank" rel="noopener noreferrer">Book a call ↗</SiteAnchor></div>
+    </div>
+  </section>;
 }
