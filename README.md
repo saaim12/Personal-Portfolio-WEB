@@ -1,15 +1,31 @@
 # Saaim Abdullah's portfolio
 
-Next.js 16, React 19, TypeScript, and Once UI. Supports Vercel and GitHub Pages from the same source.
+Personal engineering portfolio for **Saaim Abdullah**, a software engineer in Lahore working on backend systems, cloud infrastructure, data pipelines, and AI applications.
+
+**Primary website:** [saaim.site](https://saaim.site) · **Contact:** [saaim.abdullah.work@gmail.com](mailto:saaim.abdullah.work@gmail.com)
+
+Built with Next.js 16, React 19, TypeScript, and Once UI. The same source supports Vercel production hosting and a GitHub Pages static mirror.
+
+## Features
+
+- Animated Home and Services pages, project folder stacking, interactive rulers, and reduced-motion support.
+- Six main project case studies, plus four learning repositories presented separately.
+- Professional Experience and Story, personal media, and a looping bio reel with playback controls.
+- Journal links to original Medium articles and their chapter headings.
+- Email-based contact form, professional profiles, and document downloads.
+- Route metadata, JSON-LD, sitemap, robots, static social previews, and optional ownership verification.
+- Production-only Vercel Web Analytics and Speed Insights.
 
 ## Development
 
-Use Node.js 22.13 or newer for the application and test commands.
+Use Node.js 22.13 or newer, below version 25. Node 22 is used by deployment workflows.
 
 ```sh
 npm ci
 npm run dev
 ```
+
+Open http://localhost:3000. See [.env.example](.env.example) for optional configuration. Defaults work locally without API keys. Keep real local environment files out of Git.
 
 ## Content and source
 
@@ -37,6 +53,7 @@ Once UI supplies shared layout, typography, heading permalink copying, and toast
 npm run typecheck
 npm test
 npm run build
+npx playwright install chromium
 npm start
 # In another terminal:
 npm run test:browser -- http://localhost:3000
@@ -82,7 +99,7 @@ After importing the project, finish these dashboard steps and redeploy:
 3. Use **Observability** and **Logs** to inspect requests, errors, and deployments. Stay with the included features; Observability Plus is unnecessary for this site.
 4. Check **Usage** periodically to see the remaining free allowances.
 
-On Hobby, Web Analytics includes **50,000 events per month** with a one-month reporting window. Custom click events require Pro, so this portfolio collects page views only. Standard Speed Insights includes **10,000 events over a rolling 30 days**, shared across the team. Free collection pauses at its limits; it does not silently purchase extra events. These integrations do not change your Vercel plan. Web Analytics on Pro has different, usage-based billing.
+This portfolio collects page views and performance measurements, without custom click events. Included allowances and billing depend on your Vercel plan; check the linked pricing pages and your dashboard before enabling additional features. Installing these integrations does not change your Vercel plan.
 
 Vercel already provides its CDN, automatic HTTPS certificates, and platform DDoS protection; these do not require application packages. `vercel.json` also adds MIME sniffing protection, a referrer policy, and disables unused camera, microphone, and location permissions. GitHub Pages does not apply Vercel response headers or provide its analytics endpoints.
 
@@ -110,3 +127,11 @@ For a domain-root static export, set `NEXT_PUBLIC_BASE_PATH` to an empty string 
 ## Content evidence
 
 Employment and delivery claims were checked against supplied resumes and the signed Fitter Health recommendation on September 30, 2026. Source PDFs remain unchanged. Preserve the documented dates, Expertflow usage and response-time figures, and Fitter Health delivery details. Unverified RAG, recommender, pipeline, and compression benchmarks were removed; do not reintroduce them without supporting evidence. This was not an independent audit of external project repositories.
+
+## License and attribution
+
+The repository retains its existing **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)** license. [LICENSE](LICENSE) contains the full official terms, including attribution, noncommercial use, and modification notices.
+
+When sharing permitted adaptations, credit Saaim Abdullah for his original contributions, link to this repository and the license, identify your changes, and retain any existing attribution notices. Suggested credit: "Adapted from Saaim Abdullah's portfolio: https://github.com/saaim12/Personal-Portfolio-WEB (CC BY-NC 4.0); modifications by [your name]."
+
+Dependencies, fonts, brand icons, third-party media, and any upstream material retain their respective licenses and ownership. The repository license does not replace those licenses or grant rights its contributors do not hold. For permission requests, contact [Saaim Abdullah](mailto:saaim.abdullah.work@gmail.com).
