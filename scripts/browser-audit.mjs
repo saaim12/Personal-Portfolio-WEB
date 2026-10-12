@@ -85,12 +85,14 @@ for(const [name,count,learnings]of [['Product & web',2,0],['AI & data',4,0],['Le
 }
 assert.equal(slugs.length,10,'Ten current projects');
 await page.goto(base+'/professional-experience');
-assert.equal(await page.locator('.storyCard').count(),4,'All four story cards are present');
+assert.equal(await page.locator('.storyCard').count(),0,'Removed story cards stay removed');
+assert.equal(await page.locator('#bio h2').textContent(),'My Story / My Bio');
+assert.equal(await page.locator('.personalStoryMoments figure').count(),4,'Personal photos and video accompany the story');
 assert.equal(await page.locator('.roleCard li').count(),14,'Both roles show all responsibilities without expansion');
 assert.equal(await page.locator('.roleCard details').count(),0,'Experience details are not collapsed');
-await page.locator('.professionalSections a[href="#story"]').click();
-await page.waitForFunction(()=>document.querySelector('.professionalSections a[href="#story"]')?.getAttribute('aria-current')==='location');
-assert.equal(await page.locator('#story h2').textContent(),'My story');
+await page.locator('.professionalSections a[href="#career"]').click();
+await page.waitForFunction(()=>document.querySelector('.professionalSections a[href="#career"]')?.getAttribute('aria-current')==='location');
+assert.equal(await page.locator('#career h2').textContent(),'My Work / Work Experience');
 await page.goto(base+'/contact');
 await page.getByRole('button',{name:'Next (1/2)',exact:true}).click();
 assert.equal(await page.locator('#contact-name').count(),0);
