@@ -28,3 +28,10 @@
 .combinedStoryFrame .editorialPhoto figcaption{text-align:center;font:19px/1.45 var(--font-hand);padding:9px 6px 3px}
 .combinedStoryFrame .petsClosing{text-align:center;font-size:clamp(19px,2.6vw,27px);margin:50px auto 14px;max-width:660px}
 @media(max-width:720px){.combinedStoryFrame .bioOpening,.combinedStoryFrame .personalStoryMoments{grid-template-columns:1fr}.combinedStoryFrame .bioOpening .editorialPhoto{max-width:280px}.combinedStoryFrame .personalStoryMoments{gap:24px}.combinedStoryFrame .editorialPhoto{max-width:285px}}
+
+/* Keep editorial media and headings inside narrow mobile viewports. */
+.combinedStoryFrame,.combinedStoryFrame .bioOpening,.combinedStoryFrame .personalStoryMoments{min-width:0;max-width:100%}
+.combinedStoryFrame .displayType{overflow-wrap:anywhere}
+.combinedStoryFrame .bioOpening>*,.combinedStoryFrame .personalStoryMoments>*{min-width:0;max-width:100%}
+.combinedStoryFrame .editorialPhoto{box-sizing:border-box;min-width:0;max-width:min(100%,340px)}
+@media(max-width:720px){.combinedStoryFrame .bioOpening,.combinedStoryFrame .personalStoryMoments{grid-template-columns:minmax(0,1fr)}.combinedStoryFrame .editorialPhoto{transform:none!important;max-width:min(100%,285px)}.professionalSections a{min-width:0;overflow-wrap:anywhere}}
