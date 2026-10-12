@@ -188,6 +188,10 @@ const touchPage=await browser.newPage({viewport:{width:390,height:844},isMobile:
 await touchPage.goto(base+'/',{waitUntil:'networkidle'});await touchPage.mouse.move(120,220);
 assert.equal(await touchPage.locator('html').getAttribute('data-studio-cursor'),null,'Touch devices retain their native pointer behavior');
 assert.equal(await touchPage.locator('.studioCursor').evaluate(e=>getComputedStyle(e).display),'none','Custom cursor is hidden on touch devices');
+assert.equal(await touchPage.locator('.homeWelcome').count(),0,'Mobile does not display a blocking welcome overlay');
+await touchPage.locator('.contactIntro').scrollIntoViewIfNeeded();
+assert.equal(await touchPage.locator('.contactIntro h2').evaluate(e=>getComputedStyle(e).whiteSpace),'normal','Mobile contact heading can wrap');
+assert.equal(await touchPage.locator('.contactIntro .mascot').evaluate(e=>getComputedStyle(e).animationName),'none','Mobile contact animation is disabled');
 await touchPage.close();
 const staticPage=await browser.newPage({javaScriptEnabled:false,viewport:{width:1440,height:1000}});
 await staticPage.goto(base+'/',{waitUntil:'networkidle'});

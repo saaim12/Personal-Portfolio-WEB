@@ -120,3 +120,20 @@
 .servicesPage :is(.engineeringServiceCard,.proficiencyCard) ul{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:22px 0 0;padding:0}
 .servicesPage :is(.engineeringServiceCard,.proficiencyCard) li{padding:7px 10px;border:1px solid var(--ink);background:#fff;font:12px/1.5 var(--font-code),monospace;overflow-wrap:anywhere}
 @media(max-width:850px){.servicesPage .engineeringServicesGrid,.servicesPage .proficiencyGrid{grid-template-columns:1fr}}
+
+/* Flowing chips prevent collisions in the mobile capability sections. */
+@media (max-width: 767px) {
+  .servicesPage .capabilityCloud{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+  .servicesPage .capabilityGroup{display:flex;flex-direction:column;align-items:flex-start;gap:12px;min-width:0;min-height:0;padding:18px;border:1px solid #ddd}
+  .servicesPage .capabilityGroup h3{margin:0 0 6px;max-width:100%}
+  .servicesPage .capabilityGroup .capabilityChip,
+  .servicesPage .capabilityGroup .capabilityChip:nth-of-type(n){position:static;inset:auto;transform:none;display:block;box-sizing:border-box;width:100%;max-width:100%;padding:12px 14px;overflow-wrap:anywhere;font-size:14px;line-height:1.5}
+  .servicesPage .servicePanel h2{font-size:clamp(33px,10vw,65px);overflow-wrap:anywhere}
+  .servicesPage .servicePanelInner{min-width:0;max-width:100%}
+  .servicesPage .serviceProcess{height:auto}
+  .servicesPage .processSticky{position:static;overflow:visible}
+  .servicesPage .processRail{transform:none!important;display:grid;grid-template-columns:minmax(0,1fr)}
+  .servicesPage .processCard{width:100%;max-width:100%;min-height:0;height:auto;padding:45px 22px 75px;border-radius:24px}
+  .servicesPage .processIndex{right:8px}
+  .servicesPage .servicesHero h1{max-width:100%;font-size:clamp(27px,7vw,60px)}
+}

@@ -308,3 +308,45 @@ body a.studioButton:is(:hover,:focus-visible){background:white;color:var(--ink);
 :is(.galleryGrid,.relatedProjects) .folderSmall:is(:hover,:focus-within) .projectTags span{background:#fff;color:var(--ink)}
 :is(.galleryGrid,.relatedProjects) .folderSmall .projectPicture img{object-fit:contain}
 @media(max-width:760px){.hiringProofGrid{grid-template-columns:1fr}.hiringProofLinks{flex-direction:column;align-items:stretch}.hiringProofLinks a{text-align:center}.experienceProof{flex-direction:column}}
+
+/* Mobile layout: size intrinsic children instead of hiding document overflow. */
+@media (max-width: 767px) {
+  .studioPage,.studioHome,.studioContainer,.contactSection,.contactIntro,.contactBoard{min-width:0;max-width:100%}
+  .contactIntro{grid-template-columns:minmax(0,1fr);gap:20px;padding-inline:8px}
+  .contactIntro>div{min-width:0;max-width:100%}
+  .contactIntro h2{font-size:clamp(32px,9vw,50px);line-height:1.04;white-space:normal;overflow-wrap:anywhere;max-width:100%}
+  .contactIntro p{max-width:100%;overflow-wrap:break-word}
+  .contactIntro .mascot{max-width:min(160px,55vw);height:auto;animation:none!important}
+  .contactIntro .mascotEyes{animation:none!important}
+  .contactBoard{box-sizing:border-box;min-height:520px;padding:115px 8px 150px;overflow:visible}
+  .contactBoard .contactSticker{box-sizing:border-box;max-width:calc(100% - 20px);margin-inline:auto;white-space:normal;overflow-wrap:anywhere;transform:none;transition:none}
+  .studioHome .contactBoard .contactSticker,.servicesPage .contactBoard .contactSticker{font-size:clamp(26px,7.5vw,40px)}
+  .contactBoard .boardLinks{max-width:calc(100% - 24px);left:12px;right:12px;bottom:16px;gap:7px}
+  .contactBoard .boardLinks a{font-size:10px;line-height:1.35;min-height:38px;padding:9px 10px!important}
+  .commentNote{box-sizing:border-box;max-width:calc(100% - 24px);left:12px}
+  .contactBoardAnimated .contactBackdrop{clip-path:none}
+  .studioHome .homeAbout .polaroid,.studioHome .homeAbout h2>.mark,.studioHome .heroStatement .pinkInk{animation:none!important;will-change:auto}
+  .studioHome .folderFeature,.studioHome .folderFeature .projectPicture img{will-change:auto}
+  .studioHome .heroStatement .pinkInk,.servicesPage .chapterArtwork{animation:none!important}
+  .galleryToolbar{flex-direction:column;align-items:stretch;gap:12px}
+  .galleryFilters{max-width:100%;gap:6px}
+  .galleryFilters button{min-width:0;justify-content:space-between}
+  :is(.galleryGrid,.relatedProjects) .folderSmall .folderTab{max-width:85%}
+  :is(.galleryGrid,.relatedProjects) .folderSmall .folderContent{width:100%}
+  :is(.galleryGrid,.relatedProjects) .folderSmall .projectPicture{aspect-ratio:1.4}
+  :is(.galleryGrid,.relatedProjects) .folderSmall :is(h2,h3){font-size:clamp(23px,7vw,32px)}
+}
+@media (max-width: 600px) {
+  .studioHero{height:auto;min-height:590px;padding:35px 0 45px}
+  .heroNameGroup{max-width:calc(100% - 32px)}
+  .heroAvailable{left:auto;transform:none;max-width:100%;width:auto;white-space:normal;justify-content:center;margin-inline:16px;line-height:1.5}
+  .heroStatement{margin:42px auto 0;padding-inline:14px}
+  .heroStatement h2{font-size:clamp(26px,7.4vw,36px);overflow-wrap:anywhere}
+  .experiencePage .pageHeading h1{font-size:clamp(13px,3.3vw,18px)}
+}
+@media (hover: none), (pointer: coarse) {
+  .contactSticker:hover{transform:none}
+  .servicesPage .servicesSelection,.servicesPage .servicesSelection>.mark{animation:none}
+  .servicesPage .chapterArtwork{animation:none}
+  .studioHome .homeAbout .polaroid,.studioHome .heroStatement .pinkInk,.studioHome .contactIntro .mascot,.servicesPage .contactIntro .mascot{animation:none}
+}

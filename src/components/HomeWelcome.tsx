@@ -8,7 +8,8 @@ export function HomeWelcome() {
   const [entered, setEntered] = useState(false);
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (window.scrollY > 50) return;
+    // Avoid covering the introduction on small touch screens.
+    if (window.scrollY > 50 || window.matchMedia("(max-width: 767px), (hover: none), (pointer: coarse)").matches) return;
     setVisible(true);
     const enterTimer = window.setTimeout(() => setEntered(true), 40);
     document.documentElement.setAttribute("data-studio-welcome", "");

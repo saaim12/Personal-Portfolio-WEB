@@ -103,6 +103,7 @@ export function StudioMotion() {
 
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const compact = window.matchMedia("(max-width: 767px), (hover: none), (pointer: coarse)");
     const animations = new Set<Animation>();
     let observer: IntersectionObserver | undefined;
     const targets = document.querySelectorAll<HTMLElement>(
@@ -120,7 +121,7 @@ export function StudioMotion() {
     };
     const start = () => {
       reset();
-      if (preference.matches) return;
+      if (preference.matches || compact.matches) return;
       const page = document.querySelector(".studioPage, .studioHome");
       if (page) {
         const entrance = page.animate([{ opacity: 0.45 }, { opacity: 1 }], { duration: 280, easing: "ease-out" });
@@ -205,10 +206,12 @@ export function StudioMotion() {
     start();
     window.addEventListener("studio-welcome-end", start);
     preference.addEventListener("change", start);
+    compact.addEventListener("change", start);
     return () => {
       reset();
       window.removeEventListener("studio-welcome-end", start);
       preference.removeEventListener("change", start);
+      compact.removeEventListener("change", start);
     };
   }, [pathname]);
 
@@ -216,7 +219,7 @@ export function StudioMotion() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     const home = document.querySelector<HTMLElement>(".studioHome");
     const services = document.querySelector<HTMLElement>(".servicesPage");
-    if ((!home && !services) || reduced.matches) return;
+    if ((!home && !services) || reduced.matches || window.matchMedia("(max-width: 767px), (hover: none), (pointer: coarse)").matches) return;
 
     let frame = 0;
     const process = services?.querySelector<HTMLElement>(".serviceProcess");
@@ -296,6 +299,7 @@ export function StudioMotion() {
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const boards = document.querySelectorAll<HTMLElement>(".contactBoardAnimated");
+    const compact = window.matchMedia("(max-width: 767px), (hover: none), (pointer: coarse)");
     const animations = new Set<Animation>();
     let observer: IntersectionObserver | undefined;
     const reset = () => {
@@ -309,7 +313,7 @@ export function StudioMotion() {
     };
     const start = () => {
       reset();
-      if (preference.matches) return;
+      if (preference.matches || compact.matches) return;
       observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (!entry.isIntersecting) return;
@@ -349,7 +353,8 @@ export function StudioMotion() {
     };
     start();
     preference.addEventListener("change", start);
-    return () => { reset(); preference.removeEventListener("change", start); };
+    compact.addEventListener("change", start);
+    return () => { reset(); preference.removeEventListener("change", start); compact.removeEventListener("change", start); };
   }, [pathname]);
 
   return <><span ref={blend} className="studioCursorBlend" aria-hidden="true"><i /><i /><i /><i /></span><span className="studioCursorLayer" aria-hidden="true"><span ref={cursor} className="studioCursor"><i /><span>You</span></span></span></>;
