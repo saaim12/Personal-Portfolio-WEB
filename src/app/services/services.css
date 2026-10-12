@@ -137,3 +137,32 @@
   .servicesPage .processIndex{right:8px}
   .servicesPage .servicesHero h1{max-width:100%;font-size:clamp(27px,7vw,60px)}
 }
+
+/* Small screens preserve the chapter design but use compact spacing and subtle motion. */
+@media (max-width: 767px) {
+  .servicesPage .serviceChapters{padding-top:42px;padding-bottom:42px}
+  .servicesPage .servicePanel{min-height:0;clip-path:none}
+  .servicesPage .servicePanelInner{box-sizing:border-box;width:calc(100% - 32px);max-width:620px;padding:50px 0 76px;isolation:isolate}
+  .servicesPage .servicePanelInner>.serviceNumber{margin-bottom:24px}
+  .servicesPage .servicePanel h2{font-size:clamp(34px,10vw,54px);line-height:1.03;max-width:100%}
+  .servicesPage .servicePanelInner>p{max-width:100%;margin:27px auto 42px;font-size:clamp(16px,4vw,19px);line-height:1.55}
+  .servicesPage .servicePanelCapabilities{display:grid;grid-template-columns:minmax(0,1fr);gap:11px}
+  .servicesPage .servicePanelCapabilities span{box-sizing:border-box;min-height:58px;padding:24px 15px 13px;font-size:clamp(13px,3.3vw,16px);line-height:1.5;overflow-wrap:anywhere}
+  .servicesPage .chapterArtwork{opacity:.1}
+  .servicesPage .serviceBoundary{pointer-events:none}
+  .servicesPage .serviceProcess{padding:0 16px}
+  .servicesPage .processRail{gap:20px}
+  .servicesPage .servicesHero h1{text-wrap:nowrap}
+  .servicesPage .servicesSelection{min-width:0;max-width:100%}
+  .servicesPage .contactSection{max-width:100%}
+}
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .servicesPage .servicesSelection{animation:servicesBandPalette 6s steps(1,end) infinite}
+  .servicesPage .servicesSelection>.mark{animation:servicesSymbolTurn 11s linear infinite}
+  .servicesPage .servicePanelCapabilities span{transition:filter .2s ease,transform .2s ease}
+  .servicesPage .servicePanelCapabilities span:active{filter:brightness(.92);transform:scale(.99)}
+}
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .servicesPage .servicesSelection,.servicesPage .servicesSelection>.mark{animation:none!important}
+  .servicesPage .servicePanelCapabilities span{transition:none!important}
+}

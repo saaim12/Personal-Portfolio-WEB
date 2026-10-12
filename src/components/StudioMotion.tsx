@@ -357,5 +357,52 @@ export function StudioMotion() {
     return () => { reset(); preference.removeEventListener("change", start); compact.removeEventListener("change", start); };
   }, [pathname]);
 
+  // Mobile gets lightweight scroll reveals instead of desktop scroll-linked parallax.
+  useEffect(() => {
+    const compact = window.matchMedia("(max-width: 767px) and (hover: none), (max-width: 767px) and (pointer: coarse)");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let observer: IntersectionObserver | undefined;
+    const active = new Set<Animation>();
+    const start = () => {
+      observer?.disconnect();
+      active.forEach(animation => animation.cancel());
+      active.clear();
+      if (!compact.matches || reduced.matches) return;
+      const targets = document.querySelectorAll<HTMLElement>(
+        ".studioHome .folderFeature, .servicesPage .servicePanelInner, " +
+        ".servicesPage .processCard, .servicesPage .engineeringServiceCard, " +
+        ".servicesPage .technicalSkillGroup",
+      );
+      observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          observer?.unobserve(el);
+          // Never animate items that were already in the first viewport.
+          if (el.dataset.mobileRevealDone) return;
+          el.dataset.mobileRevealDone = "true";
+          const animation = el.animate(
+            [{ opacity: .55, translate: "0 22px" }, { opacity: 1, translate: "0 0" }],
+            { duration: 460, easing: "cubic-bezier(.22,1,.36,1)" },
+          );
+          active.add(animation);
+          animation.onfinish = () => active.delete(animation);
+        });
+      }, { rootMargin: "0px 0px -5% 0px", threshold: .06 });
+      targets.forEach(el => {
+        if (el.getBoundingClientRect().top >= window.innerHeight * .85) observer?.observe(el);
+      });
+    };
+    start();
+    compact.addEventListener("change", start);
+    reduced.addEventListener("change", start);
+    return () => {
+      observer?.disconnect();
+      active.forEach(animation => animation.cancel());
+      compact.removeEventListener("change", start);
+      reduced.removeEventListener("change", start);
+    };
+  }, [pathname]);
+
   return <><span ref={blend} className="studioCursorBlend" aria-hidden="true"><i /><i /><i /><i /></span><span className="studioCursorLayer" aria-hidden="true"><span ref={cursor} className="studioCursor"><i /><span>You</span></span></span></>;
 }

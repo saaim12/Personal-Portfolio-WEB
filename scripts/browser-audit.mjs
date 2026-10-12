@@ -189,6 +189,15 @@ await touchPage.goto(base+'/',{waitUntil:'networkidle'});await touchPage.mouse.m
 assert.equal(await touchPage.locator('html').getAttribute('data-studio-cursor'),null,'Touch devices retain their native pointer behavior');
 assert.equal(await touchPage.locator('.studioCursor').evaluate(e=>getComputedStyle(e).display),'none','Custom cursor is hidden on touch devices');
 assert.equal(await touchPage.locator('.homeWelcome').count(),0,'Mobile does not display a blocking welcome overlay');
+const mobileProject = touchPage.locator('.studioHome .folderFeature').first();
+assert.equal(await mobileProject.evaluate(el=>getComputedStyle(el).position),'relative','Mobile project cards do not stick over each other');
+assert.equal(await mobileProject.locator('.folderTab').evaluate(el=>getComputedStyle(el).height),'50px','Mobile project tabs are compact');
+assert.ok(await mobileProject.evaluate(el=>el.getBoundingClientRect().width <= innerWidth),'Mobile project card fits viewport');
+await touchPage.goto(base+'/services',{waitUntil:'networkidle'});
+assert.equal(await touchPage.locator('.servicesPage .servicePanelInner').first().evaluate(el=>getComputedStyle(el).width!=='auto'),true,'Service panels have bounded mobile width');
+assert.equal(await touchPage.locator('.servicesPage .servicePanelCapabilities').first().evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length),1,'Service tags use one mobile column');
+await touchPage.goto(base+'/',{waitUntil:'networkidle'});
+
 await touchPage.locator('.contactIntro').scrollIntoViewIfNeeded();
 assert.equal(await touchPage.locator('.contactIntro h2').evaluate(e=>getComputedStyle(e).whiteSpace),'normal','Mobile contact heading can wrap');
 assert.equal(await touchPage.locator('.contactIntro .mascot').evaluate(e=>getComputedStyle(e).animationName),'none','Mobile contact animation is disabled');

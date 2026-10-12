@@ -350,3 +350,59 @@ body a.studioButton:is(:hover,:focus-visible){background:white;color:var(--ink);
   .servicesPage .chapterArtwork{animation:none}
   .studioHome .homeAbout .polaroid,.studioHome .heroStatement .pinkInk,.studioHome .contactIntro .mascot,.servicesPage .contactIntro .mascot{animation:none}
 }
+
+/* Mobile editorial layout: colorful folder cards without desktop sticky layers. */
+@media (max-width: 767px) {
+  .studioHome .featuredProjects{display:flex;flex-direction:column;gap:30px;isolation:auto}
+  .studioHome .folderFeature,
+  .studioHome .folderFeature:nth-child(n){
+    position:relative;top:auto;min-height:0;margin:0;padding:0!important;
+    transform:none;filter:none;will-change:auto;overflow:visible
+  }
+  .studioHome .folderFeature::before{display:none!important}
+  .studioHome .folderFeature .retainedFolderLabels{display:none}
+  .studioHome .folderFeature .folderTab,
+  .studioHome .folderFeature:nth-child(n) .folderTab{
+    box-sizing:border-box;width:max-content;max-width:90%;
+    height:50px;min-height:50px;margin:0!important;padding:0 28px 0 14px;
+    justify-content:flex-start;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 100%,0 100%);
+    font-size:12px;letter-spacing:.02em
+  }
+  .studioHome .folderFeature .folderContent{
+    display:flex;flex-direction:column;box-sizing:border-box;min-height:0;
+    padding:clamp(18px,5vw,25px);gap:18px;width:100%;position:relative
+  }
+  .studioHome .folderFeature .folderCopy{padding:8px 0 0;gap:0;opacity:1}
+  .studioHome .folderFeature .folderCopy :is(h2,h3){font-size:clamp(30px,9vw,48px);line-height:1.07;overflow-wrap:anywhere;margin:15px 0}
+  .studioHome .folderFeature .folderCopy>p{font-size:clamp(15px,4vw,18px);line-height:1.5;max-width:100%}
+  .studioHome .folderFeature .projectTags{gap:8px;padding-top:22px;margin-top:0}
+  .studioHome .folderFeature .projectTags span{max-width:100%;overflow-wrap:anywhere}
+  .studioHome .folderFeature .projectPicture{
+    display:block;width:100%;height:auto;max-width:100%;min-height:0;
+    aspect-ratio:auto;overflow:hidden;background:white;box-sizing:border-box
+  }
+  .studioHome .folderFeature .projectPicture img{display:block;width:100%;height:auto;object-fit:contain;transform:none}
+  .studioHome .folderFeature :is(.projectLink,.projectPicture){
+    -webkit-tap-highlight-color:transparent;touch-action:manipulation
+  }
+  .studioHome .folderFeature:active .folderContent{filter:brightness(.96)}
+  .studioHome .folderFeature .projectPicture:active img{transform:scale(1.015)}
+  .studioHome .heroNameGroup .heroAvailable{
+    display:flex;position:static;transform:none;left:auto;max-width:100%;width:100%;
+    margin:14px 0 0;padding:0 8px;white-space:normal;overflow-wrap:anywhere;
+    text-wrap:balance;font-size:clamp(10px,2.7vw,12px);line-height:1.5;text-align:center
+  }
+  .studioHome .heroStatement{max-width:100%;margin-inline:auto}
+  .studioHome .heroStatement h2{max-width:100%;text-wrap:pretty;overflow-wrap:anywhere}
+  .studioHome .heroSocials{justify-content:center;max-width:100%}
+  .studioHome .heroSocials a{min-width:0}
+}
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .studioHome .folderFeature .folderContent{transition:filter .18s ease}
+  .studioHome .folderFeature .projectPicture img{transition:transform .18s ease}
+  .studioHome .heroStatement .pinkInk{animation:homeFlowerTurn 14s linear infinite}
+}
+@media (prefers-reduced-motion: reduce) {
+  .studioHome .folderFeature .folderContent,.studioHome .folderFeature .projectPicture img{transition:none!important}
+  .studioHome .heroStatement .pinkInk{animation:none!important}
+}
