@@ -46,7 +46,8 @@ try {
       assert.equal(await page.locator('h1').count(), 1, route);
       await page.evaluate(async () => { for (const image of document.images) image.loading = 'eager'; await Promise.all([...document.images].map(image => image.decode().catch(() => {}))); });
       assert.deepEqual(await page.evaluate(() => [...document.images].filter(image => !image.naturalWidth).map(image => image.src)), [], route + ' images');
-      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2), route + ' mobile bounds');
+      const bounds = await page.evaluate(() => ({ viewport: innerWidth, page: document.documentElement.scrollWidth, offenders: [...document.querySelectorAll('body *')].filter(element => { const rect = element.getBoundingClientRect(); return rect.width > 0 && (rect.right > innerWidth + 2 || rect.left < -2) && getComputedStyle(element).position !== 'fixed'; }).slice(0,12).map(element => ({ tag: element.tagName, className: typeof element.className === 'string' ? element.className : '', right: Math.round(element.getBoundingClientRect().right), left: Math.round(element.getBoundingClientRect().left) })) }));
+      assert.ok(bounds.page <= bounds.viewport + 2, route + ' mobile bounds ' + JSON.stringify(bounds));
       for (const href of await page.locator('a[href^="/"]').evaluateAll(anchors => anchors.map(a => a.getAttribute('href')))) links.add(href.split('#')[0]);
       if (basePath) assert.ok([...links].every(href => href.startsWith(basePath + '/') || href === basePath), 'Native links preserve the repository prefix');
     }
