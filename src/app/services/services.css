@@ -94,3 +94,17 @@
 .servicesPage .servicesSelection .handles i{width:clamp(8px,1vw,16px);height:clamp(8px,1vw,16px)}
 @media(max-width:1000px){.servicesPage .processCard{padding:30px 30px 160px}.servicesPage .capabilityChip{max-width:40%;padding:12px;left:8%}.servicesPage .capabilityChip:nth-of-type(2),.servicesPage .capabilityChip:nth-of-type(3){left:55%}.servicesPage .capabilityChip:nth-of-type(4){left:8%}}
 @media(max-width:600px){.servicesPage .capabilityGroup{min-height:520px}}
+
+/* Expanded resume-backed skills directory: natural-flow cards avoid overlapping chips. */
+.servicesPage .technicalSkillsSection{padding-block:clamp(55px,8vw,110px);max-width:1200px}
+.servicesPage .technicalSkillsSection .serviceSectionHeading h2{font-size:clamp(38px,7vw,90px);overflow-wrap:anywhere}
+.servicesPage .technicalSkillsIntro{max-width:780px;line-height:1.7;margin:24px 0 34px}
+.servicesPage .technicalSkillsGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.servicesPage .technicalSkillGroup{min-width:0;padding:clamp(18px,2.5vw,30px);border:1px solid var(--ink);background:var(--sand)}
+.servicesPage .technicalSkillGroup:nth-child(4n+2){background:var(--mint)}
+.servicesPage .technicalSkillGroup:nth-child(4n+3){background:#fce5ef}
+.servicesPage .technicalSkillGroup:nth-child(4n+4){background:#e1f3fd}
+.servicesPage .technicalSkillGroup h3{font-size:clamp(19px,2.5vw,28px);line-height:1.2;margin-bottom:20px}
+.servicesPage .technicalSkillGroup ul{display:flex;flex-wrap:wrap;gap:9px;list-style:none;padding:0;margin:0}
+.servicesPage .technicalSkillGroup li{max-width:100%;min-width:0;overflow-wrap:anywhere;padding:8px 10px;background:white;border:1px solid var(--ink);font:12px/1.5 var(--font-code),monospace}
+@media(max-width:700px){.servicesPage .technicalSkillsGrid{grid-template-columns:minmax(0,1fr)}}
