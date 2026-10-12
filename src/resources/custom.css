@@ -284,3 +284,27 @@ body a.studioButton:is(:hover,:focus-visible){background:white;color:var(--ink);
 :is(.galleryGrid,.relatedProjects) .folderProject:is(:hover,:focus-within) .projectTags>span{background:#fff;color:var(--ink)}
 :is(.galleryGrid,.relatedProjects) .folderProject:is(:hover,:focus-within) .projectPicture{border-color:var(--ink)}
 @media(prefers-reduced-motion:reduce){:is(.galleryGrid,.relatedProjects) .folderProject{transition:none}}
+
+/* Hiring-focused proof points and clear conversion links */
+.hiringProof{padding:clamp(40px,6vw,85px) 0;border-top:1px solid #ddd;border-bottom:1px solid #ddd}
+.hiringProof>.handwritten{font-size:clamp(23px,3vw,35px);margin-bottom:22px}
+.hiringProofGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.hiringProofGrid article{padding:24px;background:#f5dda1;display:flex;flex-direction:column;gap:10px;min-width:0}
+.hiringProofGrid article:nth-child(2){background:#a1dfc5}.hiringProofGrid article:nth-child(3){background:#c2ebfa}
+.hiringProofGrid strong{font:800 clamp(30px,5vw,64px)/1 var(--font-heading),monospace}.hiringProofGrid span{font-size:14px;line-height:1.5}
+.hiringProofLinks{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.experienceProof{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}.experienceProof span{padding:10px 12px;background:var(--sand);font-size:13px}.experienceProof strong{font-weight:800}
+.contactPage .contactDirect{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.contactPage .contactDirect a{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--ink);padding:12px 16px;background:#fff;color:var(--ink);font:12px/1.4 var(--font-code),monospace;text-transform:uppercase;overflow-wrap:anywhere}
+.contactPage .contactDirect a:is(:hover,:focus-visible){background:var(--ink);color:#fff}
+/* Responsive project cards, dark hover surfaces and readable copy */
+.galleryGrid .folderSmall,.relatedProjects .folderSmall{min-width:0;overflow:visible;background:#fff;padding-bottom:16px}
+:is(.galleryGrid,.relatedProjects) .folderSmall .folderContent{min-width:0;gap:18px}
+:is(.galleryGrid,.relatedProjects) .folderSmall .folderCopy{padding:8px 16px 16px;min-width:0;overflow-wrap:anywhere}
+:is(.galleryGrid,.relatedProjects) .folderSmall :is(h2,h3){font-size:clamp(24px,3vw,34px);overflow-wrap:anywhere}
+:is(.galleryGrid,.relatedProjects) .folderSmall .projectPicture{width:100%;max-width:100%;aspect-ratio:1.5;overflow:hidden;border:8px solid #ededed}
+:is(.galleryGrid,.relatedProjects) .folderSmall:is(:hover,:focus-within) :is(.folderTab,.folderContent,.folderCopy){background:var(--ink);color:#fff}
+:is(.galleryGrid,.relatedProjects) .folderSmall:is(:hover,:focus-within) :is(h2,h3,p,.projectDate,.projectLink,.folderCopy a){color:#fff}
+:is(.galleryGrid,.relatedProjects) .folderSmall:is(:hover,:focus-within) .projectTags span{background:#fff;color:var(--ink)}
+:is(.galleryGrid,.relatedProjects) .folderSmall .projectPicture img{object-fit:contain}
+@media(max-width:760px){.hiringProofGrid{grid-template-columns:1fr}.hiringProofLinks{flex-direction:column;align-items:stretch}.hiringProofLinks a{text-align:center}.experienceProof{flex-direction:column}}
