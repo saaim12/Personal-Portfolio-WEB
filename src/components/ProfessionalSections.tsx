@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { Mark } from "./Studio";
 
 const sections = [
-  { id: "bio", label: "My Story / My Bio", icon: "flower" },
-  { id: "career", label: "My Work / Work Experience", icon: "pinwheel" },
+  { id: "bio", label: "Story / Bio", icon: "flower" },
+  { id: "career", label: "My Work", icon: "pinwheel" },
 ];
 
 export function ProfessionalSections() {
