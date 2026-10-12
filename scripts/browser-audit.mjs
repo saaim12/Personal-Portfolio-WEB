@@ -92,7 +92,7 @@ assert.equal(await page.locator('.roleCard li').count(),14,'Both roles show all 
 assert.equal(await page.locator('.roleCard details').count(),0,'Experience details are not collapsed');
 await page.locator('.professionalSections a[href="#career"]').click();
 await page.waitForFunction(()=>document.querySelector('.professionalSections a[href="#career"]')?.getAttribute('aria-current')==='location');
-assert.equal(await page.locator('#career h2').textContent(),'My Work / Work Experience');
+assert.equal(await page.locator('#career h2').textContent(),'My Work Experience');
 await page.goto(base+'/contact');
 await page.getByRole('button',{name:'Next (1/2)',exact:true}).click();
 assert.equal(await page.locator('#contact-name').count(),0);
