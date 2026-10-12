@@ -11,7 +11,7 @@ import { sitePath } from "@/utils/sitePath";
 import { jsonLd, personJsonLd, profilePageJsonLd, breadcrumbJsonLd } from "@/resources/schema";
 
 export async function generateMetadata() {
-  return pageMeta({ title: "Professional Experience and Story", description: "Explore Saaim Abdullah's engineering experience at Fitter Health and Expertflow: backend services, cloud deployments, data pipelines, and measured results.", path: "/professional-experience" });
+  return pageMeta({ title: "Professional Experience", description: "Explore Saaim Abdullah's engineering experience at Fitter Health and Expertflow: backend services, cloud deployments, data pipelines, and measured results.", path: "/professional-experience" });
 }
 
 const skills = [
@@ -24,8 +24,8 @@ const skills = [
 ];
 
 export default function ProfessionalExperience() {
-  return <div className="studioPage"><script {...jsonLd(personJsonLd)} /><script {...jsonLd(profilePageJsonLd)} /><script {...jsonLd(breadcrumbJsonLd([{name:"Home",path:"/"},{name:"Professional Experience and Story",path:"/professional-experience"}]))} /><div className="professionalLayout studioContainer"><ProfessionalSections /><div className="experiencePage">
-    <PageHeading title="Professional Experience and Story" note="the story so far"><p>Customer-facing applications, distributed services, and data pipelines. From requirements to deployment and handover.</p></PageHeading>
+  return <div className="studioPage"><script {...jsonLd(personJsonLd)} /><script {...jsonLd(profilePageJsonLd)} /><script {...jsonLd(breadcrumbJsonLd([{name:"Home",path:"/"},{name:"Professional Experience",path:"/professional-experience"}]))} /><div className="professionalLayout studioContainer"><ProfessionalSections /><div className="experiencePage">
+    <PageHeading title="Professional Experience" note="the work and the story"><p>Backend engineering, cloud delivery, and data systems. Previously at Expertflow and Fitter Health, where I worked on production APIs, communication workflows, and healthcare software.</p><div className="experienceProof"><span><strong>77%</strong> faster admin responses</span><span><strong>135</strong> passing handover tests</span><span><strong>106</strong> PostgreSQL tables</span></div><SiteAnchor href="#career" className="outlineButton">Jump to work experience ↗</SiteAnchor></PageHeading>
     <section id="bio" className="experienceFrame bioFrame combinedStoryFrame" aria-labelledby="bio-heading"><span className="frameLabel">The person behind the work</span><Handles />
       <h2 id="bio-heading" className="displayType">My Story / My Bio</h2>
       <div className="bioOpening">
