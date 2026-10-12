@@ -42,11 +42,6 @@ const engineeringServices = [
   { title: "Data Engineering", text: "Build recoverable ingestion, transformation, and analytics pipelines with Kafka, PySpark, Airflow, AWS Glue, EMR, and PostgreSQL. Model warehouse data with star schemas, validation, deduplication, and bronze/silver/gold layers.", examples: ["Streaming & batch ETL", "Data modelling", "Star schemas", "Data quality"] },
   { title: "AI Engineering", text: "Develop retrieval-augmented applications, document ingestion, multilingual embeddings, tenant-isolated vector search, and recommendation APIs. Connect model serving with secure backend services and measurable workflows.", examples: ["RAG & pgvector", "LLM integration", "Recommendations", "Model APIs"] },
 ] as const;
-const proficiencyGroups = [
-  { title: "Applied in professional delivery", description: "Technologies documented in my work at Expertflow and Fitter Health.", skills: ["Python", "Django / DRF", "Node.js", "JavaScript / TypeScript", "React / Next.js", "Angular", "PostgreSQL", "Redis", "Data Modelling", "AWS", "Docker", "REST APIs", "ETL", "PySpark", "Airflow"] },
-  { title: "Applied in projects", description: "Technologies demonstrated in portfolio and engineering projects.", skills: ["Kafka", "FastAPI", "Flask", "pgvector", "RAG", "TensorFlow", "scikit-learn", "Recommendation Systems", "Firebase", "gRPC / Protobuf"] },
-  { title: "Additional technologies", description: "Technologies in my broader toolkit; depth of commercial production usage varies.", skills: ["Spring Boot", "Java", "C++", "C#", "Kubernetes", "SQL Server", "DynamoDB", "Linux", "Jira", "Postman"] },
-] as const;
 const faqs = [
   ["How do you design reliable backend systems?", "I start with domain rules, API contracts, database constraints, and failure paths. At Fitter Health, I addressed silent notification loss, documented the services, and handed over a platform with 135 passing tests. Tests and recovery paths support the delivery; they are not a claim of zero production failures."],
   ["How do you keep customer data separate in a RAG system?", "In my multilingual RAG project, tenant identity comes from verified JWT authentication. Documents and chunks belong to a tenant, and pgvector retrieval is filtered by that identity before context reaches Gemini. Quotas limit usage separately from authorization; a caller-supplied tenant ID is not trusted."],
@@ -63,14 +58,9 @@ export default function Services(){return <div className="studioPage servicesPag
     <div className="serviceSectionHeading"><span className="handwritten">areas of focus</span><h2 id="engineering-services-heading" className="displayType">Engineering services</h2></div>
     <div className="engineeringServicesGrid">{engineeringServices.map(item=><article className="engineeringServiceCard" key={item.title}><h3>{item.title}</h3><p>{item.text}</p><ul>{item.examples.map(example=><li key={example}>{example}</li>)}</ul></article>)}</div>
   </section>
-  <section className="proficiencySection studioContainer" aria-labelledby="proficiency-heading">
-    <div className="serviceSectionHeading"><h2 id="proficiency-heading" className="displayType">Experience by context</h2></div>
-    <p className="technicalSkillsIntro">Grouped by where I have applied the technologies, rather than assigning unsupported numerical proficiency ratings.</p>
-    <div className="proficiencyGrid">{proficiencyGroups.map(group=><article className="proficiencyCard" key={group.title}><h3>{group.title}</h3><p>{group.description}</p><ul>{group.skills.map(skill=><li key={skill}>{skill}</li>)}</ul></article>)}</div>
-  </section>
   <section className="technicalSkillsSection studioContainer" aria-labelledby="technical-skills-heading">
     <div className="serviceSectionHeading"><span className="handwritten">technologies and practices</span><h2 id="technical-skills-heading" className="displayType">Technical skills</h2></div>
-    <p className="technicalSkillsIntro">The technologies and engineering practices I work with, study, and use across backend, frontend, data, AI, and cloud projects.</p>
+    <p className="technicalSkillsIntro">A consolidated toolkit across professional delivery, independent projects, and ongoing learning. Commercial experience varies by technology.</p>
     <div className="technicalSkillsGrid">{technicalSkills.map(group => <article className="technicalSkillGroup" key={group.title}><h3>{group.title}</h3><ul>{group.skills.map(skill => <li key={skill}>{skill}</li>)}</ul></article>)}</div>
   </section>
   <section className="serviceFaqSection studioContainer" aria-labelledby="faq-heading"><div className="serviceSectionHeading"><h2 id="faq-heading" className="displayType">FAQ</h2></div><div className="serviceFaqGrid">{faqs.map(([question,answer],index)=><article className="serviceFaq" key={question}><div className="faqLabel">Question</div><div className="faqQuestion"><span className={`faqUser faqTone${index}`} aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="17" r="8"/><path d="M8 43v-6a16 16 0 0 1 32 0v6Z"/></svg></span><div><span className="faqUsername">User</span><h3>{question}</h3><span className="faqReaction">✦ 1</span></div></div><div className="faqAnswer"><Image src={person.avatar} width={48} height={48} alt="Saaim Abdullah"/><p>{answer}</p></div></article>)}</div></section>
