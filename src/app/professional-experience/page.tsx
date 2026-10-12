@@ -53,9 +53,8 @@ export default function ProfessionalExperience() {
         <figure className="editorialPhoto"><Image src={portraits.withChickenSmiling} width={1200} height={1600} alt="Saaim smiling while holding a chicken" /><figcaption>These are the moments that make me smile.</figcaption></figure>
         <figure className="editorialPhoto personalVideo"><video autoPlay loop muted playsInline controls preload="metadata" poster={sitePath(portraits.duckVideoPoster)} aria-label="Saaim spending time with a duck"><source src={sitePath(portraits.withDuckVideo)} type="video/mp4" />Your browser does not support this video. <SiteAnchor href={portraits.withDuckVideo}>Watch the duck video</SiteAnchor>.</video><figcaption>Spending a little time with my duck.</figcaption></figure>
       </div>
-      <p className="petsClosing"><strong>I love my pets, and I like to think they love me just as much. ❤️</strong></p>
     </section>
-    <section id="career" className="experienceFrame careerFrame" aria-labelledby="career-heading"><span className="frameLabel">My work and experience</span><Handles /><h2 id="career-heading" className="displayType">My Work / Work Experience</h2><p className="careerIntro">The roles, responsibilities, and results, with the full details right here.</p>
+    <section id="career" className="experienceFrame careerFrame" aria-labelledby="career-heading"><span className="frameLabel">My work and experience</span><Handles /><h2 id="career-heading" className="displayType">My Work Experience</h2><p className="careerIntro">The roles, responsibilities, and results, with the full details right here.</p>
     {roles.map(role => <section className="roleCard" key={role.company} aria-label={role.company + " experience"}>
       <div className="roleHeader"><div><h3>{role.company}</h3><p>{role.title}</p></div><div className="stickyNote sand"><p>{role.dates}</p><p>{role.location}</p></div></div>
       <ul>{role.bullets.map(bullet => <li key={bullet}>{bullet}</li>)}</ul><p className="roleTech">{role.tech}</p>
