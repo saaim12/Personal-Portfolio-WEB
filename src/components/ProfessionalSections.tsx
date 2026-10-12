@@ -6,7 +6,7 @@ import { Mark } from "./Studio";
 
 const sections = [
   { id: "bio", label: "My Story / My Bio", icon: "flower" },
-  { id: "career", label: "My Work / Work Experience", icon: "pinwheel" },
+  { id: "career", label: "My Work Experience", icon: "pinwheel" },
 ];
 
 export function ProfessionalSections() {
