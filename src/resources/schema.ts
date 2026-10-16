@@ -175,3 +175,51 @@ export const profilePageJsonLd = {
   "@type": "ProfilePage",
   mainEntity: { "@id": PERSON_ID },
 };
+
+
+/**
+ * Structured indexes describe the same projects and services visitors can
+ * already read on the landing pages. No hidden or crawler-only content.
+ */
+export const projectIndexJsonLd = (
+  projects: ReadonlyArray<{ slug: string; title: string; description: string }>,
+) => ({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": `${baseURL}/projects#project-list`,
+  name: "Software engineering projects",
+  numberOfItems: projects.length,
+  itemListElement: projects.map((project, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    item: {
+      "@type": "CreativeWork",
+      "@id": `${baseURL}/projects/${project.slug}#project`,
+      url: `${baseURL}/projects/${project.slug}`,
+      name: project.title,
+      description: project.description,
+    },
+  })),
+});
+
+export const serviceIndexJsonLd = (
+  services: ReadonlyArray<{ title: string; text: string }>,
+) => ({
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": `${baseURL}/services#service-list`,
+  name: "Engineering services",
+  numberOfItems: services.length,
+  itemListElement: services.map((service, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    item: {
+      "@type": "Service",
+      "@id": `${baseURL}/services#service-${index + 1}`,
+      url: `${baseURL}/services#engineering-services-heading`,
+      name: service.title,
+      description: service.text,
+      provider: { "@id": PERSON_ID },
+    },
+  })),
+});
