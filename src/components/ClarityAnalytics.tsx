@@ -1,12 +1,12 @@
 import Script from "next/script";
 
 /**
- * Microsoft Clarity is optional, production-only and disabled for the
- * static GitHub Pages mirror. Set NEXT_PUBLIC_CLARITY_PROJECT_ID on Vercel.
+ * Microsoft Clarity runs only on Vercel production, not the static Pages mirror.
+ * NEXT_PUBLIC_CLARITY_PROJECT_ID can override the portfolio's project ID.
  */
 export function ClarityAnalytics() {
-  const projectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID?.trim();
-  if (!projectId || process.env.VERCEL_ENV !== "production" || process.env.NEXT_PUBLIC_STATIC_EXPORT === "true") {
+  const projectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID?.trim() || "yz2e55wz6z";
+  if (process.env.VERCEL_ENV !== "production" || process.env.NEXT_PUBLIC_STATIC_EXPORT === "true") {
     return null;
   }
 
