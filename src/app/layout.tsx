@@ -13,6 +13,7 @@ import { pageMeta } from "@/resources/seo";
 import { jsonLd, webSiteJsonLd } from "@/resources/schema";
 
 import { VercelMonitoring } from "@/components/VercelMonitoring";
+import { ClarityAnalytics } from "@/components/ClarityAnalytics";
 
 export async function generateMetadata() {
   return {
@@ -109,6 +110,7 @@ export default function RootLayout({
             </div>
           </main>
           <Footer />
+          <ClarityAnalytics />
           {process.env.VERCEL_ENV === "production" &&
             process.env.NEXT_PUBLIC_STATIC_EXPORT !== "true" && <VercelMonitoring />}
         </body>
