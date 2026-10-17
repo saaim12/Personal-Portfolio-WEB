@@ -14,6 +14,7 @@ import { jsonLd, webSiteJsonLd } from "@/resources/schema";
 
 import { VercelMonitoring } from "@/components/VercelMonitoring";
 import { ClarityAnalytics } from "@/components/ClarityAnalytics";
+import { AhrefsAnalytics } from "@/components/AhrefsAnalytics";
 
 export async function generateMetadata() {
   return {
@@ -111,6 +112,7 @@ export default function RootLayout({
           </main>
           <Footer />
           <ClarityAnalytics />
+          <AhrefsAnalytics />
           {process.env.VERCEL_ENV === "production" &&
             process.env.NEXT_PUBLIC_STATIC_EXPORT !== "true" && <VercelMonitoring />}
         </body>
