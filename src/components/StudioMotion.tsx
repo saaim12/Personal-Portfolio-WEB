@@ -81,7 +81,7 @@ export function StudioMotion() {
       cursor.current.style.opacity = "1";
       cursor.current.classList.toggle("cursorActive", target instanceof Element && !!target.closest("a, button"));
       if (blend.current) {
-        const overHeroText = target instanceof Element && !!target.closest(".studioHome #hero-name") && !document.documentElement.hasAttribute("data-studio-welcome");
+        const overHeroText = target instanceof Element && !!target.closest(".studioHome #hero-name");
         blend.current.style.translate = `${event.clientX}px ${event.clientY}px`;
         blend.current.style.opacity = overHeroText ? "1" : "0";
         cursor.current.classList.toggle("cursorSelection", overHeroText);
@@ -204,12 +204,10 @@ export function StudioMotion() {
     };
 
     start();
-    window.addEventListener("studio-welcome-end", start);
     preference.addEventListener("change", start);
     compact.addEventListener("change", start);
     return () => {
       reset();
-      window.removeEventListener("studio-welcome-end", start);
       preference.removeEventListener("change", start);
       compact.removeEventListener("change", start);
     };

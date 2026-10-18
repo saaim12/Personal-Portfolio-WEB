@@ -151,14 +151,7 @@ body .navContact:is(:hover,:focus-visible){background:var(--pink);color:white}
 @media(max-width:1199px){.professionalLayout{gap:40px;grid-template-columns:70px minmax(0,1fr)}.experienceFrame{padding:32px}.bioNotes{grid-template-columns:minmax(0,1fr) 150px;gap:24px}.storyCard{padding:24px}.storyCard h3{font-size:27px}.storyAnnotation{font-size:20px}}
 @media(max-width:809px){.professionalLayout{display:block}.professionalSections{position:relative;top:auto;flex-direction:row;width:max-content;gap:12px;margin-top:40px;padding:8px}.professionalSections a{flex-direction:row;padding:8px 12px}.professionalSections .mark{width:18px;height:18px}.experiencePage .pageHeading{padding-top:40px}.storyFrame{margin-inline:0}.frameSticker{right:12px}.experienceFrame>.displayType{font-size:48px}.storyCard{width:66%}.storyAnnotation{left:calc(100% + 16px);width:44%;font-size:18px}.storyCard:nth-child(even) .storyAnnotation{right:calc(100% + 16px)}}
 @media(max-width:520px){.experienceFrame{padding:24px;margin-top:75px}.bioFrame{margin-top:8px}.bioFrame>h2{font-size:29px}.bioNotes{grid-template-columns:1fr;gap:28px}.bioNotes .bioPortrait{width:160px;justify-self:center}.personalNote{max-width:100%}.storyCards{gap:28px}.storyCard{width:100%;padding:22px}.storyCard h3{font-size:28px}.storyAnnotation,.storyCard:nth-child(even) .storyAnnotation{position:static;display:block;width:auto;margin:22px 0 4px;font-size:23px}.storyFrame{padding-bottom:66px}.careerFrame{padding-bottom:65px}.careerFrame .roleHeader :is(h2,h3){font-size:34px}.experienceFrame>.displayType{font-size:42px}.frameLabel{left:8px;font-size:10px}.professionalSections{gap:4px}.professionalSections a{padding:8px 10px}.roleCard ul{padding-left:18px}.careerFrame .aboutActions{align-items:flex-start}}
-/* Home greeting, selection cursor, and expanding portrait bubbles from the reference. */
-.homeWelcome{position:fixed;inset:88px 0 0;z-index:95;display:grid;place-items:center;pointer-events:none;background-color:white;background-image:linear-gradient(#f3f3f3 1px,transparent 1px),linear-gradient(90deg,#f3f3f3 1px,transparent 1px);background-size:100px 100px;animation:welcomeExit .35s ease-in 1.75s both}
-.welcomeBubble{border:2px solid var(--ink);border-radius:0 22px 22px;background:var(--blue);padding:14px 20px;font-size:clamp(32px,4vw,50px);line-height:1.2;animation:welcomePop .45s cubic-bezier(.2,.8,.2,1) both}
-.welcomeBubble>span{display:block;white-space:nowrap;clip-path:inset(0 100% 0 0);animation:welcomeType .7s steps(10,end) .2s forwards}
-@keyframes welcomePop{from{opacity:0;scale:.8;rotate:-8deg}to{opacity:1;scale:1;rotate:0deg}}
-@keyframes welcomeType{to{clip-path:inset(0)}}
-@keyframes welcomeExit{to{opacity:0;visibility:hidden}}
-@media(prefers-reduced-motion:reduce){.homeWelcome{animation:none!important;opacity:1;visibility:visible}}
+/* Selection cursor and expanding portrait bubbles. */
 .floatingAvatar{display:flex;align-items:center;border-radius:32px 32px 32px 0;z-index:3;overflow:hidden;color:var(--ink)}.floatingAvatar img{flex:none}.avatarGreeting{display:block;max-width:0;opacity:0;overflow:hidden;white-space:nowrap;font-size:16px;transition:max-width .4s cubic-bezier(.22,1,.36,1),opacity .25s,padding .4s}.floatingAvatar:is(:hover,:focus-visible) .avatarGreeting{max-width:180px;padding-left:8px;opacity:1}
 .studioCursor>span{background:var(--ink);color:white;border-radius:14px;font-size:12px}.studioCursor.cursorSelection>i{opacity:0}
 .studioCursorBlend{position:fixed;top:0;left:0;width:clamp(240px,22vw,420px);aspect-ratio:1;background:white;mix-blend-mode:difference;pointer-events:none;z-index:149;opacity:0;transform:translate(-50%,-50%);transition:opacity .12s}
@@ -190,10 +183,6 @@ body a.studioButton:is(:hover,:focus-visible){background:white;color:var(--ink);
 
 .servicesPage .pageHeading h1>span[aria-hidden=true]{display:inline-block;padding:.02em .1em;animation:servicesHeadingPalette 2s steps(1,end) infinite}
 
-.homeWelcome .welcomeBubble{animation:none;opacity:0;transform:scale(.72) rotate(-3deg);transition:opacity .22s ease-out,transform .55s cubic-bezier(.22,1,.36,1)}
-.homeWelcome.isEntered .welcomeBubble{opacity:1;transform:scale(1) rotate(0)}
-.homeWelcome .welcomeBubble span{animation:none;clip-path:inset(0 100% 0 0);transition:clip-path .52s steps(8,end) .22s}
-.homeWelcome.isEntered .welcomeBubble span{clip-path:inset(0 0 0 0)}
 
 @keyframes mascotRevolve{0%{transform:rotate(0deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}50%,100%{transform:rotate(1080deg)}}
 @keyframes mascotRestBlink{0%,62%,66%,86%,90%,100%{scale:1 1}64%,88%{scale:1 .08}}
@@ -203,7 +192,7 @@ body a.studioButton:is(:hover,:focus-visible){background:white;color:var(--ink);
 @keyframes servicesHeadingPalette{0%{background:var(--blue)}25%{background:var(--yellow)}50%{background:var(--pink);color:#fff}75%{background:var(--green);color:var(--ink)}}
 
 @media(max-width:1000px){.studioHome .folderFeature{transform:none;filter:none}.studioHome .folderFeature .projectPicture img{transform:none}}
-@media(prefers-reduced-motion:reduce){.studioHome .folderFeature,.studioHome .folderFeature .projectPicture img{transform:none!important;filter:none!important}.studioHome .heroStatement .pinkInk,.studioHome .contactIntro .mascot,.servicesPage .contactIntro .mascot,.servicesPage .pageHeading h1>span[aria-hidden=true],.studioHome .floatingAvatar>img{animation:none!important}.homeWelcome .welcomeBubble,.homeWelcome .welcomeBubble span{transition:none!important;opacity:1;transform:none;clip-path:none}}
+@media(prefers-reduced-motion:reduce){.studioHome .folderFeature,.studioHome .folderFeature .projectPicture img{transform:none!important;filter:none!important}.studioHome .heroStatement .pinkInk,.studioHome .contactIntro .mascot,.servicesPage .contactIntro .mascot,.servicesPage .pageHeading h1>span[aria-hidden=true],.studioHome .floatingAvatar>img{animation:none!important}}
 
 /* Sequential Home folders: each following project physically covers the previous one. */
 @media(min-width:1001px) and (min-height:700px){
