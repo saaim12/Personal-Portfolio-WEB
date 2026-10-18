@@ -209,9 +209,9 @@ assert.equal(await staticPage.locator('#about-intro').evaluate(e=>getComputedSty
 await staticPage.close();
 const greetingPage=await browser.newPage({viewport:{width:1440,height:1000}});
 await greetingPage.goto(base+'/',{waitUntil:'domcontentloaded'});
-await greetingPage.locator('.welcomeBubble').waitFor({state:'visible'});
-assert.equal(await greetingPage.locator('.welcomeBubble').textContent(),'Hey, welcome!');
-await greetingPage.locator('.homeWelcome').waitFor({state:'detached'});
+assert.equal(await greetingPage.locator('.homeWelcome, .welcomeBubble').count(),0,'No blocking welcome intro is mounted');
+assert.equal(await greetingPage.locator('#hero-name').count(),1,'Home hero is present immediately');
+assert.equal(await greetingPage.locator('#hero-name').isVisible(),true,'Home hero can be viewed without waiting for a welcome screen');
 await greetingPage.locator('#hero-name').hover();
 assert.equal(await greetingPage.locator('.studioCursorBlend').evaluate(e=>getComputedStyle(e).mixBlendMode),'difference');
 await greetingPage.waitForFunction(()=>getComputedStyle(document.querySelector('.studioCursorBlend')).opacity==='1');

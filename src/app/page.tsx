@@ -9,14 +9,12 @@ import { Action, Handles, Mark, RevealText } from "@/components/Studio";
 import { StudioClock } from "@/components/StudioClock";
 import { featuredSlugs } from "@/resources/project-art";
 import { getProjects } from "@/utils/projects";
-import { HomeWelcome } from "@/components/HomeWelcome";
 function ScrollWords({ text }: { text: string }) {
   return text.split(/(\s+)/).map((word, index) => /\s/.test(word) ? word : <span className="homeRevealWord" key={index}>{word}</span>);
 }
 export async function generateMetadata() { return pageMeta({ title: home.title, description: home.description, path: home.path, image: home.image }); }
 export default function Home() {
   return <div className="studioHome">
-    <HomeWelcome />
     <script {...jsonLd(webPageJsonLd({ title: home.title, description: home.description, path: home.path, image: ogImageFor(home.title) }))} /><script {...jsonLd(personJsonLd)} />
     <section className="studioHero" aria-labelledby="hero-name">
       <StudioClock />
