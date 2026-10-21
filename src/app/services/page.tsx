@@ -1,4 +1,6 @@
 import { SiteAnchor } from "@/components/SiteAnchor";
+import Link from "next/link";
+import { specialties } from "@/resources/specialties";
 import type { CSSProperties } from "react";
 import Image from "@/components/SiteImage";
 import { Handles, RevealText, Mark, Action } from "@/components/Studio";
@@ -65,6 +67,12 @@ export default function Services(){return <div className="studioPage servicesPag
   <section className="engineeringServicesSection studioContainer" aria-labelledby="engineering-services-heading">
     <div className="serviceSectionHeading"><span className="handwritten">areas of focus</span><h2 id="engineering-services-heading" className="displayType">Engineering services</h2></div>
     <div className="engineeringServicesGrid">{engineeringServices.map(item=><article className="engineeringServiceCard" key={item.title}><h3>{item.title}</h3><p>{item.text}</p><ul>{item.examples.map(example=><li key={example}>{example}</li>)}</ul></article>)}</div>
+  </section>
+  <section className="engineeringServicesSection studioContainer" aria-labelledby="engineering-deep-dives">
+    <div className="serviceSectionHeading"><span className="handwritten">from practice to architecture</span><h2 id="engineering-deep-dives" className="displayType">Explore the engineering</h2></div>
+    <p className="technicalSkillsIntro">These focused technical pages explain how I approach each system, what can go wrong, and where existing case studies demonstrate the implementation.</p>
+    <div className="engineeringServicesGrid">{specialties.map(item=><article className="engineeringServiceCard" key={item.slug}><h3><Link href={`/expertise/${item.slug}`}>{item.title} ↗</Link></h3><p>{item.summary}</p><p><Link href={`/expertise/${item.slug}`}>Approach and project evidence ↗</Link></p></article>)}</div>
+    <p style={{marginTop:28}}><Link href="/engineering-notes">Read engineering decision guides ↗</Link></p>
   </section>
   <section className="technicalSkillsSection studioContainer" aria-labelledby="technical-skills-heading">
     <div className="serviceSectionHeading"><span className="handwritten">technologies and practices</span><h2 id="technical-skills-heading" className="displayType">Technical skills</h2></div>
