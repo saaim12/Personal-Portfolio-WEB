@@ -92,7 +92,11 @@ try {
   const llms = await fetch(origin + '/llms.txt');
   assert.equal(llms.status, 200);
   assert.ok(llms.headers.get('content-type').includes('text/plain'));
-  assert.ok((await llms.text()).includes('Saaim Abdullah'));
+  const readingIndex = await llms.text();
+  assert.ok(readingIndex.includes('Saaim Abdullah'));
+  for (const url of locations) {
+    assert.ok(readingIndex.includes(url), 'llms.txt should link to every published sitemap route: ' + url);
+  }
   await page.goto(origin + '/professional-experience', { waitUntil: 'networkidle' });
   assert.ok(await page.locator('video').evaluate(video => video.loop && video.muted && video.controls && video.paused), 'Accessible reel respects reduced motion');
   fs.mkdirSync('.audit', { recursive: true });
