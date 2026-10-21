@@ -1,4 +1,8 @@
 import { SiteAnchor } from "@/components/SiteAnchor";
+import Link from "next/link";
+import { specialties } from "@/resources/specialties";
+import { engineeringNotes } from "@/resources/engineering-notes";
+import "@/app/expertise/editorial.css";
 import Image from "@/components/SiteImage";
 import { home, person, portraits, social } from "@/resources/content";
 import { pageMeta, ogImageFor } from "@/resources/seo";
@@ -44,6 +48,13 @@ export default function Home() {
       <div className="workHeading"><span className="handwritten">explore my work!<span className="scribble" aria-hidden="true" /></span><h2 id="featured-heading" className="displayType"><RevealText text="Featured" /><br /><RevealText text="works" /></h2><p className="stickyNote sand">Real problems, thoughtful decisions,<br />and software that gets things done.</p></div>
       <Projects only={featuredSlugs} preview />
       <div className="allWorkAction"><Action href="/projects">All {getProjects().length} projects</Action><SiteAnchor href="/professional-experience" className="quietLink">Explore my experience ↗</SiteAnchor></div>
+    </section>
+    <section className="engineeringHub studioContainer" aria-labelledby="home-engineering-focus">
+      <span className="engineeringEyebrow">WHAT I BUILD / HOW I THINK</span>
+      <h2 id="home-engineering-focus" className="engineeringTitle">Engineering behind the work.</h2>
+      <p className="engineeringLead">Detailed technical approaches linked to real case studies—not a generic stack of buzzwords. Explore how I design backend APIs, data pipelines, AI retrieval, cloud delivery and dependable product systems.</p>
+      <div className="engineeringCardGrid">{specialties.slice(0,4).map(item=><Link className="engineeringCard" href={`/expertise/${item.slug}`} key={item.slug}><small>ENGINEERING PRACTICE</small><h3>{item.title}</h3><p>{item.summary}</p><span className="engineeringArrow">See case-study evidence ↗</span></Link>)}</div>
+      <div className="engineeringClosing"><h3>Technical architecture notes</h3><p>{engineeringNotes.slice(0,2).map((note,index)=><span key={note.slug}>{index>0?" · ":""}<Link href={`/engineering-notes/${note.slug}`}>{note.title} ↗</Link></span>)}</p><p><Link href="/expertise">View all specialties ↗</Link> · <Link href="/engineering-notes">Read all notes ↗</Link></p></div>
     </section>
     <Contact animated />
   </div>;
