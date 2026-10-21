@@ -5,6 +5,8 @@ const routes = {
   "/professional-experience": true,
   "/projects": true,
   "/services": true,
+  "/expertise": true,
+  "/engineering-notes": true,
   "/journal": true,
   "/contact": true,
 };

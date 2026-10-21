@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 
 import { getProjects } from "@/utils/projects";
+import { specialties } from "@/resources/specialties";
+import { engineeringNotes } from "@/resources/engineering-notes";
 import { baseURL, routes as routesConfig } from "@/resources/once-ui.config";
 import { SITE_LAST_MODIFIED } from "@/resources/seo";
 export const dynamic = "force-static";
@@ -29,6 +31,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const meta: Record<string, RouteMeta> = {
     "/": { lastModified: SITE_LAST_MODIFIED, changeFrequency: "monthly", priority: 1 },
     "/projects": { lastModified: newestPost, changeFrequency: "monthly", priority: 0.9 },
+    "/expertise": { lastModified: "2026-10-21", changeFrequency: "monthly", priority: 0.9 },
+    "/engineering-notes": { lastModified: "2026-10-21", changeFrequency: "monthly", priority: 0.85 },
     "/professional-experience": { lastModified: SITE_LAST_MODIFIED, changeFrequency: "monthly", priority: 0.8 },
   };
 
@@ -43,5 +47,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }),
     }));
 
-  return [...pages, ...works];
+  const expertisePages=specialties.map(item=>({
+    url:`${baseURL}/expertise/${item.slug}`,
+    lastModified:"2026-10-21",
+    changeFrequency:"monthly" as const,
+    priority:0.8,
+  }));
+  const notes=engineeringNotes.map(item=>({
+    url:`${baseURL}/engineering-notes/${item.slug}`,
+    lastModified:"2026-10-21",
+    changeFrequency:"monthly" as const,
+    priority:0.75,
+  }));
+  return [...pages, ...works, ...expertisePages, ...notes];
 }
