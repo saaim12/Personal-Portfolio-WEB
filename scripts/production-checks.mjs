@@ -92,7 +92,21 @@ try {
   const llms = await fetch(origin + '/llms.txt');
   assert.equal(llms.status, 200);
   assert.ok(llms.headers.get('content-type').includes('text/plain'));
-  assert.ok((await llms.text()).includes('Saaim Abdullah'));
+  const readingIndex = await llms.text();
+  assert.ok(readingIndex.includes('Saaim Abdullah'));
+  for (const route of [
+    '/expertise/backend-api-engineering',
+    '/expertise/data-engineering-pipelines',
+    '/expertise/rag-ai-engineering',
+    '/expertise/aws-cloud-devops',
+    '/expertise/full-stack-saas-products',
+    '/expertise/distributed-systems-reliability',
+    '/expertise/recommendation-ml-systems',
+    '/engineering-notes/reliable-background-jobs-webhooks-idempotency',
+    '/engineering-notes/tenant-isolated-rag-with-pgvector',
+    '/engineering-notes/kafka-spark-airflow-pipeline-design',
+    '/engineering-notes/django-nextjs-aws-application-delivery'
+  ]) assert.ok(readingIndex.includes('https://saaim.site' + route), 'Missing optional reading index entry: ' + route);
   await page.goto(origin + '/professional-experience', { waitUntil: 'networkidle' });
   assert.ok(await page.locator('video').evaluate(video => video.loop && video.muted && video.controls && video.paused), 'Accessible reel respects reduced motion');
   fs.mkdirSync('.audit', { recursive: true });
