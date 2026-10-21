@@ -67,3 +67,28 @@ test("project image paths retain supported final assets", () => {
     }
   }
 });
+
+
+test("portfolio specialties and engineering notes use unique routes and real projects", async () => {
+  const { specialties } = await import("../src/resources/specialties.ts");
+  const { engineeringNotes } = await import("../src/resources/engineering-notes.ts");
+  assert.equal(specialties.length, 7);
+  assert.equal(engineeringNotes.length, 4);
+  const keys = [...specialties.map(s=>"expertise/"+s.slug),...engineeringNotes.map(n=>"engineering-notes/"+n.slug)];
+  assert.equal(new Set(keys).size, 11);
+  const known = new Set(projects.map(p=>p.slug));
+  for (const s of specialties) {
+    assert.ok(s.title.length+(" | Saaim Abdullah").length<=60, s.slug+" title is concise");
+    assert.ok(s.description.length>=120 && s.description.length<=160,s.slug+" meaningful description");
+    assert.ok(s.approach.length>=3,s.slug+" implementation steps");
+    assert.ok(s.relatedProjects.length>=1,s.slug+" project evidence");
+    for (const project of s.relatedProjects) assert.ok(known.has(project.slug),s.slug+" invalid project "+project.slug);
+  }
+  for (const note of engineeringNotes) {
+    assert.ok(note.title.length+(" | Saaim Abdullah").length<=60,note.slug+" title is concise");
+    assert.ok(note.description.length>=120 && note.description.length<=160,note.slug+" meaningful description");
+    assert.ok(note.sections.length>=5,note.slug+" detailed technical sections");
+    assert.ok(specialties.some(s=>s.slug===note.relatedSpecialty),note.slug+" internal specialty link");
+    for (const project of note.proof) assert.ok(known.has(project.slug),note.slug+" invalid project "+project.slug);
+  }
+});
