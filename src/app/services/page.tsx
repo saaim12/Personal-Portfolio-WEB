@@ -11,6 +11,7 @@ import { Contact } from "@/components/Contact";
 import { pageMeta } from "@/resources/seo";
 import { ChapterArtwork, ChapterBoundary, ProcessArtwork, ProcessArrow, StepPointer } from "./ServiceArtwork";
 import "./services.css";
+import "../expertise/editorial.css";
 
 export async function generateMetadata(){return pageMeta({title:"Services",description:"Software engineering by Saaim Abdullah: backend APIs, full stack products, data and AI systems, and cloud delivery from architecture to handover.",path:"/services"});}
 
@@ -71,7 +72,7 @@ export default function Services(){return <div className="studioPage servicesPag
   <section className="engineeringServicesSection studioContainer" aria-labelledby="engineering-deep-dives">
     <div className="serviceSectionHeading"><span className="handwritten">from practice to architecture</span><h2 id="engineering-deep-dives" className="displayType">Explore the engineering</h2></div>
     <p className="technicalSkillsIntro">These focused technical pages explain how I approach each system, what can go wrong, and where existing case studies demonstrate the implementation.</p>
-    <div className="engineeringServicesGrid">{specialties.map(item=><article className="engineeringServiceCard" key={item.slug}><h3><Link href={`/expertise/${item.slug}`}>{item.title} ↗</Link></h3><p>{item.summary}</p><p><Link href={`/expertise/${item.slug}`}>Approach and project evidence ↗</Link></p></article>)}</div>
+    <div className="engineeringServicesGrid">{specialties.map(item=><article className="engineeringCard" key={item.slug}><h3><Link href={`/expertise/${item.slug}`}>{item.title} ↗</Link></h3><p>{item.summary}</p><p><Link href={`/expertise/${item.slug}`}>Approach and project evidence ↗</Link></p></article>)}</div>
     <p style={{marginTop:28}}><Link href="/engineering-notes">Read engineering decision guides ↗</Link></p>
   </section>
   <section className="technicalSkillsSection studioContainer" aria-labelledby="technical-skills-heading">
