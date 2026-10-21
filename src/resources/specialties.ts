@@ -101,7 +101,7 @@ stack:["Django","PostgreSQL","Celery","Redis","SQS","SNS","Node.js","Kafka"],
 relatedProjects:[{slug:"fitter-health-platform",label:"Notification recovery at Fitter Health",proof:"Delivery work that addressed silent notification loss and durable recovery."},{slug:"temporary-url-service",label:"Expiring URL service",proof:"A compact example of defining expiry and persistence limitations."}],
 outcome:"Failure-aware workflows with clear recovery and fewer silent inconsistencies.",
 tradeoff:"Retries without idempotency or reconciliation can amplify failures rather than repair them."
-}
+},
 {
 slug:"recommendation-ml-systems",title:"Recommendation & ML Serving Systems",
 description:"Recommendation system engineering with Python, FastAPI, Airflow, reproducible model artifacts, ranking signals, caching, and API evaluation.",
