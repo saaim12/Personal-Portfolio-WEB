@@ -102,5 +102,21 @@ relatedProjects:[{slug:"fitter-health-platform",label:"Notification recovery at 
 outcome:"Failure-aware workflows with clear recovery and fewer silent inconsistencies.",
 tradeoff:"Retries without idempotency or reconciliation can amplify failures rather than repair them."
 }
+{
+slug:"recommendation-ml-systems",title:"Recommendation & ML Serving Systems",
+description:"Recommendation system engineering with Python, FastAPI, Airflow, reproducible model artifacts, ranking signals, caching, and API evaluation.",
+summary:"I connect machine learning experiments to serving APIs that can be tested, monitored and versioned.",
+problem:"A recommendation model can look convincing in a notebook but fail when it meets missing users, new items or an out-of-date serving cache. I define how candidates are scored, how training artifacts reach the API and what fallback appears when a result cannot be produced.",
+audience:["Developers shipping an ML-powered product","Teams turning offline Python experiments into APIs","Products combining behavioral and content ranking signals"],
+approach:[
+{heading:"Make training and evaluation reproducible",detail:"Data splits, features and output artifacts need consistent identifiers. I record what the model learned from, how signals were weighted and which metrics can be calculated from available test data. A production claim requires representative traffic and feedback that a local experiment cannot provide.",checks:["Record dataset and feature version","Separate training from inference","Document evaluation metrics and known gaps"]},
+{heading:"Design a stable recommendation API",detail:"A serving endpoint must validate requests, handle users with no history and report missing models cleanly. Versionable files and safe model reloads prevent a partially written artifact from becoming live. Cache strategy has to respect model changes and personalized inputs.",checks:["Define fallbacks and empty recommendation behavior","Use versioned model artifacts","Test API latency and cold-start paths"]},
+{heading:"Monitor outcomes and operational cost",detail:"Offline ranking quality alone cannot prove usefulness. Serving logs, latency, error rates, data drift and eventual user outcomes matter. Expensive retraining and feature dependencies should follow observed product requirements, not arbitrary schedules.",checks:["Instrument failure and latency signals","Track model freshness","Plan controlled evaluation before major changes"]}
+],
+stack:["Python","FastAPI","pandas","scikit-learn","Airflow","Redis","Docker"],
+relatedProjects:[{slug:"movie-recommender-system",label:"Hybrid MovieLens recommendation project",proof:"Content similarity, item co-occurrence and popularity combined with FastAPI serving."},{slug:"ml-data-foundations",label:"Machine learning foundations",proof:"Reproducible Python experiments, model serialization and evaluation choices."}],
+outcome:"An inspectable ranking pipeline connected to an API, with explicit model versions and fallbacks.",
+tradeoff:"A simple, well-evaluated ranker is often more useful than a complex model without reliable training data or serving observability."
+},
 ];
 export const getSpecialty=(slug:string)=>specialties.find(x=>x.slug===slug);
