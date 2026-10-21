@@ -8,7 +8,7 @@ export const OG_WIDTH = 1200;
 export const OG_HEIGHT = 630;
 export const SITE_NAME = `${person.name}, software engineer`;
 
-export const SITE_LAST_MODIFIED = "2026-10-11";
+export const SITE_LAST_MODIFIED = "2026-10-21";
 
 export const ogImageFor = (_title: string) => "/images/social-preview.png";
 
