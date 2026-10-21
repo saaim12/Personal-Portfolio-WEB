@@ -29,7 +29,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       .sort()
       .at(-1) ?? SITE_LAST_MODIFIED;
   const meta: Record<string, RouteMeta> = {
-    "/": { lastModified: SITE_LAST_MODIFIED, changeFrequency: "monthly", priority: 1 },
+    "/": { lastModified: "2026-10-21", changeFrequency: "monthly", priority: 1 },
+    "/services": { lastModified: "2026-10-21", changeFrequency: "monthly", priority: 0.85 },
+    "/journal": { lastModified: "2026-10-21", changeFrequency: "monthly", priority: 0.7 },
     "/projects": { lastModified: newestPost, changeFrequency: "monthly", priority: 0.9 },
     "/expertise": { lastModified: "2026-10-21", changeFrequency: "monthly", priority: 0.9 },
     "/engineering-notes": { lastModified: "2026-10-21", changeFrequency: "monthly", priority: 0.85 },
