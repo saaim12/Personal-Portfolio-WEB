@@ -36,7 +36,9 @@ page.on('request', request => {
 });
 try {
   const projects = fs.readdirSync('src/app/projects/content').filter(file => file.endsWith('.mdx')).map(file => '/projects/' + file.slice(0, -4));
-  const routes = ['/', '/services', '/professional-experience', '/projects', '/journal', '/contact', ...projects];
+  const expertise = ['/expertise','/expertise/backend-api-engineering','/expertise/data-engineering-pipelines','/expertise/rag-ai-engineering','/expertise/aws-cloud-devops','/expertise/full-stack-saas-products','/expertise/distributed-systems-reliability','/expertise/recommendation-ml-systems'];
+  const notes = ['/engineering-notes','/engineering-notes/reliable-background-jobs-webhooks-idempotency','/engineering-notes/tenant-isolated-rag-with-pgvector','/engineering-notes/kafka-spark-airflow-pipeline-design','/engineering-notes/django-nextjs-aws-application-delivery'];
+  const routes = ['/', '/services', '/professional-experience', '/projects', '/journal', '/contact', ...expertise, ...notes, ...projects];
   const links = new Set();
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 });
