@@ -8,7 +8,7 @@ interface ProjectsProps { preview?: boolean; showcase?: boolean; range?: [number
 const learningSlugs = ["esp32-temperature-inference", "autoencoder-edge-compression", "algorithms-in-python", "ml-data-foundations"];
 export function Projects({ range, exclude = [], only, showcase = false, preview = false }: ProjectsProps) {
   const Heading = showcase ? "h2" : "h3";
-  const posts = getProjects().filter(p => !exclude.includes(p.slug) && (showcase || !learningSlugs.includes(p.slug))).sort((a,b) => b.metadata.publishedAt.localeCompare(a.metadata.publishedAt));
+  const posts = getProjects().filter(p => !exclude.includes(p.slug) && (showcase || only?.includes(p.slug) || !learningSlugs.includes(p.slug))).sort((a,b) => b.metadata.publishedAt.localeCompare(a.metadata.publishedAt));
   const selected = only ? only.flatMap(slug => posts.filter(p => p.slug === slug)) : range ? posts.slice(range[0] - 1, range[1]) : posts;
   const cards = selected.map((post, index) => {
     const art = projectArt[post.slug];

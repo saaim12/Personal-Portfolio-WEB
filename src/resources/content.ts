@@ -25,8 +25,7 @@ export const bookingLink = "https://cal.com/saaim-abdullah-gm3ck6";
 export const social = [
   { name: "GitHub", link: "https://github.com/saaim12" },
   { name: "LinkedIn", link: "https://www.linkedin.com/in/saaim-abdullah/" },
-  { name: "Upwork", link: "https://www.upwork.com/freelancers/saaim" },
-  { name: "WhatsApp", link: "https://wa.me/923249923289" },
+  { name: "WhatsApp", link: "https://api.whatsapp.com/send/?phone=923249923289&text&type=phone_number&app_absent=0" },
   { name: "Medium", link: "https://medium.com/@saymmalik08" },
   { name: "Email", link: `mailto:${person.email}` },
 ];

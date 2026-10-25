@@ -76,6 +76,16 @@ export const caseStudyJsonLd = ({
   inLanguage: "en",
 });
 
+// The write-up and the software it describes are separate creative works.
+export const projectArticleJsonLd = (input: Parameters<typeof caseStudyJsonLd>[0]) => ({
+  ...caseStudyJsonLd(input),
+  "@type": "Article",
+  "@id": `${baseURL}${input.path}#article`,
+  headline: input.title,
+  about: { "@id": `${baseURL}${input.path}#project` },
+  codeRepository: undefined,
+});
+
 export const webSiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -173,5 +183,5 @@ export const profilePageJsonLd = {
     image: person.avatar,
   }),
   "@type": "ProfilePage",
-  mainEntity: { "@id": PERSON_ID },
+  mainEntity: personJsonLd,
 };

@@ -40,6 +40,7 @@ const urls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
 const seenTitles = new Map();
 const seenDescs = new Map();
 const rows = [];
+const incomingPages = new Map();
 
 for (const url of urls) {
   if (!url.startsWith(CANONICAL_HOST)) fail(url, `not on ${CANONICAL_HOST}`);
@@ -47,6 +48,16 @@ for (const url of urls) {
 
   const res = await fetch(origin + path);
   const html = res.ok ? await res.text() : "";
+  for (const match of html.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>/g)) {
+    if (/\brel="[^"]*\bnofollow\b/.test(match[0])) continue;
+    const target = new URL(decode(match[1]), url);
+    if (target.origin !== CANONICAL_HOST || target.pathname === new URL(url).pathname) continue;
+    const sources = incomingPages.get(target.pathname) || new Set();
+    sources.add(path);
+    incomingPages.set(target.pathname, sources);
+  }
+  if (html.includes("upwork.com/freelancers/saaim")) fail(path, "private Upwork URL exposed");
+  if (html.includes("https://wa.me/")) fail(path, "WhatsApp redirect shortcut exposed");
   if (!res.ok) fail(path, `HTTP ${res.status}`);
 
   const title = decode(pick(html, /<title[^>]*>([^<]*)<\/title>/i));
@@ -74,6 +85,10 @@ for (const url of urls) {
     .flatMap((m) => {
       try {
         const d = JSON.parse(m[1]);
+        if (d["@type"] === "ProfilePage" && (!d.mainEntity?.name || d.mainEntity?.["@type"] !== "Person"))
+          fail(path, "ProfilePage requires an explicit Person with a name");
+        if (d["@type"] === "Article" && (!d.headline || !d.author?.name || !d.image || !d.datePublished))
+          fail(path, "incomplete Article markup");
         return Array.isArray(d) ? d.map((x) => x["@type"]) : [d["@type"]];
       } catch {
         fail(path, "invalid JSON-LD");
@@ -84,7 +99,7 @@ for (const url of urls) {
   const expectedTypes = path === "/" ? ["WebSite", "Person", "WebPage"]
     : path === "/professional-experience" ? ["WebSite", "Person", "ProfilePage", "BreadcrumbList"]
     : path === "/journal" ? ["WebSite", "CollectionPage", "BreadcrumbList"]
-    : path.startsWith("/projects/") ? ["WebSite", "BreadcrumbList"]
+    : path.startsWith("/projects/") ? ["WebSite", "BreadcrumbList", "Article"]
     : ["WebSite", "WebPage", "BreadcrumbList"];
   for (const type of expectedTypes) if (!ldTypes.includes(type)) fail(path, `missing ${type} schema`);
   if (path.startsWith("/projects/") && !ldTypes.some(type => type === "CreativeWork" || type === "SoftwareSourceCode")) fail(path, "missing project schema");
@@ -120,6 +135,15 @@ for (const url of urls) {
     ogImage,
     jsonLd: ldTypes.join(", ") || "—",
   });
+}
+
+for (const slug of ["algorithms-in-python", "esp32-temperature-inference"]) {
+  const target = `/projects/${slug}`;
+  if ((incomingPages.get(target)?.size || 0) < 2) fail(target, "needs links from at least two distinct pages");
+}
+for (const file of fs.readdirSync("public/images/projects/diagrams")) {
+  if (fs.statSync(`public/images/projects/diagrams/${file}`).size > 1_000_000)
+    fail(file, "diagram exceeds 1 MB");
 }
 
 const w = (s, n) => String(s).padEnd(n).slice(0, n);
