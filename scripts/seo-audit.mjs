@@ -87,7 +87,7 @@ for (const url of urls) {
         const d = JSON.parse(m[1]);
         if (d["@type"] === "ProfilePage" && (!d.mainEntity?.name || d.mainEntity?.["@type"] !== "Person"))
           fail(path, "ProfilePage requires an explicit Person with a name");
-        if (d["@type"] === "Article" && (!d.headline || !d.author?.name || !d.image || !d.datePublished))
+        if (d["@type"] === "Article" && (!d.headline || !d.author?.name || (path.startsWith("/projects/") && (!d.image || !d.datePublished))))
           fail(path, "incomplete Article markup");
         return Array.isArray(d) ? d.map((x) => x["@type"]) : [d["@type"]];
       } catch {

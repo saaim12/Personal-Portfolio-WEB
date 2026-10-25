@@ -5,6 +5,7 @@ import { pageMeta } from "@/resources/seo";
 import { engineeringNotes,getEngineeringNote } from "@/resources/engineering-notes";
 import { jsonLd } from "@/resources/schema";
 import { baseURL } from "@/resources/once-ui.config";
+import { person } from "@/resources/content";
 import { PageSchema } from "@/components/PageSchema";
 import { Contact } from "@/components/Contact";
 import "../../expertise/editorial.css";
@@ -14,7 +15,7 @@ export function generateStaticParams(){return engineeringNotes.map(x=>({slug:x.s
 export async function generateMetadata({params}:Params):Promise<Metadata>{const {slug}=await params;const note=getEngineeringNote(slug);return note?pageMeta({title:note.title,description:note.description,path:`/engineering-notes/${slug}`,type:"article"}) : {title:"Not found",robots:{index:false,follow:false}};}
 export default async function NotePage({params}:Params){const {slug}=await params;const note=getEngineeringNote(slug);if(!note)notFound();const path=`/engineering-notes/${slug}`;return <div className="studioPage">
 <PageSchema title={note.title} description={note.description} path={path}/>
-<script {...jsonLd({"@context":"https://schema.org","@type":"Article","@id":`${baseURL}${path}#article`,mainEntityOfPage:baseURL+path,headline:note.title,description:note.description,articleSection:note.sections.map(s=>s.heading),author:{"@type":"Person","@id":`${baseURL}/#person`},publisher:{"@type":"Person","@id":`${baseURL}/#person`},inLanguage:"en"})}/>
+<script {...jsonLd({"@context":"https://schema.org","@type":"Article","@id":`${baseURL}${path}#article`,mainEntityOfPage:baseURL+path,headline:note.title,description:note.description,articleSection:note.sections.map(s=>s.heading),author:{"@type":"Person","@id":`${baseURL}/#person`,name:person.name,url:`${baseURL}/professional-experience`},publisher:{"@type":"Person","@id":`${baseURL}/#person`,name:person.name},inLanguage:"en"})}/>
 <div className="studioContainer engineeringHub"><nav aria-label="Breadcrumb" className="engineeringBreadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><Link href="/engineering-notes">Engineering notes</Link><span aria-hidden="true">/</span><span aria-current="page">{note.title}</span></nav>
 <header className="engineeringIntro"><span className="engineeringEyebrow">{note.category.toUpperCase()} / ORIGINAL TECHNICAL NOTE</span><h1 className="engineeringTitle">{note.title}</h1><p className="engineeringLead">{note.description}</p></header>
 <div className="engineeringContent"><section><h2>{note.question}</h2><p>{note.answer}</p></section>
