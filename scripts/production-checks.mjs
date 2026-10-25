@@ -41,6 +41,22 @@ try {
       if (schema['@type'] === 'ProfilePage') assert.equal(schema.mainEntity['@id'], 'https://saaim.site/#person');
       if (schema['@type'] === 'BreadcrumbList') assert.deepEqual(schema.itemListElement.map(i => i.position), schema.itemListElement.map((_, i) => i + 1));
     }
+    if (route === '/projects' || route === '/services') {
+      const index = data.schemas.find(schema => schema['@type'] === 'ItemList');
+      assert.ok(index, route + ' has a machine-readable item list');
+      assert.equal(index.numberOfItems, index.itemListElement.length, route + ' item count matches');
+      assert.ok(index.numberOfItems >= 3, route + ' has real indexed entries');
+      for (const [i, entry] of index.itemListElement.entries()) {
+        assert.equal(entry.position, i + 1, route + ' item position');
+        assert.ok(entry.item.name && entry.item.description, route + ' descriptive entries');
+        if (route === '/projects') assert.ok(data.anchors.includes(new URL(entry.item.url).pathname), 'Indexed project has a visible link: ' + entry.item.url);
+      }
+      if (route === '/services') {
+        const visibleServices = await page.locator('.engineeringServiceCard h3').allTextContents();
+        assert.deepEqual(index.itemListElement.map(entry => entry.item.name), visibleServices, 'Indexed services match visible cards');
+        assert.ok(await page.locator('.serviceFaq h3').count() >= 10, 'Expanded FAQs remain visible to visitors');
+      }
+    }
     report.push({ route, headings: data.headingLevels, schemas: data.schemas.map(s => s['@type']) });
   }
   for (const href of links) {
@@ -76,7 +92,11 @@ try {
   const llms = await fetch(origin + '/llms.txt');
   assert.equal(llms.status, 200);
   assert.ok(llms.headers.get('content-type').includes('text/plain'));
-  assert.ok((await llms.text()).includes('Saaim Abdullah'));
+  const readingIndex = await llms.text();
+  assert.ok(readingIndex.includes('Saaim Abdullah'));
+  for (const url of locations) {
+    assert.ok(readingIndex.includes(url), 'llms.txt should link to every published sitemap route: ' + url);
+  }
   await page.goto(origin + '/professional-experience', { waitUntil: 'networkidle' });
   assert.ok(await page.locator('video').evaluate(video => video.loop && video.muted && video.controls && video.paused), 'Accessible reel respects reduced motion');
   fs.mkdirSync('.audit', { recursive: true });

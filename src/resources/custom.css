@@ -151,14 +151,7 @@ body .navContact:is(:hover,:focus-visible){background:var(--pink);color:white}
 @media(max-width:1199px){.professionalLayout{gap:40px;grid-template-columns:70px minmax(0,1fr)}.experienceFrame{padding:32px}.bioNotes{grid-template-columns:minmax(0,1fr) 150px;gap:24px}.storyCard{padding:24px}.storyCard h3{font-size:27px}.storyAnnotation{font-size:20px}}
 @media(max-width:809px){.professionalLayout{display:block}.professionalSections{position:relative;top:auto;flex-direction:row;width:max-content;gap:12px;margin-top:40px;padding:8px}.professionalSections a{flex-direction:row;padding:8px 12px}.professionalSections .mark{width:18px;height:18px}.experiencePage .pageHeading{padding-top:40px}.storyFrame{margin-inline:0}.frameSticker{right:12px}.experienceFrame>.displayType{font-size:48px}.storyCard{width:66%}.storyAnnotation{left:calc(100% + 16px);width:44%;font-size:18px}.storyCard:nth-child(even) .storyAnnotation{right:calc(100% + 16px)}}
 @media(max-width:520px){.experienceFrame{padding:24px;margin-top:75px}.bioFrame{margin-top:8px}.bioFrame>h2{font-size:29px}.bioNotes{grid-template-columns:1fr;gap:28px}.bioNotes .bioPortrait{width:160px;justify-self:center}.personalNote{max-width:100%}.storyCards{gap:28px}.storyCard{width:100%;padding:22px}.storyCard h3{font-size:28px}.storyAnnotation,.storyCard:nth-child(even) .storyAnnotation{position:static;display:block;width:auto;margin:22px 0 4px;font-size:23px}.storyFrame{padding-bottom:66px}.careerFrame{padding-bottom:65px}.careerFrame .roleHeader :is(h2,h3){font-size:34px}.experienceFrame>.displayType{font-size:42px}.frameLabel{left:8px;font-size:10px}.professionalSections{gap:4px}.professionalSections a{padding:8px 10px}.roleCard ul{padding-left:18px}.careerFrame .aboutActions{align-items:flex-start}}
-/* Home greeting, selection cursor, and expanding portrait bubbles from the reference. */
-.homeWelcome{position:fixed;inset:88px 0 0;z-index:95;display:grid;place-items:center;pointer-events:none;background-color:white;background-image:linear-gradient(#f3f3f3 1px,transparent 1px),linear-gradient(90deg,#f3f3f3 1px,transparent 1px);background-size:100px 100px;animation:welcomeExit .35s ease-in 1.75s both}
-.welcomeBubble{border:2px solid var(--ink);border-radius:0 22px 22px;background:var(--blue);padding:14px 20px;font-size:clamp(32px,4vw,50px);line-height:1.2;animation:welcomePop .45s cubic-bezier(.2,.8,.2,1) both}
-.welcomeBubble>span{display:block;white-space:nowrap;clip-path:inset(0 100% 0 0);animation:welcomeType .7s steps(10,end) .2s forwards}
-@keyframes welcomePop{from{opacity:0;scale:.8;rotate:-8deg}to{opacity:1;scale:1;rotate:0deg}}
-@keyframes welcomeType{to{clip-path:inset(0)}}
-@keyframes welcomeExit{to{opacity:0;visibility:hidden}}
-@media(prefers-reduced-motion:reduce){.homeWelcome{animation:none!important;opacity:1;visibility:visible}}
+/* Selection cursor and expanding portrait bubbles. */
 .floatingAvatar{display:flex;align-items:center;border-radius:32px 32px 32px 0;z-index:3;overflow:hidden;color:var(--ink)}.floatingAvatar img{flex:none}.avatarGreeting{display:block;max-width:0;opacity:0;overflow:hidden;white-space:nowrap;font-size:16px;transition:max-width .4s cubic-bezier(.22,1,.36,1),opacity .25s,padding .4s}.floatingAvatar:is(:hover,:focus-visible) .avatarGreeting{max-width:180px;padding-left:8px;opacity:1}
 .studioCursor>span{background:var(--ink);color:white;border-radius:14px;font-size:12px}.studioCursor.cursorSelection>i{opacity:0}
 .studioCursorBlend{position:fixed;top:0;left:0;width:clamp(240px,22vw,420px);aspect-ratio:1;background:white;mix-blend-mode:difference;pointer-events:none;z-index:149;opacity:0;transform:translate(-50%,-50%);transition:opacity .12s}
@@ -190,10 +183,6 @@ body a.studioButton:is(:hover,:focus-visible){background:white;color:var(--ink);
 
 .servicesPage .pageHeading h1>span[aria-hidden=true]{display:inline-block;padding:.02em .1em;animation:servicesHeadingPalette 2s steps(1,end) infinite}
 
-.homeWelcome .welcomeBubble{animation:none;opacity:0;transform:scale(.72) rotate(-3deg);transition:opacity .22s ease-out,transform .55s cubic-bezier(.22,1,.36,1)}
-.homeWelcome.isEntered .welcomeBubble{opacity:1;transform:scale(1) rotate(0)}
-.homeWelcome .welcomeBubble span{animation:none;clip-path:inset(0 100% 0 0);transition:clip-path .52s steps(8,end) .22s}
-.homeWelcome.isEntered .welcomeBubble span{clip-path:inset(0 0 0 0)}
 
 @keyframes mascotRevolve{0%{transform:rotate(0deg);animation-timing-function:cubic-bezier(.45,0,.55,1)}50%,100%{transform:rotate(1080deg)}}
 @keyframes mascotRestBlink{0%,62%,66%,86%,90%,100%{scale:1 1}64%,88%{scale:1 .08}}
@@ -203,7 +192,7 @@ body a.studioButton:is(:hover,:focus-visible){background:white;color:var(--ink);
 @keyframes servicesHeadingPalette{0%{background:var(--blue)}25%{background:var(--yellow)}50%{background:var(--pink);color:#fff}75%{background:var(--green);color:var(--ink)}}
 
 @media(max-width:1000px){.studioHome .folderFeature{transform:none;filter:none}.studioHome .folderFeature .projectPicture img{transform:none}}
-@media(prefers-reduced-motion:reduce){.studioHome .folderFeature,.studioHome .folderFeature .projectPicture img{transform:none!important;filter:none!important}.studioHome .heroStatement .pinkInk,.studioHome .contactIntro .mascot,.servicesPage .contactIntro .mascot,.servicesPage .pageHeading h1>span[aria-hidden=true],.studioHome .floatingAvatar>img{animation:none!important}.homeWelcome .welcomeBubble,.homeWelcome .welcomeBubble span{transition:none!important;opacity:1;transform:none;clip-path:none}}
+@media(prefers-reduced-motion:reduce){.studioHome .folderFeature,.studioHome .folderFeature .projectPicture img{transform:none!important;filter:none!important}.studioHome .heroStatement .pinkInk,.studioHome .contactIntro .mascot,.servicesPage .contactIntro .mascot,.servicesPage .pageHeading h1>span[aria-hidden=true],.studioHome .floatingAvatar>img{animation:none!important}}
 
 /* Sequential Home folders: each following project physically covers the previous one. */
 @media(min-width:1001px) and (min-height:700px){
@@ -260,3 +249,149 @@ body a.studioButton:is(:hover,:focus-visible){background:white;color:var(--ink);
 .studioHome .folderFeature .projectPicture{height:auto;min-height:0;aspect-ratio:auto;align-self:start;background:white}
 .studioHome .folderFeature .projectPicture>img{display:block;width:100%;height:auto;transform:none}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.studioHome .folderFeature{position:relative;top:auto}}
+
+/* Professional section navigation is a horizontal, wrapping section switcher. */
+.professionalLayout{display:block;max-width:1040px}
+.professionalLayout .experiencePage{max-width:100%;min-width:0}
+.professionalLayout .professionalSections{position:relative;top:auto;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:stretch;width:fit-content;max-width:100%;margin:30px auto 24px;gap:10px;padding:10px;border-radius:20px;box-sizing:border-box}
+.professionalLayout .professionalSections a{display:inline-flex;flex-direction:row;gap:10px;align-items:center;justify-content:center;white-space:normal;text-align:center;max-width:100%;min-width:0;padding:12px 16px;line-height:1.4;overflow-wrap:anywhere}
+.professionalLayout .professionalSections .mark{flex:none;width:22px;height:22px}
+@media(max-width:520px){.professionalLayout .professionalSections{width:100%;gap:6px}.professionalLayout .professionalSections a{flex:1 1 130px;padding:10px 8px;font-size:10px}.professionalLayout .professionalSections .mark{width:17px;height:17px}.experiencePage .pageHeading h1{font-size:clamp(30px,7vw,43px)}}
+.contactBoard .boardLinks{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;bottom:18px;left:16px;right:16px;max-width:calc(100% - 32px)}
+.contactBoard .boardLinks a{white-space:nowrap;min-width:0;padding:9px 11px!important;font-size:11px}
+@media(max-width:520px){.contactBoard{min-height:490px}.contactBoard .boardLinks{gap:7px}.contactBoard .boardLinks a{font-size:10px;padding:8px!important}}
+
+/* One-line orange title band for the professional experience hero. */
+.experiencePage .pageHeading h1{display:table;width:max-content;max-width:none;margin:0;background:#f59b37;color:var(--ink);font-size:clamp(10px,3.1vw,44px);line-height:1.25;letter-spacing:-.035em;padding:.14em .24em;white-space:nowrap;overflow-wrap:normal}
+@media(max-width:520px){.experiencePage .pageHeading h1{font-size:clamp(9px,3vw,16px)}}
+/* Project tiles invert as a unified surface on hover and keyboard focus. */
+:is(.galleryGrid,.relatedProjects) .folderProject{transition:background-color .2s ease,color .2s ease}
+:is(.galleryGrid,.relatedProjects) .folderProject:is(:hover,:focus-within){background:var(--ink);color:#fff;--folder-ink:#fff}
+:is(.galleryGrid,.relatedProjects) .folderProject:is(:hover,:focus-within) .folderContent,
+:is(.galleryGrid,.relatedProjects) .folderProject:is(:hover,:focus-within) .folderCopy{background:var(--ink);color:#fff}
+:is(.galleryGrid,.relatedProjects) .folderProject:is(:hover,:focus-within) .folderTab{background:var(--ink);color:#fff}
+:is(.galleryGrid,.relatedProjects) .folderProject:is(:hover,:focus-within) .projectTags>span{background:#fff;color:var(--ink)}
+:is(.galleryGrid,.relatedProjects) .folderProject:is(:hover,:focus-within) .projectPicture{border-color:var(--ink)}
+@media(prefers-reduced-motion:reduce){:is(.galleryGrid,.relatedProjects) .folderProject{transition:none}}
+
+/* Hiring-focused proof points and clear conversion links */
+.hiringProof{padding:clamp(40px,6vw,85px) 0;border-top:1px solid #ddd;border-bottom:1px solid #ddd}
+.hiringProof>.handwritten{font-size:clamp(23px,3vw,35px);margin-bottom:22px}
+.hiringProofGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.hiringProofGrid article{padding:24px;background:#f5dda1;display:flex;flex-direction:column;gap:10px;min-width:0}
+.hiringProofGrid article:nth-child(2){background:#a1dfc5}.hiringProofGrid article:nth-child(3){background:#c2ebfa}
+.hiringProofGrid strong{font:800 clamp(30px,5vw,64px)/1 var(--font-heading),monospace}.hiringProofGrid span{font-size:14px;line-height:1.5}
+.hiringProofLinks{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.experienceProof{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}.experienceProof span{padding:10px 12px;background:var(--sand);font-size:13px}.experienceProof strong{font-weight:800}
+.contactPage .contactDirect{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center}
+.contactPage .contactDirect a{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--ink);padding:12px 16px;background:#fff;color:var(--ink);font:12px/1.4 var(--font-code),monospace;text-transform:uppercase;overflow-wrap:anywhere}
+.contactPage .contactDirect a:is(:hover,:focus-visible){background:var(--ink);color:#fff}
+/* Responsive project cards, dark hover surfaces and readable copy */
+.galleryGrid .folderSmall,.relatedProjects .folderSmall{min-width:0;overflow:visible;background:#fff;padding-bottom:16px}
+:is(.galleryGrid,.relatedProjects) .folderSmall .folderContent{min-width:0;gap:18px}
+:is(.galleryGrid,.relatedProjects) .folderSmall .folderCopy{padding:8px 16px 16px;min-width:0;overflow-wrap:anywhere}
+:is(.galleryGrid,.relatedProjects) .folderSmall :is(h2,h3){font-size:clamp(24px,3vw,34px);overflow-wrap:anywhere}
+:is(.galleryGrid,.relatedProjects) .folderSmall .projectPicture{width:100%;max-width:100%;aspect-ratio:1.5;overflow:hidden;border:8px solid #ededed}
+:is(.galleryGrid,.relatedProjects) .folderSmall:is(:hover,:focus-within) :is(.folderTab,.folderContent,.folderCopy){background:var(--ink);color:#fff}
+:is(.galleryGrid,.relatedProjects) .folderSmall:is(:hover,:focus-within) :is(h2,h3,p,.projectDate,.projectLink,.folderCopy a){color:#fff}
+:is(.galleryGrid,.relatedProjects) .folderSmall:is(:hover,:focus-within) .projectTags span{background:#fff;color:var(--ink)}
+:is(.galleryGrid,.relatedProjects) .folderSmall .projectPicture img{object-fit:contain}
+@media(max-width:760px){.hiringProofGrid{grid-template-columns:1fr}.hiringProofLinks{flex-direction:column;align-items:stretch}.hiringProofLinks a{text-align:center}.experienceProof{flex-direction:column}}
+
+/* Mobile layout: size intrinsic children instead of hiding document overflow. */
+@media (max-width: 767px) {
+  .studioPage,.studioHome,.studioContainer,.contactSection,.contactIntro,.contactBoard{min-width:0;max-width:100%}
+  .contactIntro{grid-template-columns:minmax(0,1fr);gap:20px;padding-inline:8px}
+  .contactIntro>div{min-width:0;max-width:100%}
+  .contactIntro h2{font-size:clamp(32px,9vw,50px);line-height:1.04;white-space:normal;overflow-wrap:anywhere;max-width:100%}
+  .contactIntro p{max-width:100%;overflow-wrap:break-word}
+  .contactIntro .mascot{max-width:min(160px,55vw);height:auto;animation:none!important}
+  .contactIntro .mascotEyes{animation:none!important}
+  .contactBoard{box-sizing:border-box;min-height:520px;padding:115px 8px 150px;overflow:visible}
+  .contactBoard .contactSticker{box-sizing:border-box;max-width:calc(100% - 20px);margin-inline:auto;white-space:normal;overflow-wrap:anywhere;transform:none;transition:none}
+  .studioHome .contactBoard .contactSticker,.servicesPage .contactBoard .contactSticker{font-size:clamp(26px,7.5vw,40px)}
+  .contactBoard .boardLinks{max-width:calc(100% - 24px);left:12px;right:12px;bottom:16px;gap:7px}
+  .contactBoard .boardLinks a{font-size:10px;line-height:1.35;min-height:38px;padding:9px 10px!important}
+  .commentNote{box-sizing:border-box;max-width:calc(100% - 24px);left:12px}
+  .contactBoardAnimated .contactBackdrop{clip-path:none}
+  .studioHome .homeAbout .polaroid,.studioHome .homeAbout h2>.mark,.studioHome .heroStatement .pinkInk{animation:none!important;will-change:auto}
+  .studioHome .folderFeature,.studioHome .folderFeature .projectPicture img{will-change:auto}
+  .studioHome .heroStatement .pinkInk,.servicesPage .chapterArtwork{animation:none!important}
+  .galleryToolbar{flex-direction:column;align-items:stretch;gap:12px}
+  .galleryFilters{max-width:100%;gap:6px}
+  .galleryFilters button{min-width:0;justify-content:space-between}
+  :is(.galleryGrid,.relatedProjects) .folderSmall .folderTab{max-width:85%}
+  :is(.galleryGrid,.relatedProjects) .folderSmall .folderContent{width:100%}
+  :is(.galleryGrid,.relatedProjects) .folderSmall .projectPicture{aspect-ratio:1.4}
+  :is(.galleryGrid,.relatedProjects) .folderSmall :is(h2,h3){font-size:clamp(23px,7vw,32px)}
+}
+@media (max-width: 600px) {
+  .studioHero{height:auto;min-height:590px;padding:35px 0 45px}
+  .heroNameGroup{max-width:calc(100% - 32px)}
+  .heroAvailable{left:auto;transform:none;max-width:100%;width:auto;white-space:normal;justify-content:center;margin-inline:16px;line-height:1.5}
+  .heroStatement{margin:42px auto 0;padding-inline:14px}
+  .heroStatement h2{font-size:clamp(26px,7.4vw,36px);overflow-wrap:anywhere}
+  .experiencePage .pageHeading h1{font-size:clamp(13px,3.3vw,18px)}
+}
+@media (hover: none), (pointer: coarse) {
+  .contactSticker:hover{transform:none}
+  .servicesPage .servicesSelection,.servicesPage .servicesSelection>.mark{animation:none}
+  .servicesPage .chapterArtwork{animation:none}
+  .studioHome .homeAbout .polaroid,.studioHome .heroStatement .pinkInk,.studioHome .contactIntro .mascot,.servicesPage .contactIntro .mascot{animation:none}
+}
+
+/* Mobile editorial layout: colorful folder cards without desktop sticky layers. */
+@media (max-width: 767px) {
+  .studioHome .featuredProjects{display:flex;flex-direction:column;gap:30px;isolation:auto}
+  .studioHome .folderFeature,
+  .studioHome .folderFeature:nth-child(n){
+    position:relative;top:auto;min-height:0;margin:0;padding:0!important;
+    transform:none;filter:none;will-change:auto;overflow:visible
+  }
+  .studioHome .folderFeature::before{display:none!important}
+  .studioHome .folderFeature .retainedFolderLabels{display:none}
+  .studioHome .folderFeature .folderTab,
+  .studioHome .folderFeature:nth-child(n) .folderTab{
+    box-sizing:border-box;width:max-content;max-width:90%;
+    height:50px;min-height:50px;margin:0!important;padding:0 28px 0 14px;
+    justify-content:flex-start;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 100%,0 100%);
+    font-size:12px;letter-spacing:.02em
+  }
+  .studioHome .folderFeature .folderContent{
+    display:flex;flex-direction:column;box-sizing:border-box;min-height:0;
+    padding:clamp(18px,5vw,25px);gap:18px;width:100%;position:relative
+  }
+  .studioHome .folderFeature .folderCopy{padding:8px 0 0;gap:0;opacity:1}
+  .studioHome .folderFeature .folderCopy :is(h2,h3){font-size:clamp(30px,9vw,48px);line-height:1.07;overflow-wrap:anywhere;margin:15px 0}
+  .studioHome .folderFeature .folderCopy>p{font-size:clamp(15px,4vw,18px);line-height:1.5;max-width:100%}
+  .studioHome .folderFeature .projectTags{gap:8px;padding-top:22px;margin-top:0}
+  .studioHome .folderFeature .projectTags span{max-width:100%;overflow-wrap:anywhere}
+  .studioHome .folderFeature .projectPicture{
+    display:block;width:100%;height:auto;max-width:100%;min-height:0;
+    aspect-ratio:auto;overflow:hidden;background:white;box-sizing:border-box
+  }
+  .studioHome .folderFeature .projectPicture img{display:block;width:100%;height:auto;object-fit:contain;transform:none}
+  .studioHome .folderFeature :is(.projectLink,.projectPicture){
+    -webkit-tap-highlight-color:transparent;touch-action:manipulation
+  }
+  .studioHome .folderFeature:active .folderContent{filter:brightness(.96)}
+  .studioHome .folderFeature .projectPicture:active img{transform:scale(1.015)}
+  .studioHome .heroNameGroup .heroAvailable{
+    display:flex;position:static;transform:none;left:auto;max-width:100%;width:100%;
+    margin:14px 0 0;padding:0 8px;white-space:normal;overflow-wrap:anywhere;
+    text-wrap:balance;font-size:clamp(10px,2.7vw,12px);line-height:1.5;text-align:center
+  }
+  .studioHome .heroStatement{max-width:100%;margin-inline:auto}
+  .studioHome .heroStatement h2{max-width:100%;text-wrap:pretty;overflow-wrap:anywhere}
+  .studioHome .heroSocials{justify-content:center;max-width:100%}
+  .studioHome .heroSocials a{min-width:0}
+}
+@media (max-width: 767px) and (prefers-reduced-motion: no-preference) {
+  .studioHome .folderFeature .folderContent{transition:filter .18s ease}
+  .studioHome .folderFeature .projectPicture img{transition:transform .18s ease}
+  .studioHome .heroStatement .pinkInk{animation:homeFlowerTurn 14s linear infinite}
+}
+@media (prefers-reduced-motion: reduce) {
+  .studioHome .folderFeature .folderContent,.studioHome .folderFeature .projectPicture img{transition:none!important}
+  .studioHome .heroStatement .pinkInk{animation:none!important}
+}

@@ -9,9 +9,10 @@ import { person } from "@/resources/content";
 import { Mark, Ruler } from "./Studio";
 const links = [
   { href: "/", label: "Home", symbol: "home" },
-  { href: "/professional-experience", label: "Professional Experience and Story", symbol: "flower" },
+  { href: "/professional-experience", label: "Professional Experience", symbol: "flower" },
   { href: "/projects", label: "Projects", symbol: "spool" },
   { href: "/services", label: "Services", symbol: "stack" },
+  { href: "/expertise", label: "Expertise", symbol: "target" },
   { href: "/journal", label: "Journal / My Blog", symbol: "tree" },
 ];
 export function Header({ name }: { name: string }) {

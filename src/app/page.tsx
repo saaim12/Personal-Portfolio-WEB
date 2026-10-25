@@ -1,4 +1,8 @@
 import { SiteAnchor } from "@/components/SiteAnchor";
+import Link from "next/link";
+import { specialties } from "@/resources/specialties";
+import { engineeringNotes } from "@/resources/engineering-notes";
+import "@/app/expertise/editorial.css";
 import Image from "@/components/SiteImage";
 import { home, person, portraits, social } from "@/resources/content";
 import { pageMeta, ogImageFor } from "@/resources/seo";
@@ -9,14 +13,12 @@ import { Action, Handles, Mark, RevealText } from "@/components/Studio";
 import { StudioClock } from "@/components/StudioClock";
 import { featuredSlugs } from "@/resources/project-art";
 import { getProjects } from "@/utils/projects";
-import { HomeWelcome } from "@/components/HomeWelcome";
 function ScrollWords({ text }: { text: string }) {
   return text.split(/(\s+)/).map((word, index) => /\s/.test(word) ? word : <span className="homeRevealWord" key={index}>{word}</span>);
 }
 export async function generateMetadata() { return pageMeta({ title: home.title, description: home.description, path: home.path, image: home.image }); }
 export default function Home() {
   return <div className="studioHome">
-    <HomeWelcome />
     <script {...jsonLd(webPageJsonLd({ title: home.title, description: home.description, path: home.path, image: ogImageFor(home.title) }))} /><script {...jsonLd(personJsonLd)} />
     <section className="studioHero" aria-labelledby="hero-name">
       <StudioClock />
@@ -24,14 +26,14 @@ export default function Home() {
         <p className="nameCaption handwritten">my name is<span className="scribble" aria-hidden="true" /></p>
         <div className="heroNotes"><span className="stickyNote mint">Recently at Fitter Health</span><span className="stickyNote sand">Previously at Expertflow</span></div>
         <div className="nameSelection"><h1 id="hero-name" className="displayType"><RevealText text={person.firstName} /></h1><Handles /></div>
-        <p className="heroAvailable"><i />Available for thoughtful projects</p>
+        <p className="heroAvailable"><i />Based in Lahore · Open to remote engineering roles and contracts</p>
       </div>
       <SiteAnchor href="/professional-experience" className="floatingAvatar avatarLeft" aria-label="Meet Saaim"><Image src={person.avatar} width={40} height={40} alt="" /><span className="avatarGreeting" aria-hidden="true">Good to see you!</span></SiteAnchor>
       <SiteAnchor href="/professional-experience" className="floatingAvatar avatarRight" aria-label="Saaim's story"><Image src={portraits.playful} width={40} height={40} alt="" /><span className="avatarGreeting" aria-hidden="true">Hello my friends</span></SiteAnchor>
-      <div className="heroStatement"><h2>I build <Mark kind="target" className="greenInk" /> dependable<br />digital products <Mark kind="flower" className="pinkInk" />.</h2><div className="heroCtas"><Action href="/contact">Contact me</Action><nav className="heroSocials" aria-label="Saaim's profiles">{social.map(item=><SiteAnchor key={item.name} href={item.link} {...(!item.link.startsWith("mailto:")?{target:"_blank",rel:"noopener noreferrer"}:{})}>{item.name}<span aria-hidden="true">↗</span></SiteAnchor>)}</nav></div></div>
+      <div className="heroStatement"><h2>I build <Mark kind="target" className="greenInk" /> backend systems,<br />data pipelines &amp; cloud products <Mark kind="flower" className="pinkInk" />.</h2><div className="heroCtas"><Action href="/contact">Contact me</Action><nav className="heroSocials" aria-label="Saaim's profiles">{social.map(item=><SiteAnchor key={item.name} href={item.link} {...(!item.link.startsWith("mailto:")?{target:"_blank",rel:"noopener noreferrer"}:{})}>{item.name}<span aria-hidden="true">↗</span></SiteAnchor>)}</nav></div></div>
       <span className="cursorSticker roleSticker">Software engineer<span aria-hidden="true">➤</span></span><span className="cursorSticker citySticker"><span aria-hidden="true">➤</span>Lahore, PK</span>
     </section>
-    <section className="homeAbout" aria-labelledby="about-intro">
+    <section className="hiringProof studioContainer" aria-label="Engineering experience highlights"><p className="handwritten">Evidence from shipped work</p><div className="hiringProofGrid"><article><strong>77%</strong><span>Faster admin responses through Redis caching and database indexing at Expertflow</span></article><article><strong>135</strong><span>Passing tests at Fitter Health handover</span></article><article><strong>106</strong><span>Tables in the healthcare product PostgreSQL schema</span></article></div><div className="hiringProofLinks"><SiteAnchor className="outlineButton" href="/professional-experience#career">View work experience ↗</SiteAnchor><SiteAnchor className="outlineButton" href="/projects/fitter-health-platform">Fitter Health case study ↗</SiteAnchor><SiteAnchor className="outlineButton" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer">View resume ↗</SiteAnchor></div></section><section className="homeAbout" aria-labelledby="about-intro">
       <span className="aboutScribble handwritten">the engineer</span>
       <div className="selectionLabel">what’s up<Handles /></div>
       <h2 id="about-intro"><ScrollWords text="I’m Saaim" /> <Image src={person.avatar} width={58} height={58} alt="" /> <ScrollWords text="a software engineer in Lahore who gets excited" /> <Mark kind="pinwheel" className="yellowInk" /> <ScrollWords text="about making complicated things simple" /> <Mark kind="spool" className="pinkInk" />.</h2>
@@ -40,12 +42,19 @@ export default function Home() {
       <figure className="polaroid polaroidRight"><Image src={portraits.playful} width={240} height={280} alt="Saaim wearing neon glasses" /><figcaption>after hours</figcaption></figure>
       </div>
       <div className="skillStickers"><span className="yellow">Backend systems</span><span className="yellow stickerIcon"><Mark kind="pinwheel" /></span><span className="green">Full stack</span><span className="green stickerIcon"><Mark kind="flower" /></span><span className="pink">Data engineering</span><span className="pink stickerIcon"><Mark kind="target" /></span><span className="blue">Cloud &amp; AI</span><span className="blue stickerIcon"><Mark kind="steps" /></span></div>
-      <SiteAnchor href="/professional-experience" className="quietLink">Professional Experience and Story ↗</SiteAnchor>
+      <SiteAnchor href="/professional-experience" className="quietLink">Professional Experience ↗</SiteAnchor>
     </section>
     <section id="work" className="homeWork studioContainer" aria-labelledby="featured-heading">
       <div className="workHeading"><span className="handwritten">explore my work!<span className="scribble" aria-hidden="true" /></span><h2 id="featured-heading" className="displayType"><RevealText text="Featured" /><br /><RevealText text="works" /></h2><p className="stickyNote sand">Real problems, thoughtful decisions,<br />and software that gets things done.</p></div>
       <Projects only={featuredSlugs} preview />
       <div className="allWorkAction"><Action href="/projects">All {getProjects().length} projects</Action><SiteAnchor href="/professional-experience" className="quietLink">Explore my experience ↗</SiteAnchor></div>
+    </section>
+    <section className="engineeringHub studioContainer" aria-labelledby="home-engineering-focus">
+      <span className="engineeringEyebrow">WHAT I BUILD / HOW I THINK</span>
+      <h2 id="home-engineering-focus" className="engineeringTitle">Engineering behind the work.</h2>
+      <p className="engineeringLead">Detailed technical approaches linked to real case studies—not a generic stack of buzzwords. Explore how I design backend APIs, data pipelines, AI retrieval, cloud delivery and dependable product systems.</p>
+      <div className="engineeringCardGrid">{specialties.slice(0,4).map(item=><Link className="engineeringCard" href={`/expertise/${item.slug}`} key={item.slug}><small>ENGINEERING PRACTICE</small><h3>{item.title}</h3><p>{item.summary}</p><span className="engineeringArrow">See case-study evidence ↗</span></Link>)}</div>
+      <div className="engineeringClosing"><h3>Technical architecture notes</h3><p>{engineeringNotes.slice(0,2).map((note,index)=><span key={note.slug}>{index>0?" · ":""}<Link href={`/engineering-notes/${note.slug}`}>{note.title} ↗</Link></span>)}</p><p><Link href="/expertise">View all specialties ↗</Link> · <Link href="/engineering-notes">Read all notes ↗</Link></p></div>
     </section>
     <Contact animated />
   </div>;

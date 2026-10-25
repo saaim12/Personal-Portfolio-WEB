@@ -81,7 +81,7 @@ export function StudioMotion() {
       cursor.current.style.opacity = "1";
       cursor.current.classList.toggle("cursorActive", target instanceof Element && !!target.closest("a, button"));
       if (blend.current) {
-        const overHeroText = target instanceof Element && !!target.closest(".studioHome #hero-name") && !document.documentElement.hasAttribute("data-studio-welcome");
+        const overHeroText = target instanceof Element && !!target.closest(".studioHome #hero-name");
         blend.current.style.translate = `${event.clientX}px ${event.clientY}px`;
         blend.current.style.opacity = overHeroText ? "1" : "0";
         cursor.current.classList.toggle("cursorSelection", overHeroText);
@@ -103,6 +103,7 @@ export function StudioMotion() {
 
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const compact = window.matchMedia("(max-width: 767px), (hover: none), (pointer: coarse)");
     const animations = new Set<Animation>();
     let observer: IntersectionObserver | undefined;
     const targets = document.querySelectorAll<HTMLElement>(
@@ -120,7 +121,7 @@ export function StudioMotion() {
     };
     const start = () => {
       reset();
-      if (preference.matches) return;
+      if (preference.matches || compact.matches) return;
       const page = document.querySelector(".studioPage, .studioHome");
       if (page) {
         const entrance = page.animate([{ opacity: 0.45 }, { opacity: 1 }], { duration: 280, easing: "ease-out" });
@@ -203,12 +204,12 @@ export function StudioMotion() {
     };
 
     start();
-    window.addEventListener("studio-welcome-end", start);
     preference.addEventListener("change", start);
+    compact.addEventListener("change", start);
     return () => {
       reset();
-      window.removeEventListener("studio-welcome-end", start);
       preference.removeEventListener("change", start);
+      compact.removeEventListener("change", start);
     };
   }, [pathname]);
 
@@ -216,7 +217,7 @@ export function StudioMotion() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     const home = document.querySelector<HTMLElement>(".studioHome");
     const services = document.querySelector<HTMLElement>(".servicesPage");
-    if ((!home && !services) || reduced.matches) return;
+    if ((!home && !services) || reduced.matches || window.matchMedia("(max-width: 767px), (hover: none), (pointer: coarse)").matches) return;
 
     let frame = 0;
     const process = services?.querySelector<HTMLElement>(".serviceProcess");
@@ -296,6 +297,7 @@ export function StudioMotion() {
   useEffect(() => {
     const preference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const boards = document.querySelectorAll<HTMLElement>(".contactBoardAnimated");
+    const compact = window.matchMedia("(max-width: 767px), (hover: none), (pointer: coarse)");
     const animations = new Set<Animation>();
     let observer: IntersectionObserver | undefined;
     const reset = () => {
@@ -309,7 +311,7 @@ export function StudioMotion() {
     };
     const start = () => {
       reset();
-      if (preference.matches) return;
+      if (preference.matches || compact.matches) return;
       observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (!entry.isIntersecting) return;
@@ -349,7 +351,55 @@ export function StudioMotion() {
     };
     start();
     preference.addEventListener("change", start);
-    return () => { reset(); preference.removeEventListener("change", start); };
+    compact.addEventListener("change", start);
+    return () => { reset(); preference.removeEventListener("change", start); compact.removeEventListener("change", start); };
+  }, [pathname]);
+
+  // Mobile gets lightweight scroll reveals instead of desktop scroll-linked parallax.
+  useEffect(() => {
+    const compact = window.matchMedia("(max-width: 767px) and (hover: none), (max-width: 767px) and (pointer: coarse)");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let observer: IntersectionObserver | undefined;
+    const active = new Set<Animation>();
+    const start = () => {
+      observer?.disconnect();
+      active.forEach(animation => animation.cancel());
+      active.clear();
+      if (!compact.matches || reduced.matches) return;
+      const targets = document.querySelectorAll<HTMLElement>(
+        ".studioHome .folderFeature, .servicesPage .servicePanelInner, " +
+        ".servicesPage .processCard, .servicesPage .engineeringServiceCard, " +
+        ".servicesPage .technicalSkillGroup",
+      );
+      observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target as HTMLElement;
+          observer?.unobserve(el);
+          // Never animate items that were already in the first viewport.
+          if (el.dataset.mobileRevealDone) return;
+          el.dataset.mobileRevealDone = "true";
+          const animation = el.animate(
+            [{ opacity: .55, translate: "0 22px" }, { opacity: 1, translate: "0 0" }],
+            { duration: 460, easing: "cubic-bezier(.22,1,.36,1)" },
+          );
+          active.add(animation);
+          animation.onfinish = () => active.delete(animation);
+        });
+      }, { rootMargin: "0px 0px -5% 0px", threshold: .06 });
+      targets.forEach(el => {
+        if (el.getBoundingClientRect().top >= window.innerHeight * .85) observer?.observe(el);
+      });
+    };
+    start();
+    compact.addEventListener("change", start);
+    reduced.addEventListener("change", start);
+    return () => {
+      observer?.disconnect();
+      active.forEach(animation => animation.cancel());
+      compact.removeEventListener("change", start);
+      reduced.removeEventListener("change", start);
+    };
   }, [pathname]);
 
   return <><span ref={blend} className="studioCursorBlend" aria-hidden="true"><i /><i /><i /><i /></span><span className="studioCursorLayer" aria-hidden="true"><span ref={cursor} className="studioCursor"><i /><span>You</span></span></span></>;

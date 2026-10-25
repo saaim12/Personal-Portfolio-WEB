@@ -18,3 +18,11 @@
 .caseStudyBody>ul:last-child a:hover::after{color:var(--ink)}
 .caseStudyBody>ul:last-child a:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
 @media(prefers-reduced-motion:reduce){.caseStudyBody>ul:last-child a{transition:none}}
+
+/* Keep diagrams, code and copy inside project detail columns on every viewport. */
+.casePage,.caseLayout,.caseLayout>div,.caseStudyBody{min-width:0;max-width:100%}
+.caseStudyBody :is(p,li,h2,h3,h4,blockquote){overflow-wrap:anywhere}
+.caseStudyBody pre{max-width:100%;overflow-x:auto;white-space:pre}
+.caseStudyBody img,.caseDiagram{display:block;max-width:100%;height:auto;object-fit:contain}
+.caseStudyBody table{max-width:100%}
+@media(max-width:760px){.caseHero,.caseLayout{min-width:0}.caseHero h1{overflow-wrap:anywhere}.caseNotes{min-width:0}}

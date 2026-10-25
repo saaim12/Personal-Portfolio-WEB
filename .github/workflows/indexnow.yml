@@ -1,0 +1,71 @@
+name: Notify IndexNow after production deployment
+
+on:
+  repository_dispatch:
+    types: [vercel.deployment.success]
+  workflow_dispatch:
+  schedule:
+    - cron: '17 8 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow-saaim-production
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule' ||
+      (github.event_name == 'repository_dispatch' && github.event.client_payload.environment == 'production')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Verify event refers to current production commit
+        id: gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          DEPLOYMENT_SHA: ${{ github.event.client_payload.git.sha }}
+        run: |
+          CURRENT_SHA=$(git rev-parse HEAD)
+          if [ "$EVENT_NAME" = repository_dispatch ] && [ -n "$DEPLOYMENT_SHA" ] && [ "$DEPLOYMENT_SHA" != "$CURRENT_SHA" ]; then
+            echo "Not current main deployment; skipping."
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Use Node.js 22
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Restore last successful submission snapshot
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/cache/restore@v4
+        with:
+          path: .indexnow-state
+          key: indexnow-snapshot-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            indexnow-snapshot-
+
+      - name: Verify live production and submit changed URLs
+        if: steps.gate.outputs.run == 'true'
+        run: node scripts/indexnow-submit.mjs
+        env:
+          INDEXNOW_KEY: 677ed91e382c449085e93a1de2bf1fd6
+
+      - name: Save successful submission snapshot
+        if: steps.gate.outputs.run == 'true' && success()
+        uses: actions/cache/save@v4
+        with:
+          path: .indexnow-state
+          key: indexnow-snapshot-${{ github.run_id }}-${{ github.run_attempt }}

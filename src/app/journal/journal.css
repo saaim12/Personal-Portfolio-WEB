@@ -3,3 +3,16 @@
 .journalPage .journalChapters ol{margin:0;padding-left:26px;line-height:1.6}
 .journalPage .journalChapters li{padding-left:6px;margin-bottom:10px;overflow-wrap:anywhere}
 .journalPage .journalChapters li::marker{color:#666;font-family:var(--font-code);font-size:12px}
+
+/* Accessible, native chapter accordion. Collapsed by default. */
+.journalPage .journalChapters{margin-top:28px;border-top:1px solid #ddd;border-bottom:1px solid #ddd;padding:0}
+.journalPage .journalChapters summary{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:16px 14px;cursor:pointer;list-style:none;font:14px/1.5 var(--font-code),monospace;text-transform:uppercase;transition:background .2s,color .2s}
+.journalPage .journalChapters summary::-webkit-details-marker{display:none}
+.journalPage .journalChapters summary::marker{content:""}
+.journalPage .journalChapters summary:is(:hover,:focus-visible){background:var(--ink);color:#fff}
+.journalPage .journalChapters summary:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.journalPage .journalChapterCount{font-size:12px;opacity:.7}
+.journalPage .journalChapterChevron{font-size:24px;line-height:1;transition:transform .2s}
+.journalPage .journalChapters[open] .journalChapterChevron{transform:rotate(180deg)}
+.journalPage .journalChapters ol{padding:14px 20px 12px 38px;margin:0}
+@media(prefers-reduced-motion:reduce){.journalPage .journalChapters summary,.journalPage .journalChapterChevron{transition:none}}

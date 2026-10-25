@@ -28,7 +28,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Verify production output
         env:
-          AUDIT_WIDTHS: 1440,390
+          AUDIT_WIDTHS: 1440,1024,768,390,320
         run: |
           npm start > /tmp/portfolio-server.log 2>&1 &
           SERVER_PID=$!
