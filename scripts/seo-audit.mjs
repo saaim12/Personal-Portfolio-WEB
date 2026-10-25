@@ -97,7 +97,9 @@ for (const url of urls) {
     });
 
   const expectedTypes = path === "/" ? ["WebSite", "Person", "WebPage"]
-    : path === "/professional-experience" ? ["WebSite", "Person", "ProfilePage", "BreadcrumbList"]
+    : path === "/professional-experience" ? ["WebSite", "Person", "ProfilePage", "Article", "BreadcrumbList"]
+    : path === "/engineering-notes" ? ["WebSite", "CollectionPage", "BreadcrumbList"]
+    : path.startsWith("/expertise/") ? ["WebSite", "WebPage", "Service", "Article", "BreadcrumbList"]
     : path === "/journal" ? ["WebSite", "CollectionPage", "BreadcrumbList"]
     : path.startsWith("/projects/") ? ["WebSite", "BreadcrumbList", "Article"]
     : ["WebSite", "WebPage", "BreadcrumbList"];

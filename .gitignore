@@ -16,6 +16,7 @@ next-env.d.ts
 # Test reports and temporary work
 /coverage/
 /.audit/
+/.indexnow-state/
 /.audit-redesign/
 /.audit-responsive/
 /.audit-log.txt

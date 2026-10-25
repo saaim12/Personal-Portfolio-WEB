@@ -20,6 +20,17 @@
 
 ## Release verification
 
+### Follow-up after the 1:47 PM crawl
+
+- Direct submission to `https://api.indexnow.org/indexnow` returned **HTTP 200 for all 29 live sitemap URLs** on October 25, including the eleven flagged URLs. Ownership was checked against the live key file first. This confirms protocol acceptance, not indexing or Ahrefs' internal submission history.
+- Fixed source-change detection for shared schema, dynamic templates, assets and build dependencies. Project changes also notify their indexes. Failed Git comparisons now conservatively submit all live URLs. The manual workflow has a `force_all` input for resubmissions.
+- Added Article entities for the written professional biography and expertise guides while retaining ProfilePage and Service entities. The engineering-notes directory is now explicitly a CollectionPage; its individual notes already have Article markup.
+- **Ahrefs-only follow-up:** configure the existing public key `677ed91e382c449085e93a1de2bf1fd6` under Project settings → Site Audit → Crawl settings → IndexNow, then use **Submit to IndexNow** in the changed-pages report. Ahrefs' submission history may still flag URLs submitted outside Ahrefs. Auto-submission requires a supporting plan.
+- **Classification warnings:** the notes directory is a collection, not an article. This portfolio has no separate organization to declare. The two flagged project pages describe work for a client and a RAG implementation, with no published sale offers. Do not add fabricated Organization, pricing, review or rating data. Review these automated page classifications in Ahrefs and turn off nonapplicable preset issues for this project when necessary.
+- **Medium:** retain the five valid editorial/profile links. A 403 returned by Medium to Ahrefs cannot be repaired from this repository. Recheck those destinations in a normal browser and treat crawler blocking separately from missing URLs.
+
+Ahrefs documentation: [IndexNow configuration and submission](https://help.ahrefs.com/en/articles/9317209-how-to-submit-pages-to-indexnow-within-site-audit), [configuring preset issues](https://help.ahrefs.com/en/articles/1420169-how-to-configure-pre-set-issues-within-ahrefs-site-audit).
+
 Deploy these changes, run Google's Rich Results Test on `/professional-experience` and a project page, then rerun Ahrefs. Audit counts will not change until the updated deployment is crawled. No deployment or hosting configuration was changed by this local fix.
 
 Sources: [Google ProfilePage requirements](https://developers.google.com/search/docs/appearance/structured-data/profile-page), [Article markup](https://developers.google.com/search/docs/appearance/structured-data/article), [structured data quality guidelines](https://developers.google.com/search/docs/appearance/structured-data/sd-policies).

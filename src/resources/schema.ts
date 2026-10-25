@@ -16,6 +16,22 @@ const authorNode = {
   url: `${baseURL}/professional-experience`,
 };
 
+export const editorialArticleJsonLd = ({ title, description, path, image }: {
+  title: string; description: string; path: string; image?: string;
+}) => ({
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": `${baseURL}${path}#article`,
+  mainEntityOfPage: `${baseURL}${path}`,
+  url: `${baseURL}${path}`,
+  headline: title,
+  description,
+  author: authorNode,
+  publisher: authorNode,
+  ...(image ? { image: `${baseURL}${image}` } : {}),
+  inLanguage: "en",
+});
+
 export const webPageJsonLd = ({
   title,
   description,

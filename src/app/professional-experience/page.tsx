@@ -8,7 +8,7 @@ import { PageHeading, Action, Handles } from "@/components/Studio";
 import { Contact } from "@/components/Contact";
 import { ProfessionalSections } from "@/components/ProfessionalSections";
 import { sitePath } from "@/utils/sitePath";
-import { jsonLd, personJsonLd, profilePageJsonLd, breadcrumbJsonLd } from "@/resources/schema";
+import { jsonLd, personJsonLd, profilePageJsonLd, breadcrumbJsonLd, editorialArticleJsonLd } from "@/resources/schema";
 
 export async function generateMetadata() {
   return pageMeta({ title: "Professional Experience", description: "Explore Saaim Abdullah's engineering experience at Fitter Health and Expertflow: backend services, cloud deployments, data pipelines, and measured results.", path: "/professional-experience" });
@@ -24,7 +24,7 @@ const skills = [
 ];
 
 export default function ProfessionalExperience() {
-  return <div className="studioPage"><script {...jsonLd(personJsonLd)} /><script {...jsonLd(profilePageJsonLd)} /><script {...jsonLd(breadcrumbJsonLd([{name:"Home",path:"/"},{name:"Professional Experience",path:"/professional-experience"}]))} /><div className="professionalLayout studioContainer"><ProfessionalSections /><div className="experiencePage">
+  return <div className="studioPage"><script {...jsonLd(personJsonLd)} /><script {...jsonLd(profilePageJsonLd)} /><script {...jsonLd(editorialArticleJsonLd({title:"My Story / My Bio",description:"Saaim Abdullah's account of his journey into software engineering, professional experience, and education.",path:"/professional-experience",image:portraits.playful}))} /><script {...jsonLd(breadcrumbJsonLd([{name:"Home",path:"/"},{name:"Professional Experience",path:"/professional-experience"}]))} /><div className="professionalLayout studioContainer"><ProfessionalSections /><div className="experiencePage">
     <PageHeading title="Professional Experience" note="the work and the story"><p>Backend engineering, cloud delivery, and data systems. Previously at Expertflow and Fitter Health, where I worked on production APIs, communication workflows, and healthcare software.</p><div className="experienceProof"><span><strong>77%</strong> faster admin responses</span><span><strong>135</strong> passing handover tests</span><span><strong>106</strong> PostgreSQL tables</span></div><SiteAnchor href="#career" className="outlineButton">Jump to work experience ↗</SiteAnchor></PageHeading>
     <section id="bio" className="experienceFrame bioFrame combinedStoryFrame" aria-labelledby="bio-heading"><span className="frameLabel">The person behind the work</span><Handles />
       <h2 id="bio-heading" className="displayType">My Story / My Bio</h2>

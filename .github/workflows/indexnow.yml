@@ -4,6 +4,11 @@ on:
   repository_dispatch:
     types: [vercel.deployment.success]
   workflow_dispatch:
+    inputs:
+      force_all:
+        description: Resubmit every published URL
+        type: boolean
+        default: false
   schedule:
     - cron: '17 8 * * *'
 
@@ -62,6 +67,7 @@ jobs:
         run: node scripts/indexnow-submit.mjs
         env:
           INDEXNOW_KEY: 677ed91e382c449085e93a1de2bf1fd6
+          INDEXNOW_FORCE_ALL: ${{ inputs.force_all || false }}
 
       - name: Save successful submission snapshot
         if: steps.gate.outputs.run == 'true' && success()

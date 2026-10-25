@@ -1,5 +1,6 @@
 import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
+import { urlsForChanges } from './indexnow-changes.mjs';
 
 const host = 'saaim.site';
 const origin = `https://${host}`;
@@ -49,6 +50,9 @@ try { previous = JSON.parse(await readFile(statePath, 'utf8')); } catch (err) {
 }
 const previousUrls = previous.urls ?? {};
 const notify = new Set();
+if (process.env.INDEXNOW_FORCE_ALL === 'true') {
+  for (const url of Object.keys(current)) notify.add(url);
+}
 for (const [url, updated] of Object.entries(current)) {
   if (!(url in previousUrls) || previousUrls[url] !== updated) notify.add(url);
 }
@@ -61,20 +65,10 @@ const newSha = process.env.GITHUB_SHA || '';
 if (oldSha && newSha && oldSha !== newSha) {
   try {
     const changed = execFileSync('git', ['diff', '--name-only', oldSha, newSha], { encoding: 'utf8' }).trim().split('\n').filter(Boolean);
-    for (const file of changed) {
-      const project = file.match(/^src\/app\/projects\/content\/(.+)\.mdx$/);
-      if (project) { notify.add(`${origin}/projects/${project[1]}`); continue; }
-      const page = file.match(/^src\/app\/(.*?)\/page\.(tsx|ts|jsx|js)$/);
-      if (page) { notify.add(`${origin}/${page[1]}`); continue; }
-      if (/^src\/app\/page\.(tsx|ts|jsx|js)$/.test(file)) { notify.add(`${origin}/`); continue; }
-      if (file === 'src/resources/articles.ts') { notify.add(`${origin}/journal`); continue; }
-      if (file === 'src/resources/experience.ts') { notify.add(`${origin}/professional-experience`); continue; }
-      if (/^(src\/components\/|src\/resources\/custom\.css|src\/resources\/content\.ts)/.test(file)) {
-        for (const url of Object.keys(current)) notify.add(url);
-      }
-    }
+    for (const url of urlsForChanges(changed, Object.keys(current), origin)) notify.add(url);
   } catch (err) {
-    console.warn(`Unable to compare Git revisions: ${err.message}. Sitemap changes are still tracked.`);
+    console.warn(`Unable to compare Git revisions: ${err.message}. Submitting all published URLs to avoid missing changes.`);
+    for (const url of Object.keys(current)) notify.add(url);
   }
 }
 

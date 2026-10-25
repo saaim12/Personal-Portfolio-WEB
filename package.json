@@ -11,7 +11,7 @@
     "build:pages": "node scripts/build-pages.mjs",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/content.test.mjs",
+    "test": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test scripts/content.test.mjs scripts/indexnow-changes.test.mjs",
     "test:browser": "node scripts/browser-audit.mjs",
     "test:projects": "node --experimental-strip-types --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/project-content-audit.mjs",
     "test:pages": "node scripts/test-pages.mjs",
