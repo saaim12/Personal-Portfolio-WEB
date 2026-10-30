@@ -1,8 +1,8 @@
-import { Meta } from "@once-ui-system/core/modules";
 import type { Metadata } from "next";
 
 import { baseURL } from "@/resources/once-ui.config";
 import { person } from "@/resources/content";
+import { isSearchIndexable } from "@/resources/indexing";
 
 export const OG_WIDTH = 1200;
 export const OG_HEIGHT = 630;
@@ -42,27 +42,17 @@ export function pageMeta({
   // Resolve against the site path too (GitHub project sites have a URL prefix).
   const ogImage = relativeImage.startsWith("/") ? `${baseURL}${relativeImage}` : relativeImage;
 
-  const base = Meta.generate({
+  return {
     title,
     description,
-    baseURL,
-    path,
-    type,
-    image: ogImage,
-    ...(publishedTime ? { publishedTime } : {}),
-  });
-
-  return {
-    ...base,
     metadataBase: new URL(baseURL),
     authors: [{ name: person.name, url: `${baseURL}/professional-experience` }],
     creator: person.name,
-    robots: process.env.VERCEL_ENV === "preview" || process.env.VERCEL_ENV === "development" || process.env.NEXT_PUBLIC_SEARCH_INDEXING === "false"
-      ? { index: false, follow: false }
-      : { index: true, follow: true },
+    robots: isSearchIndexable()
+      ? { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } }
+      : { index: false, follow: false, googleBot: { index: false, follow: false } },
     alternates: { canonical },
     openGraph: {
-      ...base.openGraph,
       title,
       description,
       url: canonical,

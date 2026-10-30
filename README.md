@@ -45,7 +45,7 @@ The Projects gallery shows six main projects, followed by four Learnings entries
 Project frontmatter selects covers through thumbnail and detail diagrams through images. Put new media in public/images/projects/covers or diagrams, using the project slug as the filename. Diagram links open the full-resolution originals.
 
 Project Markdown is read with gray-matter and rendered using next-mdx-remote/rsc and remark-gfm. Detailed tables scroll within the content column on small screens; second- and third-level headings have permalink links.
-Once UI supplies shared layout, typography, heading permalink copying, and toast feedback; it requires Sass.
+Once UI supplies shared CSS and design tokens. Case-study paragraphs, lists, and tables use server-rendered HTML; a small client component handles accessible heading permalink copying and feedback.
 
 ## Validation
 
@@ -62,7 +62,13 @@ npm run test:seo -- http://localhost:3000
 npm run test:production -- http://localhost:3000
 ```
 
-Browser checks cover all 16 pages at 2560, 1440, 1024, 768, 390, and 320 pixels, plus legacy redirects, removed pages, keyboard navigation, project filters, contact validation, downloads, image proportions, button contrast, and reduced motion. Reports go in the ignored .audit folder. The repository has no ESLint configuration. The Production checks workflow runs the build and route, content, SEO, and interaction checks on main pushes and pull requests.
+Browser checks cover all 30 pages at 1440, 1024, 768, 390, and 320 pixels by default (use `AUDIT_WIDTHS` for additional widths), plus legacy redirects, removed pages, keyboard navigation, project filters, contact validation, downloads, image proportions, button contrast, and reduced motion. Editorial checks enforce page gutters, working section links, and matching HTML/XML sitemap coverage. Reports go in the ignored .audit folder. The repository has no ESLint configuration. The Production checks workflow runs the build and route, content, SEO, and interaction checks on main pushes and pull requests.
+
+The footer links to `/sitemap`, a browsable directory of every public page. `/sitemap.xml` includes all main pages, all 10 project case studies, all 7 expertise pages, and all 4 engineering notes; `/robots.txt` advertises its canonical URL. Preview and non-indexable mirror deployments continue to omit XML entries.
+
+The HTML sitemap, XML sitemap, and `/llms.txt` reading directory share `src/utils/siteCatalog.ts`. `/llm.txt` serves the same reading directory as a compatibility spelling. HTML pages link to it with `rel="describedby"`. `AGENTS.md` holds repository guidance and stays out of the public export. Run `npm run test:discovery -- http://localhost:3000` against a production server to verify route coverage, URLs, crawler responses, and the alias; static mirror checks are included in `test:pages`.
+
+See [search and answer visibility](docs/search-visibility.md) for the SEO/AEO/GEO implementation, evidence maintenance, image optimization, deployment checks, and Search Console/Bing account steps.
 
 For optional Lighthouse and axe audits, install tools outside application dependencies and run against a production server:
 

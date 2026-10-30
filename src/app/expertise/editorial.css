@@ -1,32 +1,63 @@
-/* Portfolio SEO editorial hubs: scoped, readable, and lightweight. */
-.engineeringHub{width:100%;min-width:0;padding:clamp(32px,6vw,90px) 0 100px}
-.engineeringIntro{max-width:940px;margin:0 auto 46px}
-.engineeringEyebrow{font-family:var(--font-code,monospace);font-size:13px;letter-spacing:.13em;text-transform:uppercase;opacity:.67}
-.engineeringTitle{font-size:clamp(2.6rem,6.6vw,6rem);line-height:1.04;letter-spacing:-.06em;font-weight:700;overflow-wrap:anywhere;margin:20px 0}
-.engineeringLead{font-size:clamp(1.05rem,2.1vw,1.35rem);line-height:1.7;max-width:810px;color:var(--neutral-on-background-medium,#4f5968)}
-.engineeringBreadcrumb{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:.88rem;margin-bottom:35px}
+/* Editorial pages inherit studio gutters; keep width in the shared container. */
+.engineeringHub{min-width:0;max-width:1280px;padding-block:clamp(40px,6vw,88px) clamp(32px,5vw,64px)}
+.engineeringIntro{max-width:100%;margin:0 0 clamp(32px,4vw,56px)}
+.engineeringIntro .pageHeading{padding:0}
+.engineeringIntro .pageHeading h1{font-size:clamp(32px,7.4vw,112px);line-height:1;letter-spacing:-.04em}
+.engineeringIntro .pageHeading>.handwritten{font-size:clamp(23px,2.6vw,34px);margin-bottom:24px}
+.engineeringIntro .pageHeadingIntro{max-width:680px;font-size:clamp(16px,1.4vw,19px);line-height:1.7;margin-top:28px}
+.engineeringEyebrow{display:block;font:12px/1.7 var(--font-code,monospace);letter-spacing:.08em;text-transform:uppercase;color:#555;overflow-wrap:break-word}
+.engineeringTitle{font-size:clamp(32px,4.5vw,68px);line-height:1.08;letter-spacing:-.045em;font-weight:600;text-wrap:balance;margin:18px 0 24px;overflow-wrap:break-word}
+.engineeringLead{font-size:clamp(16px,1.5vw,20px);line-height:1.7;max-width:740px;color:#454545;margin-bottom:28px}
+.engineeringBreadcrumb{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;font:12px/1.7 var(--font-code,monospace);margin-bottom:32px;overflow-wrap:anywhere}
+.engineeringBreadcrumb [aria-current]{color:#555}
 .engineeringBreadcrumb a,.engineeringHub a:not(.engineeringCard){text-underline-offset:4px}
-.engineeringCardGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
-.engineeringCard{display:block;min-width:0;padding:clamp(20px,3vw,34px);background:var(--surface-background,#fff);border:1px solid var(--neutral-alpha-medium,rgba(45,55,65,.2));border-radius:18px;text-decoration:none;color:inherit;transition:transform .15s,border-color .15s}
-.engineeringCard:hover,.engineeringCard:focus-visible{transform:translateY(-3px);border-color:currentColor}
-.engineeringCard h2,.engineeringCard h3{font-size:clamp(1.24rem,2.2vw,1.7rem);line-height:1.25;letter-spacing:-.025em;margin:10px 0 12px}
-.engineeringCard p{font-size:1rem;line-height:1.7}
-.engineeringCard small{display:block;opacity:.67;text-transform:uppercase;letter-spacing:.08em}
-.engineeringArrow{font-weight:700;display:inline-block;margin-top:14px}
-.engineeringContent{max-width:950px}
-.engineeringContent>section{padding:30px 0;border-top:1px solid var(--neutral-alpha-medium,rgba(45,55,65,.19))}
-.engineeringContent h2{font-size:clamp(1.55rem,3vw,2.25rem);margin-bottom:16px;letter-spacing:-.03em}
-.engineeringContent h3{font-size:1.12rem;margin:26px 0 12px}
-.engineeringContent p,.engineeringContent li{font-size:1.05rem;line-height:1.82}
-.engineeringContent ul{padding-left:1.4em}
-.engineeringContent li{margin-bottom:8px}
-.engineeringAside{border-radius:16px;background:var(--surface-background,#fff);border:1px solid var(--neutral-alpha-medium,rgba(45,55,65,.2));padding:26px;margin:28px 0}
-.engineeringAside h2{font-size:1.45rem;margin:0 0 12px}
-.engineeringAside a{display:inline-block;margin:8px 18px 8px 0;font-weight:600}
-.engineeringClosing{margin:50px 0 20px;padding:28px;border-top:2px solid currentColor}
-.engineeringClosing h2{font-size:1.6rem;margin-bottom:10px}
-.engineeringClosing p{line-height:1.7}
-.engineeringTagRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.engineeringTagRow span{border:1px solid currentColor;border-radius:999px;padding:5px 12px;font-size:.82rem}
-@media(max-width:700px){.engineeringCardGrid{grid-template-columns:1fr}.engineeringHub{padding-top:35px}.engineeringContent>section{padding:25px 0}.engineeringCard{padding:22px}}
-@media(prefers-reduced-motion:reduce){.engineeringCard{transition:none}.engineeringCard:hover{transform:none}}
+.engineeringHub a:not(.engineeringCard):hover{text-decoration:underline}
+.engineeringCardGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:30px}
+.engineeringCard{display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:clamp(22px,2.4vw,34px);background:#ffffffed;border:1px solid #d8d8d8;border-top:4px solid var(--mint);border-radius:16px;text-decoration:none;color:var(--ink);transition:transform .18s,border-color .18s,box-shadow .18s}
+.engineeringCard:nth-child(4n+2){border-top-color:var(--blue)}
+.engineeringCard:nth-child(4n+3){border-top-color:var(--yellow)}
+.engineeringCard:nth-child(4n){border-top-color:var(--pink)}
+.engineeringCard:hover,.engineeringCard:focus-visible{transform:translateY(-3px);border-color:var(--ink);box-shadow:4px 5px 0 #1112120d}
+.engineeringCard h2,.engineeringCard h3{font-size:clamp(22px,2vw,28px);line-height:1.2;letter-spacing:-.035em;margin:12px 0}
+.engineeringCard p{font-size:16px;line-height:1.65;margin-bottom:22px}
+.engineeringCard small{font:11px/1.5 var(--font-code,monospace);color:#555;text-transform:uppercase;letter-spacing:.06em}
+.engineeringArrow{display:inline-block;margin-top:auto;padding-top:4px;font-size:14px;font-weight:600}
+.engineeringReading{max-width:880px}
+.engineeringReading :is(.engineeringContent,.engineeringContents,.engineeringAside){max-width:100%}
+.engineeringHub+.contactSection{padding-top:clamp(56px,7vw,112px)}
+.engineeringHub+.contactSection .contactIntro{padding-bottom:110px}
+.engineeringContent{min-width:0;max-width:760px}
+.engineeringContent>section{padding:32px 0;border-top:1px solid #d8d8d8;scroll-margin-top:0}
+.engineeringContent h2{font-size:clamp(25px,2.7vw,34px);line-height:1.2;margin-bottom:18px;letter-spacing:-.035em;text-wrap:pretty}
+.engineeringContent h3{font-size:18px;margin:26px 0 12px}
+.engineeringContent p,.engineeringContent li,.engineeringAside p,.engineeringAside li{font-size:17px;line-height:1.8;overflow-wrap:break-word}
+.engineeringContent p+p{margin-top:16px}
+.engineeringContent ul,.engineeringAside ul{padding-left:1.3em;margin:12px 0 0}
+.engineeringContent li,.engineeringAside li{margin-bottom:10px}
+.engineeringContents{max-width:760px;margin:0 0 36px;padding:22px 24px;background:#f5f9f7;border:1px solid #d8e5de;border-radius:12px}
+.engineeringContents h2{font:12px/1.5 var(--font-code,monospace);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.engineeringContents ol{margin:0;padding-left:20px;display:grid;gap:10px}
+.engineeringContents a{display:inline-block;font-size:15px;line-height:1.5;text-decoration:underline}
+.engineeringAside{max-width:760px;border-radius:14px;background:white;border:1px solid #d8d8d8;padding:clamp(22px,3vw,30px);margin:24px 0;scroll-margin-top:0}
+.engineeringAside h2{font-size:25px;line-height:1.2;margin:0 0 14px}
+.engineeringAside a{font-weight:600;text-decoration:underline}
+.engineeringClosing{margin:40px 0 0;padding:clamp(22px,3vw,32px);background:var(--sand);border-radius:14px}
+.engineeringClosing h2,.engineeringClosing h3{font-size:clamp(23px,2.4vw,30px);line-height:1.2;margin-bottom:12px}
+.engineeringClosing p{font-size:16px;line-height:1.75;max-width:760px;overflow-wrap:break-word}
+.engineeringClosing p+p{margin-top:12px}
+.engineeringClosing a{text-decoration:underline}
+.engineeringTagRow{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.engineeringTagRow span{max-width:100%;background:#f3f3f3;border:1px solid #ddd;border-radius:6px;padding:7px 10px;font:12px/1.5 var(--font-code,monospace);overflow-wrap:anywhere}
+.engineeringAnswer{padding:clamp(22px,3vw,30px);margin-bottom:30px;background:#eef8f3;border-left:4px solid var(--green);border-radius:0 12px 12px 0;scroll-margin-top:0}
+.engineeringAnswer h2{font-size:clamp(23px,2.5vw,30px);line-height:1.25;margin-bottom:14px}
+.engineeringAnswer p{font-size:17px;line-height:1.75;overflow-wrap:break-word}
+.engineeringAnswer p+p{margin-top:12px}
+.engineeringAnswer a{text-decoration:underline;font-weight:600}
+.editorialReferences li p{font-size:15px;color:#454545;margin-top:6px}
+.siteMapGroup{scroll-margin-top:100px}
+.siteMapGroup h2{font-size:26px;margin-bottom:18px}
+.siteMapGroup ul{list-style:none;padding:0;margin:0;display:grid;gap:6px;width:100%}
+.siteMapGroup a{display:block;padding:10px 0;text-decoration:underline;line-height:1.5}
+.siteMapGroup li+li{border-top:1px solid #e5e5e5}
+@media(max-width:700px){.engineeringCardGrid{grid-template-columns:1fr;gap:16px}.engineeringHub{padding-top:36px}.engineeringContent>section{padding:26px 0}.engineeringContent p,.engineeringContent li,.engineeringAside p,.engineeringAside li{font-size:16px}.engineeringIntro .pageHeading h1{font-size:clamp(32px,8.2vw,56px)}.engineeringContents{padding:20px}.engineeringBreadcrumb{font-size:11px}.engineeringCard p{margin-bottom:18px}}
+@media(prefers-reduced-motion:reduce){.engineeringCard{transition:none}.engineeringCard:hover,.engineeringCard:focus-visible{transform:none}}

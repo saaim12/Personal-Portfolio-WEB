@@ -21,7 +21,7 @@ export const portraits = {
 
 export const bookingLink = "https://cal.com/saaim-abdullah-gm3ck6";
 
-// All profiles also appear in Person structured data, even if absent from the footer.
+// Identity profiles also appear in Person structured data; contact actions do not.
 export const social = [
   { name: "GitHub", link: "https://github.com/saaim12" },
   { name: "LinkedIn", link: "https://www.linkedin.com/in/saaim-abdullah/" },
@@ -34,11 +34,11 @@ export const home = {
   path: "/",
   image: "/images/social-preview.png",
   title: `${person.name}, Software Engineer`,
-  description: "Saaim Abdullah is a software engineer in Lahore who turns complex software problems into dependable products, APIs, and data systems.",
+  description: "Saaim Abdullah is a Lahore-based software engineer building backend APIs, Django and PostgreSQL systems, data pipelines, and AWS cloud applications.",
 };
 
 export const work = {
   path: "/projects",
-  title: "Projects",
-  description: "Explore Saaim Abdullah's software projects, from product delivery and backend services to data pipelines, AI applications, and engineering experiments.",
+  title: "Software Engineering Projects",
+  description: "Explore Saaim Abdullah's engineering case studies: Django APIs, AWS delivery, tenant-isolated RAG, Kafka/Spark pipelines, and dependable web products.",
 };

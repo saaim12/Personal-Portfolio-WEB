@@ -2,10 +2,7 @@ import { SiteAnchor } from "@/components/SiteAnchor";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import type { ComponentProps, ReactNode } from "react";
-import { HeadingLink } from "@once-ui-system/core/modules";
-import { List } from "@once-ui-system/core/components/List";
-import { ListItem } from "@once-ui-system/core/components/ListItem";
-import { Text } from "@once-ui-system/core/components/Text";
+import { HeadingPermalink } from "@/components/HeadingPermalink";
 import { headingId } from "@/utils/headingId";
 
 function ContentLink({ href, children, ...props }: ComponentProps<"a"> & { href: string }) {
@@ -16,14 +13,14 @@ function ContentLink({ href, children, ...props }: ComponentProps<"a"> & { href:
 
 const components = {
   h2: ({ children }: { children?: ReactNode }) => (
-    <HeadingLink marginTop="24" marginBottom="12" as="h2" id={headingId(String(children))}>
+    <HeadingPermalink as="h2" id={headingId(String(children))}>
       {children}
-    </HeadingLink>
+    </HeadingPermalink>
   ),
   h3: ({ children }: { children?: ReactNode }) => (
-    <HeadingLink marginTop="24" marginBottom="12" as="h3" id={headingId(String(children))}>
+    <HeadingPermalink as="h3" id={headingId(String(children))}>
       {children}
-    </HeadingLink>
+    </HeadingPermalink>
   ),
   table: ({ children, ...props }: ComponentProps<"table">) => (
     <div className="caseTableScroll" role="region" aria-label="Project details table" tabIndex={0}>
@@ -31,15 +28,15 @@ const components = {
     </div>
   ),
   p: ({ children }: { children?: ReactNode }) => (
-    <Text style={{ lineHeight: "175%" }} variant="body-default-m" onBackground="neutral-medium" marginTop="8" marginBottom="12">
+    <p className="caseParagraph">
       {children}
-    </Text>
+    </p>
   ),
   a: ContentLink,
-  ul: ({ children }: { children?: ReactNode }) => <List as="ul">{children}</List>,
-  ol: ({ children }: { children?: ReactNode }) => <List as="ol">{children}</List>,
+  ul: ({ children }: { children?: ReactNode }) => <ul>{children}</ul>,
+  ol: ({ children }: { children?: ReactNode }) => <ol>{children}</ol>,
   li: ({ children }: { children?: ReactNode }) => (
-    <ListItem marginTop="4" marginBottom="8" style={{ lineHeight: "175%" }}>{children}</ListItem>
+    <li>{children}</li>
   ),
 };
 

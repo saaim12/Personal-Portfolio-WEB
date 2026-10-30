@@ -98,7 +98,7 @@ for (const url of urls) {
 
   const expectedTypes = path === "/" ? ["WebSite", "Person", "WebPage"]
     : path === "/professional-experience" ? ["WebSite", "Person", "ProfilePage", "Article", "BreadcrumbList"]
-    : path === "/engineering-notes" ? ["WebSite", "CollectionPage", "BreadcrumbList"]
+    : ["/engineering-notes", "/expertise", "/projects", "/sitemap"].includes(path) ? ["WebSite", "CollectionPage", "BreadcrumbList"]
     : path.startsWith("/expertise/") ? ["WebSite", "WebPage", "Service", "Article", "BreadcrumbList"]
     : path === "/journal" ? ["WebSite", "CollectionPage", "BreadcrumbList"]
     : path.startsWith("/projects/") ? ["WebSite", "BreadcrumbList", "Article"]
@@ -106,6 +106,8 @@ for (const url of urls) {
   for (const type of expectedTypes) if (!ldTypes.includes(type)) fail(path, `missing ${type} schema`);
   if (path.startsWith("/projects/") && !ldTypes.some(type => type === "CreativeWork" || type === "SoftwareSourceCode")) fail(path, "missing project schema");
   if (meta(html, "robots")?.includes("noindex")) fail(path, "production page is noindex");
+  if (!meta(html, "googlebot")?.includes("max-image-preview:large")) fail(path, "large search previews are not enabled");
+  if (!meta(html, "googlebot")?.includes("max-snippet:-1")) fail(path, "answer snippets are restricted");
   if (meta(html, "author") !== "Saaim Abdullah") fail(path, "missing author metadata");
 
   // Assertions

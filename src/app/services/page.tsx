@@ -13,7 +13,7 @@ import { ChapterArtwork, ChapterBoundary, ProcessArtwork, ProcessArrow, StepPoin
 import "./services.css";
 import "../expertise/editorial.css";
 
-export async function generateMetadata(){return pageMeta({title:"Services",description:"Software engineering by Saaim Abdullah: backend APIs, full stack products, data and AI systems, and cloud delivery from architecture to handover.",path:"/services"});}
+export async function generateMetadata(){return pageMeta({title:"Software Engineering Services",description:"Software engineering by Saaim Abdullah: backend APIs, full stack products, data and AI systems, and cloud delivery from architecture to handover.",path:"/services"});}
 
 const services = [
   ["Backend systems", "APIs and workflows for accounts, permissions, payments, bookings, and integrations. Built with explicit contracts, validation, error handling, and background processing.", "yellow", "pinwheel", ["API design", "System architecture", "Integrations", "Background processing"]],

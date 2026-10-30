@@ -7,7 +7,7 @@ await mkdir(out, {recursive:true});
 const slugs = (await readdir('src/app/projects/content')).filter(f=>f.endsWith('.mdx')).map(f=>f.slice(0,-4));
 const specialtyRoutes = ['/expertise/backend-api-engineering','/expertise/data-engineering-pipelines','/expertise/rag-ai-engineering','/expertise/aws-cloud-devops','/expertise/full-stack-saas-products','/expertise/distributed-systems-reliability','/expertise/recommendation-ml-systems'];
 const noteRoutes = ['/engineering-notes/reliable-background-jobs-webhooks-idempotency','/engineering-notes/tenant-isolated-rag-with-pgvector','/engineering-notes/kafka-spark-airflow-pipeline-design','/engineering-notes/django-nextjs-aws-application-delivery'];
-const routes = ['/', '/professional-experience', '/projects', '/services', '/journal', '/contact','/expertise','/engineering-notes',...specialtyRoutes,...noteRoutes,...slugs.map(slug=>'/projects/'+slug)];
+const routes = ['/', '/professional-experience', '/projects', '/services', '/journal', '/contact','/expertise','/engineering-notes','/sitemap',...specialtyRoutes,...noteRoutes,...slugs.map(slug=>'/projects/'+slug)];
 const browser = await chromium.launch();
 const page = await browser.newPage({ permissions: ['clipboard-read', 'clipboard-write'] });
 const errors = [];
@@ -43,6 +43,21 @@ for (const width of widths) {
   });
   results.push({width,route,...layout});
   if(layout.scroll>width+2||layout.overflow.length||layout.broken.length)console.log('ISSUE',JSON.stringify(results.at(-1)));
+  if(route.startsWith('/expertise') || route.startsWith('/engineering-notes') || route === '/sitemap') {
+   const editorial = await page.locator('.engineeringHub').evaluate(container => {
+    const bounds = container.getBoundingClientRect();
+    const heading = container.querySelector('h1').getBoundingClientRect();
+    const targets = [...container.querySelectorAll('.engineeringContents a')].map(a => document.getElementById(decodeURIComponent(a.hash.slice(1))));
+    return {left:bounds.left,right:bounds.right,headingLeft:heading.left,headingRight:heading.right,validTargets:targets.every(Boolean)};
+   });
+   assert.ok(editorial.left >= 15 && editorial.right <= width - 15, 'Editorial page keeps its gutters: '+route+' at '+width);
+   assert.ok(editorial.headingLeft >= editorial.left - 1 && editorial.headingRight <= editorial.right + 1, 'Editorial heading fits its container: '+route);
+   assert.ok(editorial.validTargets, 'Every editorial section link has a destination: '+route);
+  }
+  if(route === '/' && width >= 1001) {
+   const columns = await page.locator('.hiringProof,.homeWork,.engineeringHub,.contactSection').evaluateAll(elements=>elements.map(el=>({left:el.getBoundingClientRect().left,width:el.getBoundingClientRect().width})));
+   assert.ok(columns.every(col=>Math.abs(col.left-columns[0].left)<1 && Math.abs(col.width-columns[0].width)<1), 'Home sections share their gutters at '+width);
+  }
   if(route.startsWith('/projects/')) {
    assert.equal(await page.locator('.caseCover img').evaluate(e=>getComputedStyle(e).objectFit),'contain','Project cover fits without cropping: '+route);
    for(const diagram of await page.locator('.caseDiagram').evaluateAll(images=>images.map(img=>({href:img.closest('a')?.getAttribute('href'),target:img.closest('a')?.getAttribute('target'),label:img.closest('a')?.getAttribute('aria-label'),ratio:img.clientWidth/img.clientHeight,naturalRatio:img.naturalWidth/img.naturalHeight})))){
@@ -52,11 +67,28 @@ for (const width of widths) {
     assert.ok(Math.abs(diagram.ratio/diagram.naturalRatio-1)<.02,'Architecture keeps its proportions: '+route);
    }
   }
-  if(['/', '/professional-experience', '/projects', '/contact','/projects/fitter-health-platform'].includes(route))await page.screenshot({path:out+'/'+(route==='/'?'home':route.slice(1).replaceAll('/','-'))+'-'+width+'.png'});
+  if(['/', '/professional-experience', '/projects', '/contact','/projects/fitter-health-platform','/expertise','/expertise/backend-api-engineering','/engineering-notes','/sitemap'].includes(route))await page.screenshot({path:out+'/'+(route==='/'?'home':route.slice(1).replaceAll('/','-'))+'-'+width+'.png'});
  }
  console.log('Checked '+routes.length+' routes at '+width+'px');
 }
+const sitemapResponse = await page.request.get(base+'/sitemap.xml');
+assert.equal(sitemapResponse.status(),200,'XML sitemap is available');
+const sitemapXml = await sitemapResponse.text();
+const sitemapPaths = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match=>new URL(match[1]).pathname);
+assert.deepEqual(sitemapPaths.slice().sort(), routes.slice().sort(), 'XML sitemap covers every public route exactly once');
+await page.goto(base+'/sitemap');
+const htmlSitemapPaths = await page.locator('.siteMapGroup a').evaluateAll(links=>links.map(link=>new URL(link.href).pathname));
+assert.deepEqual(htmlSitemapPaths.slice().sort(), sitemapPaths.slice().sort(), 'HTML and XML sitemap coverage agrees');
+const robotsText = await (await page.request.get(base+'/robots.txt')).text();
+assert.ok(robotsText.includes('Sitemap: '+new URL('/sitemap.xml', [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)][0][1]).href), 'Robots advertises the canonical sitemap');
 await page.setViewportSize({width:390,height:844});
+await page.goto(base+'/expertise/backend-api-engineering');
+await page.getByRole('navigation',{name:'On this page'}).getByRole('link',{name:'Project evidence',exact:true}).click();
+await page.waitForFunction(()=>{
+ const top=document.getElementById('project-evidence')?.getBoundingClientRect().top;
+ return top >= 88 && top <= 120;
+});
+assert.equal(new URL(page.url()).hash,'#project-evidence','Editorial section links scroll below the fixed header without doubling its offset');
 await page.goto(base+'/');
 await page.getByRole('button',{name:'Menu',exact:true}).click();
 assert.equal(await page.getByRole('button',{name:'Close',exact:true}).getAttribute('aria-expanded'),'true');
@@ -118,6 +150,10 @@ for(const [from,to]of [['/about','/professional-experience'],['/experience','/pr
 await page.goto(base+'/projects/fitter-health-platform');
 await page.locator('.caseStudyBody h2').first().click();
 assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),base+'/projects/fitter-health-platform#a-health-tech-product-is-not-just-a-set-of-endpoints');
+assert.equal(await page.getByRole('status').textContent(),'Link copied to clipboard.','Copying a heading has accessible feedback');
+await page.locator('.caseHeadingCopy').first().focus();
+await page.keyboard.press('Enter');
+assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),base+'/projects/fitter-health-platform#a-health-tech-product-is-not-just-a-set-of-endpoints','Heading links support keyboard copying');
 for(const route of ['/does-not-exist','/playground','/projects/bookstore-platform','/projects/web-sentiment-pipeline','/projects/interactive-portfolio'])assert.equal((await page.goto(base+route)).status(),404,'Removed or missing page: '+route);
 await page.setViewportSize({width:1440,height:1000});
 // Sample solid control surfaces; imagery and decorative overlays need visual review.
@@ -208,6 +244,9 @@ const staticPage=await browser.newPage({javaScriptEnabled:false,viewport:{width:
 await staticPage.goto(base+'/',{waitUntil:'networkidle'});
 assert.equal(await staticPage.locator('[data-motion-pending]').count(),0,'No JavaScript leaves all motion content visible');
 assert.equal(await staticPage.locator('#about-intro').evaluate(e=>getComputedStyle(e).opacity),'1','The introduction is readable without JavaScript');
+await staticPage.goto(base+'/projects/fitter-health-platform',{waitUntil:'networkidle'});
+assert.ok(await staticPage.locator('.caseStudyBody p').count()>10,'Case-study text is rendered without JavaScript');
+assert.ok(await staticPage.locator('.caseStudyBody table').count()>0,'Case-study tables are rendered without JavaScript');
 await staticPage.close();
 const greetingPage=await browser.newPage({viewport:{width:1440,height:1000}});
 await greetingPage.goto(base+'/',{waitUntil:'domcontentloaded'});

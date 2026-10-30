@@ -92,3 +92,36 @@ test("portfolio specialties and engineering notes use unique routes and real pro
     for (const project of note.proof) assert.ok(known.has(project.slug),note.slug+" invalid project "+project.slug);
   }
 });
+
+test("preview and mirror indexing settings cannot be overridden by a production flag", async () => {
+  const { isSearchIndexable } = await import("../src/resources/indexing.ts");
+  const previous = { environment: process.env.VERCEL_ENV, indexing: process.env.NEXT_PUBLIC_SEARCH_INDEXING };
+  try {
+    for (const [environment, indexing, expected] of [
+      [undefined, undefined, true], ["production", undefined, true],
+      ["preview", "true", false], ["development", "true", false],
+      ["production", "false", false], [undefined, "false", false],
+    ]) {
+      if (environment === undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV = environment;
+      if (indexing === undefined) delete process.env.NEXT_PUBLIC_SEARCH_INDEXING; else process.env.NEXT_PUBLIC_SEARCH_INDEXING = indexing;
+      assert.equal(isSearchIndexable(), expected, `${environment}/${indexing}`);
+    }
+  } finally {
+    if (previous.environment === undefined) delete process.env.VERCEL_ENV; else process.env.VERCEL_ENV = previous.environment;
+    if (previous.indexing === undefined) delete process.env.NEXT_PUBLIC_SEARCH_INDEXING; else process.env.NEXT_PUBLIC_SEARCH_INDEXING = previous.indexing;
+  }
+});
+
+test("optimized covers preserve dimensions and reduce static download weight", async () => {
+  const { default: sharp } = await import("sharp");
+  for (const { data, slug } of projects.filter(project => project.data.thumbnail.endsWith(".png"))) {
+    const original = "public" + data.thumbnail;
+    const optimized = original.replace(/\.png$/, ".webp");
+    const before = await sharp(original).metadata();
+    const after = await sharp(optimized).metadata();
+    assert.equal(after.width, before.width, slug);
+    assert.equal(after.height, before.height, slug);
+    assert.equal(after.format, "webp", slug);
+    assert.ok(fs.statSync(optimized).size < fs.statSync(original).size * .3, slug + " saves at least 70% per cover");
+  }
+});

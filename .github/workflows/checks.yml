@@ -38,6 +38,7 @@ jobs:
             sleep 1
           done
           npm run test:production -- http://localhost:3000
+          npm run test:discovery -- http://localhost:3000
           npm run test:browser -- http://localhost:3000
           npm run test:projects -- http://localhost:3000
           npm run test:seo -- http://localhost:3000

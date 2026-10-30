@@ -8,6 +8,7 @@ import { home, person, portraits, social } from "@/resources/content";
 import { pageMeta, ogImageFor } from "@/resources/seo";
 import { jsonLd, personJsonLd, webPageJsonLd } from "@/resources/schema";
 import { Contact } from "@/components/Contact";
+import { PortfolioAnswers } from "@/components/PortfolioAnswers";
 import { Projects } from "@/components/projects/Projects";
 import { Action, Handles, Mark, RevealText } from "@/components/Studio";
 import { StudioClock } from "@/components/StudioClock";
@@ -56,6 +57,7 @@ export default function Home() {
       <div className="engineeringCardGrid">{specialties.slice(0,4).map(item=><Link className="engineeringCard" href={`/expertise/${item.slug}`} key={item.slug}><small>ENGINEERING PRACTICE</small><h3>{item.title}</h3><p>{item.summary}</p><span className="engineeringArrow">See case-study evidence ↗</span></Link>)}</div>
       <div className="engineeringClosing"><h3>Technical architecture notes</h3><p>{engineeringNotes.slice(0,2).map((note,index)=><span key={note.slug}>{index>0?" · ":""}<Link href={`/engineering-notes/${note.slug}`}>{note.title} ↗</Link></span>)}</p><p><Link href="/expertise">View all specialties ↗</Link> · <Link href="/engineering-notes">Read all notes ↗</Link></p></div>
     </section>
+    <PortfolioAnswers />
     <Contact animated />
   </div>;
 }

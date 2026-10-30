@@ -25,11 +25,13 @@ try {
       const ids = [...document.querySelectorAll('[id]')].map(e => e.id);
       const anchors = [...document.querySelectorAll('a[href]')].map(a => a.getAttribute('href'));
       const schemas = [...document.querySelectorAll('script[type="application/ld+json"]')].map(s => JSON.parse(s.textContent));
-      return { headingLevels, ids, anchors, schemas };
+      const scriptBytes = performance.getEntriesByType('resource').filter(entry => entry.initiatorType === 'script').reduce((sum, entry) => sum + entry.decodedBodySize, 0);
+      return { headingLevels, ids, anchors, schemas, scriptBytes };
     });
     assert.equal(data.headingLevels.filter(level => level === 1).length, 1, route + ' one H1');
     assert.ok(data.headingLevels.every((level, i, all) => level <= (all[i - 1] || 0) + 1), route + ' heading hierarchy');
     assert.equal(new Set(data.ids).size, data.ids.length, route + ' unique element IDs');
+    if (route === '/' || route.startsWith('/projects/')) assert.ok(data.scriptBytes < 750_000, route + ' startup JavaScript stays below the 750 KB decoded budget: ' + data.scriptBytes);
     for (const anchor of data.anchors) {
       if (anchor.startsWith('#') && anchor.length > 1) assert.ok(data.ids.includes(decodeURIComponent(anchor.slice(1))), route + ' ' + anchor);
       if (anchor.startsWith('/') && !anchor.startsWith('//')) links.add(anchor);
@@ -40,6 +42,28 @@ try {
       if (schema['@type'] === 'SoftwareSourceCode') assert.ok(schema.codeRepository.startsWith('https://github.com/'), route + ' repository');
       if (schema['@type'] === 'ProfilePage') assert.equal(schema.mainEntity['@id'], 'https://saaim.site/#person');
       if (schema['@type'] === 'BreadcrumbList') assert.deepEqual(schema.itemListElement.map(i => i.position), schema.itemListElement.map((_, i) => i + 1));
+    }
+    if (route.startsWith('/expertise/') || route.startsWith('/engineering-notes/')) {
+      const article = data.schemas.find(schema => schema['@type'] === 'Article');
+      const updatedAt = await page.locator('.editorialByline time').getAttribute('datetime');
+      assert.equal(article.dateModified, updatedAt, route + ' visible and structured update dates agree');
+      assert.ok(Date.parse(updatedAt) <= Date.now(), route + ' has no future update date');
+      assert.equal(article.author.name, 'Saaim Abdullah', route + ' identifies its author');
+      assert.equal(await page.locator('.editorialByline a[rel="author"]').getAttribute('href'), '/professional-experience');
+      assert.ok((await page.locator('main').innerText()).includes(article.abstract), route + ' summary is visible to readers');
+      const visibleTargets = new Set(data.anchors.map(href => new URL(href, url).href));
+      for (const citation of article.citation) assert.ok(visibleTargets.has(citation), route + ' citations have visible source links: ' + citation);
+      const breadcrumb = data.schemas.find(schema => schema['@type'] === 'BreadcrumbList');
+      assert.equal(breadcrumb.itemListElement.length, 3, route + ' includes its parent breadcrumb');
+      assert.equal(new URL(breadcrumb.itemListElement[1].item).pathname, '/' + route.split('/')[1]);
+      assert.ok(await page.locator('.engineeringAnswer').isVisible(), route + ' leads with a direct answer');
+    }
+    if (['/expertise', '/engineering-notes', '/sitemap'].includes(route)) {
+      const collection = data.schemas.find(schema => schema['@type'] === 'CollectionPage');
+      assert.ok(collection.mainEntity.numberOfItems > 0, route + ' has a populated collection index');
+      assert.equal(collection.mainEntity.numberOfItems, collection.mainEntity.itemListElement.length);
+      const visiblePaths = new Set(data.anchors.map(href => new URL(href, url).pathname));
+      for (const entry of collection.mainEntity.itemListElement) assert.ok(visiblePaths.has(new URL(entry.item.url).pathname), route + ' collection entries are linked visibly');
     }
     if (route === '/projects' || route === '/services') {
       const index = data.schemas.find(schema => schema['@type'] === 'ItemList');
@@ -85,7 +109,10 @@ try {
   }
   const notFound = await fetch(origin + '/this-page-does-not-exist');
   assert.equal(notFound.status, 404);
-  assert.ok((await notFound.text()).includes('noindex'), '404 is noindex');
+  const notFoundHtml = await notFound.text();
+  assert.ok(notFoundHtml.includes('noindex'), '404 is noindex');
+  assert.ok(/<meta name="googlebot" content="[^"]*noindex/.test(notFoundHtml), '404 does not inherit an indexable Googlebot directive');
+  assert.ok(!/rel="canonical"/.test(notFoundHtml), '404 does not inherit the home canonical');
   const robots = await (await fetch(origin + '/robots.txt')).text();
   assert.ok(robots.includes('Allow: /') && robots.includes('Sitemap: https://saaim.site/sitemap.xml'));
   assert.ok(!robots.includes('Disallow: /_next'), 'Rendering assets are crawlable');
@@ -97,6 +124,9 @@ try {
   for (const url of locations) {
     assert.ok(readingIndex.includes(url), 'llms.txt should link to every published sitemap route: ' + url);
   }
+  const sitemapImages = [...sitemap.matchAll(/<image:loc>([^<]+)<\/image:loc>/g)].map(match => match[1]);
+  assert.ok(sitemapImages.length >= 20, 'Project covers and diagrams are discoverable in the image sitemap');
+  for (const image of new Set(sitemapImages)) assert.equal((await fetch(origin + new URL(image).pathname, { method: 'HEAD' })).status, 200, 'Sitemap image is accessible: ' + image);
   await page.goto(origin + '/professional-experience', { waitUntil: 'networkidle' });
   assert.ok(await page.locator('video').evaluate(video => video.loop && video.muted && video.controls && video.paused), 'Accessible reel respects reduced motion');
   fs.mkdirSync('.audit', { recursive: true });

@@ -15,6 +15,7 @@ type ProjectMetadata = {
   image?: string;
   images: string[];
   thumbnail: string;
+  socialImage: string;
   tags: string[];
   stack: TechKey[];
   role?: string;
@@ -39,7 +40,9 @@ export const getProjects = cache(() => {
         seoDescription: data.seoDescription || data.summary || "",
         image: data.image || "",
         images: data.images || [],
-        thumbnail: data.thumbnail || "",
+        thumbnail: data.thumbnail?.endsWith(".png") && fs.existsSync(path.join(process.cwd(), "public", data.thumbnail.replace(/\.png$/, ".webp")))
+          ? data.thumbnail.replace(/\.png$/, ".webp") : data.thumbnail || "",
+        socialImage: data.thumbnail?.endsWith(".png") ? data.thumbnail : "/images/social-preview.png",
         tags: data.tags || [],
         stack: data.stack || [],
         role: data.role,

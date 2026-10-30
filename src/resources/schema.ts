@@ -16,8 +16,9 @@ const authorNode = {
   url: `${baseURL}/professional-experience`,
 };
 
-export const editorialArticleJsonLd = ({ title, description, path, image }: {
+export const editorialArticleJsonLd = ({ title, description, path, image, dateModified, abstract, sections, citations }: {
   title: string; description: string; path: string; image?: string;
+  dateModified?: string; abstract?: string; sections?: string[]; citations?: string[];
 }) => ({
   "@context": "https://schema.org",
   "@type": "Article",
@@ -28,6 +29,11 @@ export const editorialArticleJsonLd = ({ title, description, path, image }: {
   description,
   author: authorNode,
   publisher: authorNode,
+  isPartOf: { "@id": `${baseURL}/#website` },
+  ...(dateModified ? { dateModified } : {}),
+  ...(abstract ? { abstract } : {}),
+  ...(sections?.length ? { articleSection: sections } : {}),
+  ...(citations?.length ? { citation: citations } : {}),
   ...(image ? { image: `${baseURL}${image}` } : {}),
   inLanguage: "en",
 });
@@ -52,7 +58,8 @@ export const webPageJsonLd = ({
   image: image.startsWith("http") ? image : `${baseURL}${image}`,
   isPartOf: { "@id": `${baseURL}/#website` },
   inLanguage: "en",
-  about: { "@id": PERSON_ID },
+  about: authorNode,
+  ...(path !== "/" ? { breadcrumb: { "@id": `${baseURL}${path}#breadcrumbs` } } : {}),
 });
 
 export const caseStudyJsonLd = ({
@@ -111,7 +118,7 @@ export const webSiteJsonLd = {
   alternateName: SITE_NAME,
   description: home.description,
   inLanguage: "en",
-  publisher: { "@id": PERSON_ID },
+  publisher: authorNode,
 };
 export const personJsonLd = {
   "@context": "https://schema.org",
@@ -128,7 +135,7 @@ export const personJsonLd = {
     addressLocality: "Lahore",
     addressCountry: "PK",
   },
-  sameAs: social.filter((s) => s.name !== "Email").map((s) => s.link),
+  sameAs: social.filter((s) => ["GitHub", "LinkedIn", "Medium"].includes(s.name)).map((s) => s.link),
   alumniOf: {
     "@type": "CollegeOrUniversity",
     name: "COMSATS University Islamabad",

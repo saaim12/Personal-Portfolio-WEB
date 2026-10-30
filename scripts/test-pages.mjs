@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
 import { chromium } from 'playwright';
+import { checkDiscovery } from './discovery-checks.mjs';
 
 const root = path.resolve('out');
 assert.ok(fs.existsSync(path.join(root, 'index.html')), 'Run npm run build:pages first');
@@ -38,7 +39,7 @@ try {
   const projects = fs.readdirSync('src/app/projects/content').filter(file => file.endsWith('.mdx')).map(file => '/projects/' + file.slice(0, -4));
   const expertise = ['/expertise','/expertise/backend-api-engineering','/expertise/data-engineering-pipelines','/expertise/rag-ai-engineering','/expertise/aws-cloud-devops','/expertise/full-stack-saas-products','/expertise/distributed-systems-reliability','/expertise/recommendation-ml-systems'];
   const notes = ['/engineering-notes','/engineering-notes/reliable-background-jobs-webhooks-idempotency','/engineering-notes/tenant-isolated-rag-with-pgvector','/engineering-notes/kafka-spark-airflow-pipeline-design','/engineering-notes/django-nextjs-aws-application-delivery'];
-  const routes = ['/', '/services', '/professional-experience', '/projects', '/journal', '/contact', ...expertise, ...notes, ...projects];
+  const routes = ['/', '/services', '/professional-experience', '/projects', '/journal', '/contact', '/sitemap', ...expertise, ...notes, ...projects];
   const links = new Set();
   for (const width of [1440, 390]) {
     await page.setViewportSize({ width, height: 900 });
@@ -46,6 +47,8 @@ try {
       const response = await page.goto(origin + basePath + route + (route === '/' ? '' : '/'), { waitUntil: 'networkidle' });
       assert.equal(response.status(), 200, route);
       assert.equal(await page.locator('h1').count(), 1, route);
+      assert.ok((await page.locator('meta[name="robots"]').getAttribute('content')).includes('noindex'), route + ' mirror remains noindex');
+      assert.ok((await page.locator('meta[name="googlebot"]').getAttribute('content')).includes('noindex'), route + ' mirror has no contradictory Googlebot directive');
       await page.evaluate(async () => { for (const image of document.images) image.loading = 'eager'; await Promise.all([...document.images].map(image => image.decode().catch(() => {}))); });
       assert.deepEqual(await page.evaluate(() => [...document.images].filter(image => !image.naturalWidth).map(image => image.src)), [], route + ' images');
       const bounds = await page.evaluate(() => ({ viewport: innerWidth, page: document.documentElement.scrollWidth, offenders: [...document.querySelectorAll('body *')].filter(element => { const rect = element.getBoundingClientRect(); return rect.width > 0 && (rect.right > innerWidth + 2 || rect.left < -2) && getComputedStyle(element).position !== 'fixed'; }).slice(0,12).map(element => ({ tag: element.tagName, className: typeof element.className === 'string' ? element.className : '', right: Math.round(element.getBoundingClientRect().right), left: Math.round(element.getBoundingClientRect().left) })) }));
@@ -71,7 +74,9 @@ try {
   assert.ok(await page.locator('form').evaluate(form => form.checkValidity()));
   await page.goto(origin + basePath + '/work/fitter-health-platform/', { waitUntil: 'networkidle' });
   await page.waitForURL('**/projects/fitter-health-platform/');
-  for (const asset of ['/robots.txt', '/sitemap.xml', '/llms.txt', '/images/social-preview.png', '/SaaimCV.pdf', '/Fitter-Recommendation-Letter.pdf']) assert.equal((await page.request.get(origin + basePath + asset)).status(), 200, asset);
+  for (const asset of ['/robots.txt', '/sitemap.xml', '/llms.txt', '/llm.txt', '/images/social-preview.png', '/SaaimCV.pdf', '/Fitter-Recommendation-Letter.pdf']) assert.equal((await page.request.get(origin + basePath + asset)).status(), 200, asset);
+  await checkDiscovery({ origin: origin + basePath, canonicalBase: canonical, indexable: false, expectedPaths: routes, checkHeaders: false });
+  assert.ok(!fs.existsSync(path.join(root, 'AGENTS.md')), 'Repository agent instructions are not exported');
   assert.ok(fs.existsSync(path.join(root, '.nojekyll')));
   assert.ok(fs.existsSync(path.join(root, '404.html')));
   assert.deepEqual(errors, [], 'No hydration or browser errors');

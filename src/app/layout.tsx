@@ -7,7 +7,7 @@ import { StudioMotion } from "@/components/StudioMotion";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { fonts, handwriting } from "@/resources/fonts";
-import { style } from "@/resources/once-ui.config";
+import { baseURL, style } from "@/resources/once-ui.config";
 import { home, person } from "@/resources/content";
 import { pageMeta } from "@/resources/seo";
 import { jsonLd, webSiteJsonLd } from "@/resources/schema";
@@ -53,6 +53,7 @@ export default function RootLayout({
       ].join(" ")}
     >
       <head>
+        <link rel="describedby" type="text/plain" href={`${baseURL}/llms.txt`} />
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{
