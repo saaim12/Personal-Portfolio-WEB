@@ -24,7 +24,7 @@ const sections = [
 ];
 const documents = [
   { title: "Resume (PDF)", href: "/SaaimCV.pdf" },
-  { title: "Fitter Health recommendation letter (PDF)", href: "/Fitter-Recommendation-Letter.pdf" },
+  { title: "Letter from Fitter Health’s CEO (PDF)", href: "/Fitter-Recommendation-Letter.pdf" },
 ];
 const machine = [
   { title: "XML sitemap", href: "/sitemap.xml" },

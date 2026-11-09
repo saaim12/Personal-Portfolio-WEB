@@ -32,7 +32,7 @@ export default function ProfessionalExperience() {
       <ul>{role.bullets.map(bullet => <li key={bullet}>{bullet}</li>)}</ul><p className="roleTech">{role.tech}</p>
       {role.link && <SiteAnchor className="outlineButton" href={role.link}>View project</SiteAnchor>}
     </section>)}
-    <div className="aboutActions"><Action href="/SaaimCV.pdf" external>Resume</Action><SiteAnchor className="outlineButton" href="/Fitter-Recommendation-Letter.pdf" target="_blank" rel="noopener noreferrer">Fitter Health founder recommendation</SiteAnchor></div></section>
+    <div className="aboutActions"><Action href="/SaaimCV.pdf" external>Resume</Action><SiteAnchor className="outlineButton" href="/Fitter-Recommendation-Letter.pdf" target="_blank" rel="noopener noreferrer">Letter from Fitter Health’s CEO</SiteAnchor></div></section>
     <section className="aboutSection"><h2 className="displayType">Selected projects</h2><div className="skillsGrid">
       <div className="skillGroup"><h3>Multilingual, Multi-Tenant RAG Engine</h3><p>Freelance: Django APIs with CSV, PDF, and DOCX ingestion, pgvector, multilingual embeddings, and Gemini. Authenticated tenant-scoped retrieval, quotas, and six prompt templates keep knowledge bases separate.</p><SiteAnchor className="quietLink" href="/projects/multilingual-rag-engine">View project</SiteAnchor></div>
       <div className="skillGroup"><h3>Real-Time E-Commerce ETL Pipeline</h3><p>Freelance: Kafka and PySpark ingestion with checkpoints, date-partitioned Parquet, validation, and deduplication. Hourly Airflow transformations move Bronze, Silver, and Gold data into a four-table sales star schema.</p><SiteAnchor className="quietLink" href="/projects/realtime-ecommerce-etl-pipeline">View project</SiteAnchor></div>
