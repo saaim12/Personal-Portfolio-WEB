@@ -1,4 +1,4 @@
-/* Monochrome system — Switzer + Geist Mono, near-black on mist, square corners, flat surfaces.
+/* Monochrome system - Switzer + Geist Mono, near-black on mist, square corners, flat surfaces.
    Loaded after custom.css; rules prefixed with "html body" also outrank route stylesheets. */
 :root{
   --bg:#F4F3EF;--surface:#FFFFFF;--ink:#0A0A0A;--slate:#6E6D69;--mist:#F4F3EF;--charcoal:#111111;--line:rgba(10,10,10,.14);--line-dark:rgba(255,255,255,.16);
@@ -72,7 +72,7 @@ html body .menuToggle{border:0!important;background:none!important;padding:0!imp
 .gridLines{position:relative;isolation:isolate}
 .gridLines::before{content:"";position:absolute;inset:0 var(--page-margin);z-index:-1;pointer-events:none;background:repeating-linear-gradient(to right,transparent 0 calc(100%/12 - 1px),rgba(10,10,10,.08) calc(100%/12 - 1px) calc(100%/12));-webkit-mask:repeating-linear-gradient(to bottom,#000 0 4px,transparent 4px 8px);mask:repeating-linear-gradient(to bottom,#000 0 4px,transparent 4px 8px)}
 
-/* Home — hero */
+/* Home - hero */
 html body .studioHero{height:auto!important;min-height:calc(100svh - 56px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:1fr auto auto;column-gap:10px;padding:clamp(48px,10vh,140px) var(--page-margin) 28px;text-align:left;overflow:visible}
 html body .heroNameGroup{grid-column:5/13;width:auto!important;margin:0!important;align-self:center}
 html body .heroName{font:400 clamp(86px,10.6vw,152px)/.92 var(--font-body),sans-serif;letter-spacing:-.045em;margin:0 0 40px;color:var(--ink)}
@@ -95,7 +95,7 @@ html body .monoLink{color:var(--ink)}
   html body .heroFooter{padding-left:0;margin-top:56px}
 }
 
-/* Home — selected work (inverse) */
+/* Home - selected work (inverse) */
 html body .homeWork{width:100%!important;max-width:none!important;margin:0!important;padding:var(--section) 0!important;background:var(--charcoal)!important;color:#F4F3EF}
 html body .workInner{padding:0 var(--page-margin)}
 html body .homeWork .workHeading{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:10px;align-items:end;margin:0 0 72px!important;text-align:left;min-height:0}
@@ -126,7 +126,7 @@ html body .folderProject .projectLink{display:inline-flex;gap:6px;font:400 12px/
 html body .homeWork .folderProject{color:#F4F3EF}
 html body .homeWork .folderProject .projectTags span,html body .homeWork .folderProject .folderTab,html body .homeWork .folderProject .folderCopy p{color:#9a9994!important}
 
-/* Home — about */
+/* Home - about */
 html body .homeAbout{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:10px;padding:var(--section) 0!important;margin:0 auto!important;min-height:0!important;height:auto!important;text-align:left;overflow:visible}
 html body .homeAbout>.monoLabel{grid-column:1/4;margin:0}
 html body .aboutBody{grid-column:4/13;min-width:0}
@@ -305,7 +305,7 @@ html body .learningLinks a{font:400 12px/1.4 var(--font-code),monospace;text-tra
 
 /* Case studies */
 html body :is(.caseHero,.caseStudyBody,.caseNotes,.caseCover){background:none!important}
-html body .caseHero h1{font:400 clamp(48px,8vw,120px)/.95 var(--font-body),sans-serif!important;letter-spacing:-.045em!important;text-transform:none!important}
+html body .caseHero h1{font:400 clamp(40px,5.6vw,84px)/.98 var(--font-body),sans-serif!important;letter-spacing:-.045em!important;text-transform:none!important}
 html body .caseCover{border:0!important;padding:0!important;background:var(--surface)!important}
 html body .caseNotes>div{background:none!important;border:0!important;border-top:1px solid var(--ink)!important;padding:16px 0 0!important}
 html body .caseStudyBody h2{margin-top:72px}
@@ -407,8 +407,8 @@ html body .heroDots{position:absolute;z-index:-1;pointer-events:none;width:clamp
 :root body :is(.outlineButton,.quietLink,.projectLink,.engineeringArrow,.portfolioAnswerGrid a,.engineeringClosing a,.learningLinks a,.contactPrimary a:not(.contactEmail),.copyEmail,main p a:not([class]),main li a:not([class])){border-bottom:0!important;text-decoration:none;background-image:linear-gradient(currentColor,currentColor);background-size:100% 1px;background-repeat:no-repeat;background-position:0 100%;padding-bottom:3px!important;transition:background-size .25s var(--ease),color .2s var(--ease)!important}
 :root body :is(.outlineButton,.quietLink,.projectLink,.engineeringArrow,.portfolioAnswerGrid a,.engineeringClosing a,.learningLinks a,.contactPrimary a:not(.contactEmail),.copyEmail,main p a:not([class]),main li a:not([class])):is(:hover,:focus-visible){background-size:100% 2px;color:inherit!important}
 :root body :is(.engineeringCard,.folderProject):is(:hover,:focus-within) :is(.engineeringArrow,.projectLink){background-size:100% 2px}
-:root body :is(.outlineButton,.quietLink,.projectLink,.heroSocials a,.studioFooter a,.boardLinks a,.studioButton) span[aria-hidden]{display:inline-block;transition:transform .2s var(--ease)!important}
-:root body :is(.outlineButton,.quietLink,.projectLink,.heroSocials a,.studioFooter a,.boardLinks a,.studioButton,.engineeringCard,.folderProject):is(:hover,:focus-visible,:focus-within) span[aria-hidden]{transform:translate(2px,-2px)}
+:root body :is(.outlineButton,.quietLink,.projectLink,.heroSocials a,.studioFooter a,.boardLinks a,.studioButton)>span[aria-hidden]{display:inline-block;transition:transform .2s var(--ease)!important}
+:root body :is(.outlineButton,.quietLink,.projectLink,.heroSocials a,.studioFooter a,.boardLinks a,.studioButton,.engineeringCard,.folderProject):is(:hover,:focus-visible,:focus-within) :is(.projectLink,a,.studioButton,.outlineButton,.quietLink)>span[aria-hidden],:root body :is(.outlineButton,.quietLink,.projectLink,.heroSocials a,.studioFooter a,.boardLinks a,.studioButton):is(:hover,:focus-visible)>span[aria-hidden]{transform:translate(2px,-2px)}
 :root body .folderProject .folderCopy :is(h2,h3) a{background-image:linear-gradient(currentColor,currentColor);background-size:0% 1px;background-repeat:no-repeat;background-position:0 92%;transition:background-size .25s var(--ease)!important}
 :root body .folderProject:is(:hover,:focus-within) .folderCopy :is(h2,h3) a{background-size:100% 1px}
 /* Solid buttons invert to an outline on hover */
@@ -444,14 +444,10 @@ html body .studioHero{overflow-x:clip}
 
 /* Work carousel */
 .workCarousel{position:relative;margin:0 calc(var(--page-margin) * -1)}
-:root body .homeWork .featuredProjects{display:flex!important;grid-template-columns:none;gap:28px!important;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;padding:24px calc(50% - min(46vw,660px)/2) 40px;cursor:grab;outline-offset:-4px}
+:root body .homeWork .featuredProjects{display:flex!important;grid-template-columns:none;gap:28px!important;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;padding:24px calc(50% - min(46vw,660px)/2) 40px;outline-offset:-4px}
 :root body .homeWork .featuredProjects::-webkit-scrollbar{display:none}
-.workCarousel.isDragging .featuredProjects{scroll-snap-type:none!important;cursor:grabbing!important;user-select:none}
 :root body .homeWork .featuredProjects>.folderProject{flex:0 0 min(46vw,660px)!important;scroll-snap-align:center;transform:skewX(var(--skew,0deg))!important;transition:transform .1s linear}
 :root body .homeWork .folderProject .projectPicture img{filter:drop-shadow(var(--split,0px) 0 0 rgba(255,0,80,.55)) drop-shadow(calc(var(--split,0px) * -1) 0 0 rgba(0,220,255,.55))}
-.workOverlayTitle{position:absolute;left:0;right:0;top:calc(24px + min(46vw,660px) * .28);transform:translateY(-50%);margin:0;text-align:center!important;pointer-events:none;overflow:hidden;height:1.05em;font:400 clamp(44px,6vw,96px)/1 var(--font-body),sans-serif;letter-spacing:-.045em;color:#F4F3EF;mix-blend-mode:difference}
-.workOverlayTitle>span{display:block;animation:titleRoll .45s cubic-bezier(.2,.7,.2,1) both}
-@keyframes titleRoll{from{transform:translateY(100%);opacity:0}}
 .workProgress{height:1px;margin:0 var(--page-margin);background:rgba(244,243,239,.18)}
 .workProgress>span{display:block;height:100%;background:#F4F3EF;transform-origin:left;transition:transform .15s linear}
 :root body .homeWork .workHeading{grid-template-areas:"label range hint" ". title title" ". lead lead";grid-template-columns:4fr 5fr 3fr;row-gap:14px}
@@ -463,8 +459,7 @@ html body .studioHero{overflow-x:clip}
 @media (max-width:809px){
   :root body .homeWork .featuredProjects{padding:16px var(--page-margin) 32px;gap:16px!important}
   :root body .homeWork .featuredProjects>.folderProject{flex-basis:82vw!important}
-  .workOverlayTitle{top:calc(16px + 82vw * .28)}
-  .workHint{text-align:left!important;margin-top:6px}
+    .workHint{text-align:left!important;margin-top:6px}
   :root body .homeWork .workHeading{display:flex!important;flex-direction:column}
 }
 
@@ -476,20 +471,126 @@ html body .studioHero{overflow-x:clip}
 .countUp{display:inline-block;font-variant-numeric:tabular-nums}
 :root body .countUp.isRolling>span[aria-hidden]{text-shadow:2px 0 rgba(255,0,80,.6),-2px 0 rgba(0,220,255,.6)!important}
 
-/* Contact image with parallax */
-:root body .contactSection .contactImage{grid-column:6/12;margin:96px 0 0;overflow:hidden;aspect-ratio:16/9;background:var(--surface)}
-.parallax>*{display:block;width:100%;height:100%;object-fit:cover;will-change:transform;transform:scale(1.18)}
-@media (max-width:809px){:root body .contactSection .contactImage{margin-top:48px}}
+
 
 @media (prefers-reduced-motion:reduce){
   :root body *,:root body *::before,:root body *::after{animation:none!important}
   :root body .homeWork .featuredProjects>.folderProject{transform:none!important}
 }
 :root body .homeWork .featuredProjects{flex-direction:row!important;flex-wrap:nowrap!important;align-items:flex-start}
-:root body .workOverlayTitle>span{text-align:center!important}
-:root body .homeWork .workHeading :is(.workRange,.workHint,.workLead){grid-column:auto}
+:root body :root body .homeWork .workHeading :is(.workRange,.workHint,.workLead){grid-column:auto}
 :root body .homeWork .workHeading .workRange{grid-area:range}
 :root body .homeWork .workHeading .workHint{grid-area:hint;text-align:right!important}
 :root body .homeWork .workHeading .workLead{grid-area:lead}
 :root body .hiringProofGrid strong span{font:inherit!important;color:inherit;max-width:none}
 :root body .hiringProofGrid strong .screenReaderText{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* Restored after cleanup */
+.screenReaderText{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.scribble,.handles,.ruler,.mascot,.studioCursorLayer,.studioCursorBlend,.boardShape,.contactBackdrop,.aboutScribble,.selectionLabel,.cursorSticker,.heroNotes,.floatingAvatar,.retainedFolderLabels,.reaction,.frameSticker{display:none!important}
+html body :is(.polaroid,.polaroidLeft,.polaroidRight,.contactTitle,.stickyNote,.storyAnnotation,.personalNote,.bioPortrait,.caseNotes>div,.capabilityChip,.processIndex,.servicesAvailability,.editorialPhoto,.roleHeader .stickyNote,.workHeading>.stickyNote,.contactSticker){transform:none!important;rotate:none!important}
+html body :is(.stickyNote,.personalNote,.storyAnnotation){background:transparent!important;padding:0!important;font:400 13px/1.4 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)!important}
+html body .polaroid{background:transparent!important;padding:0!important;border:0!important}
+html body .polaroid figcaption,html body figcaption{font:400 12px/1.3 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate);margin-top:10px;text-align:left}
+html body .mark{display:none!important}
+html body :is(.roleCard,.storyCard,.bioFrame,.combinedStoryFrame,.toolkitCard,.projectCard,.selectedProject,.caseNotes>div,.serviceCard,.servicePanel,.processCard,.serviceFaq,.journalEntry,.learningEntry,.capabilityChip,.commentNote,.contactBoard,.notFound){box-shadow:none!important}
+html body :is(.yellow,.green,.pink,.blue,.mint,.sand){background:transparent!important;color:inherit!important}
+html body :is(.greenInk,.pinkInk,.yellowInk){color:inherit!important}
+html body .contactPage .polaroid{display:none!important}
+html body .editorialPhoto img,html body .bioPortrait img{filter:none}
+html body :is(.selectedProjects,.relatedProjects,.projectList)>*{background:none!important;border:0!important;border-top:1px solid var(--line)!important;padding:20px 0 0!important}
+html body .headingPermalink,html body .headingPermalink *{color:var(--slate)}
+html body .boundaryStroke,html body .chapterArtworkLayer,html body .chapterArtwork,html body .processArtwork,html body .stepPointer,html body .processArrow,html body .faqUser,html body .faqUsername,html body .faqReaction,html body .faqLabel,html body .faqAnswer img,html body .serviceChapters>svg,html body .servicePanel>svg{display:none!important}
+html body :is(.journalEntry,.journalChapters,.sitemapGroup,.editorialSection){background:none!important;border:0!important;border-top:1px solid var(--line)!important;padding-top:28px!important}
+html body .editorialByline,html body .editorialContents{font-family:var(--font-code),monospace;font-size:12px;text-transform:uppercase;letter-spacing:.02em;color:var(--slate)}
+html body .editorialContents{background:none!important;border:0!important;border-left:1px solid var(--line)!important;padding:0 0 0 20px!important}
+html body .editorialContents a{color:var(--slate)}
+html body .editorialContents a:hover,html body .editorialContents a[aria-current]{color:var(--ink)}
+html body .journalPage :is(.journalNumber,.noteNumber,.journalEntry>span:first-child){background:none!important;border:0!important}
+.journalPage .journalChapters[open] .journalChapterChevron{transform:rotate(180deg)}
+
+/* Pinned, scroll-driven work rail (wide screens with motion) */
+.workPin.isPinned{position:relative}
+.workPin.isPinned .workCarousel{position:sticky;top:56px;height:calc(100vh - 56px);display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+:root body .workPin.isPinned .homeWork .featuredProjects,:root body .homeWork .workPin.isPinned .featuredProjects{overflow:visible;scroll-snap-type:none;will-change:transform}
+:root body .homeWork .workPin.isPinned .featuredProjects>.folderProject{scroll-snap-align:none}
+.workPin.isPinned .workProgress{margin-top:8px}
+:root body .homeWork .workPin.isPinned .featuredProjects{min-width:0;width:100%}
+
+/* ---------- Menu panel (all widths) ---------- */
+:root body .studioHeader{z-index:100}
+:root body .navBar{position:relative;z-index:3}
+:root body .navActions{margin-left:auto}
+:root body .menuToggle{display:flex!important;margin-left:22px;position:relative;z-index:4}
+html[data-menu-open] body .menuToggle{color:#F4F3EF!important}
+html[data-menu-open] body .navActions{visibility:hidden}
+:root body .menuBackdrop{position:fixed;inset:0;z-index:1;background:rgba(10,10,10,.6);opacity:0;pointer-events:none;transition:opacity .3s var(--ease)!important}
+html[data-menu-open] body .menuBackdrop{opacity:1;pointer-events:auto}
+:root body .navLinks{display:none!important;position:fixed!important;top:0!important;right:0;left:auto!important;bottom:0;z-index:2;width:min(640px,100%);height:100vh;margin:0!important;padding:28px var(--page-margin) 32px 60px!important;flex-direction:column!important;align-items:stretch!important;gap:0!important;background:transparent!important;color:#F4F3EF;border:0!important;overflow:auto}
+:root body .navLinks.isOpen{display:flex!important}
+:root body .navLinks .pixelBlocks{position:absolute;inset:0;z-index:-1;display:grid}
+:root body .navLinks .pixelBlocks i{background:#0A0A0A;animation:blockIn .14s steps(1,end) both}
+:root body .navLinks>*:not(.pixelBlocks){animation:fadeIn .25s .3s both}
+@keyframes blockIn{from{opacity:0}}
+.menuName{font:400 12px/1 var(--font-code),monospace;letter-spacing:.04em;text-transform:uppercase;margin:0 0 auto!important;padding-top:2px}
+.menuList{display:flex;flex-direction:column;gap:2px;margin:72px 0}
+:root body .navLinks .menuList>a{display:flex!important;align-items:baseline;gap:28px;width:auto;padding:0!important;border:0!important;background:none!important;color:#F4F3EF!important;font:400 clamp(36px,4.4vw,64px)/1.08 var(--font-body),sans-serif!important;letter-spacing:-.035em!important;text-transform:none!important}
+:root body .navLinks .menuList>a:hover,:root body .navLinks .menuList>a:focus-visible,:root body .navLinks .menuList>a[aria-current=page]{color:#9a9994!important}
+:root body .navLinks .menuList>a:focus-visible{outline-color:#F4F3EF}
+.menuIndex{font:400 12px/1 var(--font-code),monospace;letter-spacing:.04em;color:#9a9994;min-width:22px}
+.menuFooter{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:auto}
+:root body .navLinks .menuFooter a{display:inline-flex!important;width:auto;padding:0!important;border:0!important;background:none!important;font:400 12px/1.6 var(--font-code),monospace!important;letter-spacing:.04em;text-transform:uppercase;color:#F4F3EF!important}
+:root body .navLinks .menuFooter a:hover{color:#9a9994!important}
+:root body .navLinks .menuFooter a:focus-visible{outline-color:#F4F3EF}
+.menuMail{flex-basis:100%;margin:6px 0 0!important;font:400 12px/1.6 var(--font-code),monospace;letter-spacing:.04em;text-transform:uppercase;color:#9a9994}
+@media (max-width:809px){:root body .navLinks{padding:24px var(--page-margin)!important}.menuList{margin:56px 0}}
+@media (prefers-reduced-motion:reduce){:root body .navLinks .pixelBlocks i{animation:none}}
+
+/* Page transition blocks */
+.pageBlocks{position:fixed;inset:0;z-index:150;display:grid;pointer-events:none}
+.pageBlocks i{background:#0A0A0A;animation:blockOut .16s steps(1,end) both}
+@keyframes blockOut{to{opacity:0}}
+
+/* Scramble */
+.scramble{display:inline-block;white-space:nowrap}
+
+/* Hero stays put while the work section slides over it */
+@media (min-width:810px) and (prefers-reduced-motion:no-preference){
+  :root body .studioHome .studioHero{position:sticky;top:56px;z-index:0}
+  :root body .studioHome .homeWork{position:relative;z-index:1}
+}
+
+/* Contact headline letters */
+.blurLetters{display:inline-block;white-space:inherit}
+.blurLetter{display:inline-block;transition:filter .18s linear,opacity .3s linear;will-change:filter}
+.blurLetter:empty,.blurLetter{min-width:.01em}
+@media (max-width:809px){.blurLetter{display:inline}}
+
+/* Project title over the centre card */
+:root body .workOverlayTitle{position:absolute;left:0;right:0;top:calc(24px + min(46vw,660px) * .28);transform:translateY(-50%);z-index:2;margin:0;pointer-events:none;text-align:center!important;font:400 clamp(40px,5.4vw,84px)/1 var(--font-body),sans-serif;letter-spacing:-.045em;color:#F4F3EF;mix-blend-mode:difference;white-space:nowrap}
+:root body .workOverlayTitle *{text-align:center!important}
+:root body .workPin .workOverlayTitle{top:var(--title-y,50%)}
+@media (max-width:809px){:root body .workPin .workOverlayTitle{font-size:36px}}
+
+/* Next project (case studies) */
+:root body .nextProject{margin:var(--section) 0 0;padding-top:28px;border-top:1px solid var(--ink)}
+:root body .nextProjectLink{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:10px;row-gap:12px;margin-top:28px;background:none!important;padding:0!important}
+.nextProjectTitle{grid-column:1/9;font:400 clamp(48px,7vw,112px)/.95 var(--font-body),sans-serif;letter-spacing:-.045em}
+:root body .nextProjectLink .monoMeta{grid-column:9/13;align-self:end;text-align:right}
+.nextProjectImage{grid-column:1/13;display:block;overflow:hidden;background:var(--surface);aspect-ratio:16/7}
+.nextProjectImage img{width:100%;height:100%;object-fit:contain;padding:3%;transition:transform .5s var(--ease)!important}
+:root body .nextProjectLink:is(:hover,:focus-visible) .nextProjectImage img{transform:scale(1.03)}
+:root body .nextProjectLink:is(:hover,:focus-visible) .nextProjectTitle{color:var(--slate)}
+@media (max-width:809px){:root body .nextProjectLink{display:block!important}.nextProjectTitle{display:block;margin-bottom:10px}:root body .nextProjectLink .monoMeta{display:block;text-align:left;margin-bottom:16px}}
+:root body .studioHome>:not(.studioHero):not(script){position:relative;z-index:1;background-color:var(--bg)!important}
+:root body .studioHome>section.homeWork.homeWork{background-color:var(--charcoal)!important}
+:root body .navLinks .menuList>a{font-size:clamp(30px,3.4vw,52px)!important;white-space:normal}
+:root body .navLinks .menuList .scramble{white-space:normal}
+:root body .contactSection .boardLinks{justify-items:start}:root body .contactSection .boardLinks a{justify-self:start;text-align:left}
+.nextProjectTitle{overflow-wrap:break-word;hyphens:auto;min-width:0}@media (max-width:809px){.nextProjectTitle{font-size:clamp(34px,11vw,56px)}}
+
+@media (max-width:1199px){:root body .rollTrack>span[aria-hidden]{display:none!important}}
+:root body .navLinks.isOpen::before{content:"";position:fixed;top:0;right:0;bottom:0;width:min(640px,100%);z-index:-2;background:#0A0A0A;opacity:0;animation:fillIn .01s .32s forwards}
+@keyframes fillIn{to{opacity:1}}
+@media (prefers-reduced-motion:reduce){:root body .navLinks.isOpen::before{opacity:1;animation:none!important}}
+@media (max-width:809px){:root body .heroCtas{justify-content:flex-start!important}}

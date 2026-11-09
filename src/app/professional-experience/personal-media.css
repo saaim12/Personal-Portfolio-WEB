@@ -11,8 +11,7 @@
 .combinedStoryFrame p{line-height:1.8}
 .combinedStoryFrame .mergedStoryIntro{max-width:850px;margin-inline:auto}
 .combinedStoryFrame .personalStoryMoments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:clamp(20px,4vw,52px);margin-top:52px}
-.combinedStoryFrame .editorialPhoto{margin:0;padding:10px 10px 8px;background:white;max-width:340px;justify-self:center;transform:rotate(-2deg);width:100%}
-.combinedStoryFrame .editorialPhoto:nth-of-type(even){transform:rotate(2deg)}
+.combinedStoryFrame .editorialPhoto{margin:0;padding:10px 10px 8px;background:white;max-width:340px;justify-self:center;width:100%}
 .combinedStoryFrame .editorialPhoto img,.combinedStoryFrame .editorialPhoto video{display:block;width:100%;height:auto;max-height:340px;object-fit:cover}
 .combinedStoryFrame .editorialPhoto video{object-fit:contain;background:var(--ink)}
 .combinedStoryFrame .editorialPhoto figcaption{text-align:center;font:19px/1.45 var(--font-hand);padding:9px 6px 3px}

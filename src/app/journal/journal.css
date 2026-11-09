@@ -15,7 +15,6 @@
 .journalPage .journalChapters summary:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 .journalPage .journalChapterCount{font-size:12px;opacity:.7}
 .journalPage .journalChapterChevron{font-size:24px;line-height:1}
-.journalPage .journalChapters[open] .journalChapterChevron{transform:rotate(180deg)}
 .journalPage .journalChapters ol{padding:14px 20px 12px 38px;margin:0}
 
 }

@@ -3,6 +3,7 @@ import "@/resources/custom.css";
 import "@/resources/mono.css";
 
 import { StudioMotion } from "@/components/StudioMotion";
+import { PageTransition } from "@/components/effects/PageTransition";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { fonts } from "@/resources/fonts";
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <SiteAnchor href="#main" className="skipLink">Skip to content</SiteAnchor>
         <Header name={person.name} />
         <StudioMotion />
+        <PageTransition />
         <main id="main">{children}</main>
         <Footer />
         <ClarityAnalytics />

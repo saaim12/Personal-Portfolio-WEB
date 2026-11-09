@@ -20,7 +20,7 @@ import { getProjects } from "@/utils/projects";
 export async function generateMetadata() { return pageMeta({ title: home.title, description: home.description, path: home.path, image: home.image }); }
 const [firstName, ...rest] = person.name.split(" ");
 const featuredYears = getProjects().filter(p => featuredSlugs.includes(p.slug)).map(p => p.metadata.publishedAt.slice(0, 4)).sort();
-const workYears = featuredYears[0] === featuredYears.at(-1) ? featuredYears[0] : `${featuredYears[0]}—${featuredYears.at(-1)}`;
+const workYears = featuredYears[0] === featuredYears.at(-1) ? featuredYears[0] : `${featuredYears[0]}-${featuredYears.at(-1)}`;
 export default function Home() {
   const external = (link: string) => link.startsWith("mailto:") ? {} : { target: "_blank", rel: "noopener noreferrer" };
   return <div className="studioHome">
@@ -38,7 +38,7 @@ export default function Home() {
     </section>
     <section id="work" className="homeWork" aria-labelledby="featured-heading">
       <div className="workInner">
-        <div className="workHeading"><Label>Selected work</Label><p className="monoMeta workRange">Projects_{workYears}</p><p className="monoMeta workHint">[Drag to explore]</p><h2 id="featured-heading" className="workTitle">Featured works</h2><p className="monoMeta workLead">Real problems, thoughtful decisions, and software that gets things done.</p></div>
+        <div className="workHeading"><Label>Selected work</Label><p className="monoMeta workRange">Projects_{workYears}</p><p className="monoMeta workHint">[Scroll to explore]</p><h2 id="featured-heading" className="workTitle">Featured works</h2><p className="monoMeta workLead">Real problems, thoughtful decisions, and software that gets things done.</p></div>
         <WorkCarousel><Projects only={featuredSlugs} preview /></WorkCarousel>
         <div className="allWorkAction"><Action href="/projects">All {getProjects().length} projects</Action><SiteAnchor href="/professional-experience" className="quietLink">Explore my experience ↗</SiteAnchor></div>
       </div>
@@ -48,7 +48,7 @@ export default function Home() {
       <div className="aboutBody">
         <h2 id="about-intro"><WordReveal text="I’m Saaim, a software engineer in Lahore who gets excited about making complicated things simple." /></h2>
         <div className="aboutColumns">
-          <p>I work across backend systems, full-stack products, data engineering, and cloud &amp; AI—shipping APIs, pipelines and services that teams can depend on.</p>
+          <p>I work across backend systems, full-stack products, data engineering, and cloud &amp; AI, shipping APIs, pipelines and services that teams can depend on.</p>
           <div className="portraitPair">
             <figure><Image src={person.avatar} width={240} height={280} alt="Saaim Abdullah" /><figcaption>2026</figcaption></figure>
             <figure><Image src={portraits.playful} width={240} height={280} alt="Saaim wearing neon glasses" /><figcaption>After hours</figcaption></figure>
@@ -66,7 +66,7 @@ export default function Home() {
     <section className="engineeringHub studioContainer" aria-labelledby="home-engineering-focus">
       <span className="engineeringEyebrow">(What I build / How I think)</span>
       <h2 id="home-engineering-focus" className="engineeringTitle">Engineering behind the work.</h2>
-      <p className="engineeringLead">Detailed technical approaches linked to real case studies—not a generic stack of buzzwords. Explore how I design backend APIs, data pipelines, AI retrieval, cloud delivery and dependable product systems.</p>
+      <p className="engineeringLead">Detailed technical approaches linked to real case studies, not a generic stack of buzzwords. Explore how I design backend APIs, data pipelines, AI retrieval, cloud delivery and dependable product systems.</p>
       <div className="engineeringCardGrid">{specialties.slice(0,4).map((item, index)=><Link className="engineeringCard" href={`/expertise/${item.slug}`} key={item.slug}><small>{String(index+1).padStart(2,"0")}_Engineering practice</small><h3>{item.title}</h3><p>{item.summary}</p><span className="engineeringArrow">See case-study evidence ↗</span></Link>)}</div>
       <div className="engineeringClosing"><h3>Technical architecture notes</h3><p>{engineeringNotes.slice(0,2).map((note,index)=><span key={note.slug}>{index>0?" · ":""}<Link href={`/engineering-notes/${note.slug}`}>{note.title} ↗</Link></span>)}</p><p><Link href="/expertise">View all specialties ↗</Link> · <Link href="/engineering-notes">Read all notes ↗</Link></p></div>
     </section>

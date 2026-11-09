@@ -1,5 +1,5 @@
 ---
-title: "ML foundations — reproducible experiments before model complexity"
+title: "ML foundations: reproducible experiments before model complexity"
 seoTitle: "Machine learning foundations"
 publishedAt: "2026-09-29"
 updatedAt: "2026-10-11"
@@ -17,7 +17,7 @@ team: []
 
 ## Knowing the algorithm is not enough; the experiment must be correct
 
-I built these machine learning exercises to understand what a trained model actually means. It is easy to call `.fit()` and print a score. It is harder—and much more useful—to explain what data the model saw, how inputs were shaped, whether the score is comparable across experiments, and whether an artifact behaves the same way after it is loaded again.
+I built these machine learning exercises to understand what a trained model actually means. It is easy to call `.fit()` and print a score. It is harder, and much more useful, to explain what data the model saw, how inputs were shaped, whether the score is comparable across experiments, and whether an artifact behaves the same way after it is loaded again.
 
 This body of work is **foundational engineering practice**, not a deployed commercial ML platform. I include it because the discipline behind evaluation, preprocessing, and reproducibility is the same discipline required in larger data and machine learning systems.
 
@@ -25,11 +25,11 @@ This body of work is **foundational engineering practice**, not a deployed comme
 
 | Component | Exact structure in the exercise | Engineering significance |
 | --- | --- | --- |
-| Regression input features | **3** — TV, radio, newspaper spending | Multi-input feature matrix |
-| Regression target | **1** — sales | Supervised continuous prediction |
+| Regression input features | **3**: TV, radio, newspaper spending | Multi-input feature matrix |
+| Regression target | **1**: sales | Supervised continuous prediction |
 | Split recorded in script | **20% train / 80% test** | Implementation fact, not an assumed standard 80/20 split |
-| Named evaluation measures | **2** — MSE and R² | Error magnitude and explained variance |
-| Artifact lifecycle | **2 steps** — save and reload via joblib | Test that inference can run from a persisted model |
+| Named evaluation measures | **2**: MSE and R² | Error magnitude and explained variance |
+| Artifact lifecycle | **2 steps**: save and reload via joblib | Test that inference can run from a persisted model |
 | Scientific stack | pandas, NumPy, scikit-learn | Data manipulation, numerical computation, ML pipeline |
 
 ## From raw CSV to an evaluated prediction
@@ -58,7 +58,7 @@ The implementation uses **20% for training and 80% for testing**. A reader might
 | R² | `1 - SS_res / SS_tot` | Model not beating a simple mean baseline |
 | Residual visualization | Inspect error across observed sales | Trends or nonlinearity ignored by linear model |
 
-I would also add MAE and confidence intervals in a future report—but I do not claim that those are already published results.
+I would also add MAE and confidence intervals in a future report, but I do not claim that those are already published results.
 
 ## The principles behind the smaller Python labs
 

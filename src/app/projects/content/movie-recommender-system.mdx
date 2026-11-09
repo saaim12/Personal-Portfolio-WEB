@@ -1,5 +1,5 @@
 ---
-title: "Recommendation engineering — from raw ratings to a serving API"
+title: "Recommendation engineering: from raw ratings to a serving API"
 publishedAt: "2026-07-01"
 cardSummary: "Built a 3-signal hybrid recommender with separate training, versionable artifacts, FastAPI serving, and optional Redis cache."
 updatedAt: "2026-10-11"
@@ -27,17 +27,17 @@ seoTitle: "Movie recommendation service"
 
 A good recommendation model is worthless if a product cannot load it, make repeatable requests, handle a new user, or replace a model without breaking the API. I approached MovieLens as a **full ML-systems problem**: ingestion, feature preparation, ranking signals, artifact lifecycle, serving, and operational behaviors all belong in the design.
 
-I built a recommendation service that combines **three complementary signals**—content similarity, item co-occurrence, and popularity—and exposes them through **FastAPI**. Training runs separately from requests, with **Airflow** coordinating the workflow. Redis caching is optional; model artifacts can be reloaded through an explicit service operation.
+I built a recommendation service that combines **three complementary signals** (content similarity, item co-occurrence, and popularity) and exposes them through **FastAPI**. Training runs separately from requests, with **Airflow** coordinating the workflow. Redis caching is optional; model artifacts can be reloaded through an explicit service operation.
 
 ## Scope in numbers
 
 | Area | Implemented architecture | Engineering benefit |
 | --- | --- | --- |
-| Ranking signals | **3** — content, co-occurrence, popularity | Different evidence for familiar items and cold starts |
-| Main API capabilities | **4 groups** — recommend, similar items, health, model reload | Clear serving and operational contracts |
-| Model lifecycles | **2** — offline training and online serving | Training failures do not block every live request |
+| Ranking signals | **3**: content, co-occurrence, popularity | Different evidence for familiar items and cold starts |
+| Main API capabilities | **4 groups**: recommend, similar items, health, model reload | Clear serving and operational contracts |
+| Model lifecycles | **2**: offline training and online serving | Training failures do not block every live request |
 | Source families | Ratings, tags, links, and movie metadata | Join user behavior with item context |
-| Optional cache systems | **1** — Redis | Avoid repeat work where cache keys are safe |
+| Optional cache systems | **1**: Redis | Avoid repeat work where cache keys are safe |
 | Scheduling | Airflow workflow | Repeatable feature/model preparation |
 
 The counts describe components, **not measured precision, click-through, or online user activity**.
@@ -109,4 +109,4 @@ For an ingestion and warehouse comparison, see my [e-commerce data pipeline](/pr
 
 ## Source
 
-* [GitHub — Recommender System](https://github.com/saaim12/Recommender-System)
+* [GitHub: Recommender System](https://github.com/saaim12/Recommender-System)

@@ -1,5 +1,5 @@
 ---
-title: "Multilingual, multi-tenant RAG — isolation before intelligence"
+title: "Multilingual, multi-tenant RAG: isolation before intelligence"
 publishedAt: "2026-05-10"
 cardSummary: "Designed tenant-scoped retrieval with local multilingual embeddings, 6 task templates, JWT identity, usage quotas, and grounded generation."
 updatedAt: "2026-10-11"
@@ -39,7 +39,7 @@ The outcome is a Django-backed retrieval system with local multilingual embeddin
 | Knowledge ownership | **Tenant-associated** documents and chunks | Query scope belongs to authenticated identity |
 | Embedding provider type | **1 local multilingual E5 path** | Source text can be vectorized without an embedding API request |
 | Generation provider type | **1 external Gemini path** | Only selected context is passed to the generation dependency |
-| Principal security gates | **3** — identity, authorization, retrieval scope | Each protects a different part of the lifecycle |
+| Principal security gates | **3**: identity, authorization, retrieval scope | Each protects a different part of the lifecycle |
 | Persistence | PostgreSQL plus pgvector | Metadata and vectors share a relational model |
 | Usage control | Per-tenant quotas | Limit consumption independently from data isolation |
 

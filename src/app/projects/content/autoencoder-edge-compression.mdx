@@ -1,5 +1,5 @@
 ---
-title: "Edge ML — splitting an autoencoder between a device and the cloud"
+title: "Edge ML: splitting an autoencoder between a device and the cloud"
 publishedAt: "2025-11-15"
 cardSummary: "Designed a 5-stage sensor pipeline spanning model training, ESP32 inference, transport, Flask reconstruction, and S3-backed artifacts."
 updatedAt: "2026-10-11"
@@ -27,7 +27,7 @@ seoTitle: "Autoencoder for edge sensor data"
 
 Embedded devices are not smaller laptops. Their memory budgets, compute characteristics, wireless links, and firmware deployment model force architectural decisions that a server-side ML engineer can often ignore. I built this project to explore a **split autoencoder**: encode a sensor reading close to its source and reconstruct that representation on a cloud service.
 
-My responsibility spanned both halves of the system: model development in Python/TensorFlow, conversion for **TensorFlow Lite Micro**, ESP32-side integration, a **Flask decoder** running on **AWS EC2**, and **S3** integration for encoded payload artifacts. The important achievement is creating a connected edge-to-cloud inference contract—not making an unsupported claim that every autoencoder reduces energy or encrypts data.
+My responsibility spanned both halves of the system: model development in Python/TensorFlow, conversion for **TensorFlow Lite Micro**, ESP32-side integration, a **Flask decoder** running on **AWS EC2**, and **S3** integration for encoded payload artifacts. The important achievement is creating a connected edge-to-cloud inference contract, not making an unsupported claim that every autoencoder reduces energy or encrypts data.
 
 ## Architecture, in five accountable stages
 
@@ -80,7 +80,7 @@ For a **clearly hypothetical** example, if the original payload occupied 100 byt
 
 ## Two implementation decisions I would defend in review
 
-**First: use an explicit edge/server split, not hidden remote inference.** Even when the server reconstructs the result, the ESP32 must perform meaningful local model work. That exposes real deployment issues—operator support, exported model format, memory allocation, and firmware/model version coupling.
+**First: use an explicit edge/server split, not hidden remote inference.** Even when the server reconstructs the result, the ESP32 must perform meaningful local model work. That exposes real deployment issues: operator support, exported model format, memory allocation, and firmware/model version coupling.
 
 **Second: separate representation learning from confidentiality.** The repository title references encryption, but an autoencoder's latent representation is **not cryptographic encryption**. If payload secrecy is needed, I would use authenticated transport and appropriately managed encryption keys, independent of model design. Compressibility and secrecy are different properties with different acceptance tests.
 

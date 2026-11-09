@@ -1,5 +1,5 @@
 ---
-title: "ESP32 temperature inference — proving the model/firmware contract"
+title: "ESP32 temperature inference: proving the model/firmware contract"
 seoTitle: "ESP32 temperature inference"
 publishedAt: "2026-09-29"
 updatedAt: "2026-10-11"
@@ -28,7 +28,7 @@ This is a focused embedded-inference project, distinct from the broader edge com
 | Sensor | **DHT11** | Physical device input, not just an offline CSV |
 | Scalar sensor value used | **1 temperature reading** | Defines the shape of the model's input |
 | Latent vector width | **2 values** | Defines the device-to-Flask interface |
-| Model deployment runtimes | **2** — ESP32 and Python service | Export/decoder compatibility must be maintained |
+| Model deployment runtimes | **2**: ESP32 and Python service | Export/decoder compatibility must be maintained |
 | Decode API | **`/decode`** | HTTP boundary for reconstructed inference |
 | Firmware model runtime | TensorFlow Lite Micro | Embedded tensor arena and operator registration |
 | Server runtime | Flask with saved decoder/scaler | Inverse transform and output handling |

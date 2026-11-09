@@ -30,7 +30,7 @@ export default async function SpecialtyPage({params}:Params){const {slug}=await 
 {item.approach.map((step,i)=><section id={headingId(step.heading)} key={step.heading}><h2>{i+1}. {step.heading}</h2><p>{step.detail}</p><h3>Engineering checks</h3><ul>{step.checks.map(check=><li key={check}>{check}</li>)}</ul></section>)}
 <section id="outcomes"><h2>Expected result and engineering trade-off</h2><p>{item.outcome}</p><p>{item.tradeoff}</p><div className="engineeringTagRow">{item.stack.map(t=><span key={t}>{t}</span>)}</div></section>
 </div>
-<aside id="project-evidence" className="engineeringAside"><h2>Related real project evidence</h2><ul>{item.relatedProjects.map(p=><li key={p.slug}><Link href={`/projects/${p.slug}`}>{p.label} ↗</Link> — {p.proof}</li>)}</ul></aside>
+<aside id="project-evidence" className="engineeringAside"><h2>Related real project evidence</h2><ul>{item.relatedProjects.map(p=><li key={p.slug}><Link href={`/projects/${p.slug}`}>{p.label} ↗</Link>: {p.proof}</li>)}</ul></aside>
 {matchingNotes.length>0&&<aside className="engineeringAside"><h2>Deep engineering note</h2>{matchingNotes.map(note=><p key={note.slug}><Link href={`/engineering-notes/${note.slug}`}>{note.title} ↗</Link></p>)}</aside>}
 <div className="engineeringClosing"><h2>Have a backend, data, or product challenge?</h2><p>Review <Link href="/services">all service areas</Link>, see <Link href="/projects">published work</Link>, or <Link href="/contact">contact me about a role or project</Link>.</p></div>
 </div><Contact/></div>;}

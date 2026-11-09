@@ -9,7 +9,7 @@ export const specialties:Specialty[]=[
 {
 slug:"backend-api-engineering",title:"Backend API & Systems Engineering",
 description:"Backend API engineering with Django, Node.js, PostgreSQL, authentication, background jobs, testing, and reliable service integrations.",
-summary:"I design and implement application backends that treat data integrity, permissions and recovery as product requirements , not afterthoughts.",
+summary:"I design and implement application backends that treat data integrity, permissions and recovery as product requirements, not afterthoughts.",
 problem:"A feature can seem simple in a UI yet require consistent state across accounts, databases and external systems. When an API times out, a worker retries, or a user loses permission, the system still needs a predictable answer. I start by mapping these cases rather than choosing a framework first.",
 audience:["Teams building a new API-backed product","Organizations maintaining Django or Node.js services","Product engineers connecting user workflows to external providers"],
 approach:[
@@ -18,14 +18,14 @@ approach:[
 {heading:"Test, deploy and make failure visible",detail:"Integration tests cover permissions, expired sessions and database rules. Operational monitoring should report worker failures and delayed jobs, not just HTTP health. Deployment planning includes migrations, secrets, rollback and a clear way for another engineer to diagnose a problem.",checks:["Test failure paths and duplicate delivery","Instrument errors and job status","Prepare a deploy and rollback checklist"]}
 ],
 stack:["Python","Django REST Framework","Node.js","PostgreSQL","Redis","Celery","AWS"],
-relatedProjects:[{slug:"fitter-health-platform",label:"Fitter Health , production platform",proof:"Django application delivery, membership workflows, notifications, AWS and handover."},{slug:"temporary-url-service",label:"Temporary URL service",proof:"Small Express API with explicit expiry and durability limitations."}],
+relatedProjects:[{slug:"fitter-health-platform",label:"Fitter Health: production platform",proof:"Django application delivery, membership workflows, notifications, AWS and handover."},{slug:"temporary-url-service",label:"Temporary URL service",proof:"Small Express API with explicit expiry and durability limitations."}],
 outcome:"A maintainable backend with explicit authorization, reliable state transitions, clear integration contracts and documentation.",
 tradeoff:"A modular application with sound data rules is usually more useful than multiple services created for their own sake."
 },
 {
 slug:"data-engineering-pipelines",title:"Data Pipelines & ETL Engineering",
 description:"Data pipeline design with Kafka, Spark, Airflow, Python, SQL, PostgreSQL, deduplication, observability, and batch or streaming ETL.",
-summary:"I build data flows that people can reproduce, reconcile and trust from raw events to documented analytical models.",
+summary:"I build data flows that people can reproduce, reconcile and trust, from raw events to documented analytical models.",
 problem:"When analytics cannot explain where a number came from, building a faster dashboard will not solve the problem. A useful data platform begins with authoritative sources, business definitions, freshness expectations and a plan for replaying failed loads.",
 audience:["Teams merging application events and operational reporting","Engineers choosing between scheduled ETL and streaming","Businesses replacing recurring spreadsheet reconciliation"],
 approach:[
@@ -42,7 +42,7 @@ tradeoff:"Batch processing is often the best choice until a real operational dec
 slug:"rag-ai-engineering",title:"RAG & AI Backend Engineering",
 description:"RAG and AI backend systems with Django, pgvector, multilingual embeddings, tenant-isolated retrieval, grounded answers, and API safeguards.",
 summary:"I treat AI retrieval as a backend security and data-quality problem, with model choice only one part of the system.",
-problem:"A chat interface can generate plausible answers while retrieving irrelevant context or context belonging to another customer. A dependable retrieval system must distinguish ingestion, identity, embedding compatibility and answer verification.",
+problem:"A chat interface can generate plausible answers while retrieving irrelevant context, or context belonging to another customer. A dependable retrieval system must distinguish ingestion, identity, embedding compatibility and answer verification.",
 audience:["Teams exploring document question-answering","Products serving multiple customer workspaces","Developers connecting embeddings and LLMs to existing APIs"],
 approach:[
 {heading:"Map documents, permissions and retrieval goals",detail:"I begin with who owns each document, which queries should succeed and which should be declined. Chunking strategy and metadata decide what can be found. Authentication, authorization and retrieval filtering must agree on the same tenant scope.",checks:["Define ingestion and source attribution","Test unauthorized cross-tenant queries","Create questions with no supported answer"]},

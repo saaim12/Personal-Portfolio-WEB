@@ -28,19 +28,19 @@
 .servicesPage .processCard:before{height:30px}
 .servicesPage .processCard h3{font-size:48px;line-height:1.2;margin:0 0 14px;letter-spacing:-2px}
 .servicesPage .processCard p{font-size:18px;line-height:1.5}
-.servicesPage .processIndex{right:-48px;bottom:110px;font-size:16px;padding:8px 18px;background:var(--blue);transform:rotate(-3deg)}
-.servicesPage .processCard:nth-child(2) .processIndex{background:var(--yellow);transform:rotate(-10deg)}
-.servicesPage .processCard:nth-child(3) .processIndex{background:var(--pink);transform:rotate(-10deg)}
-.servicesPage .processCard:nth-child(4) .processIndex{background:var(--green);transform:rotate(6deg)}
+.servicesPage .processIndex{right:-48px;bottom:110px;font-size:16px;padding:8px 18px;background:var(--blue)}
+.servicesPage .processCard:nth-child(2) .processIndex{background:var(--yellow)}
+.servicesPage .processCard:nth-child(3) .processIndex{background:var(--pink)}
+.servicesPage .processCard:nth-child(4) .processIndex{background:var(--green)}
 .servicesPage .capabilitiesSection{padding:110px 0}
 .servicesPage .capabilityGroup{min-height:650px;padding:70px;border-color:#444}
 .servicesPage .capabilityGroup h3{font-size:20px;padding:24px 12px 12px;clip-path:polygon(0 0,40px 0,55px 15px,100% 15px,100% 100%,0 100%)}
 .servicesPage .capabilityTone4 h3{color:white}
-.servicesPage .capabilityChip{font-size:20px;padding:20px;max-width:36%;overflow-wrap:anywhere;top:250px;left:18%;transform:rotate(-6deg)}
-.servicesPage .capabilityChip:nth-of-type(2){left:56%;top:160px;transform:rotate(10deg)}
-.servicesPage .capabilityChip:nth-of-type(3){left:60%;top:350px;transform:rotate(-10deg)}
-.servicesPage .capabilityChip:nth-of-type(4){left:18%;top:410px;transform:rotate(2deg)}
-.servicesPage .capabilityChip:nth-of-type(5){left:50%;top:525px;transform:rotate(-8deg)}
+.servicesPage .capabilityChip{font-size:20px;padding:20px;max-width:36%;overflow-wrap:anywhere;top:250px;left:18%}
+.servicesPage .capabilityChip:nth-of-type(2){left:56%;top:160px}
+.servicesPage .capabilityChip:nth-of-type(3){left:60%;top:350px}
+.servicesPage .capabilityChip:nth-of-type(4){left:18%;top:410px}
+.servicesPage .capabilityChip:nth-of-type(5){left:50%;top:525px}
 .servicesPage .serviceFaqGrid{gap:70px 110px}
 .servicesPage .serviceFaq{padding:24px}
 .servicesPage .serviceFaq:nth-child(even){margin-top:120px}

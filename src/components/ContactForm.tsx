@@ -31,10 +31,10 @@ export function ContactForm(){
    setError(result.error||"The message could not be sent right now.");setStatus("error");
   }catch{setError("The message could not be sent. Check your connection and try again.");setStatus("error");}
  }
- if(status==="sent")return <div className="contactForm"><div className="formSheet" role="status"><p className="formSuccess">Thanks , your message has been delivered to my inbox. I’ll reply to your email soon.</p><div className="formActions"><span/><button type="button" onClick={()=>{setStatus("idle");startedAt.current=0;requestAnimationFrame(()=>messageRef.current?.focus());}}>Send another</button></div></div><p className="handwritten">{availability}</p></div>;
+ if(status==="sent")return <div className="contactForm"><div className="formSheet" role="status"><p className="formSuccess">Thanks, your message has been delivered to my inbox. I’ll reply to your email soon.</p><div className="formActions"><span/><button type="button" onClick={()=>{setStatus("idle");startedAt.current=0;requestAnimationFrame(()=>messageRef.current?.focus());}}>Send another</button></div></div><p className="handwritten">{availability}</p></div>;
  return <form className="contactForm" onSubmit={submit} onFocus={markStarted} aria-busy={status==="sending"}>
   <div className="formSheet">
-   <p className="formNotice formIntro">{canSendDirectly?"Send a note straight to my inbox , no email app needed.":"This form opens a draft in your email app so you can review it before sending."}</p>
+   <p className="formNotice formIntro">{canSendDirectly?"Send a note straight to my inbox, no email app needed.":"This form opens a draft in your email app so you can review it before sending."}</p>
    <label htmlFor="project-message">What’s on your mind?</label><textarea ref={messageRef} id="project-message" name="message" placeholder="Tell me about the role, team, or problem…" required minLength={10} maxLength={3000} value={message} onChange={e=>setMessage(e.target.value)}/>
    <label htmlFor="contact-name">Your name</label><input id="contact-name" name="name" autoComplete="name" placeholder="Your name" required maxLength={100} value={name} onChange={e=>setName(e.target.value)}/>
    <label htmlFor="contact-email">Your email</label><input id="contact-email" name="email" type="email" autoComplete="email" placeholder="you@company.com" required maxLength={254} value={email} onChange={e=>setEmail(e.target.value)}/>

@@ -1,5 +1,5 @@
 ---
-title: "E-commerce data platform — from live events to trusted sales reporting"
+title: "E-commerce data platform: from live events to trusted sales reporting"
 publishedAt: "2026-06-20"
 cardSummary: "Built 3 data layers, an hourly orchestration path, and a 4-table sales star schema using Kafka, Spark, Airflow, and PostgreSQL."
 updatedAt: "2026-10-11"
@@ -21,7 +21,7 @@ images:
 thumbnail: "/images/projects/covers/realtime-ecommerce-etl-pipeline.png"
 link: "https://github.com/saaim12/ETL-Pipeline-with-Batch-Straming-Pipelines"
 article: "https://medium.com/@saymmalik08/building-a-real-time-e-commerce-etl-pipeline-with-kafka-spark-and-airflow-2baa9090ab3e"
-role: "Data engineer — streaming and analytics systems"
+role: "Data engineer, streaming and analytics systems"
 seoTitle: "Streaming sales data pipeline"
 ---
 
@@ -37,10 +37,10 @@ The architectural goal was not to list popular technologies. It was to establish
 
 | Dimension | Documented system | Meaning |
 | --- | --- | --- |
-| Logical data quality layers | **3** — bronze, silver, gold | Preserve source, standardize records, publish reporting model |
+| Logical data quality layers | **3**: bronze, silver, gold | Preserve source, standardize records, publish reporting model |
 | Warehouse tables | **4** | One sales fact table and **3 dimensions** |
-| Dimension tables | **3** — customer, product, date | Consistent grouping axes for sales analysis |
-| Analytics fact tables | **1** — sales | Centralized quantitative event measures |
+| Dimension tables | **3**: customer, product, date | Consistent grouping axes for sales analysis |
+| Analytics fact tables | **1**: sales | Centralized quantitative event measures |
 | Batch orchestration cadence | **Hourly** | Reporting latency includes scheduled batch wait |
 | Continuous ingestion | Kafka + Spark Structured Streaming | Input acceptance is decoupled from batch reporting |
 | Columnar storage | Parquet, partitioned by date | Replayable intermediate event history |
@@ -105,7 +105,7 @@ An **illustrative schedule**, not a measured service-level agreement: if a clean
 
 A direct producer-to-PostgreSQL insert would be simpler for a tiny workload, but would entangle ingestion failure with reporting schema changes and lose a convenient replay source. Kafka + bronze storage creates a durable separation. Airflow provides explicit scheduled dependencies instead of hidden cron chains. Spark handles structured event processing, while PostgreSQL remains a familiar query surface for the gold model.
 
-Those choices have costs: more local services, checkpoints to manage, batch/stream coordination, and operational overhead. They are justified by recoverability and a clear transformation contract—not by assuming that every small e-commerce workload needs Kafka.
+Those choices have costs: more local services, checkpoints to manage, batch/stream coordination, and operational overhead. They are justified by recoverability and a clear transformation contract, not by assuming that every small e-commerce workload needs Kafka.
 
 ## What I delivered, and what I would benchmark
 

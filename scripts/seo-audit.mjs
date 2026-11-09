@@ -66,7 +66,7 @@ for (const url of urls) {
   const ogImage = decode(meta(html, "og:image"));
 
   // Verify that local social previews and project covers can be fetched.
-  let ogStatus = "—";
+  let ogStatus = "-";
   if (ogImage) {
     const imgUrl = ogImage.startsWith("http") ? ogImage.replace(CANONICAL_HOST, origin) : origin + ogImage;
     try {
@@ -130,14 +130,14 @@ for (const url of urls) {
   rows.push({
     route: path,
     status: res.status,
-    title: title ?? "—",
+    title: title ?? "-",
     titleLen: title?.length ?? 0,
     descLen: description?.length ?? 0,
-    canonical: canonical ?? "—",
+    canonical: canonical ?? "-",
     og: ogStatus,
     description,
     ogImage,
-    jsonLd: ldTypes.join(", ") || "—",
+    jsonLd: ldTypes.join(", ") || "-",
   });
 }
 
