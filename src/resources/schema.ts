@@ -256,3 +256,11 @@ export const serviceIndexJsonLd = (
     },
   })),
 });
+
+/** FAQPage built from the same question/answer pairs that are visible on the page. */
+export const faqJsonLd = (path: string, items: readonly (readonly [string, string])[]) => ({
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": `${baseURL}${path === "/" ? "" : path}#faq`,
+  mainEntity: items.map(([question, answer]) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } })),
+});

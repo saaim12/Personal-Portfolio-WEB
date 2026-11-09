@@ -173,7 +173,7 @@ async function sampleContrast(selector,state){
  contrast.push(...records.map(record=>({route:new URL(page.url()).pathname,selector,state,...record})));
 }
 for(const [route,selectors]of [
- ['/', ['.navLinks > a:visible','.navActions > a:not(.navAvatar):visible','.studioButton > span:last-child','.footerLinks a','.boardLinks a']],
+ ['/', ['.navLinks > a:visible','.navActions > a:not(.navAvatar):visible','.studioButton > span:last-child','.footerNav a','.contactActions a']],
  ['/projects',['.galleryFilters button','.galleryFilters button span']],
  ['/contact',['.formActions button','.contactDirect a','.contactPrimary .contactEmail']],
 ]){

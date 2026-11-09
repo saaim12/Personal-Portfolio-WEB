@@ -9,6 +9,7 @@ import { pageMeta, ogImageFor } from "@/resources/seo";
 import { jsonLd, personJsonLd, webPageJsonLd } from "@/resources/schema";
 import { Contact } from "@/components/Contact";
 import { HeroDots } from "@/components/HeroDots";
+import { BlurLetters } from "@/components/effects/BlurLetters";
 import { WorkCarousel } from "@/components/effects/WorkCarousel";
 import { WordReveal } from "@/components/effects/WordReveal";
 import { CountUp } from "@/components/effects/CountUp";
@@ -28,7 +29,7 @@ export default function Home() {
     <section className="studioHero gridLines" aria-labelledby="hero-name">
       <HeroDots />
       <div className="heroNameGroup">
-        <h1 id="hero-name" className="heroName"><span className="heroLine"><span>{firstName}</span></span> <span className="heroLine"><span>{rest.join(" ")}</span></span></h1>
+        <h1 id="hero-name" className="heroName"><span className="heroLine"><span><BlurLetters text={firstName} reveal={false} strength={6} /></span></span> <span className="heroLine"><span><BlurLetters text={rest.join(" ")} reveal={false} strength={6} /></span></span></h1>
         <p className="heroRole">Software engineer<br />Based in Lahore, Pakistan</p>
         <p className="heroAvailable">Open to remote engineering roles and contracts</p>
         <p className="monoMeta">Recently_Fitter Health · Previously_Expertflow</p>

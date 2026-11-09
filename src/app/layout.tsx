@@ -35,6 +35,8 @@ export async function generateMetadata() {
   };
 }
 
+export const viewport = { themeColor: "#F4F3EF", colorScheme: "light" };
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang={person.locale ?? "en"} className={`${fonts.body.variable} ${fonts.code.variable}`}>

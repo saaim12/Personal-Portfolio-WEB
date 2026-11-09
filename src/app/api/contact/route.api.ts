@@ -65,7 +65,7 @@ export async function POST(request: Request) {
 
   if (!name || name.length > LIMITS.name) return json(400, { error: "Please add your name." });
   if (!EMAIL_PATTERN.test(email) || email.length > LIMITS.email) return json(400, { error: "Please add a valid email address." });
-  if (message.length < 10 || message.length > LIMITS.message) return json(400, { error: "Your message should be 10–3000 characters." });
+  if (message.length < 10 || message.length > LIMITS.message) return json(400, { error: "Your message should be 10 to 3000 characters." });
 
   const client = (request.headers.get("x-forwarded-for") || "").split(",")[0].trim() || request.headers.get("x-real-ip") || "unknown";
   if (throttled(client)) return json(429, { error: "Too many messages. Please try again later or email directly." });

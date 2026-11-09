@@ -13,8 +13,8 @@ html body{background:var(--bg)!important;background-image:none!important;color:v
 html body *,html body *::before,html body *::after{border-radius:0!important;box-shadow:none!important;text-shadow:none!important}
 html body ::selection{background:var(--ink);color:var(--surface)}
 html body :where(a,button,input,textarea,summary,select):focus-visible{outline:2px solid var(--ink);outline-offset:4px}
-html body h1,html body h2,html body h3,html body h4{font-family:var(--font-body),sans-serif;font-weight:400;letter-spacing:-.035em;color:var(--ink)}
-html body strong,html body b{font-weight:500}
+html body h1,html body h2,html body h3{font-family:var(--font-body),sans-serif;font-weight:400;letter-spacing:-.035em;color:var(--ink)}
+html body strong{font-weight:500}
 html body p{color:inherit}
 html body .studioContainer{width:calc(100% - var(--page-margin)*2);max-width:none}
 #main{padding-top:56px}
@@ -28,17 +28,9 @@ html body .handwritten::before{content:"("}html body .handwritten::after{content
 .monoLink:hover{color:var(--ink)}
 
 /* Remove playful decoration */
-.handles{display:none!important}
 html body figcaption{font:400 12px/1.3 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate);margin-top:10px;text-align:left}
 
 /* Buttons and links */
-html body .studioButton{position:relative;display:inline-flex;align-items:center;gap:10px;background:var(--ink)!important;color:var(--surface)!important;border:0!important;padding:10px 14px!important;font:400 13px/1 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;transform:none!important}
-html body .studioButton::before,html body .studioButton::after,html body .studioButton .buttonIcon::before,html body .studioButton .buttonIcon::after{display:none!important;content:none!important}
-html body .studioButton:hover{background:#2a2a2a!important}
-html body .studioButton .buttonIcon{font-size:12px;width:auto;height:auto;background:none!important;color:inherit!important;border:0!important;padding:0!important}
-html body .outlineButton{display:inline-flex;align-items:center;gap:6px;background:transparent!important;color:var(--ink)!important;border:0!important;border-bottom:1px solid var(--ink)!important;padding:4px 0!important;font:400 13px/1.2 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase}
-html body .outlineButton:hover{color:var(--slate)!important;border-color:var(--slate)!important}
-html body .quietLink{font:400 17px/1.35 var(--font-body),sans-serif!important;text-transform:none;letter-spacing:-.005em;border-bottom:1px solid currentColor;padding-bottom:1px}
 html body main a:not([class]):hover{color:var(--slate)}
 
 /* Header */
@@ -47,26 +39,22 @@ html body .navBar{height:56px;border:0!important;padding:0 var(--page-margin);ga
 html body .brandMark{width:auto!important;display:flex!important;align-items:center;gap:10px;font:400 13px/1 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:var(--slate);white-space:nowrap}
 html body .brandMark>span:first-child{color:var(--ink)}
 html body .navLinks{height:auto;gap:22px;margin-left:auto}
-html body .navLinks>a{padding:0!important;background:none!important;font:400 12px/1 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)}
-html body .navLinks>a:hover,html body .navLinks>a[aria-current=page]{color:var(--ink);background:none!important}
+html body .navLinks>a[aria-current=page]{color:var(--ink);background:none!important}
 html body .navLinks>a[aria-current=page] span{border-bottom:1px solid var(--ink);padding-bottom:2px}
 html body .navActions{margin-left:0;padding:0;gap:18px;font:400 12px/1 var(--font-code),monospace}
 html body .navUtility{color:var(--slate);text-transform:uppercase;letter-spacing:.02em;border:0!important;padding:0!important;background:none!important}
 html body .navUtility:hover{color:var(--ink)}
-html body .navContact{background:var(--ink)!important;color:var(--surface)!important;border:0!important;padding:6px 8px!important;font:400 12px/1 var(--font-code),monospace!important;letter-spacing:.04em;text-transform:uppercase}
-html body .navContact:hover{background:#2a2a2a!important;color:var(--surface)!important}
 html body .menuToggle{border:0!important;background:none!important;padding:0!important;font:400 12px/1 var(--font-code),monospace!important;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
 @media (max-width:1199px){
   html body .menuToggle{display:flex!important;margin-left:auto}
   html body .navActions .navUtility{display:none}
   html body .navLinks{display:none!important;position:fixed;top:56px;left:0;right:0;bottom:0;flex-direction:column;align-items:flex-start;gap:0;margin:0;padding:24px var(--page-margin);background:var(--bg)!important;overflow:auto;border-top:1px solid var(--line)}
   html body .navLinks.isOpen{display:flex!important}
-  html body .navLinks>a{width:100%;font:400 clamp(28px,6vw,50px)/1.1 var(--font-body),sans-serif!important;letter-spacing:-.035em!important;text-transform:none;color:var(--ink);padding:10px 0!important;border-bottom:1px solid var(--line)}
   html body .navLinks>a[aria-current=page] span{border:0}
   html body .navLinks>a[aria-current=page]{color:var(--slate)}
   html body .navLinks .mobileContact{display:flex!important}
 }
-@media (max-width:809px){html body .navContact{display:none!important}html body .brandMark .brandClock{display:none}}
+@media (max-width:809px){html body .brandMark .brandClock{display:none}}
 
 /* Dashed column guides (hero, contact) */
 .gridLines{position:relative;isolation:isolate}
@@ -76,10 +64,9 @@ html body .menuToggle{border:0!important;background:none!important;padding:0!imp
 html body .studioHero{height:auto!important;min-height:calc(100svh - 56px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:1fr auto auto;column-gap:10px;padding:clamp(48px,10vh,140px) var(--page-margin) 28px;text-align:left;overflow:visible}
 html body .heroNameGroup{grid-column:5/13;width:auto!important;margin:0!important;align-self:center}
 html body .heroName{font:400 clamp(86px,10.6vw,152px)/.92 var(--font-body),sans-serif;letter-spacing:-.045em;margin:0 0 40px;color:var(--ink)}
-html body .heroName span{display:block}
+html body .heroName .heroLine{display:block}
 html body .heroRole{font-size:20px;line-height:1.2;letter-spacing:-.015em;margin-bottom:20px}
 html body .heroAvailable{display:block;font:400 13px/1.4 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--ink);margin:0 0 6px!important}
-html body .heroAvailable i{display:none}
 html body .heroStatement{grid-column:5/13;margin:56px 0 0!important;text-align:left;display:flex;align-items:flex-end;justify-content:space-between;gap:28px;flex-wrap:wrap}
 html body .heroStatement h2{font-size:clamp(24px,2.6vw,36px);line-height:1.1;letter-spacing:-.03em;max-width:620px;margin:0}
 html body .heroCtas{display:flex;margin:0!important}
@@ -104,8 +91,6 @@ html body .homeWork .workTitle{grid-column:5/13;font:400 clamp(28px,3.5vw,50px)/
 html body .homeWork .workHeading .monoMeta{grid-column:5/13;margin-top:14px;color:#9a9994}
 html body .homeWork .featuredProjects{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:72px 10px}
 html body .homeWork .allWorkAction{display:flex;gap:28px;align-items:center;margin-top:96px;justify-content:flex-start;padding-left:calc((100% + 10px)/12*4)}
-html body .homeWork .studioButton{background:#F4F3EF!important;color:var(--ink)!important}
-html body .homeWork .quietLink{color:#F4F3EF}
 @media (max-width:809px){html body .homeWork .workHeading{display:block}html body .homeWork .featuredProjects{grid-template-columns:1fr;gap:56px}html body .homeWork .allWorkAction{padding-left:0;flex-wrap:wrap}}
 
 /* Project cards (home, gallery, related) */
@@ -116,13 +101,11 @@ html body .folderProject .projectPicture img{position:absolute!important;inset:0
 html body .folderProject:hover .projectPicture img{transform:scale(1.02)}
 html body .folderProject .folderTab{all:unset;display:flex;justify-content:space-between;gap:12px;margin-top:12px;font:400 12px/1.3 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)}
 html body .folderProject .folderTab .projectDate{display:inline;font:inherit;margin:0}
-html body .folderProject .folderTab .projectDate i{display:none}
 html body .folderProject .folderCopy{all:unset;display:block;margin-top:18px}
 html body .folderProject .folderCopy :is(h2,h3){font:400 clamp(24px,2.4vw,34px)/1.08 var(--font-body),sans-serif!important;letter-spacing:-.03em!important;margin:0 0 10px;color:inherit}
 html body .folderProject .folderCopy p{font-size:15px;line-height:1.4;color:var(--slate);max-width:560px;margin:0 0 16px}
 html body .folderProject .projectTags{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 14px;position:static}
 html body .folderProject .projectTags span{background:none!important;border:0!important;padding:0!important;font:400 11px/1.2 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)!important}
-html body .folderProject .projectLink{display:inline-flex;gap:6px;font:400 12px/1 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:inherit;border-bottom:1px solid currentColor;padding-bottom:3px;background:none!important}
 html body .homeWork .folderProject{color:#F4F3EF}
 html body .homeWork .folderProject .projectTags span,html body .homeWork .folderProject .folderTab,html body .homeWork .folderProject .folderCopy p{color:#9a9994!important}
 
@@ -138,7 +121,6 @@ html body .portraitPair figure{margin:0;position:static!important;transform:none
 html body .portraitPair img{width:100%;height:auto;aspect-ratio:6/7;object-fit:cover;display:block}
 html body .skillStickers{display:flex!important;flex-wrap:wrap;gap:8px 22px;list-style:none;padding:0;margin:48px 0 28px calc((100% + 10px)/9*3)!important;position:static!important}
 html body .skillStickers li{font:400 13px/1.2 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
-html body .homeAbout .quietLink{margin-left:calc((100% + 10px)/9*3);display:inline-block;position:static!important}
 html body .hiringProof{width:auto!important;margin:120px 0 0 calc((100% + 10px)/9*3)!important;padding:0!important}
 html body .hiringProof .monoLabel{margin-bottom:28px}
 html body .hiringProofGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 40px}
@@ -151,7 +133,6 @@ html body .hiringProofLinks{display:flex;gap:24px;flex-wrap:wrap}
   html body .homeAbout>.monoLabel{margin-bottom:28px}
   html body .homeAbout h2{text-indent:0;margin-bottom:40px!important}
   html body .aboutColumns{grid-template-columns:1fr;margin-left:0;gap:28px}
-  html body :is(.skillStickers,.homeAbout .quietLink,.hiringProof){margin-left:0!important}
   html body .hiringProof{margin-top:80px!important}
   html body .hiringProofGrid{grid-template-columns:1fr;gap:36px}
 }
@@ -168,7 +149,6 @@ html body .engineeringCard:hover{background:var(--surface)!important}
 html body .engineeringCard small{font:400 12px/1.2 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)}
 html body .engineeringCard h3,html body .engineeringCard h2{font:400 clamp(22px,2vw,28px)/1.1 var(--font-body),sans-serif!important;letter-spacing:-.03em!important;margin:14px 0 10px!important}
 html body .engineeringCard p{font-size:15px;line-height:1.4;color:var(--slate)}
-html body .engineeringArrow{font:400 12px/1 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)!important;margin-top:18px}
 html body .engineeringClosing{background:none!important;border:0!important;border-top:1px solid var(--line)!important;padding:40px 0 0!important;margin-top:56px!important}
 html body .engineeringClosing h2,html body .engineeringClosing h3{font:400 clamp(22px,2vw,28px)/1.1 var(--font-body),sans-serif!important;letter-spacing:-.03em!important;margin-bottom:14px}
 html body .engineeringClosing a{border-bottom:1px solid currentColor}
@@ -191,22 +171,9 @@ html body .contactSection .contactIntro p{font-size:17px;line-height:1.35;max-wi
 html body .contactSection .contactNote{margin-top:20px;font:400 13px/1.4 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)}
 html body .contactHeadline{grid-column:1/13;margin:120px 0 72px!important;font:400 clamp(72px,14.2vw,220px)/.92 var(--font-body),sans-serif!important;letter-spacing:-.05em!important;white-space:nowrap}
 html body .contactHeadline a:hover{color:var(--slate)}
-html body .contactSection .boardLinks{grid-column:7/13;display:grid!important;grid-template-columns:repeat(2,max-content);gap:8px 96px;position:static!important;background:none!important;padding:0!important;margin:0!important;transform:none!important}
-html body .contactSection .boardLinks a,html body .contactDirect a{background:none!important;border:0!important;padding:0!important;font:400 12px/1.4 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)!important}
-html body .contactSection .boardLinks a:hover,html body .contactDirect a:hover{color:var(--ink)!important}
-@media (max-width:809px){html body .contactInner{display:block}html body .contactSection .contactIntro{margin-top:28px!important}html body .contactHeadline{margin:72px 0 48px!important;white-space:normal;font-size:clamp(64px,22vw,96px)!important}html body .contactSection .boardLinks{grid-template-columns:1fr 1fr;gap:8px 20px}}
+@media (max-width:809px){html body .contactInner{display:block}html body .contactSection .contactIntro{margin-top:28px!important}html body .contactHeadline{margin:72px 0 48px!important;white-space:normal;font-size:clamp(64px,22vw,96px)!important}}
 
 /* Footer */
-html body .studioFooter{background:var(--bg)!important;border:0!important;padding:0 var(--page-margin) 40px!important;color:var(--slate)}
-html body .footerInner{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:10px;row-gap:56px;padding-top:56px;border-top:1px solid var(--line)}
-html body .footerColumns{grid-column:7/13;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-html body .footerLinks{display:flex!important;flex-direction:column;gap:6px;margin:0!important}
-html body .studioFooter a,html body .studioFooter span,html body .studioFooter p{font:400 12px/1.4 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;background:none!important;border:0!important;padding:0!important;color:var(--slate)}
-html body .studioFooter a:hover{color:var(--ink)!important}
-html body .footerMeta{grid-column:7/13}
-html body .footerMeta .footerName{color:var(--ink)!important}
-html body .footerBottom{grid-column:7/13;display:flex;justify-content:space-between;gap:20px}
-@media (max-width:809px){html body .footerInner{display:flex;flex-direction:column;gap:40px}}
 
 /* Page headings (inner pages) */
 html body .pageHeading{padding:0!important;text-align:left!important;margin:0}
@@ -224,9 +191,7 @@ html body .contactPage .contactTitle{grid-column:1/13;border:0!important;padding
 html body .contactPage .contactTitle h1{font:400 clamp(72px,10.6vw,152px)/.92 var(--font-body),sans-serif!important;letter-spacing:-.045em!important;text-transform:none!important}
 html body .contactPrimary{grid-column:1/5;flex-direction:column;align-items:flex-start!important;justify-content:flex-start!important;gap:18px!important;margin:0!important;font:400 13px/1.3 var(--font-code),monospace!important}
 html body .contactPrimary a{border:0!important;border-bottom:1px solid currentColor!important;padding:0 0 2px!important;text-transform:uppercase;letter-spacing:.02em}
-html body .contactPrimary .contactEmail{background:var(--ink)!important;color:var(--surface)!important;padding:10px 14px!important;border:0!important}
 html body .contactAddress{color:var(--ink)}
-html body .copyEmail{background:none!important;border:0!important;border-bottom:1px solid var(--ink)!important;padding:0 0 2px!important;min-height:0;font:400 12px/1.2 var(--font-code),monospace!important;text-transform:uppercase;color:var(--ink)!important}
 html body .contactForm{grid-column:6/13;width:auto!important;margin:0!important}
 html body .formSheet{background:none!important;padding:0!important;border-top:1px solid var(--ink)}
 html body .formSheet label{font:400 12px/1.2 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate);margin:28px 0 8px!important}
@@ -235,10 +200,7 @@ html body .formSheet input:focus,html body .formSheet textarea:focus{outline:0;b
 html body .formSheet textarea{min-height:120px}
 html body .formIntro{margin:16px 0 0!important;font:400 13px/1.4 var(--font-code),monospace!important;text-transform:uppercase;letter-spacing:.02em;color:var(--slate)}
 html body .formActions{transform:none!important;margin-top:28px;justify-content:flex-end!important}
-html body .formActions button{background:var(--ink)!important;color:var(--surface)!important;padding:12px 16px!important;font:400 13px/1 var(--font-code),monospace!important;letter-spacing:.02em}
 html body .formNotice{font-size:14px!important}
-html body .formError{color:#a3261a!important}
-html body .formSuccess{font-size:20px!important;line-height:1.3;padding-top:28px}
 html body .contactForm>.handwritten{margin:40px 0 0!important;text-align:left}
 html body .contactDirect{grid-column:6/13;justify-content:flex-start!important;gap:22px!important;margin-top:72px!important;padding:28px 0 0!important;border-top:1px solid var(--line)}
 @media (max-width:809px){html body .contactPage{display:block;padding-top:56px!important}html body .contactPrimary{margin-bottom:56px!important}}
@@ -248,7 +210,6 @@ html body .notFound .displayType{font-size:clamp(96px,16vw,220px)!important}
 
 /* Link color and alignment resets */
 :root body a:not(.button){color:inherit;text-decoration:none}
-html body :is(.studioHero,.homeAbout,.hiringProof,.homeWork,.engineeringHub,.portfolioAnswers,.contactSection,.studioFooter) :is(p,h1,h2,h3,ul,li,div,span){text-align:left}
 html body :is(.hiringProofLinks,.skillStickers,.heroSocials,.allWorkAction){justify-content:flex-start!important;align-items:flex-start}
 @media (max-width:809px){
   html body .hiringProofLinks{flex-direction:column;gap:14px}
@@ -265,7 +226,6 @@ html body .studioPage h3{font-size:clamp(20px,1.6vw,24px);line-height:1.15;lette
 /* Section jump nav (experience) */
 html body .professionalSections{display:flex!important;gap:22px;background:none!important;border:0!important;padding:0!important;margin:0 0 56px!important;position:static!important;transform:none!important;justify-content:flex-start!important}
 html body .professionalSections a{all:unset;cursor:pointer;font:400 12px/1.2 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:var(--slate);padding-bottom:2px}
-html body .professionalSections a svg{display:none}
 html body .professionalSections a[aria-current],html body .professionalSections a:hover{color:var(--ink);border-bottom:1px solid var(--ink)}
 
 /* Experience frames and role cards become ruled sections */
@@ -274,8 +234,7 @@ html body .roleCard{margin-top:56px!important;border-top-color:var(--ink)!import
 html body .frameLabel{display:block;position:static!important;background:none!important;border:0!important;padding:0!important;margin:0 0 28px!important;font:400 13px/1.25 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)!important;transform:none!important}
 html body .frameLabel::before{content:"("}html body .frameLabel::after{content:")"}
 html body .roleHeader{display:flex;justify-content:space-between;gap:28px;flex-wrap:wrap}
-html body .roleHeader h2,html body .roleHeader h3{font-size:clamp(28px,3.5vw,50px)!important}
-html body .roleTech span,html body .roleTech li{background:none!important;border:0!important;padding:0!important;font:400 12px/1.4 var(--font-code),monospace;text-transform:uppercase;color:var(--slate)}
+html body .roleHeader h3{font-size:clamp(28px,3.5vw,50px)!important}
 html body :is(.skillsGrid,.experienceProof){gap:10px!important}
 html body :is(.skillGroup,.experienceProof>*,.educationEntry){background:none!important;border:0!important;border-top:1px solid var(--line)!important;padding:20px 0 0!important}
 html body .experienceProof>*{font:400 12px/1.4 var(--font-code),monospace!important;text-transform:uppercase;letter-spacing:.02em}
@@ -313,20 +272,17 @@ html body .caseStudyBody :is(p,li){font-size:17px;line-height:1.5}
 html body .caseStudyBody a{border-bottom:1px solid currentColor}
 html body .caseStudyBody>ul:last-child a{background:var(--ink)!important;color:var(--surface)!important;border:0!important;font:400 13px/1.2 var(--font-code),monospace!important;text-transform:uppercase;letter-spacing:.02em;padding:12px 16px!important}
 html body .caseStudyBody>ul:last-child a::after{color:inherit!important}
-html body .caseStudyBody pre,html body .caseStudyBody code{font-family:var(--font-code),monospace;background:var(--surface)!important;border:0!important}
+html body .caseStudyBody code{font-family:var(--font-code),monospace;background:var(--surface)!important;border:0!important}
 html body .caseStudyBody table{border-collapse:collapse}
 html body .caseStudyBody :is(th,td){border:0!important;border-bottom:1px solid var(--line)!important;background:none!important}
-html body .caseStudyBody blockquote{border:0!important;border-left:1px solid var(--ink)!important;background:none!important}
 
 /* Services */
 html body .servicesHero{padding:72px 0 var(--section)!important;min-height:0!important;height:auto!important;text-align:left!important;background:none!important}
 html body .servicesHeroContent{text-align:left!important;margin:0!important;max-width:none!important;display:block!important}
 html body .servicesAvailability{display:inline-flex!important;background:none!important;border:0!important;padding:0!important;margin:0 0 28px!important;font:400 13px/1.25 var(--font-code),monospace!important;text-transform:uppercase;letter-spacing:.02em;color:var(--slate)!important}
-html body .servicesAvailability img{display:none}
 html body .servicesHero h1{font:400 clamp(72px,10.6vw,152px)/.92 var(--font-body),sans-serif!important;letter-spacing:-.045em!important;text-transform:none!important}
 html body .servicesSelection{background:none!important;border:0!important;padding:0!important;color:inherit!important;display:inline}
 html body .servicesHeroSummary{max-width:520px;margin:40px 0 28px!important;font-size:20px;line-height:1.2;text-align:left!important}
-html body .faqAnswer img,html body .serviceChapters>svg,html body .servicePanel>svg{display:none!important}
 html body .serviceChapters{background:none!important;margin:0!important}
 html body .servicePanel{background:none!important;color:var(--ink)!important;min-height:0!important;height:auto!important;padding:0!important;margin:0!important;clip-path:none!important;position:relative}
 html body .servicePanelInner{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:10px;row-gap:20px;padding:56px 0!important;border-top:1px solid var(--line);text-align:left!important;min-height:0!important}
@@ -385,11 +341,8 @@ html body .capabilityGroup::before,html body .capabilityGroup::after{display:non
 html body .processRail{align-items:start!important}
 html body .processCard{margin:0!important;top:auto!important;translate:none!important}
 html body .processCard *{text-align:left!important}
-html body .studioFooter a{display:inline-flex;align-items:center;min-height:24px}
-html body .footerLinks{gap:0!important}
 html body .pageHeading h1,html body .pageHeading .displayType{white-space:normal!important;overflow-wrap:break-word;font-size:clamp(48px,9vw,152px)!important}
 html body .pageHeading h1,html body .pageHeading .displayType{width:auto!important;max-width:100%!important;display:block!important}
-html body .pageHeading h1 *{white-space:normal!important}
 html{scroll-behavior:smooth}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}html body *{transition:none!important}}
 html body .heroStatement{padding:0!important;width:auto!important;max-width:none!important}
@@ -400,37 +353,24 @@ html body .heroDots{position:absolute;z-index:-1;pointer-events:none;width:clamp
 @media (max-width:809px){html body .heroDots{width:300px;left:auto;right:-90px;top:24px}}
 
 /* Links and buttons: clear, quick hover feedback */
-:root body :is(.navLinks>a span,.navUtility,.monoLink,.heroSocials a,.studioFooter a,.boardLinks a,.contactDirect a,.professionalSections a,.galleryFilters button,.editorialContents a,.brandMark>span:first-child){background-image:linear-gradient(currentColor,currentColor);background-size:0% 1px;background-repeat:no-repeat;background-position:0 100%;transition:background-size .25s var(--ease),color .2s var(--ease)!important}
-:root body :is(.navLinks>a,.navUtility,.heroSocials a,.studioFooter a,.boardLinks a,.contactDirect a,.professionalSections a,.galleryFilters button,.editorialContents a,.brandMark):is(:hover,:focus-visible) :is(span:first-child),
-:root body :is(.navLinks>a,.navUtility,.monoLink,.heroSocials a,.studioFooter a,.boardLinks a,.contactDirect a,.professionalSections a,.galleryFilters button,.editorialContents a):is(:hover,:focus-visible){background-size:100% 1px;color:var(--ink)!important}
-:root body .homeWork :is(.quietLink){color:#F4F3EF}
-:root body :is(.outlineButton,.quietLink,.projectLink,.engineeringArrow,.portfolioAnswerGrid a,.engineeringClosing a,.learningLinks a,.contactPrimary a:not(.contactEmail),.copyEmail,main p a:not([class]),main li a:not([class])){border-bottom:0!important;text-decoration:none;background-image:linear-gradient(currentColor,currentColor);background-size:100% 1px;background-repeat:no-repeat;background-position:0 100%;padding-bottom:3px!important;transition:background-size .25s var(--ease),color .2s var(--ease)!important}
-:root body :is(.outlineButton,.quietLink,.projectLink,.engineeringArrow,.portfolioAnswerGrid a,.engineeringClosing a,.learningLinks a,.contactPrimary a:not(.contactEmail),.copyEmail,main p a:not([class]),main li a:not([class])):is(:hover,:focus-visible){background-size:100% 2px;color:inherit!important}
-:root body :is(.engineeringCard,.folderProject):is(:hover,:focus-within) :is(.engineeringArrow,.projectLink){background-size:100% 2px}
-:root body :is(.outlineButton,.quietLink,.projectLink,.heroSocials a,.studioFooter a,.boardLinks a,.studioButton)>span[aria-hidden]{display:inline-block;transition:transform .2s var(--ease)!important}
-:root body :is(.outlineButton,.quietLink,.projectLink,.heroSocials a,.studioFooter a,.boardLinks a,.studioButton,.engineeringCard,.folderProject):is(:hover,:focus-visible,:focus-within) :is(.projectLink,a,.studioButton,.outlineButton,.quietLink)>span[aria-hidden],:root body :is(.outlineButton,.quietLink,.projectLink,.heroSocials a,.studioFooter a,.boardLinks a,.studioButton):is(:hover,:focus-visible)>span[aria-hidden]{transform:translate(2px,-2px)}
 :root body .folderProject .folderCopy :is(h2,h3) a{background-image:linear-gradient(currentColor,currentColor);background-size:0% 1px;background-repeat:no-repeat;background-position:0 92%;transition:background-size .25s var(--ease)!important}
-:root body .folderProject:is(:hover,:focus-within) .folderCopy :is(h2,h3) a{background-size:100% 1px}
 /* Solid buttons invert to an outline on hover */
-:root body :is(.studioButton,.navContact,.contactPrimary .contactEmail,.formActions button,.caseStudyBody>ul:last-child a){outline:1px solid transparent;outline-offset:-1px;transition:background-color .2s var(--ease),color .2s var(--ease),outline-color .2s var(--ease),transform .1s var(--ease)!important}
-:root body :is(.studioButton,.navContact,.contactPrimary .contactEmail,.formActions button:not(:disabled),.caseStudyBody>ul:last-child a):is(:hover,:focus-visible){background:transparent!important;color:var(--ink)!important;outline-color:var(--ink)}
-:root body :is(.studioButton,.navContact,.contactPrimary .contactEmail,.formActions button,.caseStudyBody>ul:last-child a):active{transform:scale(.97)}
-:root body main .homeWork .studioButton.studioButton:is(:hover,:focus-visible){background:transparent!important;color:#F4F3EF!important;outline-color:#F4F3EF}
-:root body .engineeringCard:is(:hover,:focus-visible){background:var(--surface)!important}
-:root body .folderProject:is(:hover,:focus-within) .projectPicture{outline:1px solid currentColor;outline-offset:-1px}
 @media (prefers-reduced-motion:reduce){:root body *{transition:none!important}}
 html body .brandMark{border:0!important;height:auto!important}html body .heroAvailable{padding:0!important}
 html body .studioHero{overflow-x:clip}
 
 /* ---------- Effects ---------- */
-/* Hover text roll */
-.roll{display:inline-block;overflow:hidden;vertical-align:bottom;height:1.25em;line-height:1.25}
-.rollTrack{display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.45,0,.55,1)}
-.rollTrack>span{display:block;height:1.25em;white-space:nowrap}
-:root body :is(a,button):is(:hover,:focus-visible) .rollTrack{transform:translateY(-50%)}
-:root body .navLinks>a .roll{background:none!important}
-:root body .navLinks>a[aria-current=page] .roll{border-bottom:1px solid var(--ink)}
-@media (max-width:1199px){.roll{height:auto;overflow:visible}.rollTrack>span[aria-hidden]{display:none}.rollTrack>span{height:auto}:root body :is(a,button):hover .rollTrack{transform:none}}
+/* Hover text roll: the duplicate line exists only for a real mouse on wide screens */
+.roll{display:inline-block;vertical-align:bottom;line-height:1.25}
+.rollTrack{display:block}
+.rollTrack>span{display:block;white-space:nowrap}
+:root body .rollTrack>span[aria-hidden]{display:none}
+@media (hover:hover) and (pointer:fine) and (min-width:1200px){
+  .roll{overflow:hidden;height:1.25em}
+  .rollTrack{display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.45,0,.55,1)}
+  .rollTrack>span{height:1.25em}
+  :root body .rollTrack>span[aria-hidden]{display:block}
+}
 
 /* Hero entrance */
 .heroLine{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
@@ -471,14 +411,11 @@ html body .studioHero{overflow-x:clip}
 .countUp{display:inline-block;font-variant-numeric:tabular-nums}
 :root body .countUp.isRolling>span[aria-hidden]{text-shadow:2px 0 rgba(255,0,80,.6),-2px 0 rgba(0,220,255,.6)!important}
 
-
-
 @media (prefers-reduced-motion:reduce){
   :root body *,:root body *::before,:root body *::after{animation:none!important}
   :root body .homeWork .featuredProjects>.folderProject{transform:none!important}
 }
 :root body .homeWork .featuredProjects{flex-direction:row!important;flex-wrap:nowrap!important;align-items:flex-start}
-:root body :root body .homeWork .workHeading :is(.workRange,.workHint,.workLead){grid-column:auto}
 :root body .homeWork .workHeading .workRange{grid-area:range}
 :root body .homeWork .workHeading .workHint{grid-area:hint;text-align:right!important}
 :root body .homeWork .workHeading .workLead{grid-area:lead}
@@ -487,26 +424,16 @@ html body .studioHero{overflow-x:clip}
 
 /* Restored after cleanup */
 .screenReaderText{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.scribble,.handles,.ruler,.mascot,.studioCursorLayer,.studioCursorBlend,.boardShape,.contactBackdrop,.aboutScribble,.selectionLabel,.cursorSticker,.heroNotes,.floatingAvatar,.retainedFolderLabels,.reaction,.frameSticker{display:none!important}
-html body :is(.polaroid,.polaroidLeft,.polaroidRight,.contactTitle,.stickyNote,.storyAnnotation,.personalNote,.bioPortrait,.caseNotes>div,.capabilityChip,.processIndex,.servicesAvailability,.editorialPhoto,.roleHeader .stickyNote,.workHeading>.stickyNote,.contactSticker){transform:none!important;rotate:none!important}
-html body :is(.stickyNote,.personalNote,.storyAnnotation){background:transparent!important;padding:0!important;font:400 13px/1.4 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)!important}
-html body .polaroid{background:transparent!important;padding:0!important;border:0!important}
-html body .polaroid figcaption,html body figcaption{font:400 12px/1.3 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate);margin-top:10px;text-align:left}
-html body .mark{display:none!important}
-html body :is(.roleCard,.storyCard,.bioFrame,.combinedStoryFrame,.toolkitCard,.projectCard,.selectedProject,.caseNotes>div,.serviceCard,.servicePanel,.processCard,.serviceFaq,.journalEntry,.learningEntry,.capabilityChip,.commentNote,.contactBoard,.notFound){box-shadow:none!important}
-html body :is(.yellow,.green,.pink,.blue,.mint,.sand){background:transparent!important;color:inherit!important}
-html body :is(.greenInk,.pinkInk,.yellowInk){color:inherit!important}
-html body .contactPage .polaroid{display:none!important}
-html body .editorialPhoto img,html body .bioPortrait img{filter:none}
-html body :is(.selectedProjects,.relatedProjects,.projectList)>*{background:none!important;border:0!important;border-top:1px solid var(--line)!important;padding:20px 0 0!important}
-html body .headingPermalink,html body .headingPermalink *{color:var(--slate)}
-html body .boundaryStroke,html body .chapterArtworkLayer,html body .chapterArtwork,html body .processArtwork,html body .stepPointer,html body .processArrow,html body .faqUser,html body .faqUsername,html body .faqReaction,html body .faqLabel,html body .faqAnswer img,html body .serviceChapters>svg,html body .servicePanel>svg{display:none!important}
-html body :is(.journalEntry,.journalChapters,.sitemapGroup,.editorialSection){background:none!important;border:0!important;border-top:1px solid var(--line)!important;padding-top:28px!important}
-html body .editorialByline,html body .editorialContents{font-family:var(--font-code),monospace;font-size:12px;text-transform:uppercase;letter-spacing:.02em;color:var(--slate)}
-html body .editorialContents{background:none!important;border:0!important;border-left:1px solid var(--line)!important;padding:0 0 0 20px!important}
-html body .editorialContents a{color:var(--slate)}
-html body .editorialContents a:hover,html body .editorialContents a[aria-current]{color:var(--ink)}
-html body .journalPage :is(.journalNumber,.noteNumber,.journalEntry>span:first-child){background:none!important;border:0!important}
+html body :is(.contactTitle,.stickyNote,.caseNotes>div,.capabilityChip,.processIndex,.servicesAvailability,.editorialPhoto,.roleHeader .stickyNote,.workHeading>.stickyNote){transform:none!important;rotate:none!important}
+html body :is(.stickyNote){background:transparent!important;padding:0!important;font:400 13px/1.4 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)!important}
+html body figcaption{font:400 12px/1.3 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate);margin-top:10px;text-align:left}
+html body :is(.roleCard,.bioFrame,.combinedStoryFrame,.caseNotes>div,.servicePanel,.processCard,.serviceFaq,.journalEntry,.learningEntry,.capabilityChip,.notFound){box-shadow:none!important}
+html body :is(.yellow,.green,.pink,.blue,.sand){background:transparent!important;color:inherit!important}
+html body .editorialPhoto img{filter:none}
+html body :is(.relatedProjects)>*{background:none!important;border:0!important;border-top:1px solid var(--line)!important;padding:20px 0 0!important}
+html body :is(.journalEntry,.journalChapters){background:none!important;border:0!important;border-top:1px solid var(--line)!important;padding-top:28px!important}
+html body .editorialByline{font-family:var(--font-code),monospace;font-size:12px;text-transform:uppercase;letter-spacing:.02em;color:var(--slate)}
+html body .journalPage :is(.journalEntry>span:first-child){background:none!important;border:0!important}
 .journalPage .journalChapters[open] .journalChapterChevron{transform:rotate(180deg)}
 
 /* Pinned, scroll-driven work rail (wide screens with motion) */
@@ -547,8 +474,6 @@ html[data-menu-open] body .menuBackdrop{opacity:1;pointer-events:auto}
 @media (prefers-reduced-motion:reduce){:root body .navLinks .pixelBlocks i{animation:none}}
 
 /* Page transition blocks */
-.pageBlocks{position:fixed;inset:0;z-index:150;display:grid;pointer-events:none}
-.pageBlocks i{background:#0A0A0A;animation:blockOut .16s steps(1,end) both}
 @keyframes blockOut{to{opacity:0}}
 
 /* Scramble */
@@ -563,7 +488,7 @@ html[data-menu-open] body .menuBackdrop{opacity:1;pointer-events:auto}
 /* Contact headline letters */
 .blurLetters{display:inline-block;white-space:inherit}
 .blurLetter{display:inline-block;transition:filter .18s linear,opacity .3s linear;will-change:filter}
-.blurLetter:empty,.blurLetter{min-width:.01em}
+.blurLetter{min-width:.01em}
 @media (max-width:809px){.blurLetter{display:inline}}
 
 /* Project title over the centre card */
@@ -579,18 +504,123 @@ html[data-menu-open] body .menuBackdrop{opacity:1;pointer-events:auto}
 :root body .nextProjectLink .monoMeta{grid-column:9/13;align-self:end;text-align:right}
 .nextProjectImage{grid-column:1/13;display:block;overflow:hidden;background:var(--surface);aspect-ratio:16/7}
 .nextProjectImage img{width:100%;height:100%;object-fit:contain;padding:3%;transition:transform .5s var(--ease)!important}
-:root body .nextProjectLink:is(:hover,:focus-visible) .nextProjectImage img{transform:scale(1.03)}
-:root body .nextProjectLink:is(:hover,:focus-visible) .nextProjectTitle{color:var(--slate)}
 @media (max-width:809px){:root body .nextProjectLink{display:block!important}.nextProjectTitle{display:block;margin-bottom:10px}:root body .nextProjectLink .monoMeta{display:block;text-align:left;margin-bottom:16px}}
 :root body .studioHome>:not(.studioHero):not(script){position:relative;z-index:1;background-color:var(--bg)!important}
 :root body .studioHome>section.homeWork.homeWork{background-color:var(--charcoal)!important}
 :root body .navLinks .menuList>a{font-size:clamp(30px,3.4vw,52px)!important;white-space:normal}
 :root body .navLinks .menuList .scramble{white-space:normal}
-:root body .contactSection .boardLinks{justify-items:start}:root body .contactSection .boardLinks a{justify-self:start;text-align:left}
 .nextProjectTitle{overflow-wrap:break-word;hyphens:auto;min-width:0}@media (max-width:809px){.nextProjectTitle{font-size:clamp(34px,11vw,56px)}}
 
-@media (max-width:1199px){:root body .rollTrack>span[aria-hidden]{display:none!important}}
 :root body .navLinks.isOpen::before{content:"";position:fixed;top:0;right:0;bottom:0;width:min(640px,100%);z-index:-2;background:#0A0A0A;opacity:0;animation:fillIn .01s .32s forwards}
 @keyframes fillIn{to{opacity:1}}
 @media (prefers-reduced-motion:reduce){:root body .navLinks.isOpen::before{opacity:1;animation:none!important}}
 @media (max-width:809px){:root body .heroCtas{justify-content:flex-start!important}}
+
+/* HTML sitemap */
+:root body .sitemapPage .sitemapGroup{border:0!important;border-top:1px solid var(--ink)!important;padding:20px 0 0!important;margin:0 0 72px!important}
+:root body .sitemapGroup h2{font:400 clamp(24px,2.4vw,34px)/1.1 var(--font-body),sans-serif!important;letter-spacing:-.03em!important;margin:0 0 24px!important}
+.sitemapCount{font:400 13px/1 var(--font-code),monospace;color:var(--slate);letter-spacing:.02em;vertical-align:middle}
+.sitemapList{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px}
+.sitemapList li{padding:16px 0;border-bottom:1px solid var(--line)}
+:root body .sitemapList a{font:400 19px/1.25 var(--font-body),sans-serif;letter-spacing:-.015em}
+.sitemapList p{margin:6px 0 0;font-size:14px;line-height:1.4;color:var(--slate)}
+.sitemapColumns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}
+.sitemapLinks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+:root body .sitemapLinks a{font:400 13px/1.4 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase}
+@media (max-width:1023px){.sitemapColumns{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:809px){.sitemapList,.sitemapColumns{grid-template-columns:1fr}}
+
+/* ---------- Buttons ---------- */
+:root body :is(.studioButton,.navContact,.contactPrimary .contactEmail,.formActions button,.caseStudyBody>ul:last-child a,.outlineButton){display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:14px 22px!important;border:1px solid var(--ink)!important;font:500 14px/1 var(--font-code),monospace!important;letter-spacing:.06em;text-transform:uppercase;text-decoration:none!important;background-image:none!important;cursor:pointer;transform:none;transition:background-color .2s var(--ease),color .2s var(--ease),border-color .2s var(--ease),transform .12s var(--ease)!important}
+/* Primary: solid ink, inverts on hover */
+:root body :is(.studioButton,.navContact,.contactPrimary .contactEmail,.formActions button,.caseStudyBody>ul:last-child a){background-color:var(--ink)!important;color:var(--surface)!important}
+:root body :is(.studioButton,.navContact,.contactPrimary .contactEmail,.formActions button:not(:disabled),.caseStudyBody>ul:last-child a):is(:hover,:focus-visible){background-color:var(--bg)!important;color:var(--ink)!important}
+/* Secondary: outlined, fills on hover */
+:root body .outlineButton{background-color:transparent!important;color:var(--ink)!important}
+:root body .outlineButton:is(:hover,:focus-visible){background-color:var(--ink)!important;color:var(--surface)!important}
+:root body :is(.studioButton,.navContact,.outlineButton,.contactPrimary .contactEmail,.formActions button,.caseStudyBody>ul:last-child a):active{transform:scale(.97)}
+:root body .formActions button:disabled{opacity:.6;cursor:progress}
+:root body .navContact{min-height:36px;padding:9px 14px!important;font-size:12px!important}
+:root body .caseStudyBody>ul:last-child a::after{content:"↗";color:inherit!important}
+/* On the dark work section */
+:root body main .homeWork .studioButton.studioButton{background-color:#F4F3EF!important;color:var(--ink)!important;border-color:#F4F3EF!important}
+:root body main .homeWork .studioButton.studioButton:is(:hover,:focus-visible){background-color:var(--charcoal)!important;color:#F4F3EF!important}
+/* Arrow nudges up-right on hover */
+:root body :is(.studioButton,.outlineButton,.quietLink,.projectLink,.engineeringArrow,.footerNav a,.nextProjectLink .monoMeta)>span[aria-hidden],:root body .studioButton .buttonIcon{display:inline-block;transition:transform .2s var(--ease)!important}
+:root body :is(.studioButton,.outlineButton,.quietLink,.projectLink,.footerNav a):is(:hover,:focus-visible)>span[aria-hidden],:root body :is(.engineeringCard,.folderProject):is(:hover,:focus-within) :is(.projectLink,.engineeringArrow)>span[aria-hidden]{transform:translate(3px,-3px)}
+
+/* ---------- Text links ---------- */
+:root body :is(.quietLink,.projectLink,.engineeringArrow,.portfolioAnswerGrid a,.engineeringClosing a,.learningLinks a,.contactPrimary a:not(.contactEmail),.copyEmail,.sitemapList a,.sitemapLinks a){border:0!important;padding:0 0 4px!important;background:linear-gradient(currentColor,currentColor) 0 100%/100% 1px no-repeat!important;font-weight:500;transition:background-size .25s var(--ease),color .2s var(--ease)!important}
+:root body :is(.quietLink,.projectLink,.engineeringArrow,.portfolioAnswerGrid a,.engineeringClosing a,.learningLinks a,.contactPrimary a:not(.contactEmail),.copyEmail,.sitemapList a,.sitemapLinks a):is(:hover,:focus-visible),:root body :is(.engineeringCard,.folderProject):is(:hover,:focus-within) :is(.projectLink,.engineeringArrow){background-size:100% 2px!important}
+:root body .quietLink{font:500 18px/1.3 var(--font-body),sans-serif!important;letter-spacing:-.01em}
+:root body :is(.projectLink,.engineeringArrow,.portfolioAnswerGrid a,.learningLinks a){display:inline-flex;align-items:center;gap:8px;font:500 13px/1.2 var(--font-code),monospace!important;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)!important}
+:root body .homeWork .projectLink{color:#F4F3EF!important}
+:root body .copyEmail{background-color:transparent!important;font:500 12px/1.2 var(--font-code),monospace!important;text-transform:uppercase;color:var(--ink)!important;cursor:pointer}
+/* Links inside running text */
+:root body main :is(p,li,dd,td) a:not([class]){text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;text-decoration-color:var(--slate);font-weight:500;transition:text-decoration-color .2s var(--ease),text-decoration-thickness .2s var(--ease)!important}
+:root body main :is(p,li,dd,td) a:not([class]):is(:hover,:focus-visible){text-decoration-color:var(--ink);text-decoration-thickness:2px;color:var(--ink)}
+/* Header utility links */
+:root body .navUtility{font:500 12px/1 var(--font-code),monospace!important;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)!important;padding:8px 2px!important}
+:root body .navUtility:hover{color:var(--slate)!important}
+:root body .heroSocials a{font-size:13px!important;padding:6px 0!important;color:var(--ink)!important}
+:root body .heroSocials a:hover{color:var(--slate)!important}
+
+/* ---------- Contact section ---------- */
+:root body .contactSection .contactActions{grid-column:7/13;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+@media (max-width:809px){:root body .contactSection .contactActions{margin-top:8px}}
+
+/* ---------- Footer ---------- */
+:root body .studioFooter{background:var(--bg)!important;border:0!important;padding:0 var(--page-margin) 28px!important;color:var(--slate);position:relative;z-index:1}
+:root body .footerInner{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:10px;row-gap:40px;padding-top:48px;border-top:1px solid var(--ink)}
+.footerLead{grid-column:1/6;display:flex;flex-direction:column;align-items:flex-start;gap:14px}
+:root body .footerName{margin:0;font:400 28px/1.05 var(--font-body),sans-serif;letter-spacing:-.03em;color:var(--ink)}
+:root body .footerName a{color:var(--ink)}
+.footerTagline{margin:0;font-size:15px;line-height:1.4;color:var(--slate);max-width:340px}
+:root body .footerCta{margin-top:6px}
+.footerNav{grid-column:7/13;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.footerHeading{margin:0 0 12px!important;font:400 11px/1 var(--font-code),monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--slate)}
+.footerNav ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+:root body .footerNav a{display:inline-flex;align-items:center;gap:6px;min-height:28px;font:500 14px/1.2 var(--font-body),sans-serif;letter-spacing:-.01em;color:var(--ink);background:linear-gradient(currentColor,currentColor) 0 85%/0 1px no-repeat;transition:background-size .25s var(--ease)!important}
+:root body .footerNav a:is(:hover,:focus-visible){background-size:100% 1px}
+:root body .footerNav a span{font-size:11px}
+:root body .footerBottom{grid-column:1/13;display:flex;justify-content:space-between;gap:20px;padding-top:16px;border-top:1px solid var(--line);font:400 12px/1.4 var(--font-code),monospace;letter-spacing:.04em;text-transform:uppercase;color:var(--slate)}
+:root body .footerBottom a{display:inline-flex;align-items:center;min-height:24px;color:var(--ink)}
+:root body .footerBottom a:hover{color:var(--slate)}
+@media (max-width:1023px){.footerLead{grid-column:1/13}.footerNav{grid-column:1/13}}
+@media (max-width:809px){:root body .footerInner{display:flex;flex-direction:column;gap:36px}.footerNav{grid-template-columns:1fr 1fr;row-gap:28px}.footerBottom{flex-wrap:wrap}}
+:root body .heroName .blurLetters{display:inline-block;white-space:nowrap}
+:root body .heroName .blurLetter{display:inline-block}
+:root body .studioButton .buttonIcon{background:none!important;color:inherit!important;border:0!important;padding:0!important;width:auto!important;height:auto!important;min-width:0!important;font:inherit;font-size:13px!important;line-height:1}
+:root body .studioFooter .footerInner{width:auto!important;max-width:none!important;margin:0!important;padding:48px 0 0!important}
+:root body .studioFooter .footerTagline{font:400 15px/1.4 var(--font-body),sans-serif!important;letter-spacing:-.005em;text-transform:none;color:var(--slate)}
+:root body .studioFooter .footerName{font:400 28px/1.05 var(--font-body),sans-serif!important;text-transform:none}
+:root body .studioFooter{font:400 15px/1.4 var(--font-body),sans-serif;margin:0!important;width:100%}
+/* Header base layout */
+:root body .studioHeader{position:fixed;top:0;left:0;width:100%}
+:root body .navBar{display:flex;align-items:center}
+:root body .navActions{display:flex;align-items:center}
+:root body .menuToggle{align-items:center;min-height:36px;cursor:pointer}
+:root body .servicesHero{display:block!important}
+:root body .servicesHeroContent{width:auto!important}
+:root body .pageHeading h1,:root body .pageHeading .displayType{padding:0!important;border:0!important}
+/* Phones: one call to action per screen; the menu holds Contact */
+@media (max-width:809px){
+  :root body .navActions{display:none!important}
+  :root body .studioHero :is(.heroAvailable,.monoMeta,.heroRole){text-align:left!important;padding:0!important}
+  :root body .studioHero .heroCtas{justify-content:flex-start!important;text-align:left}
+  :root body .servicePanelInner :is(.serviceNumber,h2,p){text-align:left!important}
+  :root body .servicesHero h1{text-align:left!important}
+}
+@media (min-width:810px) and (max-width:1023px){:root body .navActions .navUtility{display:none}}
+:root body .studioHero .heroCtas{flex-direction:row!important;align-items:center!important;justify-content:flex-start!important}
+:root body .servicesHero h1{display:block!important}
+:root body .serviceNumber{display:block!important}
+@media (max-width:809px){:root body .menuToggle{margin-left:auto!important}}
+:root body .studioPage .engineeringHub{border-top:0!important}
+:root body .contactDirect a{display:inline-flex;align-items:center;min-height:32px;border:0!important;padding:0!important;background:linear-gradient(currentColor,currentColor) 0 85%/0 1px no-repeat!important;font:500 13px/1.2 var(--font-code),monospace!important;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)!important;transition:background-size .25s var(--ease)!important}
+:root body .contactDirect a:is(:hover,:focus-visible){background-size:100% 1px!important}
+@media (max-width:1023px){
+  :root body .contactPage{display:block!important}
+  :root body .contactPrimary{flex-direction:row!important;flex-wrap:wrap;align-items:center!important;margin-bottom:56px!important}
+}
+:root body .servicesHero{justify-items:start!important}

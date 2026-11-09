@@ -10,7 +10,7 @@
        static glowing S, which is why the resting attributes are the mid-bright
        values rather than the dim end of the cycle.
 
-       The stroke is white, not the old #7c8cff: the site is monochrome now and
+       The stroke is white, not the old #9a9994: the site is monochrome now and
        the icon was the last thing still carrying a hue. -->
   <defs>
     <filter id="bloom" x="-75%" y="-75%" width="250%" height="250%">

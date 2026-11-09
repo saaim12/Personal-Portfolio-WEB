@@ -1,7 +1,7 @@
 // Change only when the guide content, evidence, or references are revised.
 export const EDITORIAL_UPDATED_AT = "2026-10-30";
 
-export type EditorialReference = { title: string; url: string; context: string };
+type EditorialReference = { title: string; url: string; context: string };
 export const noteReferences: Record<string, EditorialReference[]> = {
   "reliable-background-jobs-webhooks-idempotency": [
     { title: "Django: database transactions", url: "https://docs.djangoproject.com/en/5.2/topics/db/transactions/", context: "Transaction boundaries and running callbacks after a successful commit." },

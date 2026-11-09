@@ -1,7 +1,7 @@
 import { cache } from "react";
 import { baseURL, routes } from "@/resources/site";
 import { sitePages } from "@/resources/site-navigation";
-import { home, work } from "@/resources/content";
+import { home, person, portraits, work } from "@/resources/content";
 import { EDITORIAL_UPDATED_AT } from "@/resources/editorial";
 import { specialties } from "@/resources/specialties";
 import { engineeringNotes } from "@/resources/engineering-notes";
@@ -20,16 +20,16 @@ export type CatalogPage = {
 };
 
 // Dates represent content revisions, never the time a build happens to run.
-const mainPageDetails: Record<string, { description: string; lastModified: string }> = {
-  "/": { description: home.description, lastModified: "2026-10-30" },
-  "/professional-experience": { description: "Employment history at Expertflow and Fitter Health, education, delivery evidence, and the engineer's story.", lastModified: "2026-10-11" },
+const mainPageDetails: Record<string, { description: string; lastModified: string; images?: string[] }> = {
+  "/": { description: home.description, lastModified: "2026-11-09", images: [person.avatar, portraits.playful] },
+  "/professional-experience": { description: "Employment history at Expertflow and Fitter Health, education, delivery evidence, and the engineer's story.", lastModified: "2026-11-09", images: [portraits.smiling, portraits.withDog, portraits.withChicken, portraits.withChickenSmiling] },
   "/projects": { description: work.description, lastModified: "2026-10-30" },
   "/services": { description: "Backend APIs, full-stack products, data and AI systems, cloud delivery, and engineering handover.", lastModified: "2026-10-30" },
   "/expertise": { description: "Engineering approaches, trade-offs, and project evidence across seven software specialties.", lastModified: EDITORIAL_UPDATED_AT },
   "/engineering-notes": { description: "Original architecture guides with direct answers, implementation checks, and primary technical references.", lastModified: EDITORIAL_UPDATED_AT },
   "/journal": { description: "Published engineering articles on Medium, with summaries and chapter lists.", lastModified: "2026-10-30" },
-  "/contact": { description: "Discuss a remote engineering role, contract, product, or technical challenge with Saaim Abdullah.", lastModified: "2026-10-11" },
-  "/sitemap": { description: "A complete, grouped directory of the public portfolio pages.", lastModified: "2026-10-30" },
+  "/contact": { description: "Send Saaim Abdullah a message directly about a remote engineering role, contract, product, or technical challenge.", lastModified: "2026-11-09" },
+  "/sitemap": { description: "A complete, grouped directory of the public portfolio pages, documents, profiles and articles.", lastModified: "2026-11-09" },
 };
 
 /** One list for human navigation, search crawlers, and the AI reading directory. */

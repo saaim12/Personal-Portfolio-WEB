@@ -1,5 +1,5 @@
 // Original engineering decision notes, cross-referenced to published project evidence.
-export type EngineeringNote={
+type EngineeringNote={
 slug:string;title:string;description:string;category:string;question:string;answer:string;proof:{slug:string;label:string}[];
 sections:{heading:string;explanation:string;checklist:string[]}[];
 decision:string;relatedSpecialty:string;

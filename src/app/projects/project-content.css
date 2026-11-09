@@ -7,7 +7,6 @@
 .caseHeadingCopy{display:inline;text-align:left;background:none;border:0;padding:0;font:inherit;letter-spacing:inherit;color:inherit;line-height:inherit}
 .caseHeadingCopy svg{width:20px;height:20px;display:inline-block;vertical-align:middle;margin-left:10px;opacity:.45}
 .caseHeadingCopy:hover svg,.caseHeadingCopy:focus-visible svg{opacity:1}
-.casePermalinkStatus{position:fixed;bottom:24px;right:24px;max-width:calc(100vw - 48px);padding:12px 18px;background:var(--ink);color:white;z-index:120;font:14px/1.5 var(--font-body)}
 .caseStudyBody ol{padding-left:24px}
 .caseStudyBody code{font-family:var(--font-code);font-size:.9em;overflow-wrap:anywhere}
 .caseTableScroll{max-width:100%;overflow-x:auto;margin:24px 0;border:1px solid #ccc;background:#fff}
@@ -30,8 +29,7 @@
 /* Keep diagrams, code and copy inside project detail columns on every viewport. */
 .casePage,.caseLayout,.caseLayout>div,.caseStudyBody{min-width:0;max-width:100%}
 .caseStudyBody :is(p,li,h2,h3,h4,blockquote){overflow-wrap:anywhere}
-.caseStudyBody pre{max-width:100%;overflow-x:auto;white-space:pre}
-.caseStudyBody img,.caseDiagram{display:block;max-width:100%;height:auto;object-fit:contain}
+.caseDiagram{display:block;max-width:100%;height:auto;object-fit:contain}
 .caseStudyBody table{max-width:100%}
 @media(max-width:760px){.caseHero,.caseLayout{min-width:0}.caseHero h1{overflow-wrap:anywhere}.caseNotes{min-width:0}}
 

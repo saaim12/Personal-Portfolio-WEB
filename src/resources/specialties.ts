@@ -1,5 +1,5 @@
 // Portfolio-specific capabilities grounded in published projects, not agency case studies.
-export type Specialty={
+type Specialty={
   slug:string; title:string; description:string;summary:string; problem:string;
   audience:string[]; approach:{heading:string;detail:string;checks:string[]}[];
   stack:string[]; relatedProjects:{slug:string;label:string;proof:string}[];
