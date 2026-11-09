@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { baseURL } from "@/resources/once-ui.config";
+import { baseURL } from "@/resources/site";
 import { isSearchIndexable } from "@/resources/indexing";
 import { absoluteSiteUrl } from "@/utils/siteUrl";
 

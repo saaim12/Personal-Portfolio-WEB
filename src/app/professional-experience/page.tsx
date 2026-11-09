@@ -4,7 +4,7 @@ import "./personal-media.css";
 import { roles } from "@/resources/experience";
 import { portraits } from "@/resources/content";
 import { pageMeta } from "@/resources/seo";
-import { PageHeading, Action, Handles } from "@/components/Studio";
+import { PageHeading, Action } from "@/components/Studio";
 import { Contact } from "@/components/Contact";
 import { ProfessionalSections } from "@/components/ProfessionalSections";
 import { sitePath } from "@/utils/sitePath";
@@ -26,7 +26,7 @@ const skills = [
 export default function ProfessionalExperience() {
   return <div className="studioPage"><script {...jsonLd(personJsonLd)} /><script {...jsonLd(profilePageJsonLd)} /><script {...jsonLd(editorialArticleJsonLd({title:"My Story / My Bio",description:"Saaim Abdullah's account of his journey into software engineering, professional experience, and education.",path:"/professional-experience",image:portraits.playful}))} /><script {...jsonLd(breadcrumbJsonLd([{name:"Home",path:"/"},{name:"Professional Experience",path:"/professional-experience"}]))} /><div className="professionalLayout studioContainer"><ProfessionalSections /><div className="experiencePage">
     <PageHeading title="Professional Experience" note="the work and the story"><p>Backend engineering, cloud delivery, and data systems. Previously at Expertflow and Fitter Health, where I worked on production APIs, communication workflows, and healthcare software.</p><div className="experienceProof"><span><strong>77%</strong> faster admin responses</span><span><strong>135</strong> passing handover tests</span><span><strong>106</strong> PostgreSQL tables</span></div><SiteAnchor href="#career" className="outlineButton">Jump to work experience ↗</SiteAnchor></PageHeading>
-    <section id="bio" className="experienceFrame bioFrame combinedStoryFrame" aria-labelledby="bio-heading"><span className="frameLabel">The person behind the work</span><Handles />
+    <section id="bio" className="experienceFrame bioFrame combinedStoryFrame" aria-labelledby="bio-heading"><span className="frameLabel">The person behind the work</span>
       <h2 id="bio-heading" className="displayType">My Story / My Bio</h2>
       <div className="bioOpening">
         <div><h3>A little about me</h3>
@@ -54,13 +54,13 @@ export default function ProfessionalExperience() {
         <figure className="editorialPhoto personalVideo"><video autoPlay loop muted playsInline controls preload="metadata" poster={sitePath(portraits.duckVideoPoster)} aria-label="Saaim spending time with a duck"><source src={sitePath(portraits.withDuckVideo)} type="video/mp4" />Your browser does not support this video. <SiteAnchor href={portraits.withDuckVideo}>Watch the duck video</SiteAnchor>.</video><figcaption>Spending a little time with my duck.</figcaption></figure>
       </div>
     </section>
-    <section id="career" className="experienceFrame careerFrame" aria-labelledby="career-heading"><span className="frameLabel">My work and experience</span><Handles /><h2 id="career-heading" className="displayType">My Work Experience</h2><p className="careerIntro">The roles, responsibilities, and results, with the full details right here.</p>
+    <section id="career" className="experienceFrame careerFrame" aria-labelledby="career-heading"><span className="frameLabel">My work and experience</span><h2 id="career-heading" className="displayType">My Work Experience</h2><p className="careerIntro">The roles, responsibilities, and results, with the full details right here.</p>
     {roles.map(role => <section className="roleCard" key={role.company} aria-label={role.company + " experience"}>
       <div className="roleHeader"><div><h3>{role.company}</h3><p>{role.title}</p></div><div className="stickyNote sand"><p>{role.dates}</p><p>{role.location}</p></div></div>
       <ul>{role.bullets.map(bullet => <li key={bullet}>{bullet}</li>)}</ul><p className="roleTech">{role.tech}</p>
       {role.link && <SiteAnchor className="outlineButton" href={role.link}>View project ↗</SiteAnchor>}
     </section>)}
-    <div className="aboutActions"><Action href="/SaaimCV.pdf" external>Resume</Action><SiteAnchor className="outlineButton" href="/Fitter-Recommendation-Letter.pdf" target="_blank" rel="noopener noreferrer">Client recommendation ↗</SiteAnchor></div><span className="frameSticker">↖ My work</span></section>
+    <div className="aboutActions"><Action href="/SaaimCV.pdf" external>Resume</Action><SiteAnchor className="outlineButton" href="/Fitter-Recommendation-Letter.pdf" target="_blank" rel="noopener noreferrer">Client recommendation ↗</SiteAnchor></div></section>
     <section className="aboutSection"><h2 className="displayType">Selected projects</h2><div className="skillsGrid">
       <div className="skillGroup"><h3>Multilingual, Multi-Tenant RAG Engine</h3><p>Freelance: Django APIs with CSV, PDF, and DOCX ingestion, pgvector, multilingual embeddings, and Gemini. Authenticated tenant-scoped retrieval, quotas, and six prompt templates keep knowledge bases separate.</p><SiteAnchor className="quietLink" href="/projects/multilingual-rag-engine">View project ↗</SiteAnchor></div>
       <div className="skillGroup"><h3>Real-Time E-Commerce ETL Pipeline</h3><p>Freelance: Kafka and PySpark ingestion with checkpoints, date-partitioned Parquet, validation, and deduplication. Hourly Airflow transformations move Bronze, Silver, and Gold data into a four-table sales star schema.</p><SiteAnchor className="quietLink" href="/projects/realtime-ecommerce-etl-pipeline">View project ↗</SiteAnchor></div>

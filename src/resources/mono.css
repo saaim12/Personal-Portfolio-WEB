@@ -1,0 +1,495 @@
+/* Monochrome system — Switzer + Geist Mono, near-black on mist, square corners, flat surfaces.
+   Loaded after custom.css; rules prefixed with "html body" also outrank route stylesheets. */
+:root{
+  --bg:#F4F3EF;--surface:#FFFFFF;--ink:#0A0A0A;--slate:#6E6D69;--mist:#F4F3EF;--charcoal:#111111;--line:rgba(10,10,10,.14);--line-dark:rgba(255,255,255,.16);
+  --font-heading:var(--font-body);--font-hand:var(--font-body);--font-label:var(--font-code);
+  --blue:#FFFFFF;--yellow:#FFFFFF;--green:#FFFFFF;--mint:#FFFFFF;--sand:#FFFFFF;--pink:#111111;
+  --page-margin:48px;--section:160px;--ease:cubic-bezier(.44,0,.56,1);
+}
+@media (max-width:809px){:root{--page-margin:20px;--section:96px}}
+
+/* Base */
+html body{background:var(--bg)!important;background-image:none!important;color:var(--ink)!important;font-family:var(--font-body),"Helvetica Neue",Arial,sans-serif;font-size:17px;line-height:1.35;letter-spacing:-.005em;-webkit-font-smoothing:antialiased}
+html body *,html body *::before,html body *::after{border-radius:0!important;box-shadow:none!important;text-shadow:none!important}
+html body ::selection{background:var(--ink);color:var(--surface)}
+html body :where(a,button,input,textarea,summary,select):focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+html body h1,html body h2,html body h3,html body h4{font-family:var(--font-body),sans-serif;font-weight:400;letter-spacing:-.035em;color:var(--ink)}
+html body strong,html body b{font-weight:500}
+html body p{color:inherit}
+html body .studioContainer{width:calc(100% - var(--page-margin)*2);max-width:none}
+#main{padding-top:56px}
+html{scroll-padding-top:72px}
+
+/* Type roles */
+html body .displayType{font-family:var(--font-body),sans-serif!important;font-weight:400!important;text-transform:none!important;letter-spacing:-.045em!important;line-height:.92!important}
+.monoLabel,.monoMeta,.monoLink,html body .handwritten,html body .engineeringEyebrow{font:400 13px/1.25 var(--font-code),monospace!important;letter-spacing:.02em!important;text-transform:uppercase;color:var(--slate)}
+html body .handwritten{display:block;transform:none!important;margin:0 0 20px!important;text-align:inherit}
+html body .handwritten::before{content:"("}html body .handwritten::after{content:")"}
+.monoLink:hover{color:var(--ink)}
+
+/* Remove playful decoration */
+.handles{display:none!important}
+html body figcaption{font:400 12px/1.3 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate);margin-top:10px;text-align:left}
+
+/* Buttons and links */
+html body .studioButton{position:relative;display:inline-flex;align-items:center;gap:10px;background:var(--ink)!important;color:var(--surface)!important;border:0!important;padding:10px 14px!important;font:400 13px/1 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;transform:none!important}
+html body .studioButton::before,html body .studioButton::after,html body .studioButton .buttonIcon::before,html body .studioButton .buttonIcon::after{display:none!important;content:none!important}
+html body .studioButton:hover{background:#2a2a2a!important}
+html body .studioButton .buttonIcon{font-size:12px;width:auto;height:auto;background:none!important;color:inherit!important;border:0!important;padding:0!important}
+html body .outlineButton{display:inline-flex;align-items:center;gap:6px;background:transparent!important;color:var(--ink)!important;border:0!important;border-bottom:1px solid var(--ink)!important;padding:4px 0!important;font:400 13px/1.2 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase}
+html body .outlineButton:hover{color:var(--slate)!important;border-color:var(--slate)!important}
+html body .quietLink{font:400 17px/1.35 var(--font-body),sans-serif!important;text-transform:none;letter-spacing:-.005em;border-bottom:1px solid currentColor;padding-bottom:1px}
+html body main a:not([class]):hover{color:var(--slate)}
+
+/* Header */
+html body .studioHeader{background:var(--bg)!important;border:0}
+html body .navBar{height:56px;border:0!important;padding:0 var(--page-margin);gap:24px}
+html body .brandMark{width:auto!important;display:flex!important;align-items:center;gap:10px;font:400 13px/1 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:var(--slate);white-space:nowrap}
+html body .brandMark>span:first-child{color:var(--ink)}
+html body .navLinks{height:auto;gap:22px;margin-left:auto}
+html body .navLinks>a{padding:0!important;background:none!important;font:400 12px/1 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)}
+html body .navLinks>a:hover,html body .navLinks>a[aria-current=page]{color:var(--ink);background:none!important}
+html body .navLinks>a[aria-current=page] span{border-bottom:1px solid var(--ink);padding-bottom:2px}
+html body .navActions{margin-left:0;padding:0;gap:18px;font:400 12px/1 var(--font-code),monospace}
+html body .navUtility{color:var(--slate);text-transform:uppercase;letter-spacing:.02em;border:0!important;padding:0!important;background:none!important}
+html body .navUtility:hover{color:var(--ink)}
+html body .navContact{background:var(--ink)!important;color:var(--surface)!important;border:0!important;padding:6px 8px!important;font:400 12px/1 var(--font-code),monospace!important;letter-spacing:.04em;text-transform:uppercase}
+html body .navContact:hover{background:#2a2a2a!important;color:var(--surface)!important}
+html body .menuToggle{border:0!important;background:none!important;padding:0!important;font:400 12px/1 var(--font-code),monospace!important;letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+@media (max-width:1199px){
+  html body .menuToggle{display:flex!important;margin-left:auto}
+  html body .navActions .navUtility{display:none}
+  html body .navLinks{display:none!important;position:fixed;top:56px;left:0;right:0;bottom:0;flex-direction:column;align-items:flex-start;gap:0;margin:0;padding:24px var(--page-margin);background:var(--bg)!important;overflow:auto;border-top:1px solid var(--line)}
+  html body .navLinks.isOpen{display:flex!important}
+  html body .navLinks>a{width:100%;font:400 clamp(28px,6vw,50px)/1.1 var(--font-body),sans-serif!important;letter-spacing:-.035em!important;text-transform:none;color:var(--ink);padding:10px 0!important;border-bottom:1px solid var(--line)}
+  html body .navLinks>a[aria-current=page] span{border:0}
+  html body .navLinks>a[aria-current=page]{color:var(--slate)}
+  html body .navLinks .mobileContact{display:flex!important}
+}
+@media (max-width:809px){html body .navContact{display:none!important}html body .brandMark .brandClock{display:none}}
+
+/* Dashed column guides (hero, contact) */
+.gridLines{position:relative;isolation:isolate}
+.gridLines::before{content:"";position:absolute;inset:0 var(--page-margin);z-index:-1;pointer-events:none;background:repeating-linear-gradient(to right,transparent 0 calc(100%/12 - 1px),rgba(10,10,10,.08) calc(100%/12 - 1px) calc(100%/12));-webkit-mask:repeating-linear-gradient(to bottom,#000 0 4px,transparent 4px 8px);mask:repeating-linear-gradient(to bottom,#000 0 4px,transparent 4px 8px)}
+
+/* Home — hero */
+html body .studioHero{height:auto!important;min-height:calc(100svh - 56px);display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-template-rows:1fr auto auto;column-gap:10px;padding:clamp(48px,10vh,140px) var(--page-margin) 28px;text-align:left;overflow:visible}
+html body .heroNameGroup{grid-column:5/13;width:auto!important;margin:0!important;align-self:center}
+html body .heroName{font:400 clamp(86px,10.6vw,152px)/.92 var(--font-body),sans-serif;letter-spacing:-.045em;margin:0 0 40px;color:var(--ink)}
+html body .heroName span{display:block}
+html body .heroRole{font-size:20px;line-height:1.2;letter-spacing:-.015em;margin-bottom:20px}
+html body .heroAvailable{display:block;font:400 13px/1.4 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--ink);margin:0 0 6px!important}
+html body .heroAvailable i{display:none}
+html body .heroStatement{grid-column:5/13;margin:56px 0 0!important;text-align:left;display:flex;align-items:flex-end;justify-content:space-between;gap:28px;flex-wrap:wrap}
+html body .heroStatement h2{font-size:clamp(24px,2.6vw,36px);line-height:1.1;letter-spacing:-.03em;max-width:620px;margin:0}
+html body .heroCtas{display:flex;margin:0!important}
+html body .heroFooter{grid-column:1/13;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-top:72px;padding-left:calc((100% + 10px)/12*4)}
+html body .heroSocials{display:flex;gap:22px;flex-wrap:wrap;margin:0}
+html body .heroSocials a{background:none!important;border:0!important;padding:0!important;font:400 12px/1 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)!important}
+html body .heroSocials a:hover{color:var(--ink)!important}
+html body .heroSocials a span{margin-left:4px;font-size:10px}
+html body .monoLink{color:var(--ink)}
+@media (max-width:809px){
+  html body .studioHero{display:block;min-height:auto;padding-top:72px}
+  html body .heroName{font-size:clamp(56px,20vw,86px)}
+  html body .heroFooter{padding-left:0;margin-top:56px}
+}
+
+/* Home — selected work (inverse) */
+html body .homeWork{width:100%!important;max-width:none!important;margin:0!important;padding:var(--section) 0!important;background:var(--charcoal)!important;color:#F4F3EF}
+html body .workInner{padding:0 var(--page-margin)}
+html body .homeWork .workHeading{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:10px;align-items:end;margin:0 0 72px!important;text-align:left;min-height:0}
+html body .homeWork .workHeading .monoLabel{grid-column:1/5;color:#F4F3EF;margin:0;align-self:start}
+html body .homeWork .workTitle{grid-column:5/13;font:400 clamp(28px,3.5vw,50px)/1.06 var(--font-body),sans-serif;letter-spacing:-.035em;color:#F4F3EF;margin:0}
+html body .homeWork .workHeading .monoMeta{grid-column:5/13;margin-top:14px;color:#9a9994}
+html body .homeWork .featuredProjects{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:72px 10px}
+html body .homeWork .allWorkAction{display:flex;gap:28px;align-items:center;margin-top:96px;justify-content:flex-start;padding-left:calc((100% + 10px)/12*4)}
+html body .homeWork .studioButton{background:#F4F3EF!important;color:var(--ink)!important}
+html body .homeWork .quietLink{color:#F4F3EF}
+@media (max-width:809px){html body .homeWork .workHeading{display:block}html body .homeWork .featuredProjects{grid-template-columns:1fr;gap:56px}html body .homeWork .allWorkAction{padding-left:0;flex-wrap:wrap}}
+
+/* Project cards (home, gallery, related) */
+html body .folderProject{all:unset;display:flex!important;flex-direction:column;min-width:0;position:relative;color:inherit;background:none!important;border:0!important;padding:0!important;margin:0!important;height:auto!important;min-height:0!important;transform:none!important;clip-path:none!important}
+html body .folderProject::before,html body .folderProject::after{display:none!important}
+html body .folderProject .projectPicture{display:block;position:relative;width:100%;aspect-ratio:auto!important;height:0!important;min-height:0!important;max-height:none!important;overflow:hidden;background:var(--surface)!important;border:0!important;padding:0 0 56.25%!important;margin:0!important;order:0;transform:none!important}
+html body .folderProject .projectPicture img{position:absolute!important;inset:0;width:100%!important;height:100%!important;object-fit:contain!important;padding:4%;transition:transform .25s var(--ease)}
+html body .folderProject:hover .projectPicture img{transform:scale(1.02)}
+html body .folderProject .folderTab{all:unset;display:flex;justify-content:space-between;gap:12px;margin-top:12px;font:400 12px/1.3 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)}
+html body .folderProject .folderTab .projectDate{display:inline;font:inherit;margin:0}
+html body .folderProject .folderTab .projectDate i{display:none}
+html body .folderProject .folderCopy{all:unset;display:block;margin-top:18px}
+html body .folderProject .folderCopy :is(h2,h3){font:400 clamp(24px,2.4vw,34px)/1.08 var(--font-body),sans-serif!important;letter-spacing:-.03em!important;margin:0 0 10px;color:inherit}
+html body .folderProject .folderCopy p{font-size:15px;line-height:1.4;color:var(--slate);max-width:560px;margin:0 0 16px}
+html body .folderProject .projectTags{display:flex;gap:16px;flex-wrap:wrap;margin:0 0 14px;position:static}
+html body .folderProject .projectTags span{background:none!important;border:0!important;padding:0!important;font:400 11px/1.2 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)!important}
+html body .folderProject .projectLink{display:inline-flex;gap:6px;font:400 12px/1 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:inherit;border-bottom:1px solid currentColor;padding-bottom:3px;background:none!important}
+html body .homeWork .folderProject{color:#F4F3EF}
+html body .homeWork .folderProject .projectTags span,html body .homeWork .folderProject .folderTab,html body .homeWork .folderProject .folderCopy p{color:#9a9994!important}
+
+/* Home — about */
+html body .homeAbout{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:10px;padding:var(--section) 0!important;margin:0 auto!important;min-height:0!important;height:auto!important;text-align:left;overflow:visible}
+html body .homeAbout>.monoLabel{grid-column:1/4;margin:0}
+html body .aboutBody{grid-column:4/13;min-width:0}
+html body .homeAbout h2{font:400 clamp(28px,3.5vw,50px)/1.06 var(--font-body),sans-serif!important;letter-spacing:-.035em!important;text-indent:calc((100% + 10px)/9*3);margin:0 0 72px!important;max-width:none!important;text-align:left}
+html body .aboutColumns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;margin-left:calc((100% + 10px)/9*3)}
+html body .aboutColumns>p{font-size:15px;line-height:1.4}
+html body .portraitPair{display:grid!important;grid-template-columns:1fr 1fr;gap:10px;position:static!important;height:auto!important;margin:0!important}
+html body .portraitPair figure{margin:0;position:static!important;transform:none!important}
+html body .portraitPair img{width:100%;height:auto;aspect-ratio:6/7;object-fit:cover;display:block}
+html body .skillStickers{display:flex!important;flex-wrap:wrap;gap:8px 22px;list-style:none;padding:0;margin:48px 0 28px calc((100% + 10px)/9*3)!important;position:static!important}
+html body .skillStickers li{font:400 13px/1.2 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
+html body .homeAbout .quietLink{margin-left:calc((100% + 10px)/9*3);display:inline-block;position:static!important}
+html body .hiringProof{width:auto!important;margin:120px 0 0 calc((100% + 10px)/9*3)!important;padding:0!important}
+html body .hiringProof .monoLabel{margin-bottom:28px}
+html body .hiringProofGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 40px}
+html body .hiringProofGrid article{display:flex;flex-direction:column;justify-content:space-between;gap:24px;background:none!important;padding:0!important;border:0!important;min-height:0}
+html body .hiringProofGrid span{font-size:15px;line-height:1.35;color:var(--ink);max-width:240px}
+html body .hiringProofGrid strong{font:400 clamp(56px,6vw,86px)/.92 var(--font-body),sans-serif;letter-spacing:-.045em}
+html body .hiringProofLinks{display:flex;gap:24px;flex-wrap:wrap}
+@media (max-width:809px){
+  html body .homeAbout{display:block}
+  html body .homeAbout>.monoLabel{margin-bottom:28px}
+  html body .homeAbout h2{text-indent:0;margin-bottom:40px!important}
+  html body .aboutColumns{grid-template-columns:1fr;margin-left:0;gap:28px}
+  html body :is(.skillStickers,.homeAbout .quietLink,.hiringProof){margin-left:0!important}
+  html body .hiringProof{margin-top:80px!important}
+  html body .hiringProofGrid{grid-template-columns:1fr;gap:36px}
+}
+
+/* Editorial hub, cards, answers */
+html body .engineeringHub{max-width:none!important;padding-block:var(--section)!important;border-top:1px solid var(--line)}
+html body .engineeringTitle{font:400 clamp(28px,3.5vw,50px)/1.06 var(--font-body),sans-serif!important;letter-spacing:-.035em!important;margin:20px 0!important;max-width:900px}
+html body .engineeringLead{font-size:17px!important;line-height:1.35!important;color:var(--slate)!important;max-width:620px}
+html body .engineeringCardGrid{gap:0!important;border-top:1px solid var(--line);grid-template-columns:repeat(2,minmax(0,1fr))!important}
+html body .engineeringCard{background:none!important;border:0!important;border-bottom:1px solid var(--line)!important;border-top:0!important;padding:28px 28px 28px 0!important;transform:none!important}
+html body .engineeringCard:nth-child(odd){border-right:1px solid var(--line)!important}
+html body .engineeringCard:nth-child(even){padding-left:28px!important}
+html body .engineeringCard:hover{background:var(--surface)!important}
+html body .engineeringCard small{font:400 12px/1.2 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)}
+html body .engineeringCard h3,html body .engineeringCard h2{font:400 clamp(22px,2vw,28px)/1.1 var(--font-body),sans-serif!important;letter-spacing:-.03em!important;margin:14px 0 10px!important}
+html body .engineeringCard p{font-size:15px;line-height:1.4;color:var(--slate)}
+html body .engineeringArrow{font:400 12px/1 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)!important;margin-top:18px}
+html body .engineeringClosing{background:none!important;border:0!important;border-top:1px solid var(--line)!important;padding:40px 0 0!important;margin-top:56px!important}
+html body .engineeringClosing h2,html body .engineeringClosing h3{font:400 clamp(22px,2vw,28px)/1.1 var(--font-body),sans-serif!important;letter-spacing:-.03em!important;margin-bottom:14px}
+html body .engineeringClosing a{border-bottom:1px solid currentColor}
+@media (max-width:809px){html body .engineeringCardGrid{grid-template-columns:1fr!important}html body .engineeringCard{padding:24px 0!important;border-right:0!important}}
+html body .portfolioAnswers{padding-block:var(--section)!important;border-top:1px solid var(--line);max-width:none!important}
+html body .portfolioAnswers h2{font:400 clamp(28px,3.5vw,50px)/1.06 var(--font-body),sans-serif!important;letter-spacing:-.035em!important;margin:20px 0 56px!important}
+html body .portfolioAnswerGrid{gap:10px!important}
+html body .portfolioAnswerGrid article{background:none!important;border:0!important;border-top:1px solid var(--ink)!important;padding:20px 0 0!important}
+html body .portfolioAnswerGrid h3{font:400 20px/1.15 var(--font-body),sans-serif!important;letter-spacing:-.02em!important;margin-bottom:14px}
+html body .portfolioAnswerGrid p{font-size:15px;line-height:1.4;color:var(--slate)}
+html body .portfolioAnswerGrid a{display:inline-block;margin-top:16px;font:400 12px/1 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;border-bottom:1px solid currentColor;padding-bottom:3px}
+
+/* Contact section (shared) */
+html body .contactSection{width:100%!important;max-width:none!important;margin:0!important;padding:var(--section) var(--page-margin) 56px!important;border-top:1px solid var(--line);background:none!important;display:block;position:relative;isolation:isolate}
+html body .contactSection::before{content:"";position:absolute;inset:0 var(--page-margin);z-index:-1;pointer-events:none;background:repeating-linear-gradient(to right,transparent 0 calc(100%/12 - 1px),rgba(10,10,10,.08) calc(100%/12 - 1px) calc(100%/12));-webkit-mask:repeating-linear-gradient(to bottom,#000 0 4px,transparent 4px 8px);mask:repeating-linear-gradient(to bottom,#000 0 4px,transparent 4px 8px)}
+html body .contactInner{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:10px}
+html body .contactSection .monoLabel{grid-column:1/5}
+html body .contactSection .contactIntro{grid-column:7/13;display:block!important;margin:0!important;padding:0!important;background:none!important}
+html body .contactSection .contactIntro p{font-size:17px;line-height:1.35;max-width:520px}
+html body .contactSection .contactNote{margin-top:20px;font:400 13px/1.4 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)}
+html body .contactHeadline{grid-column:1/13;margin:120px 0 72px!important;font:400 clamp(72px,14.2vw,220px)/.92 var(--font-body),sans-serif!important;letter-spacing:-.05em!important;white-space:nowrap}
+html body .contactHeadline a:hover{color:var(--slate)}
+html body .contactSection .boardLinks{grid-column:7/13;display:grid!important;grid-template-columns:repeat(2,max-content);gap:8px 96px;position:static!important;background:none!important;padding:0!important;margin:0!important;transform:none!important}
+html body .contactSection .boardLinks a,html body .contactDirect a{background:none!important;border:0!important;padding:0!important;font:400 12px/1.4 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)!important}
+html body .contactSection .boardLinks a:hover,html body .contactDirect a:hover{color:var(--ink)!important}
+@media (max-width:809px){html body .contactInner{display:block}html body .contactSection .contactIntro{margin-top:28px!important}html body .contactHeadline{margin:72px 0 48px!important;white-space:normal;font-size:clamp(64px,22vw,96px)!important}html body .contactSection .boardLinks{grid-template-columns:1fr 1fr;gap:8px 20px}}
+
+/* Footer */
+html body .studioFooter{background:var(--bg)!important;border:0!important;padding:0 var(--page-margin) 40px!important;color:var(--slate)}
+html body .footerInner{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:10px;row-gap:56px;padding-top:56px;border-top:1px solid var(--line)}
+html body .footerColumns{grid-column:7/13;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+html body .footerLinks{display:flex!important;flex-direction:column;gap:6px;margin:0!important}
+html body .studioFooter a,html body .studioFooter span,html body .studioFooter p{font:400 12px/1.4 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;background:none!important;border:0!important;padding:0!important;color:var(--slate)}
+html body .studioFooter a:hover{color:var(--ink)!important}
+html body .footerMeta{grid-column:7/13}
+html body .footerMeta .footerName{color:var(--ink)!important}
+html body .footerBottom{grid-column:7/13;display:flex;justify-content:space-between;gap:20px}
+@media (max-width:809px){html body .footerInner{display:flex;flex-direction:column;gap:40px}}
+
+/* Page headings (inner pages) */
+html body .pageHeading{padding:0!important;text-align:left!important;margin:0}
+html body .pageHeading h1,html body .pageHeading .displayType{font:400 clamp(56px,10.6vw,152px)/.92 var(--font-body),sans-serif!important;letter-spacing:-.045em!important;text-transform:none!important;margin:0!important;background:none!important;color:var(--ink)!important}
+html body .pageHeading>.monoLabel{margin-bottom:28px}
+html body .pageHeadingIntro{max-width:620px!important;margin-top:40px!important;font-size:17px!important;line-height:1.35!important;color:var(--ink)}
+html body .engineeringIntro .pageHeading h1{font-size:clamp(48px,8vw,120px)!important}
+
+/* Generic flattening of colored panels across inner pages */
+
+/* Contact page */
+html body .contactPage{min-height:0!important;padding:96px var(--page-margin) var(--section)!important;text-align:left!important;width:100%!important;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:10px;align-items:start}
+html body .contactPage>.handwritten{grid-column:1/13;font-size:13px!important}
+html body .contactPage .contactTitle{grid-column:1/13;border:0!important;padding:0!important;display:block;margin-bottom:72px}
+html body .contactPage .contactTitle h1{font:400 clamp(72px,10.6vw,152px)/.92 var(--font-body),sans-serif!important;letter-spacing:-.045em!important;text-transform:none!important}
+html body .contactPrimary{grid-column:1/5;flex-direction:column;align-items:flex-start!important;justify-content:flex-start!important;gap:18px!important;margin:0!important;font:400 13px/1.3 var(--font-code),monospace!important}
+html body .contactPrimary a{border:0!important;border-bottom:1px solid currentColor!important;padding:0 0 2px!important;text-transform:uppercase;letter-spacing:.02em}
+html body .contactPrimary .contactEmail{background:var(--ink)!important;color:var(--surface)!important;padding:10px 14px!important;border:0!important}
+html body .contactAddress{color:var(--ink)}
+html body .copyEmail{background:none!important;border:0!important;border-bottom:1px solid var(--ink)!important;padding:0 0 2px!important;min-height:0;font:400 12px/1.2 var(--font-code),monospace!important;text-transform:uppercase;color:var(--ink)!important}
+html body .contactForm{grid-column:6/13;width:auto!important;margin:0!important}
+html body .formSheet{background:none!important;padding:0!important;border-top:1px solid var(--ink)}
+html body .formSheet label{font:400 12px/1.2 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate);margin:28px 0 8px!important}
+html body .formSheet input,html body .formSheet textarea{border:0!important;border-bottom:1px solid var(--line)!important;background:none!important;font:400 clamp(20px,2vw,28px)/1.2 var(--font-body),sans-serif!important;letter-spacing:-.02em;padding:8px 0 12px!important;color:var(--ink)}
+html body .formSheet input:focus,html body .formSheet textarea:focus{outline:0;border-bottom-color:var(--ink)!important}
+html body .formSheet textarea{min-height:120px}
+html body .formIntro{margin:16px 0 0!important;font:400 13px/1.4 var(--font-code),monospace!important;text-transform:uppercase;letter-spacing:.02em;color:var(--slate)}
+html body .formActions{transform:none!important;margin-top:28px;justify-content:flex-end!important}
+html body .formActions button{background:var(--ink)!important;color:var(--surface)!important;padding:12px 16px!important;font:400 13px/1 var(--font-code),monospace!important;letter-spacing:.02em}
+html body .formNotice{font-size:14px!important}
+html body .formError{color:#a3261a!important}
+html body .formSuccess{font-size:20px!important;line-height:1.3;padding-top:28px}
+html body .contactForm>.handwritten{margin:40px 0 0!important;text-align:left}
+html body .contactDirect{grid-column:6/13;justify-content:flex-start!important;gap:22px!important;margin-top:72px!important;padding:28px 0 0!important;border-top:1px solid var(--line)}
+@media (max-width:809px){html body .contactPage{display:block;padding-top:56px!important}html body .contactPrimary{margin-bottom:56px!important}}
+
+/* 404 */
+html body .notFound .displayType{font-size:clamp(96px,16vw,220px)!important}
+
+/* Link color and alignment resets */
+:root body a:not(.button){color:inherit;text-decoration:none}
+html body :is(.studioHero,.homeAbout,.hiringProof,.homeWork,.engineeringHub,.portfolioAnswers,.contactSection,.studioFooter) :is(p,h1,h2,h3,ul,li,div,span){text-align:left}
+html body :is(.hiringProofLinks,.skillStickers,.heroSocials,.allWorkAction){justify-content:flex-start!important;align-items:flex-start}
+@media (max-width:809px){
+  html body .hiringProofLinks{flex-direction:column;gap:14px}
+  html body .engineeringCard:nth-child(even){padding-left:0!important}
+  html body .heroStatement{display:block}
+  html body .heroCtas{margin-top:24px!important}
+}
+
+/* ---------- Inner pages ---------- */
+html body .studioPage{padding-top:72px}
+html body .studioPage :is(h2.displayType,h2){font-size:clamp(28px,3.5vw,50px);line-height:1.06;letter-spacing:-.035em}
+html body .studioPage h3{font-size:clamp(20px,1.6vw,24px);line-height:1.15;letter-spacing:-.02em;font-weight:400}
+
+/* Section jump nav (experience) */
+html body .professionalSections{display:flex!important;gap:22px;background:none!important;border:0!important;padding:0!important;margin:0 0 56px!important;position:static!important;transform:none!important;justify-content:flex-start!important}
+html body .professionalSections a{all:unset;cursor:pointer;font:400 12px/1.2 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:var(--slate);padding-bottom:2px}
+html body .professionalSections a svg{display:none}
+html body .professionalSections a[aria-current],html body .professionalSections a:hover{color:var(--ink);border-bottom:1px solid var(--ink)}
+
+/* Experience frames and role cards become ruled sections */
+html body :is(.experienceFrame,.bioFrame,.combinedStoryFrame,.roleCard,.aboutSection){background:none!important;border:0!important;border-top:1px solid var(--line)!important;padding:56px 0 0!important;margin-top:96px!important;outline:0!important}
+html body .roleCard{margin-top:56px!important;border-top-color:var(--ink)!important}
+html body .frameLabel{display:block;position:static!important;background:none!important;border:0!important;padding:0!important;margin:0 0 28px!important;font:400 13px/1.25 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)!important;transform:none!important}
+html body .frameLabel::before{content:"("}html body .frameLabel::after{content:")"}
+html body .roleHeader{display:flex;justify-content:space-between;gap:28px;flex-wrap:wrap}
+html body .roleHeader h2,html body .roleHeader h3{font-size:clamp(28px,3.5vw,50px)!important}
+html body .roleTech span,html body .roleTech li{background:none!important;border:0!important;padding:0!important;font:400 12px/1.4 var(--font-code),monospace;text-transform:uppercase;color:var(--slate)}
+html body :is(.skillsGrid,.experienceProof){gap:10px!important}
+html body :is(.skillGroup,.experienceProof>*,.educationEntry){background:none!important;border:0!important;border-top:1px solid var(--line)!important;padding:20px 0 0!important}
+html body .experienceProof>*{font:400 12px/1.4 var(--font-code),monospace!important;text-transform:uppercase;letter-spacing:.02em}
+html body .editorialPhoto img{filter:none}
+html body .editorialPhoto{background:none!important;padding:0!important;border:0!important}
+
+/* Selected projects lists (experience) and related cards */
+
+/* Projects index */
+html body .galleryToolbar{border:0!important;background:none!important;padding:0!important;margin:56px 0 56px!important}
+html body .galleryFilters{display:flex;gap:22px!important;flex-wrap:wrap;background:none!important;border:0!important;padding:0!important}
+html body .galleryFilters button{all:unset;cursor:pointer;font:400 12px/1.2 var(--font-code),monospace;letter-spacing:.02em;text-transform:uppercase;color:var(--slate);padding-bottom:3px}
+html body .galleryFilters button span{margin-left:6px;background:none!important;color:inherit!important;padding:0!important;font:inherit}
+html body .galleryFilters button span::before{content:"("}html body .galleryFilters button span::after{content:")"}
+html body .galleryFilters button[aria-pressed=true],html body .galleryFilters button:hover{color:var(--ink);border-bottom:1px solid var(--ink)}
+html body .galleryFilters button:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+html body .galleryGrid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:96px 10px!important}
+html body .galleryGrid>div{min-width:0}
+html body .projectLearnings{border-top:1px solid var(--line);padding-top:96px!important;margin-top:var(--section)!important}
+html body .projectLearnings h2{font-size:clamp(56px,8vw,120px)!important}
+html body .learningList{display:grid;gap:0!important}
+html body .learningEntry{background:none!important;border:0!important;border-top:1px solid var(--line)!important;padding:28px 0!important}
+html body .learningEntry h3{font-size:clamp(22px,2vw,28px)!important}
+html body .learningLinks{display:flex;gap:22px;flex-wrap:wrap}
+html body .learningLinks a{font:400 12px/1.4 var(--font-code),monospace;text-transform:uppercase;letter-spacing:.02em;border-bottom:1px solid currentColor}
+@media (max-width:809px){html body .galleryGrid{grid-template-columns:1fr!important;gap:64px!important}}
+
+/* Case studies */
+html body :is(.caseHero,.caseStudyBody,.caseNotes,.caseCover){background:none!important}
+html body .caseHero h1{font:400 clamp(48px,8vw,120px)/.95 var(--font-body),sans-serif!important;letter-spacing:-.045em!important;text-transform:none!important}
+html body .caseCover{border:0!important;padding:0!important;background:var(--surface)!important}
+html body .caseNotes>div{background:none!important;border:0!important;border-top:1px solid var(--ink)!important;padding:16px 0 0!important}
+html body .caseStudyBody h2{margin-top:72px}
+html body .caseStudyBody :is(p,li){font-size:17px;line-height:1.5}
+html body .caseStudyBody a{border-bottom:1px solid currentColor}
+html body .caseStudyBody>ul:last-child a{background:var(--ink)!important;color:var(--surface)!important;border:0!important;font:400 13px/1.2 var(--font-code),monospace!important;text-transform:uppercase;letter-spacing:.02em;padding:12px 16px!important}
+html body .caseStudyBody>ul:last-child a::after{color:inherit!important}
+html body .caseStudyBody pre,html body .caseStudyBody code{font-family:var(--font-code),monospace;background:var(--surface)!important;border:0!important}
+html body .caseStudyBody table{border-collapse:collapse}
+html body .caseStudyBody :is(th,td){border:0!important;border-bottom:1px solid var(--line)!important;background:none!important}
+html body .caseStudyBody blockquote{border:0!important;border-left:1px solid var(--ink)!important;background:none!important}
+
+/* Services */
+html body .servicesHero{padding:72px 0 var(--section)!important;min-height:0!important;height:auto!important;text-align:left!important;background:none!important}
+html body .servicesHeroContent{text-align:left!important;margin:0!important;max-width:none!important;display:block!important}
+html body .servicesAvailability{display:inline-flex!important;background:none!important;border:0!important;padding:0!important;margin:0 0 28px!important;font:400 13px/1.25 var(--font-code),monospace!important;text-transform:uppercase;letter-spacing:.02em;color:var(--slate)!important}
+html body .servicesAvailability img{display:none}
+html body .servicesHero h1{font:400 clamp(72px,10.6vw,152px)/.92 var(--font-body),sans-serif!important;letter-spacing:-.045em!important;text-transform:none!important}
+html body .servicesSelection{background:none!important;border:0!important;padding:0!important;color:inherit!important;display:inline}
+html body .servicesHeroSummary{max-width:520px;margin:40px 0 28px!important;font-size:20px;line-height:1.2;text-align:left!important}
+html body .faqAnswer img,html body .serviceChapters>svg,html body .servicePanel>svg{display:none!important}
+html body .serviceChapters{background:none!important;margin:0!important}
+html body .servicePanel{background:none!important;color:var(--ink)!important;min-height:0!important;height:auto!important;padding:0!important;margin:0!important;clip-path:none!important;position:relative}
+html body .servicePanelInner{display:grid!important;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:10px;row-gap:20px;padding:56px 0!important;border-top:1px solid var(--line);text-align:left!important;min-height:0!important}
+html body .serviceNumber{grid-column:1/4;grid-row:1/3;font:400 13px/1.25 var(--font-code),monospace!important;color:var(--slate)!important;background:none!important;border:0!important;padding:0!important;margin:0!important;width:auto!important;height:auto!important}
+html body .servicePanel h2{grid-column:4/9;font:400 clamp(36px,4.6vw,66px)/1 var(--font-body),sans-serif!important;letter-spacing:-.04em!important;margin:0!important;color:var(--ink)!important;text-align:left!important}
+html body .chapterTitleLine{display:inline}
+html body .chapterTitleLine+.chapterTitleLine::before{content:" "}
+html body .servicePanel p{grid-column:9/13;font-size:17px;line-height:1.35;margin:0!important;max-width:none!important;text-align:left!important;color:var(--ink)!important}
+html body .servicePanelCapabilities{grid-column:4/13;display:flex!important;gap:8px 22px;flex-wrap:wrap;margin:0!important;justify-content:flex-start!important}
+html body .servicePanelCapabilities span{background:none!important;border:0!important;padding:0!important;clip-path:none!important;font:400 12px/1.4 var(--font-code),monospace!important;letter-spacing:.02em;text-transform:uppercase;color:var(--slate)!important;width:auto!important;min-height:0!important}
+html body .servicePanelCapabilities span::before,html body .servicePanelCapabilities span::after{display:none!important}
+html body .serviceProcess{height:auto!important;min-height:0!important;background:var(--charcoal)!important;color:#F4F3EF;padding:var(--section) var(--page-margin)!important;margin:var(--section) 0 0!important}
+html body .processSticky{position:static!important;height:auto!important;display:block!important;overflow:visible!important}
+html body .serviceProcess .serviceSectionHeading{margin:0 0 72px!important;text-align:left!important;transform:none!important;position:static!important}
+html body .serviceProcess .handwritten{color:#9a9994!important}
+html body .serviceProcess h2{color:#F4F3EF!important;font:400 clamp(36px,4.6vw,66px)/1 var(--font-body),sans-serif!important;letter-spacing:-.04em!important}
+html body .processRail{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px!important;transform:none!important;width:auto!important;padding:0!important;margin:0!important}
+html body .processCard{background:none!important;border:0!important;border-top:1px solid var(--line-dark)!important;color:#F4F3EF!important;padding:20px 0 0!important;width:auto!important;height:auto!important;min-height:0!important;transform:none!important;opacity:1!important;text-align:left!important}
+html body .processCard::before,html body .processCard::after{display:none!important}
+html body .processIndex{position:static!important;background:none!important;border:0!important;padding:0!important;color:#9a9994!important;font:400 13px/1 var(--font-code),monospace!important;margin-bottom:40px;display:block}
+html body .processCard h3{color:#F4F3EF!important;font-size:clamp(22px,2vw,28px)!important;margin:0 0 10px!important}
+html body .processCard p{color:#9a9994!important;font-size:15px;line-height:1.4}
+html body .serviceSectionHeading{text-align:left!important;margin:0 0 56px!important}
+html body .serviceSectionHeading h2{font:400 clamp(36px,4.6vw,66px)/1 var(--font-body),sans-serif!important;letter-spacing:-.04em!important;text-align:left!important}
+html body :is(.capabilitiesSection,.engineeringServicesSection,.technicalSkillsSection,.serviceFaqSection){padding:var(--section) 0 0!important;margin:0 auto!important}
+html body .capabilityCloud{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px!important;background:none!important;min-height:0!important;height:auto!important}
+html body .capabilityCloud::before,html body .capabilityCloud::after{display:none!important}
+html body .capabilityGroup{position:static!important;display:flex!important;flex-direction:column;gap:8px;border-top:1px solid var(--ink);padding:20px 0 0!important;min-height:0!important;height:auto!important;background:none!important}
+html body .capabilityGroup h3{all:unset;display:block;font:400 13px/1.25 var(--font-code),monospace;text-transform:uppercase;letter-spacing:.02em;color:var(--slate);margin-bottom:12px}
+html body .capabilityChip{position:static!important;background:none!important;border:0!important;padding:0!important;font-size:17px!important;line-height:1.35;color:var(--ink)!important;inset:auto!important}
+html body .engineeringServicesGrid,html body .technicalSkillsGrid,html body .serviceFaqGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:56px 10px!important}
+html body .technicalSkillsGrid,html body .serviceFaqGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+html body :is(.engineeringServiceCard,.technicalSkillGroup,.serviceFaq,.servicesPage .engineeringCard){background:none!important;border:0!important;border-top:1px solid var(--ink)!important;padding:20px 0 0!important;margin:0!important;transform:none!important}
+html body :is(.engineeringServiceCard,.technicalSkillGroup) ul{display:flex;flex-wrap:wrap;gap:6px 18px;list-style:none;padding:0;margin:16px 0 0}
+html body :is(.engineeringServiceCard,.technicalSkillGroup) li{background:none!important;border:0!important;padding:0!important;font:400 12px/1.4 var(--font-code),monospace!important;text-transform:uppercase;letter-spacing:.02em;color:var(--slate)}
+html body .technicalSkillsIntro{max-width:620px;color:var(--slate);margin-bottom:56px}
+html body .faqQuestion,html body .faqAnswer{display:block!important;background:none!important;padding:0!important;border:0!important;margin:0!important}
+html body .faqQuestion h3{font-size:clamp(20px,1.6vw,24px)!important;margin:0 0 14px!important}
+html body .faqAnswer p{background:none!important;padding:0!important;color:var(--slate);font-size:15px;line-height:1.45}
+html body .servicesAction{padding:var(--section) 0 0;margin:0 auto!important;width:calc(100% - var(--page-margin)*2)}
+@media (max-width:1199px){html body .processRail,html body .capabilityCloud{grid-template-columns:repeat(2,minmax(0,1fr))}html body .engineeringServicesGrid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media (max-width:809px){
+  html body .servicePanelInner{display:block!important}
+  html body .servicePanel :is(h2,p,.servicePanelCapabilities){margin-top:16px!important}
+  html body :is(.processRail,.capabilityCloud,.engineeringServicesGrid,.technicalSkillsGrid,.serviceFaqGrid){grid-template-columns:1fr!important;gap:40px!important}
+}
+
+/* Expertise / notes / sitemap / journal */
+html body .engineeringIntro{margin-bottom:96px!important}
+html body .engineeringBreadcrumb{color:var(--slate);text-transform:uppercase}
+html body .journalPage .journalChapters summary{list-style:none}
+html body .editorialByline{font-family:var(--font-code),monospace;font-size:12px;text-transform:uppercase;letter-spacing:.02em;color:var(--slate)}
+html body .capabilitiesSection{min-height:0!important;height:auto!important}
+html body .capabilityGroup{border:0!important;border-top:1px solid var(--ink)!important;outline:0!important}
+html body .capabilityGroup::before,html body .capabilityGroup::after{display:none!important}
+html body .processRail{align-items:start!important}
+html body .processCard{margin:0!important;top:auto!important;translate:none!important}
+html body .processCard *{text-align:left!important}
+html body .studioFooter a{display:inline-flex;align-items:center;min-height:24px}
+html body .footerLinks{gap:0!important}
+html body .pageHeading h1,html body .pageHeading .displayType{white-space:normal!important;overflow-wrap:break-word;font-size:clamp(48px,9vw,152px)!important}
+html body .pageHeading h1,html body .pageHeading .displayType{width:auto!important;max-width:100%!important;display:block!important}
+html body .pageHeading h1 *{white-space:normal!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}html body *{transition:none!important}}
+html body .heroStatement{padding:0!important;width:auto!important;max-width:none!important}
+html body :is(button,summary,label[for]){cursor:pointer}
+
+/* Hero dot circle */
+html body .heroDots{position:absolute;z-index:-1;pointer-events:none;width:clamp(260px,34vw,500px);aspect-ratio:1;left:calc(var(--page-margin) + (100% - var(--page-margin)*2) / 12 * 4 - clamp(260px,34vw,500px) * .62);top:clamp(80px,14vh,170px)}
+@media (max-width:809px){html body .heroDots{width:300px;left:auto;right:-90px;top:24px}}
+
+/* Links and buttons: clear, quick hover feedback */
+:root body :is(.navLinks>a span,.navUtility,.monoLink,.heroSocials a,.studioFooter a,.boardLinks a,.contactDirect a,.professionalSections a,.galleryFilters button,.editorialContents a,.brandMark>span:first-child){background-image:linear-gradient(currentColor,currentColor);background-size:0% 1px;background-repeat:no-repeat;background-position:0 100%;transition:background-size .25s var(--ease),color .2s var(--ease)!important}
+:root body :is(.navLinks>a,.navUtility,.heroSocials a,.studioFooter a,.boardLinks a,.contactDirect a,.professionalSections a,.galleryFilters button,.editorialContents a,.brandMark):is(:hover,:focus-visible) :is(span:first-child),
+:root body :is(.navLinks>a,.navUtility,.monoLink,.heroSocials a,.studioFooter a,.boardLinks a,.contactDirect a,.professionalSections a,.galleryFilters button,.editorialContents a):is(:hover,:focus-visible){background-size:100% 1px;color:var(--ink)!important}
+:root body .homeWork :is(.quietLink){color:#F4F3EF}
+:root body :is(.outlineButton,.quietLink,.projectLink,.engineeringArrow,.portfolioAnswerGrid a,.engineeringClosing a,.learningLinks a,.contactPrimary a:not(.contactEmail),.copyEmail,main p a:not([class]),main li a:not([class])){border-bottom:0!important;text-decoration:none;background-image:linear-gradient(currentColor,currentColor);background-size:100% 1px;background-repeat:no-repeat;background-position:0 100%;padding-bottom:3px!important;transition:background-size .25s var(--ease),color .2s var(--ease)!important}
+:root body :is(.outlineButton,.quietLink,.projectLink,.engineeringArrow,.portfolioAnswerGrid a,.engineeringClosing a,.learningLinks a,.contactPrimary a:not(.contactEmail),.copyEmail,main p a:not([class]),main li a:not([class])):is(:hover,:focus-visible){background-size:100% 2px;color:inherit!important}
+:root body :is(.engineeringCard,.folderProject):is(:hover,:focus-within) :is(.engineeringArrow,.projectLink){background-size:100% 2px}
+:root body :is(.outlineButton,.quietLink,.projectLink,.heroSocials a,.studioFooter a,.boardLinks a,.studioButton) span[aria-hidden]{display:inline-block;transition:transform .2s var(--ease)!important}
+:root body :is(.outlineButton,.quietLink,.projectLink,.heroSocials a,.studioFooter a,.boardLinks a,.studioButton,.engineeringCard,.folderProject):is(:hover,:focus-visible,:focus-within) span[aria-hidden]{transform:translate(2px,-2px)}
+:root body .folderProject .folderCopy :is(h2,h3) a{background-image:linear-gradient(currentColor,currentColor);background-size:0% 1px;background-repeat:no-repeat;background-position:0 92%;transition:background-size .25s var(--ease)!important}
+:root body .folderProject:is(:hover,:focus-within) .folderCopy :is(h2,h3) a{background-size:100% 1px}
+/* Solid buttons invert to an outline on hover */
+:root body :is(.studioButton,.navContact,.contactPrimary .contactEmail,.formActions button,.caseStudyBody>ul:last-child a){outline:1px solid transparent;outline-offset:-1px;transition:background-color .2s var(--ease),color .2s var(--ease),outline-color .2s var(--ease),transform .1s var(--ease)!important}
+:root body :is(.studioButton,.navContact,.contactPrimary .contactEmail,.formActions button:not(:disabled),.caseStudyBody>ul:last-child a):is(:hover,:focus-visible){background:transparent!important;color:var(--ink)!important;outline-color:var(--ink)}
+:root body :is(.studioButton,.navContact,.contactPrimary .contactEmail,.formActions button,.caseStudyBody>ul:last-child a):active{transform:scale(.97)}
+:root body main .homeWork .studioButton.studioButton:is(:hover,:focus-visible){background:transparent!important;color:#F4F3EF!important;outline-color:#F4F3EF}
+:root body .engineeringCard:is(:hover,:focus-visible){background:var(--surface)!important}
+:root body .folderProject:is(:hover,:focus-within) .projectPicture{outline:1px solid currentColor;outline-offset:-1px}
+@media (prefers-reduced-motion:reduce){:root body *{transition:none!important}}
+html body .brandMark{border:0!important;height:auto!important}html body .heroAvailable{padding:0!important}
+html body .studioHero{overflow-x:clip}
+
+/* ---------- Effects ---------- */
+/* Hover text roll */
+.roll{display:inline-block;overflow:hidden;vertical-align:bottom;height:1.25em;line-height:1.25}
+.rollTrack{display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.45,0,.55,1)}
+.rollTrack>span{display:block;height:1.25em;white-space:nowrap}
+:root body :is(a,button):is(:hover,:focus-visible) .rollTrack{transform:translateY(-50%)}
+:root body .navLinks>a .roll{background:none!important}
+:root body .navLinks>a[aria-current=page] .roll{border-bottom:1px solid var(--ink)}
+@media (max-width:1199px){.roll{height:auto;overflow:visible}.rollTrack>span[aria-hidden]{display:none}.rollTrack>span{height:auto}:root body :is(a,button):hover .rollTrack{transform:none}}
+
+/* Hero entrance */
+.heroLine{display:block;overflow:hidden;padding-bottom:.06em;margin-bottom:-.06em}
+.heroLine>span{display:block;animation:riseIn .9s cubic-bezier(.2,.7,.2,1) both}
+.heroLine+.heroLine>span{animation-delay:.08s}
+:root body :is(.heroRole,.heroAvailable,.studioHero .monoMeta){animation:fadeUp .7s .35s cubic-bezier(.2,.7,.2,1) both}
+.heroDots{animation:fadeIn 1.2s .2s ease both}
+@keyframes riseIn{from{transform:translateY(105%)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}}
+@keyframes fadeIn{from{opacity:0}}
+
+/* Work carousel */
+.workCarousel{position:relative;margin:0 calc(var(--page-margin) * -1)}
+:root body .homeWork .featuredProjects{display:flex!important;grid-template-columns:none;gap:28px!important;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;padding:24px calc(50% - min(46vw,660px)/2) 40px;cursor:grab;outline-offset:-4px}
+:root body .homeWork .featuredProjects::-webkit-scrollbar{display:none}
+.workCarousel.isDragging .featuredProjects{scroll-snap-type:none!important;cursor:grabbing!important;user-select:none}
+:root body .homeWork .featuredProjects>.folderProject{flex:0 0 min(46vw,660px)!important;scroll-snap-align:center;transform:skewX(var(--skew,0deg))!important;transition:transform .1s linear}
+:root body .homeWork .folderProject .projectPicture img{filter:drop-shadow(var(--split,0px) 0 0 rgba(255,0,80,.55)) drop-shadow(calc(var(--split,0px) * -1) 0 0 rgba(0,220,255,.55))}
+.workOverlayTitle{position:absolute;left:0;right:0;top:calc(24px + min(46vw,660px) * .28);transform:translateY(-50%);margin:0;text-align:center!important;pointer-events:none;overflow:hidden;height:1.05em;font:400 clamp(44px,6vw,96px)/1 var(--font-body),sans-serif;letter-spacing:-.045em;color:#F4F3EF;mix-blend-mode:difference}
+.workOverlayTitle>span{display:block;animation:titleRoll .45s cubic-bezier(.2,.7,.2,1) both}
+@keyframes titleRoll{from{transform:translateY(100%);opacity:0}}
+.workProgress{height:1px;margin:0 var(--page-margin);background:rgba(244,243,239,.18)}
+.workProgress>span{display:block;height:100%;background:#F4F3EF;transform-origin:left;transition:transform .15s linear}
+:root body .homeWork .workHeading{grid-template-areas:"label range hint" ". title title" ". lead lead";grid-template-columns:4fr 5fr 3fr;row-gap:14px}
+:root body .homeWork .workHeading .monoLabel{grid-area:label}
+.workRange{grid-area:range;color:#9a9994!important;margin:0}
+.workHint{grid-area:hint;text-align:right!important;color:#F4F3EF!important;margin:0}
+:root body .homeWork .workTitle{grid-area:title;margin-top:48px}
+:root body .homeWork .workHeading .workLead{grid-area:lead;margin:0}
+@media (max-width:809px){
+  :root body .homeWork .featuredProjects{padding:16px var(--page-margin) 32px;gap:16px!important}
+  :root body .homeWork .featuredProjects>.folderProject{flex-basis:82vw!important}
+  .workOverlayTitle{top:calc(16px + 82vw * .28)}
+  .workHint{text-align:left!important;margin-top:6px}
+  :root body .homeWork .workHeading{display:flex!important;flex-direction:column}
+}
+
+/* Scroll word reveal */
+.wordReveal.revealReady .revealWord{color:#c4c3be;transition:color .35s ease}
+.wordReveal.revealReady .revealWord.isLit{color:var(--ink)}
+
+/* Count up with colour split while rolling */
+.countUp{display:inline-block;font-variant-numeric:tabular-nums}
+:root body .countUp.isRolling>span[aria-hidden]{text-shadow:2px 0 rgba(255,0,80,.6),-2px 0 rgba(0,220,255,.6)!important}
+
+/* Contact image with parallax */
+:root body .contactSection .contactImage{grid-column:6/12;margin:96px 0 0;overflow:hidden;aspect-ratio:16/9;background:var(--surface)}
+.parallax>*{display:block;width:100%;height:100%;object-fit:cover;will-change:transform;transform:scale(1.18)}
+@media (max-width:809px){:root body .contactSection .contactImage{margin-top:48px}}
+
+@media (prefers-reduced-motion:reduce){
+  :root body *,:root body *::before,:root body *::after{animation:none!important}
+  :root body .homeWork .featuredProjects>.folderProject{transform:none!important}
+}
+:root body .homeWork .featuredProjects{flex-direction:row!important;flex-wrap:nowrap!important;align-items:flex-start}
+:root body .workOverlayTitle>span{text-align:center!important}
+:root body .homeWork .workHeading :is(.workRange,.workHint,.workLead){grid-column:auto}
+:root body .homeWork .workHeading .workRange{grid-area:range}
+:root body .homeWork .workHeading .workHint{grid-area:hint;text-align:right!important}
+:root body .homeWork .workHeading .workLead{grid-area:lead}
+:root body .hiringProofGrid strong span{font:inherit!important;color:inherit;max-width:none}
+:root body .hiringProofGrid strong .screenReaderText{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}

@@ -4,11 +4,11 @@ Personal engineering portfolio for **Saaim Abdullah**, a software engineer in La
 
 **Primary website:** [saaim.site](https://saaim.site) · **Contact:** [saaim.abdullah.work@gmail.com](mailto:saaim.abdullah.work@gmail.com)
 
-Built with Next.js 16, React 19, TypeScript, and Once UI. The same source supports Vercel production hosting and a GitHub Pages static mirror.
+Built with Next.js 16, React 19 and TypeScript, with no UI framework. The same source supports Vercel production hosting and a GitHub Pages static mirror.
 
 ## Features
 
-- Animated Home and Services pages, project folder stacking, interactive rulers, and reduced-motion support.
+- Monochrome design (Switzer + Geist Mono): interactive dot circle, draggable project carousel, scroll word reveal, count-up figures, parallax and hover text roll, all disabled under reduced motion.
 - Six main project case studies, plus four learning repositories presented separately.
 - Professional Experience and Story, personal media, and a looping bio reel with playback controls.
 - Journal links to original Medium articles and their chapter headings.
@@ -37,7 +37,7 @@ Open http://localhost:3000. See [.env.example](.env.example) for optional config
 - `src/resources/articles.ts`: Medium titles, summaries, original chapter headings, and links.
 - `src/resources/project-art.ts`: thumbnail and category mapping.
 - `src/resources/custom.css`: studio design and responsive styles.
-- `src/resources/once-ui.config.ts`: domain, active routes, and theme settings.
+- `src/resources/site.ts`: domain and active routes.
 - `public`: local fonts, photos, final covers and diagrams, and document downloads.
 
 Professional Experience and Story, Projects, Services, Journal / My Blog, and Contact are active pages.
@@ -45,7 +45,7 @@ The Projects gallery shows six main projects, followed by four Learnings entries
 Project frontmatter selects covers through thumbnail and detail diagrams through images. Put new media in public/images/projects/covers or diagrams, using the project slug as the filename. Diagram links open the full-resolution originals.
 
 Project Markdown is read with gray-matter and rendered using next-mdx-remote/rsc and remark-gfm. Detailed tables scroll within the content column on small screens; second- and third-level headings have permalink links.
-Once UI supplies shared CSS and design tokens. Case-study paragraphs, lists, and tables use server-rendered HTML; a small client component handles accessible heading permalink copying and feedback.
+Styles live in `src/resources/mono.css` (the design system) above older layout rules in `custom.css` and route stylesheets, which sit in a lower-priority `@layer legacy`. Effects are small client components in `src/components/effects/`. Case-study paragraphs, lists, and tables use server-rendered HTML; a small client component handles accessible heading permalink copying and feedback.
 
 ## Validation
 
@@ -77,7 +77,7 @@ npm install --prefix tmp/audit-tools --no-save --package-lock=false lighthouse @
 node scripts/quality-audit.mjs http://localhost:3000 --tools=tmp/audit-tools --phase=after
 ```
 
-See [the measured production readiness report](docs/production-readiness.md) and [route metadata audit](docs/seo-metadata.csv). Shared page wrappers render on the server; Once UI contexts are scoped to MDX pages that need permalink copying and toast feedback.
+See [the measured production readiness report](docs/production-readiness.md) and [route metadata audit](docs/seo-metadata.csv). Shared page wrappers render on the server.
 
 Social previews use a local PNG, so neither build needs a server-only image endpoint or a remote font download. Vercel monitoring runs only on production Vercel deployments; local development, previews, and GitHub Pages do not send telemetry. On Vercel, the contact form sends messages straight to your inbox through [Resend](https://resend.com) via `/api/contact` (set `RESEND_API_KEY`, `CONTACT_FROM_EMAIL` and optionally `CONTACT_TO_EMAIL`; see .env.example). Replies go to the visitor's address. If the key is missing or sending fails, visitors can open an email draft instead. The GitHub Pages export has no server, so it keeps the email-draft flow.
 

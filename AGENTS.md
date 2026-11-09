@@ -1,6 +1,6 @@
 # Repository guidance
 
-This is Saaim Abdullah's engineering portfolio: Next.js App Router, React, TypeScript, local MDX content, and studio-style CSS. Read `README.md` and `docs/search-visibility.md` for context. Preserve existing user edits and the established visual design.
+This is Saaim Abdullah's engineering portfolio: Next.js App Router, React, TypeScript, local MDX content, and a monochrome CSS system (`src/resources/mono.css`). Read `README.md` and `docs/search-visibility.md` for context. Preserve existing user edits and the established visual design.
 
 ## Setup and commands
 
@@ -17,7 +17,7 @@ This is Saaim Abdullah's engineering portfolio: Next.js App Router, React, TypeS
 - `src/resources/content.ts`: identity, contact details and main-page copy.
 - `src/resources/specialties.ts` and `engineering-notes.ts`: engineering guides and project evidence.
 - `src/resources/editorial.ts`: maintained guide update date and primary references.
-- `src/resources/site-navigation.ts` and `once-ui.config.ts`: main page labels, enabled routes, canonical base and styling settings.
+- `src/resources/site-navigation.ts` and `site.ts`: main page labels, enabled routes and canonical base.
 - `src/utils/siteCatalog.ts`: shared public catalog for HTML/XML sitemaps and the LLM reading index.
 - `src/resources/indexing.ts`: shared production/preview indexing decision.
 

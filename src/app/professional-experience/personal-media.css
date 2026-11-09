@@ -1,8 +1,9 @@
+/* Legacy studio styles: layered below the monochrome system in mono.css. */
+@layer legacy{
 .educationEntry+.educationEntry{margin-top:28px}
 .educationEntry p{line-height:1.7}
 .storyIntro>h3{font-size:28px;line-height:1.25;margin-bottom:24px}
 .storyIntro>p+p{margin-top:20px}
-@media(max-width:1199px){.experienceFrame .frameSticker{right:12px}}
 
 /* Editorial layout for merged bio and story */
 .combinedStoryFrame .bioOpening{display:grid;grid-template-columns:minmax(0,1fr) minmax(210px,290px);align-items:center;gap:clamp(24px,4vw,58px);margin:30px 0 45px}
@@ -10,7 +11,7 @@
 .combinedStoryFrame p{line-height:1.8}
 .combinedStoryFrame .mergedStoryIntro{max-width:850px;margin-inline:auto}
 .combinedStoryFrame .personalStoryMoments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:clamp(20px,4vw,52px);margin-top:52px}
-.combinedStoryFrame .editorialPhoto{margin:0;padding:10px 10px 8px;background:white;box-shadow:0 5px 18px #0002;max-width:340px;justify-self:center;transform:rotate(-2deg);width:100%}
+.combinedStoryFrame .editorialPhoto{margin:0;padding:10px 10px 8px;background:white;max-width:340px;justify-self:center;transform:rotate(-2deg);width:100%}
 .combinedStoryFrame .editorialPhoto:nth-of-type(even){transform:rotate(2deg)}
 .combinedStoryFrame .editorialPhoto img,.combinedStoryFrame .editorialPhoto video{display:block;width:100%;height:auto;max-height:340px;object-fit:cover}
 .combinedStoryFrame .editorialPhoto video{object-fit:contain;background:var(--ink)}
@@ -22,4 +23,6 @@
 .combinedStoryFrame .displayType{overflow-wrap:anywhere}
 .combinedStoryFrame .bioOpening>*,.combinedStoryFrame .personalStoryMoments>*{min-width:0;max-width:100%}
 .combinedStoryFrame .editorialPhoto{box-sizing:border-box;min-width:0;max-width:min(100%,340px)}
-@media(max-width:720px){.combinedStoryFrame .bioOpening,.combinedStoryFrame .personalStoryMoments{grid-template-columns:minmax(0,1fr)}.combinedStoryFrame .editorialPhoto{transform:none!important;max-width:min(100%,285px)}.professionalSections a{min-width:0;overflow-wrap:anywhere}}
+@media(max-width:720px){.combinedStoryFrame .bioOpening,.combinedStoryFrame .personalStoryMoments{grid-template-columns:minmax(0,1fr)}.combinedStoryFrame .editorialPhoto{transform:none;max-width:min(100%,285px)}.professionalSections a{min-width:0;overflow-wrap:anywhere}}
+
+}

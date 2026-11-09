@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { baseURL, routes } from "@/resources/once-ui.config";
+import { baseURL, routes } from "@/resources/site";
 import { sitePages } from "@/resources/site-navigation";
 import { home, work } from "@/resources/content";
 import { EDITORIAL_UPDATED_AT } from "@/resources/editorial";

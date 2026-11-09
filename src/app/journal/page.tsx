@@ -5,7 +5,7 @@ import "./journal.css";
 import { PageHeading, Action } from "@/components/Studio";
 import { jsonLd, breadcrumbJsonLd, webPageJsonLd } from "@/resources/schema";
 import { person } from "@/resources/content";
-import { baseURL } from "@/resources/once-ui.config";
+import { baseURL } from "@/resources/site";
 import { articles } from "@/resources/articles";
 import { Contact } from "@/components/Contact";
 import { pageMeta } from "@/resources/seo";

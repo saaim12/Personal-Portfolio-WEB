@@ -1,7 +1,7 @@
 import { jsonLd, webPageJsonLd, breadcrumbJsonLd } from "@/resources/schema";
 import { ogImageFor } from "@/resources/seo";
 import { sitePages } from "@/resources/site-navigation";
-import { baseURL } from "@/resources/once-ui.config";
+import { baseURL } from "@/resources/site";
 
 type IndexItem = { path: string; title: string; description?: string };
 const collections = new Set(["/expertise", "/engineering-notes", "/projects", "/sitemap"]);

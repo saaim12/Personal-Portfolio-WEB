@@ -2,7 +2,6 @@ import { SiteAnchor } from "@/components/SiteAnchor";
 import Image from "@/components/SiteImage";
 import { getProjects } from "@/utils/projects";
 import { projectArt } from "@/resources/project-art";
-import { Handles, Mark } from "@/components/Studio";
 import { ProjectGallery } from "./ProjectGallery";
 interface ProjectsProps { preview?: boolean; showcase?: boolean; range?: [number, number?]; exclude?: string[]; only?: string[]; }
 const learningSlugs = ["esp32-temperature-inference", "autoencoder-edge-compression", "algorithms-in-python", "ml-data-foundations"];
@@ -14,7 +13,6 @@ export function Projects({ range, exclude = [], only, showcase = false, preview 
     const art = projectArt[post.slug];
     const title = art?.title || post.metadata.title;
     const image = post.metadata.thumbnail;
-    const color = art?.color || ["blue", "black", "yellow", "pink"][index % 4];
     const href = "/projects/" + post.slug;
     const date = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(new Date(post.metadata.publishedAt));
     const learning = learningSlugs.includes(post.slug);
@@ -23,16 +21,15 @@ export function Projects({ range, exclude = [], only, showcase = false, preview 
       const links = sourceLinks.length ? sourceLinks : [{ label: "View repository", href: post.metadata.link || "" }];
       return { slug: post.slug, category: "Learnings", card: <article className="learningEntry" key={post.slug}><h3><SiteAnchor href={href}>{post.metadata.title}</SiteAnchor></h3><p>{post.metadata.summary}</p><div className="learningLinks">{links.filter(link => link.href).map(link => <SiteAnchor key={link.href} href={link.href} target="_blank" rel="noopener noreferrer">{link.label} ↗</SiteAnchor>)}</div></article> };
     }
-    const card = <article className={`folderProject ${preview ? "folderFeature" : "folderSmall"} folder-${color}`} key={post.slug}>
-      {preview && index > 0 && <div className="retainedFolderLabels" aria-hidden="true">{Array.from({length:index},(_,previous)=><span key={previous}><Mark kind="steps"/>Project {String(previous+1).padStart(2,"0")}</span>)}</div>}
-      <div className="folderTab"><Mark kind="steps" /><span>{preview ? `Project ${String(index+1).padStart(2,"0")}` : date}</span></div>
-      <div className="folderContent">
-        <div className="folderCopy"><span className="projectDate"><i />{date}</span><Heading><SiteAnchor href={href}>{title}</SiteAnchor></Heading><p>{post.metadata.cardSummary || post.metadata.summary}</p><SiteAnchor href={href} className="projectLink" aria-label={`View project: ${title}`}>View project <span aria-hidden="true">↗</span></SiteAnchor><div className="projectTags">{post.metadata.tags?.slice(0,2).map(tag => <span key={tag}>{tag}</span>)}</div></div>
-        <SiteAnchor href={href} className="projectPicture diagramPicture" aria-label={`View ${title} project`}><Image src={image} alt={`System overview for ${title}`} {...(preview ? { width: 1672, height: 941 } : { fill: true })} sizes={preview ? "(max-width: 760px) 90vw, 45vw" : "(max-width: 760px) 90vw, 42vw"} /><Handles /></SiteAnchor>
-      </div>
+    const number = String(index + 1).padStart(2, "0");
+    const category = post.metadata.tags?.[0] || "Project";
+    const card = <article className={`folderProject ${preview ? "folderFeature" : "folderSmall"}`} key={post.slug} data-title={title}>
+      <SiteAnchor href={href} className="projectPicture diagramPicture" aria-label={`View ${title} project`} tabIndex={-1}><Image src={image} alt={`System overview for ${title}`} {...(preview ? { width: 1672, height: 941 } : { fill: true })} sizes={preview ? "(max-width: 760px) 90vw, 45vw" : "(max-width: 760px) 90vw, 42vw"} /></SiteAnchor>
+      <div className="folderTab"><span>{number}_{category}</span><span className="projectDate">{date}</span></div>
+      <div className="folderCopy"><Heading><SiteAnchor href={href}>{title}</SiteAnchor></Heading><p>{post.metadata.cardSummary || post.metadata.summary}</p><div className="projectTags">{post.metadata.tags?.slice(0,2).map(tag => <span key={tag}>{tag}</span>)}</div><SiteAnchor href={href} className="projectLink" aria-label={`View project: ${title}`}>View project <span aria-hidden="true">↗</span></SiteAnchor></div>
     </article>;
     const products = ["fitter-health-platform", "temporary-url-service"];
     return { slug: post.slug, category: products.includes(post.slug) ? "Product & web" : learning ? "Learnings" : "AI & data", card };
   });
-  return showcase ? <ProjectGallery items={cards} /> : <div className={preview ? "featuredProjects" : "relatedProjects"}>{cards.map(item => item.card)}</div>;
+  return showcase ? <ProjectGallery items={cards} /> : <div className={preview ? "featuredProjects" : "relatedProjects"} {...(preview ? { tabIndex: 0, role: "region", "aria-label": "Featured projects, scroll sideways for more" } : {})}>{cards.map(item => item.card)}</div>;
 }

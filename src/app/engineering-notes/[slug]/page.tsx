@@ -8,7 +8,7 @@ import { engineeringNotes,getEngineeringNote } from "@/resources/engineering-not
 import { EDITORIAL_UPDATED_AT, noteReferences } from "@/resources/editorial";
 import { EditorialByline } from "@/components/EditorialByline";
 import { jsonLd, editorialArticleJsonLd } from "@/resources/schema";
-import { baseURL } from "@/resources/once-ui.config";
+import { baseURL } from "@/resources/site";
 import { PageSchema } from "@/components/PageSchema";
 import { Contact } from "@/components/Contact";
 import "../../expertise/editorial.css";

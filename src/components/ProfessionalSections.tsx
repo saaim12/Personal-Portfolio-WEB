@@ -2,11 +2,10 @@
 import { SiteAnchor } from "@/components/SiteAnchor";
 
 import { useEffect, useState } from "react";
-import { Mark } from "./Studio";
 
 const sections = [
-  { id: "bio", label: "My Story / My Bio", icon: "flower" },
-  { id: "career", label: "My Work Experience", icon: "pinwheel" },
+  { id: "bio", label: "My Story / My Bio" },
+  { id: "career", label: "My Work Experience" },
 ];
 
 export function ProfessionalSections() {
@@ -20,5 +19,5 @@ export function ProfessionalSections() {
     window.addEventListener("scroll", update, { passive: true });
     return () => window.removeEventListener("scroll", update);
   }, []);
-  return <nav className="professionalSections" aria-label="Professional Experience and Story sections">{sections.map(section => <SiteAnchor key={section.id} href={"#" + section.id} aria-current={active === section.id ? "location" : undefined}><Mark kind={section.icon} />{section.label}</SiteAnchor>)}</nav>;
+  return <nav className="professionalSections" aria-label="Professional Experience and Story sections">{sections.map(section => <SiteAnchor key={section.id} href={"#" + section.id} aria-current={active === section.id ? "location" : undefined}>{section.label}</SiteAnchor>)}</nav>;
 }

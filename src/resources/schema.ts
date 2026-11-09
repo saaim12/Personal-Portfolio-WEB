@@ -1,4 +1,4 @@
-import { baseURL } from "@/resources/once-ui.config";
+import { baseURL } from "@/resources/site";
 import { home, person, social } from "@/resources/content";
 import { SITE_NAME } from "./seo";
 

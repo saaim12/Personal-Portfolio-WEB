@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { baseURL } from "@/resources/once-ui.config";
+import { baseURL } from "@/resources/site";
 import { person } from "@/resources/content";
 import { isSearchIndexable } from "@/resources/indexing";
 

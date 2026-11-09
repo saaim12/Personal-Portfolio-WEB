@@ -1,6 +1,6 @@
 import { getSiteCatalog } from "@/utils/siteCatalog";
 import { renderLlmsIndex } from "@/utils/llms";
-import { baseURL } from "@/resources/once-ui.config";
+import { baseURL } from "@/resources/site";
 import { home, person, social } from "@/resources/content";
 
 /** Both spellings serve one generated document, including on static hosts. */

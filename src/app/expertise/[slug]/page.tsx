@@ -9,7 +9,7 @@ import { EditorialByline } from "@/components/EditorialByline";
 import { specialties, getSpecialty } from "@/resources/specialties";
 import { engineeringNotes } from "@/resources/engineering-notes";
 import { jsonLd, editorialArticleJsonLd } from "@/resources/schema";
-import { baseURL } from "@/resources/once-ui.config";
+import { baseURL } from "@/resources/site";
 import { PageSchema } from "@/components/PageSchema";
 import { Contact } from "@/components/Contact";
 import "../editorial.css";
