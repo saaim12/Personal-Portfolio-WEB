@@ -9,7 +9,8 @@ const nextConfig = {
   basePath,
   poweredByHeader: false,
   devIndicators: false,
-  pageExtensions: ["ts", "tsx", "md", "mdx"],
+  // "api.ts" route handlers (e.g. the Resend contact endpoint) need a server, so static exports skip them.
+  pageExtensions: [...(staticExport ? [] : ["api.ts"]), "ts", "tsx", "md", "mdx"],
   transpilePackages: ["next-mdx-remote"],
   trailingSlash: staticExport,
 

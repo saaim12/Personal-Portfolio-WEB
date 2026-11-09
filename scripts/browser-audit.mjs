@@ -128,18 +128,20 @@ await page.locator('.professionalSections a[href="#career"]').click();
 await page.waitForFunction(()=>document.querySelector('.professionalSections a[href="#career"]')?.getAttribute('aria-current')==='location');
 assert.equal(await page.locator('#career h2').textContent(),'My Work Experience');
 await page.goto(base+'/contact');
-await page.getByRole('button',{name:'Next (1/2)',exact:true}).click();
-assert.equal(await page.locator('#contact-name').count(),0);
+assert.equal(await page.locator('.contactPrimary a[href^="mailto:"]').count(),1,'Direct email link sits above the form');
+await page.getByRole('button',{name:'Send message ↗',exact:true}).click();
+assert.equal(await page.getByLabel('What’s on your mind?').evaluate(e=>e.checkValidity()),false,'Empty message is rejected');
 await page.getByLabel('What’s on your mind?').fill('I would like to discuss a software engineering role.');
-await page.getByRole('button',{name:'Next (1/2)',exact:true}).click();
-await page.getByLabel('And who’s saying hello?').fill('Test visitor');
+await page.getByLabel('Your name').fill('Test visitor');
 await page.getByLabel('Your email').fill('invalid-email');
 assert.equal(await page.getByLabel('Your email').evaluate(e=>e.checkValidity()),false,'Invalid email is rejected');
 await page.getByLabel('Your email').fill('visitor@example.com');
-await page.getByRole('button',{name:'← Back',exact:true}).click();
-assert.equal(await page.getByLabel('What’s on your mind?').inputValue(),'I would like to discuss a software engineering role.');
-await page.getByRole('button',{name:'Next (1/2)',exact:true}).click();
-assert.equal(await page.getByLabel('Your email').inputValue(),'visitor@example.com');
+let contactPayload;
+await page.route('**/api/contact',route=>{contactPayload=JSON.parse(route.request().postData()||'{}');route.fulfill({status:200,contentType:'application/json',body:'{"ok":true}'});});
+await page.getByRole('button',{name:'Send message ↗',exact:true}).click();
+await page.getByText('your message has been delivered').waitFor();
+assert.equal(contactPayload.email,'visitor@example.com','Form posts to the contact API');
+await page.unroute('**/api/contact');
 for(const asset of new Set([...internalLinks, '/SaaimCV.pdf','/Fitter-Recommendation-Letter.pdf','/sitemap.xml','/robots.txt']))assert.equal((await page.request.get(base+asset)).status(),200,asset);
 for(const [from,to]of [['/about','/professional-experience'],['/experience','/professional-experience'],['/work','/projects'],['/work/fitter-health-platform','/projects/fitter-health-platform'],['/case-study','/projects'],['/case-studies','/projects'],['/case-study/fitter-health-platform','/projects/fitter-health-platform'],['/case-studies/fitter-health-platform','/projects/fitter-health-platform']]){
  const response=await page.request.get(base+from,{maxRedirects:0});
@@ -173,7 +175,7 @@ async function sampleContrast(selector,state){
 for(const [route,selectors]of [
  ['/', ['.navLinks > a:visible','.navActions > a:not(.navAvatar):visible','.studioButton > span:last-child','.footerLinks a','.boardLinks a']],
  ['/projects',['.galleryFilters button','.galleryFilters button span']],
- ['/contact',['.formActions button','.contactDirect a']],
+ ['/contact',['.formActions button','.contactDirect a','.contactPrimary .contactEmail']],
 ]){
  await page.goto(base+route,{waitUntil:'networkidle'});
  for(const selector of selectors){
@@ -269,4 +271,4 @@ await browser.close();
 assert.equal(errors.length,0,'Runtime errors');
 assert.equal(results.filter(r=>r.broken.length || r.scroll>r.width+2 || r.overflow.length).length,0,'New layout or asset failures');
 assert.deepEqual(contrast.filter(sample=>sample.ratio+.02<sample.minimum),[],'Sampled control text meets WCAG AA contrast in normal and hover states');
-console.log('PASS: '+results.length+' route/viewport checks; redirects, removed pages, navigation, keyboard, filters, contact validation, diagram fitting, permalink copying, footer controls, contrast, textures, cursor, and reduced motion.');
+console.log('PASS: '+results.length+' route/viewport checks; redirects, removed pages, navigation, keyboard, filters, contact validation and delivery states, diagram fitting, permalink copying, footer controls, contrast, textures, cursor, and reduced motion.');

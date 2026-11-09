@@ -68,8 +68,8 @@ try {
   assert.equal(await page.locator('.galleryGrid .folderProject').count(), 0);
   await page.goto(origin + basePath + '/contact/', { waitUntil: 'networkidle' });
   await page.getByLabel('What’s on your mind?').fill('A static deployment enquiry about a software engineering role.');
-  await page.getByRole('button', { name: 'Next (1/2)', exact: true }).click();
-  await page.getByLabel('And who’s saying hello?').fill('Deployment check');
+  await page.getByLabel('Your name').fill('Deployment check');
+  assert.equal(await page.getByRole('button', { name: 'Open email draft ↗', exact: true }).count(), 1, 'Static exports keep the email-draft flow');
   await page.getByLabel('Your email').fill('visitor@example.com');
   assert.ok(await page.locator('form').evaluate(form => form.checkValidity()));
   await page.goto(origin + basePath + '/work/fitter-health-platform/', { waitUntil: 'networkidle' });

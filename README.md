@@ -12,7 +12,7 @@ Built with Next.js 16, React 19, TypeScript, and Once UI. The same source suppor
 - Six main project case studies, plus four learning repositories presented separately.
 - Professional Experience and Story, personal media, and a looping bio reel with playback controls.
 - Journal links to original Medium articles and their chapter headings.
-- Email-based contact form, professional profiles, and document downloads.
+- Contact form with direct delivery via Resend (email-draft fallback), professional profiles, and document downloads.
 - Route metadata, JSON-LD, sitemap, robots, static social previews, and optional ownership verification.
 - Production-only Vercel Web Analytics and Speed Insights.
 
@@ -79,7 +79,7 @@ node scripts/quality-audit.mjs http://localhost:3000 --tools=tmp/audit-tools --p
 
 See [the measured production readiness report](docs/production-readiness.md) and [route metadata audit](docs/seo-metadata.csv). Shared page wrappers render on the server; Once UI contexts are scoped to MDX pages that need permalink copying and toast feedback.
 
-Social previews use a local PNG, so neither build needs a server-only image endpoint or a remote font download. Vercel monitoring runs only on production Vercel deployments; local development, previews, and GitHub Pages do not send telemetry. The contact form opens an email draft and works on both hosts without a backend.
+Social previews use a local PNG, so neither build needs a server-only image endpoint or a remote font download. Vercel monitoring runs only on production Vercel deployments; local development, previews, and GitHub Pages do not send telemetry. On Vercel, the contact form sends messages straight to your inbox through [Resend](https://resend.com) via `/api/contact` (set `RESEND_API_KEY`, `CONTACT_FROM_EMAIL` and optionally `CONTACT_TO_EMAIL`; see .env.example). Replies go to the visitor's address. If the key is missing or sending fails, visitors can open an email draft instead. The GitHub Pages export has no server, so it keeps the email-draft flow.
 
 ## Vercel deployment
 
