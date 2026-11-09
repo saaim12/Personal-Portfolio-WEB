@@ -27,6 +27,8 @@ export function Header({ name }: { name: string }) {
   useEffect(() => { setOpen(false); }, [pathname]);
   useEffect(() => {
     document.documentElement.toggleAttribute("data-menu-open", open);
+    // While the full-screen menu is open, the page behind it leaves the focus and reading order.
+    document.querySelectorAll<HTMLElement>("main, .studioFooter").forEach(element => { element.inert = open; });
     if (!open) return;
     setRound(r => r + 1);
     header.current?.querySelector<HTMLAnchorElement>(".navLinks a")?.focus({ preventScroll: true });
@@ -43,7 +45,7 @@ export function Header({ name }: { name: string }) {
       <Link prefetch={false} href="/" className="brandMark" aria-label={`${name}, home`}><span>{name.replace(" ", "")}_LHR</span> <StudioClock className="brandClock" /></Link>
       <div className="navActions">
         <Link prefetch={false} className="navUtility" href="/contact"><RollText>Email</RollText></Link>
-        <SiteAnchor className="navUtility" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer"><RollText>Resume</RollText></SiteAnchor>
+        <SiteAnchor className="navUtility navResume" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer"><RollText>Resume</RollText></SiteAnchor>
         <Link prefetch={false} href="/contact" className="navContact"><RollText>Let’s talk</RollText></Link>
       </div>
       <button ref={toggle} className="menuToggle" aria-expanded={open} aria-controls="main-navigation" onClick={() => setOpen(!open)}>{open ? "Close" : "Menu"}</button>

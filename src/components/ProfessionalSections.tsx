@@ -4,16 +4,16 @@ import { SiteAnchor } from "@/components/SiteAnchor";
 import { useEffect, useState } from "react";
 
 const sections = [
-  { id: "bio", label: "My Story / My Bio" },
   { id: "career", label: "My Work Experience" },
+  { id: "bio", label: "My Story / My Bio" },
 ];
 
 export function ProfessionalSections() {
-  const [active, setActive] = useState("bio");
+  const [active, setActive] = useState("career");
   useEffect(() => {
     const update = () => {
       const current = sections.filter(section => (document.getElementById(section.id)?.getBoundingClientRect().top ?? Infinity) <= window.innerHeight * 0.4).at(-1);
-      setActive(current?.id ?? "bio");
+      setActive(current?.id ?? "career");
     };
     update();
     window.addEventListener("scroll", update, { passive: true });

@@ -43,6 +43,14 @@ export function WorkCarousel({ children }: { children: ReactNode }) {
       const top = root.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({ top: top + Math.min(distance, Math.max(0, card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2)), behavior: "auto" });
     };
+    // Arrow keys move one card: through page scroll while pinned, or the rail's own scroll otherwise.
+    const keys = (event: KeyboardEvent) => {
+      if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+      const card = track.querySelector<HTMLElement>(".folderProject"); if (!card) return;
+      event.preventDefault();
+      const step = (card.offsetWidth + (parseFloat(getComputedStyle(track).columnGap) || 0)) * (event.key === "ArrowRight" ? 1 : -1);
+      if (wide.matches) window.scrollBy({ top: step, behavior: "smooth" }); else track.scrollBy({ left: step, behavior: "smooth" });
+    };
     const native = () => { if (!wide.matches) { const max = track.scrollWidth - track.clientWidth; setProgress(max > 0 ? track.scrollLeft / max : 0); } };
     layout();
     track.addEventListener("scroll", native, { passive: true });
@@ -50,7 +58,8 @@ export function WorkCarousel({ children }: { children: ReactNode }) {
     window.addEventListener("resize", layout);
     wide.addEventListener("change", layout);
     track.addEventListener("focusin", focus);
-    return () => { cancelAnimationFrame(frame); track.removeEventListener("scroll", native); window.removeEventListener("scroll", schedule); window.removeEventListener("resize", layout); wide.removeEventListener("change", layout); track.removeEventListener("focusin", focus); };
+    track.addEventListener("keydown", keys);
+    return () => { cancelAnimationFrame(frame); track.removeEventListener("scroll", native); window.removeEventListener("scroll", schedule); window.removeEventListener("resize", layout); wide.removeEventListener("change", layout); track.removeEventListener("focusin", focus); track.removeEventListener("keydown", keys); };
   }, []);
   return <div ref={pin} className="workPin">
     <div className="workCarousel">

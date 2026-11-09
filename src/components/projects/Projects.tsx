@@ -26,10 +26,10 @@ export function Projects({ range, exclude = [], only, showcase = false, preview 
     const card = <article className={`folderProject ${preview ? "folderFeature" : "folderSmall"}`} key={post.slug} data-title={title}>
       <SiteAnchor href={href} className="projectPicture diagramPicture" aria-label={`View ${title} project`} tabIndex={-1}><Image src={image} alt={`System overview for ${title}`} {...(preview ? { width: 1672, height: 941 } : { fill: true })} sizes={preview ? "(max-width: 760px) 90vw, 45vw" : "(max-width: 760px) 90vw, 42vw"} /></SiteAnchor>
       <div className="folderTab"><span>{number}_{category}</span><span className="projectDate">{date}</span></div>
-      <div className="folderCopy"><Heading><SiteAnchor href={href}>{title}</SiteAnchor></Heading><p>{post.metadata.cardSummary || post.metadata.summary}</p><div className="projectTags">{post.metadata.tags?.slice(0,2).map(tag => <span key={tag}>{tag}</span>)}</div><SiteAnchor href={href} className="projectLink" aria-label={`View project: ${title}`}>View project</SiteAnchor></div>
+      <div className="folderCopy"><Heading><SiteAnchor href={href}>{title}</SiteAnchor></Heading><p>{post.metadata.cardSummary || post.metadata.summary}</p><div className="projectTags">{post.metadata.tags?.slice(0,2).map(tag => <span key={tag}>{tag}</span>)}</div><SiteAnchor href={href} className="projectLink" tabIndex={-1} aria-hidden="true">View project</SiteAnchor></div>
     </article>;
     const products = ["fitter-health-platform", "temporary-url-service"];
     return { slug: post.slug, category: products.includes(post.slug) ? "Product & web" : learning ? "Learnings" : "AI & data", card };
   });
-  return showcase ? <ProjectGallery items={cards} /> : <div className={preview ? "featuredProjects" : "relatedProjects"} {...(preview ? { tabIndex: 0, role: "region", "aria-label": "Featured projects, scroll sideways for more" } : {})}>{cards.map(item => item.card)}</div>;
+  return showcase ? <ProjectGallery items={cards} /> : <div className={preview ? "featuredProjects" : "relatedProjects"} {...(preview ? { tabIndex: 0, role: "region", "aria-label": "Selected projects. Use the left and right arrow keys to move between projects more" } : {})}>{cards.map(item => item.card)}</div>;
 }

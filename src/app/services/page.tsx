@@ -24,7 +24,7 @@ const process = [
   ["Deliver", "Build, test, deploy, document, and hand over a system that another engineer can maintain.", "green", "flower"],
 ] as const;
 const capabilityGroups = [
-  ["Backend", "Django", "Node.js", "Spring Boot", "REST APIs", "Data Modelling"], ["Product", "Next.js", "React", "TypeScript", "Accessible UI", "Design systems"],
+  ["Backend", "Django", "Node.js", "FastAPI", "REST APIs", "Data Modelling"], ["Product", "Next.js", "React", "TypeScript", "Accessible UI", "Design systems"],
   ["Data & AI", "RAG", "Embeddings", "Pipelines", "Recommendations", "Model serving"], ["Delivery", "AWS", "Docker", "CI/CD", "Monitoring", "Documentation"],
 ] as const;
 const technicalSkills = [
@@ -38,7 +38,7 @@ const technicalSkills = [
   { title: "Tools & integrations", skills: ["Postman", "Jira", "Firebase", "Odoo Integration", "Third-Party APIs", "GitHub", "Technical Writing"] },
 ] as const;
 const engineeringServices = [
-  { title: "Backend Engineering", text: "Design and develop maintainable REST APIs, database-backed workflows, authentication, asynchronous jobs, and distributed services. Production experience includes Django/DRF, Node.js integrations, PostgreSQL, Redis, and AWS. Spring Boot is also in my technology toolkit.", examples: ["API architecture", "Node.js & Django", "Database design", "Queues & reliability"] },
+  { title: "Backend Engineering", text: "Design and develop maintainable REST APIs, database-backed workflows, authentication, asynchronous jobs, and distributed services. Production experience includes Django/DRF, Node.js integrations, PostgreSQL, Redis, and AWS.", examples: ["API architecture", "Node.js & Django", "Database design", "Queues & reliability"] },
   { title: "Data Engineering", text: "Build recoverable ingestion, transformation, and analytics pipelines with Kafka, PySpark, Airflow, AWS Glue, EMR, and PostgreSQL. Model warehouse data with star schemas, validation, deduplication, and bronze/silver/gold layers.", examples: ["Streaming & batch ETL", "Data modelling", "Star schemas", "Data quality"] },
   { title: "AI Engineering", text: "Develop retrieval-augmented applications, document ingestion, multilingual embeddings, tenant-isolated vector search, and recommendation APIs. Connect model serving with secure backend services and measurable workflows.", examples: ["RAG & pgvector", "LLM integration", "Recommendations", "Model APIs"] },
 ] as const;
@@ -48,7 +48,7 @@ const faqs = [
   ["How do you structure and recover a data pipeline?", "My e-commerce pipeline separates Kafka/Spark ingestion from hourly Airflow transformations. Bronze Parquet preserves replayable source events, silver validates and deduplicates records, and gold loads a four-table PostgreSQL star schema. Checkpoints track stream progress; repeatable warehouse writes and business keys address duplicate delivery."],
   ["What happens after delivery?", "The handover covers architecture, deployment, configuration, tests, and operational failure paths. Fitter Health includes a signed recommendation available with the case study. For learning projects, I distinguish implemented behavior from proposed benchmarks and hardening work so the next engineer can evaluate the evidence."],
 
-  ["What backend engineering services do you offer?", "I work on REST API design, authentication, database-backed workflows, background jobs, and service integrations. My portfolio covers Django and Django REST Framework, Node.js, PostgreSQL, Redis, and AWS. The Fitter Health and Expertflow case studies show the kinds of product and operational problems I have worked on."],
+  ["What backend engineering services do you offer?", "I work on REST API design, authentication, database-backed workflows, background jobs, and service integrations. My portfolio covers Django and Django REST Framework, Node.js, PostgreSQL, Redis, and AWS. The Fitter Health case study and the Expertflow experience entry show the kinds of product and operational problems I have worked on."],
   ["How can you speed up slow PostgreSQL-backed APIs?", "Start with slow-query evidence and request profiling, then inspect indexes, query plans, repeated database calls, and cache suitability. At Expertflow, Redis caching and database indexing contributed to 77% faster admin responses. Cache invalidation, correctness, and measurement still matter as much as speed."],
   ["Can you build a Kafka, Spark, and Airflow data engineering pipeline?", "My e-commerce ETL case study shows Kafka and Spark for event ingestion, Bronze Parquet storage for replayability, hourly Airflow transformations, and a PostgreSQL star schema. It also discusses checkpoints, deduplication, data quality, and repeatable writes. See the project case study for implementation details rather than assuming production-scale benchmarks."],
   ["What does a multilingual retrieval-augmented generation system need?", "A useful multilingual RAG design starts with reliable document ingestion, language-appropriate embeddings, retrieval quality checks, and grounded answers. For multi-tenant systems, authenticated tenant identity must constrain retrieval before context reaches the model. My multilingual RAG project documents JWT-based isolation, pgvector filtering, and quotas."],

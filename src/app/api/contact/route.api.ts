@@ -8,11 +8,23 @@ export const runtime = "nodejs";
 const RESEND_ENDPOINT = "https://api.resend.com/emails";
 const EMAIL_PATTERN = /^[^\s@<>()[\]\\,;:"]+@[^\s@<>()[\]\\,;:"]+\.[^\s@<>()[\]\\,;:"]{2,}$/;
 const LIMITS = { name: 100, email: 254, message: 3000 };
-const MIN_FILL_MS = 2500;
 const WINDOW_MS = 10 * 60 * 1000;
 const MAX_PER_WINDOW = 5;
 
-// Best-effort per-instance throttle; serverless instances do not share this map.
+// Shared limit through Upstash Redis REST when configured, so every serverless instance
+// counts the same window; otherwise a best-effort per-instance map.
+async function sharedThrottled(key: string): Promise<boolean | null> {
+  const url = process.env.UPSTASH_REDIS_REST_URL, token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  if (!url || !token) return null;
+  try {
+    const response = await fetch(`${url}/pipeline`, { method: "POST", headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }, body: JSON.stringify([["INCR", `contact:${key}`], ["EXPIRE", `contact:${key}`, String(WINDOW_MS / 1000), "NX"]]), signal: AbortSignal.timeout(3000) });
+    if (!response.ok) return null;
+    const [count] = await response.json() as { result: number }[];
+    return count.result > MAX_PER_WINDOW;
+  } catch {
+    return null;
+  }
+}
 const recent = new Map<string, number[]>();
 function throttled(key: string): boolean {
   const now = Date.now();
@@ -43,35 +55,45 @@ function sameOrigin(request: Request): boolean {
 
 export async function POST(request: Request) {
   if (!sameOrigin(request)) return json(403, { error: "Requests must come from the contact page." });
-  if (!(request.headers.get("content-type") || "").includes("application/json")) return json(415, { error: "Send the form as JSON." });
+  const type = request.headers.get("content-type") || "";
+  // Without JavaScript the browser posts the form natively; answer with a redirect back to the page.
+  const native = type.includes("application/x-www-form-urlencoded") || type.includes("multipart/form-data");
+  const reply = native
+    ? (_status: number, body: Record<string, unknown>) => Response.redirect(new URL(`/contact?contact=${body.ok ? "sent" : "error"}`, request.url), 303)
+    : json;
+  if (!native && !type.includes("application/json")) return json(415, { error: "Send the form as JSON." });
 
   let input: Record<string, unknown>;
   try {
-    const raw = await request.text();
-    if (raw.length > 10_000) return json(413, { error: "That message is too long." });
-    input = JSON.parse(raw);
+    if (native) {
+      input = Object.fromEntries(Array.from((await request.formData()).entries()).filter(([, value]) => typeof value === "string"));
+    } else {
+      const raw = await request.text();
+      if (raw.length > 10_000) return json(413, { error: "That message is too long." });
+      input = JSON.parse(raw);
+    }
   } catch {
-    return json(400, { error: "The form could not be read." });
+    return reply(400, { error: "The form could not be read." });
   }
 
   const field = (key: string) => (typeof input[key] === "string" ? (input[key] as string).trim() : "");
   const name = field("name").replace(/[\r\n]+/g, " ");
   const email = field("email");
   const message = field("message");
-  const startedAt = typeof input.startedAt === "number" ? input.startedAt : 0;
 
-  // Honeypot or instant submissions: answer as if delivered so bots learn nothing.
-  if (field("company") || (startedAt && Date.now() - startedAt < MIN_FILL_MS)) return json(200, { ok: true });
+  // Hidden field that people never see: reject openly (the visitor keeps the draft and the email fallback).
+  if (field("contact_reference")) return reply(400, { error: "The message could not be sent. Please email directly.", fallback: true });
 
-  if (!name || name.length > LIMITS.name) return json(400, { error: "Please add your name." });
-  if (!EMAIL_PATTERN.test(email) || email.length > LIMITS.email) return json(400, { error: "Please add a valid email address." });
-  if (message.length < 10 || message.length > LIMITS.message) return json(400, { error: "Your message should be 10 to 3000 characters." });
+  if (!name || name.length > LIMITS.name) return reply(400, { error: "Please add your name." });
+  if (!EMAIL_PATTERN.test(email) || email.length > LIMITS.email) return reply(400, { error: "Please add a valid email address." });
+  if (message.length < 10 || message.length > LIMITS.message) return reply(400, { error: "Your message should be 10 to 3,000 characters." });
 
   const client = (request.headers.get("x-forwarded-for") || "").split(",")[0].trim() || request.headers.get("x-real-ip") || "unknown";
-  if (throttled(client)) return json(429, { error: "Too many messages. Please try again later or email directly." });
+  const limited = (await sharedThrottled(client)) ?? throttled(client);
+  if (limited) return reply(429, { error: "Too many messages. Please try again later or email directly." });
 
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return json(503, { error: "Direct sending isn’t available right now.", fallback: true });
+  if (!apiKey) return reply(503, { error: "Direct sending isn’t available right now.", fallback: true });
 
   const to = (process.env.CONTACT_TO_EMAIL || person.email).split(",").map(address => address.trim()).filter(Boolean);
   const from = process.env.CONTACT_FROM_EMAIL || "Saaim Portfolio <contact@saaim.site>";
@@ -92,11 +114,11 @@ export async function POST(request: Request) {
     });
     if (!response.ok) {
       console.error("Resend rejected contact email", response.status, (await response.text()).slice(0, 500));
-      return json(502, { error: "The message could not be sent right now.", fallback: true });
+      return reply(502, { error: "The message could not be sent right now.", fallback: true });
     }
-    return json(200, { ok: true });
+    return reply(200, { ok: true });
   } catch (error) {
     console.error("Resend request failed", error);
-    return json(502, { error: "The message could not be sent right now.", fallback: true });
+    return reply(502, { error: "The message could not be sent right now.", fallback: true });
   }
 }

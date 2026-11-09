@@ -129,9 +129,10 @@ await page.waitForFunction(()=>document.querySelector('.professionalSections a[h
 assert.equal(await page.locator('#career h2').textContent(),'My Work Experience');
 await page.goto(base+'/contact');
 assert.equal(await page.locator('.contactPrimary a[href^="mailto:"]').count(),1,'Direct email link sits above the form');
+assert.equal(await page.locator('form.contactForm').getAttribute('method'),'post','Without JavaScript the form posts, so contact data never enters the URL');
 await page.getByRole('button',{name:'Send message',exact:true}).click();
-assert.equal(await page.getByLabel('What’s on your mind?').evaluate(e=>e.checkValidity()),false,'Empty message is rejected');
-await page.getByLabel('What’s on your mind?').fill('I would like to discuss a software engineering role.');
+assert.equal(await page.getByLabel('Your message').evaluate(e=>e.checkValidity()),false,'Empty message is rejected');
+await page.getByLabel('Your message').fill('I would like to discuss a software engineering role.');
 await page.getByLabel('Your name').fill('Test visitor');
 await page.getByLabel('Your email').fill('invalid-email');
 assert.equal(await page.getByLabel('Your email').evaluate(e=>e.checkValidity()),false,'Invalid email is rejected');
@@ -139,7 +140,7 @@ await page.getByLabel('Your email').fill('visitor@example.com');
 let contactPayload;
 await page.route('**/api/contact',route=>{contactPayload=JSON.parse(route.request().postData()||'{}');route.fulfill({status:200,contentType:'application/json',body:'{"ok":true}'});});
 await page.getByRole('button',{name:'Send message',exact:true}).click();
-await page.getByText('your message has been delivered').waitFor();
+await page.getByText('Message submitted.').waitFor();
 assert.equal(contactPayload.email,'visitor@example.com','Form posts to the contact API');
 await page.unroute('**/api/contact');
 for(const asset of new Set([...internalLinks, '/SaaimCV.pdf','/Fitter-Recommendation-Letter.pdf','/sitemap.xml','/robots.txt']))assert.equal((await page.request.get(base+asset)).status(),200,asset);
@@ -150,7 +151,7 @@ for(const [from,to]of [['/about','/professional-experience'],['/experience','/pr
  redirects.push({from,to,status:response.status()});
 }
 await page.goto(base+'/projects/fitter-health-platform');
-await page.locator('.caseStudyBody h2').first().click();
+await page.locator('.caseHeadingCopy').first().click();
 assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),base+'/projects/fitter-health-platform#a-health-tech-product-is-not-just-a-set-of-endpoints');
 assert.equal(await page.getByRole('status').textContent(),'Link copied to clipboard.','Copying a heading has accessible feedback');
 await page.locator('.caseHeadingCopy').first().focus();

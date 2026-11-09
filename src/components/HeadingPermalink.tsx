@@ -18,10 +18,11 @@ export function HeadingPermalink({ as: Heading, id, children }: { as: "h2" | "h3
     clearTimeout(timer.current);
     timer.current = setTimeout(() => setMessage(""), 2500);
   }
+  // The heading keeps its own text as its accessible name; the copy control sits beside it.
   return <>
-    <Heading id={id}><button className="caseHeadingCopy" type="button" onClick={copyLink} aria-label={`Copy link to ${String(children)}`}>
-      {children}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 13 4-4m-6 6-1 1a4 4 0 0 1-6-6l4-4a4 4 0 0 1 6 0m2 2 1-1a4 4 0 0 1 6 6l-4 4a4 4 0 0 1-6 0" fill="none" stroke="currentColor" strokeWidth="1.5" transform="translate(1 1)"/></svg>
-    </button></Heading>
+    <div className="caseHeadingRow"><Heading id={id}>{children}</Heading><button className="caseHeadingCopy" type="button" onClick={copyLink} aria-label={`Copy link to ${String(children)}`}>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m10 13 4-4m-6 6-1 1a4 4 0 0 1-6-6l4-4a4 4 0 0 1 6 0m2 2 1-1a4 4 0 0 1 6 6l-4 4a4 4 0 0 1-6 0" fill="none" stroke="currentColor" strokeWidth="1.5" transform="translate(1 1)"/></svg>
+    </button></div>
     {message && <span className="casePermalinkStatus" role="status">{message}</span>}
   </>;
 }

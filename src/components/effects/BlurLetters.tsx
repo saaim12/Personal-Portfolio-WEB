@@ -32,5 +32,5 @@ export function BlurLetters({ text, reveal = true, strength = 16 }: { text: stri
     document.addEventListener("pointerleave", leave);
     return () => { cancelAnimationFrame(frame); window.removeEventListener("scroll", schedule); window.removeEventListener("pointermove", move); document.removeEventListener("pointerleave", leave); letters.forEach(l => { l.style.filter = ""; l.style.opacity = ""; }); };
   }, [reveal, strength]);
-  return <span ref={root} className="blurLetters">{Array.from(text).map((c, i) => c === " " ? " " : <span className="blurLetter" key={i}>{c}</span>)}</span>;
+  return <span ref={root} className="blurLetters"><span className="screenReaderText">{text}</span><span aria-hidden="true">{Array.from(text).map((c, i) => c === " " ? " " : <span className="blurLetter" key={i}>{c}</span>)}</span></span>;
 }

@@ -46,7 +46,7 @@ export default function SitemapPage() {
     <PageSchema title="Sitemap" description={description} path="/sitemap" items={catalog.map(({ path, title }) => ({ path, title }))} />
     <div className="studioContainer engineeringHub">
       <div className="engineeringIntro"><PageHeading title="Sitemap" note="every page / one place">
-        <p>{catalog.length} pages, plus page sections, documents, profiles and articles. Machines can use the <SiteAnchor href="/sitemap.xml">XML sitemap</SiteAnchor> or the <SiteAnchor href="/llms.txt">AI reading index</SiteAnchor>.</p>
+        <p>{catalog.length} pages, plus page sections, documents, profiles and articles. Machine-readable indexes: <SiteAnchor href="/sitemap.xml">XML sitemap</SiteAnchor> and <SiteAnchor href="/llms.txt">llms.txt</SiteAnchor>.</p>
       </PageHeading></div>
       {pages.map(group => <section className="sitemapGroup siteMapGroup" key={group.title} aria-labelledby={`map-${group.section.replace(/\W+/g, "-")}`}>
         <h2 id={`map-${group.section.replace(/\W+/g, "-")}`}>{group.title} <span className="sitemapCount">({group.pages.length})</span></h2>
