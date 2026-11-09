@@ -19,7 +19,6 @@ export const portraits = {
   duckVideoPoster: "/images/duck-video-poster.webp",
 };
 
-export const bookingLink = "https://cal.com/saaim-abdullah-gm3ck6";
 
 // Identity profiles also appear in Person structured data; contact actions do not.
 export const social = [

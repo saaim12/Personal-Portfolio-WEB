@@ -1,6 +1,7 @@
 export const articles = [
   {
     category: "Distributed systems",
+    cover: "/images/journal/stripe-payment-saga",
     chapters: [
       "A practical guide to reliable distributed payment workflows using idempotency, Kafka, webhooks, transactional outbox, retries, DLQs, and Saga compensation.",
       "Start With a Normal Database Transaction :",
@@ -36,6 +37,7 @@ export const articles = [
   },
   {
     category: "Data engineering",
+    cover: "/images/journal/realtime-etl",
     chapters: [
       "Why I built this:",
       "Architecture:",
@@ -55,6 +57,7 @@ export const articles = [
   },
   {
     category: "AI architecture",
+    cover: "/images/journal/multilingual-rag",
     chapters: [
       "Repo:",
       "The problem statement:",
@@ -75,6 +78,7 @@ export const articles = [
   },
   {
     category: "Engineering lessons",
+    cover: "/images/journal/rag-postgres-windows",
     chapters: [
       "Everyone says RAG is five easy steps. It was five steps plus a guided tour of every way PostgreSQL can betray you on Windows.",
       "The Plan (naive, doomed)",

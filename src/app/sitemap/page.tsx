@@ -4,7 +4,7 @@ import { PageHeading } from "@/components/Studio";
 import { PageSchema } from "@/components/PageSchema";
 import { pageMeta } from "@/resources/seo";
 import { articles } from "@/resources/articles";
-import { bookingLink, social } from "@/resources/content";
+import { social } from "@/resources/content";
 import { getSiteCatalog, type CatalogSection } from "@/utils/siteCatalog";
 import "../expertise/editorial.css";
 
@@ -55,7 +55,7 @@ export default function SitemapPage() {
       <div className="sitemapColumns">
         <section className="sitemapGroup" aria-labelledby="map-sections"><h2 id="map-sections">Page sections</h2><ul className="sitemapLinks">{sections.map(item => <li key={item.path}><Link href={item.path}>{item.title}</Link></li>)}</ul></section>
         <section className="sitemapGroup" aria-labelledby="map-documents"><h2 id="map-documents">Documents</h2><ul className="sitemapLinks">{documents.map(item => <li key={item.href}><SiteAnchor href={item.href} {...external}>{item.title}</SiteAnchor></li>)}</ul></section>
-        <section className="sitemapGroup" aria-labelledby="map-profiles"><h2 id="map-profiles">Profiles and contact</h2><ul className="sitemapLinks">{social.filter(item => !item.link.startsWith("mailto:")).map(item => <li key={item.name}><SiteAnchor href={item.link} {...external}>{item.name}</SiteAnchor></li>)}<li><SiteAnchor href={bookingLink} {...external}>Book a call</SiteAnchor></li></ul></section>
+        <section className="sitemapGroup" aria-labelledby="map-profiles"><h2 id="map-profiles">Profiles and contact</h2><ul className="sitemapLinks">{social.filter(item => !item.link.startsWith("mailto:")).map(item => <li key={item.name}><SiteAnchor href={item.link} {...external}>{item.name}</SiteAnchor></li>)}</ul></section>
         <section className="sitemapGroup" aria-labelledby="map-machine"><h2 id="map-machine">For search and AI</h2><ul className="sitemapLinks">{machine.map(item => <li key={item.href}><SiteAnchor href={item.href}>{item.title}</SiteAnchor></li>)}</ul></section>
       </div>
       <section className="sitemapGroup" aria-labelledby="map-articles"><h2 id="map-articles">Articles on Medium <span className="sitemapCount">({articles.length})</span></h2>

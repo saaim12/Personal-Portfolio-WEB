@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { SiteAnchor } from "@/components/SiteAnchor";
 import { Action } from "@/components/Studio";
-import { bookingLink, person, social } from "@/resources/content";
+import { person, social } from "@/resources/content";
 import { sitePages } from "@/resources/site-navigation";
 
 const external = { target: "_blank", rel: "noopener noreferrer" };
@@ -16,9 +16,9 @@ export function Footer() {
       <Action href="/contact" className="footerCta">Let’s connect</Action>
     </div>
     <nav className="footerNav" aria-label="Footer">
-      <div><p className="footerHeading">Pages</p><ul>{sitePages.filter(page => page.path !== "/").map(page => <li key={page.path}><Link href={page.path}>{page.title}</Link></li>)}</ul></div>
-      <div><p className="footerHeading">Profiles</p><ul>{profiles.map(item => <li key={item.name}><SiteAnchor href={item.link} {...external}>{item.name} <span aria-hidden="true">↗</span></SiteAnchor></li>)}<li><SiteAnchor href={bookingLink} {...external}>Book a call <span aria-hidden="true">↗</span></SiteAnchor></li></ul></div>
-      <div><p className="footerHeading">Documents</p><ul><li><SiteAnchor href="/SaaimCV.pdf" {...external}>Resume <span aria-hidden="true">↗</span></SiteAnchor></li><li><SiteAnchor href="/Fitter-Recommendation-Letter.pdf" {...external}>Recommendation <span aria-hidden="true">↗</span></SiteAnchor></li><li><SiteAnchor href="/llms.txt">llms.txt</SiteAnchor></li><li><SiteAnchor href="https://www.google.com/preferences/source?q=saaim.site" {...external} title="Choose saaim.site as a preferred source in Google Search">Preferred source <span aria-hidden="true">↗</span></SiteAnchor></li></ul></div>
+      <div><p className="footerHeading">Pages</p><ul>{sitePages.filter(page => page.path !== "/" && page.path !== "/sitemap").map(page => <li key={page.path}><Link href={page.path}>{page.title}</Link></li>)}</ul></div>
+      <div><p className="footerHeading">Profiles</p><ul>{profiles.map(item => <li key={item.name}><SiteAnchor href={item.link} {...external}>{item.name} <span aria-hidden="true">↗</span></SiteAnchor></li>)}</ul></div>
+      <div><p className="footerHeading">Documents</p><ul><li><SiteAnchor href="/SaaimCV.pdf" {...external}>Resume <span aria-hidden="true">↗</span></SiteAnchor></li><li><SiteAnchor href="/Fitter-Recommendation-Letter.pdf" {...external}>Recommendation <span aria-hidden="true">↗</span></SiteAnchor></li></ul></div>
     </nav>
     <div className="footerBottom"><span>© {new Date().getFullYear()} {person.name}</span><SiteAnchor href="#main" aria-label="Back to top">Back to top ↑</SiteAnchor></div>
   </div></footer>;
