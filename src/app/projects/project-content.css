@@ -21,7 +21,7 @@
 .caseStudyBody>ul:last-child{display:flex;flex-wrap:wrap;gap:12px;list-style:none;padding:0;margin:20px 0 32px}
 .caseStudyBody>ul:last-child>li{list-style:none;margin:0;padding:0;max-width:100%}
 .caseStudyBody>ul:last-child a{display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:12px 18px;border:2px solid var(--ink);background:var(--ink);color:#fff;font:500 14px/1.5 var(--font-code);text-decoration:none;overflow-wrap:anywhere}
-.caseStudyBody>ul:last-child a::after{content:"↗";flex-shrink:0;color:var(--blue)}
+
 .caseStudyBody>ul:last-child a:hover{background:var(--blue);color:var(--ink)}
 .caseStudyBody>ul:last-child a:hover::after{color:var(--ink)}
 .caseStudyBody>ul:last-child a:focus-visible{outline:3px solid var(--blue);outline-offset:4px}

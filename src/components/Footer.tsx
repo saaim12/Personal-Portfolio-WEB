@@ -17,8 +17,8 @@ export function Footer() {
     </div>
     <nav className="footerNav" aria-label="Footer">
       <div><p className="footerHeading">Pages</p><ul>{sitePages.filter(page => page.path !== "/" && page.path !== "/sitemap").map(page => <li key={page.path}><Link href={page.path}>{page.title}</Link></li>)}</ul></div>
-      <div><p className="footerHeading">Profiles</p><ul>{profiles.map(item => <li key={item.name}><SiteAnchor href={item.link} {...external}>{item.name} <span aria-hidden="true">↗</span></SiteAnchor></li>)}</ul></div>
-      <div><p className="footerHeading">Documents</p><ul><li><SiteAnchor href="/SaaimCV.pdf" {...external}>Resume <span aria-hidden="true">↗</span></SiteAnchor></li><li><SiteAnchor href="/Fitter-Recommendation-Letter.pdf" {...external}>Recommendation <span aria-hidden="true">↗</span></SiteAnchor></li></ul></div>
+      <div><p className="footerHeading">Profiles</p><ul>{profiles.map(item => <li key={item.name}><SiteAnchor href={item.link} {...external}>{item.name}</SiteAnchor></li>)}</ul></div>
+      <div><p className="footerHeading">Documents</p><ul><li><SiteAnchor href="/SaaimCV.pdf" {...external}>Resume</SiteAnchor></li><li><SiteAnchor href="/Fitter-Recommendation-Letter.pdf" {...external}>Recommendation</SiteAnchor></li></ul></div>
     </nav>
     <div className="footerBottom"><span>© {new Date().getFullYear()} {person.name}</span><SiteAnchor href="#main" aria-label="Back to top">Back to top ↑</SiteAnchor></div>
   </div></footer>;

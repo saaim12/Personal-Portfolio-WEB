@@ -11,7 +11,7 @@ import "../expertise/editorial.css";
 const description = "Every page, document, profile and article on Saaim Abdullah's portfolio: experience, case studies, engineering expertise, notes and contact.";
 
 export function generateMetadata() {
-  return pageMeta({ title: "Sitemap", description, path: "/sitemap" });
+  return pageMeta({ title: "Site Map: Projects, Notes and Pages", description, path: "/sitemap" });
 }
 
 const sections = [

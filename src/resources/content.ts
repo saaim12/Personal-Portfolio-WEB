@@ -11,11 +11,11 @@ export const person = {
 export const portraits = {
   playful: "/images/avatar_2.jpeg",
   casual: "/images/avatar_3.jpeg",
-  withDog: "/images/avatar 5.jpeg",
-  smiling: "/images/avatar 4.jpeg",
-  withChicken: "/images/avatar 7.jpeg",
-  withChickenSmiling: "/images/avatart 8.jpeg",
-  withDuckVideo: "/images/avatart 6.mp4",
+  withDog: "/images/avatar-5.jpeg",
+  smiling: "/images/avatar-4.jpeg",
+  withChicken: "/images/avatar-7.jpeg",
+  withChickenSmiling: "/images/avatar-8.jpeg",
+  withDuckVideo: "/images/avatar-6.mp4",
   duckVideoPoster: "/images/duck-video-poster.webp",
 };
 

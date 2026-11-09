@@ -35,13 +35,13 @@ export default function Home() {
         <p className="monoMeta">Recently_Fitter Health · Previously_Expertflow</p>
       </div>
       <div className="heroStatement"><h2>I build backend systems, data pipelines &amp; cloud products.</h2><div className="heroCtas"><Action href="/contact">Contact me</Action></div></div>
-      <div className="heroFooter"><SiteAnchor href="#work" className="monoLink">[Scroll to explore]</SiteAnchor><nav className="heroSocials" aria-label="Saaim's profiles">{social.map(item => <SiteAnchor key={item.name} href={item.link} {...external(item.link)}>{item.name}<span aria-hidden="true">↗</span></SiteAnchor>)}</nav></div>
+      <div className="heroFooter"><SiteAnchor href="#work" className="monoLink">[Scroll to explore]</SiteAnchor><nav className="heroSocials" aria-label="Saaim's profiles">{social.map(item => <SiteAnchor key={item.name} href={item.link} {...external(item.link)}>{item.name}</SiteAnchor>)}</nav></div>
     </section>
     <section id="work" className="homeWork" aria-labelledby="featured-heading">
       <div className="workInner">
         <div className="workHeading"><Label>Selected work</Label><p className="monoMeta workRange">Projects_{workYears}</p><p className="monoMeta workHint">[Scroll to explore]</p><h2 id="featured-heading" className="workTitle">Featured works</h2><p className="monoMeta workLead">Real problems, thoughtful decisions, and software that gets things done.</p></div>
         <WorkCarousel><Projects only={featuredSlugs} preview /></WorkCarousel>
-        <div className="allWorkAction"><Action href="/projects">All {getProjects().length} projects</Action><SiteAnchor href="/professional-experience" className="quietLink">Explore my experience ↗</SiteAnchor></div>
+        <div className="allWorkAction"><Action href="/projects">All {getProjects().length} projects</Action><SiteAnchor href="/professional-experience" className="quietLink">Explore my experience</SiteAnchor></div>
       </div>
     </section>
     <section className="homeAbout studioContainer" aria-labelledby="about-intro">
@@ -60,7 +60,7 @@ export default function Home() {
         <div className="hiringProof" aria-label="Engineering experience highlights">
           <p className="monoLabel">(Evidence from shipped work)</p>
           <div className="hiringProofGrid"><article><span>Faster admin responses through Redis caching and database indexing at Expertflow</span><strong><CountUp value={77} suffix="%" /></strong></article><article><span>Passing tests at Fitter Health handover</span><strong><CountUp value={135} /></strong></article><article><span>Tables in the healthcare product PostgreSQL schema</span><strong><CountUp value={106} /></strong></article></div>
-          <div className="hiringProofLinks"><SiteAnchor className="outlineButton" href="/professional-experience#career">View work experience ↗</SiteAnchor><SiteAnchor className="outlineButton" href="/projects/fitter-health-platform">Fitter Health case study ↗</SiteAnchor><SiteAnchor className="outlineButton" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer">View resume ↗</SiteAnchor></div>
+          <div className="hiringProofLinks"><SiteAnchor className="outlineButton" href="/professional-experience#career">View work experience</SiteAnchor><SiteAnchor className="outlineButton" href="/projects/fitter-health-platform">Fitter Health case study</SiteAnchor><SiteAnchor className="outlineButton" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer">View resume</SiteAnchor></div>
         </div>
       </div>
     </section>
@@ -68,8 +68,8 @@ export default function Home() {
       <span className="engineeringEyebrow">(What I build / How I think)</span>
       <h2 id="home-engineering-focus" className="engineeringTitle">Engineering behind the work.</h2>
       <p className="engineeringLead">Detailed technical approaches linked to real case studies, not a generic stack of buzzwords. Explore how I design backend APIs, data pipelines, AI retrieval, cloud delivery and dependable product systems.</p>
-      <div className="engineeringCardGrid">{specialties.slice(0,4).map((item, index)=><Link className="engineeringCard" href={`/expertise/${item.slug}`} key={item.slug}><small>{String(index+1).padStart(2,"0")}_Engineering practice</small><h3>{item.title}</h3><p>{item.summary}</p><span className="engineeringArrow">See case-study evidence ↗</span></Link>)}</div>
-      <div className="engineeringClosing"><h3>Technical architecture notes</h3><p>{engineeringNotes.slice(0,2).map((note,index)=><span key={note.slug}>{index>0?" · ":""}<Link href={`/engineering-notes/${note.slug}`}>{note.title} ↗</Link></span>)}</p><p><Link href="/expertise">View all specialties ↗</Link> · <Link href="/engineering-notes">Read all notes ↗</Link></p></div>
+      <div className="engineeringCardGrid">{specialties.slice(0,4).map((item, index)=><Link className="engineeringCard" href={`/expertise/${item.slug}`} key={item.slug}><small>{String(index+1).padStart(2,"0")}_Engineering practice</small><h3>{item.title}</h3><p>{item.summary}</p><span className="engineeringArrow">See case-study evidence</span></Link>)}</div>
+      <div className="engineeringClosing"><h3>Technical architecture notes</h3><p>{engineeringNotes.slice(0,2).map((note,index)=><span key={note.slug}>{index>0?" · ":""}<Link href={`/engineering-notes/${note.slug}`}>{note.title}</Link></span>)}</p><p><Link href="/expertise">View all specialties</Link> · <Link href="/engineering-notes">Read all notes</Link></p></div>
     </section>
     <PortfolioAnswers />
     <Contact animated />

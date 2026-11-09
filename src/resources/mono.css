@@ -536,7 +536,6 @@ html[data-menu-open] body .menuBackdrop{opacity:1;pointer-events:auto}
 :root body :is(.studioButton,.navContact,.outlineButton,.contactPrimary .contactEmail,.formActions button,.caseStudyBody>ul:last-child a):active{transform:scale(.97)}
 :root body .formActions button:disabled{opacity:.6;cursor:progress}
 :root body .navContact{min-height:36px;padding:9px 14px!important;font-size:12px!important}
-:root body .caseStudyBody>ul:last-child a::after{content:"↗";color:inherit!important}
 /* On the dark work section */
 :root body main .homeWork .studioButton.studioButton{background-color:#F4F3EF!important;color:var(--ink)!important;border-color:#F4F3EF!important}
 :root body main .homeWork .studioButton.studioButton:is(:hover,:focus-visible){background-color:var(--charcoal)!important;color:#F4F3EF!important}
@@ -625,3 +624,10 @@ html[data-menu-open] body .menuBackdrop{opacity:1;pointer-events:auto}
 :root body .journalPage .journalCover img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
 @media (hover:hover){:root body .journalPage .journalCover:hover img{transform:scale(1.02)}}
 :root body .folderProject .projectPicture{box-shadow:inset 0 0 0 1px var(--line)!important}
+/* Capabilities: columns align to the top; words never break mid-word */
+html body .capabilityCloud{align-items:start!important}
+html body .capabilityChip{max-width:none!important;width:auto!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:manual}
+/* Menu panel: every destination stays on one line */
+:root body .navLinks{width:min(760px,100%)}
+:root body .navLinks .menuList>a{white-space:nowrap!important;font-size:clamp(34px,3.6vw,56px)!important}
+@media (max-width:809px){:root body .navLinks .menuList>a{font-size:clamp(24px,7.4vw,40px)!important;gap:16px}}

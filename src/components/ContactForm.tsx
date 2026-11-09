@@ -39,7 +39,7 @@ export function ContactForm(){
    <label htmlFor="contact-name">Your name</label><input id="contact-name" name="name" autoComplete="name" placeholder="Your name" required maxLength={100} value={name} onChange={e=>setName(e.target.value)}/>
    <label htmlFor="contact-email">Your email</label><input id="contact-email" name="email" type="email" autoComplete="email" placeholder="you@company.com" required maxLength={254} value={email} onChange={e=>setEmail(e.target.value)}/>
    {canSendDirectly&&<div className="formTrap" aria-hidden="true"><label htmlFor="contact-company">Company</label><input id="contact-company" name="company" tabIndex={-1} autoComplete="off" value={company} onChange={e=>setCompany(e.target.value)}/></div>}
-   <div className="formActions"><span/><button type="submit" disabled={status==="sending"}>{canSendDirectly?(status==="sending"?"Sending…":"Send message ↗"):"Open email draft ↗"}</button></div>
+   <div className="formActions"><span/><button type="submit" disabled={status==="sending"}>{canSendDirectly?(status==="sending"?"Sending…":"Send message"):"Open email draft"}</button></div>
   </div>{status==="error"&&<p className="formNotice formError" role="alert">{error} <button type="button" className="formFallback" onClick={openDraft}>Open an email draft instead</button> or email {person.email}.</p>}{opened&&<p className="formNotice" role="status">Your email draft is ready in your mail app. If it didn’t open, email {person.email} directly.</p>}<p className="handwritten">{availability}</p>
  </form>;
 }

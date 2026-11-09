@@ -60,7 +60,7 @@ export function Header({ name }: { name: string }) {
       <div className="menuFooter">
         <Link prefetch={false} className="mobileContact menuEmail" href="/contact" onClick={() => setOpen(false)}>Email</Link>
         <SiteAnchor className="mobileContact" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer">Resume</SiteAnchor>
-        {profiles.map(item => <SiteAnchor key={item.name} href={item.link} target="_blank" rel="noopener noreferrer">{item.name} <span aria-hidden="true">↗</span></SiteAnchor>)}
+        {profiles.map(item => <SiteAnchor key={item.name} href={item.link} target="_blank" rel="noopener noreferrer">{item.name}</SiteAnchor>)}
         <p className="menuMail">{person.email}</p>
       </div>
     </nav>

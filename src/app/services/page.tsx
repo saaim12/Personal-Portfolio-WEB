@@ -68,8 +68,8 @@ export default function Services(){return <div className="studioPage servicesPag
   <section className="engineeringServicesSection studioContainer" aria-labelledby="engineering-deep-dives">
     <div className="serviceSectionHeading"><span className="handwritten">from practice to architecture</span><h2 id="engineering-deep-dives" className="displayType">Explore the engineering</h2></div>
     <p className="technicalSkillsIntro">These focused technical pages explain how I approach each system, what can go wrong, and where existing case studies demonstrate the implementation.</p>
-    <div className="engineeringServicesGrid">{specialties.map(item=><article className="engineeringCard" key={item.slug}><h3><Link href={`/expertise/${item.slug}`}>{item.title} ↗</Link></h3><p>{item.summary}</p><p><Link href={`/expertise/${item.slug}`}>Approach and project evidence ↗</Link></p></article>)}</div>
-    <p style={{marginTop:28}}><Link href="/engineering-notes">Read engineering decision guides ↗</Link></p>
+    <div className="engineeringServicesGrid">{specialties.map(item=><article className="engineeringCard" key={item.slug}><h3><Link href={`/expertise/${item.slug}`}>{item.title}</Link></h3><p>{item.summary}</p><p><Link href={`/expertise/${item.slug}`}>Approach and project evidence</Link></p></article>)}</div>
+    <p style={{marginTop:28}}><Link href="/engineering-notes">Read engineering decision guides</Link></p>
   </section>
   <section className="technicalSkillsSection studioContainer" aria-labelledby="technical-skills-heading">
     <div className="serviceSectionHeading"><span className="handwritten">technologies and practices</span><h2 id="technical-skills-heading" className="displayType">Technical skills</h2></div>
@@ -77,5 +77,5 @@ export default function Services(){return <div className="studioPage servicesPag
     <div className="technicalSkillsGrid">{technicalSkills.map(group => <article className="technicalSkillGroup" key={group.title}><h3>{group.title}</h3><ul>{group.skills.map(skill => <li key={skill}>{skill}</li>)}</ul></article>)}</div>
   </section>
   <section className="serviceFaqSection studioContainer" aria-labelledby="faq-heading"><div className="serviceSectionHeading"><h2 id="faq-heading" className="displayType">FAQ</h2></div><div className="serviceFaqGrid">{faqs.map(([question,answer],index)=><article className="serviceFaq" key={question}><div className="faqQuestion"><div><h3>{question}</h3></div></div><div className="faqAnswer"><p>{answer}</p></div></article>)}</div></section>
-  <div className="allWorkAction servicesAction"><Action href="/projects">See the work</Action><SiteAnchor className="quietLink" href="/professional-experience">Experience &amp; skills ↗</SiteAnchor></div><Contact animated/>
+  <div className="allWorkAction servicesAction"><Action href="/projects">See the work</Action><SiteAnchor className="quietLink" href="/professional-experience">Experience &amp; skills</SiteAnchor></div><Contact animated/>
 </div>;}
