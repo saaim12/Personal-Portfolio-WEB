@@ -27,6 +27,7 @@ const components = {
       <table {...props}>{children}</table>
     </div>
   ),
+  th: ({ children, ...props }: ComponentProps<"th">) => <th scope="col" {...props}>{children}</th>,
   p: ({ children }: { children?: ReactNode }) => (
     <p className="caseParagraph">
       {children}

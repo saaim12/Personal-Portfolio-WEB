@@ -6,7 +6,7 @@ export const sitePages = [
   { path: "/services", title: "Services" },
   { path: "/expertise", title: "Engineering expertise" },
   { path: "/engineering-notes", title: "Engineering notes" },
-  { path: "/journal", title: "Journal / My blog" },
+  { path: "/journal", title: "Journal / My Blog" },
   { path: "/contact", title: "Contact" },
   { path: "/sitemap", title: "Sitemap" },
 ];

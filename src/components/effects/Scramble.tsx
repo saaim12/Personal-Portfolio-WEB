@@ -19,5 +19,5 @@ export function Scramble({ text, play = true, hover = false, duration = 520 }: {
     frame.current = requestAnimationFrame(tick);
   };
   useEffect(() => { if (play) run(); return () => cancelAnimationFrame(frame.current); }, [play, text]); // eslint-disable-line react-hooks/exhaustive-deps
-  return <span className="scramble" onMouseEnter={hover ? run : undefined}><span aria-hidden="true">{shown}</span><span className="screenReaderText">{text}</span></span>;
+  return <span className="scramble" onMouseEnter={hover ? run : undefined}><span className="scrambleSizer" aria-hidden="true">{text}</span><span className="scrambleLive" aria-hidden="true">{shown}</span><span className="screenReaderText">{text}</span></span>;
 }

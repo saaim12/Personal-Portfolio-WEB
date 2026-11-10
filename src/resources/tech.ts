@@ -36,7 +36,7 @@ const TECH = {
   pytest: { label: "pytest" },
   tensorflow: { label: "TensorFlow" },
   tflitemicro: { label: "TensorFlow Lite Micro" },
-  scikitlearn: { label: "Scikit Learn" },
+  scikitlearn: { label: "scikit-learn" },
   gemini: { label: "Gemini 2.5 Flash" },
   e5: { label: "Multilingual E5" },
   restcontracts: { label: "REST contracts" },

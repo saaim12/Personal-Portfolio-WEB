@@ -5,6 +5,12 @@
   "installCommand": "npm ci",
   "headers": [
     {
+      "source": "/SaaimCV.pdf",
+      "headers": [
+        { "key": "Content-Disposition", "value": "inline; filename=\"Saaim-Abdullah-Software-Engineer-Resume.pdf\"" }
+      ]
+    },
+    {
       "source": "/:path*",
       "headers": [
         { "key": "X-Content-Type-Options", "value": "nosniff" },

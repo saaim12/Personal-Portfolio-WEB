@@ -9,7 +9,8 @@ export function Projects({ range, exclude = [], only, showcase = false, preview 
   const Heading = showcase ? "h2" : "h3";
   const posts = getProjects().filter(p => !exclude.includes(p.slug) && (showcase || only?.includes(p.slug) || !learningSlugs.includes(p.slug))).sort((a,b) => b.metadata.publishedAt.localeCompare(a.metadata.publishedAt));
   const selected = only ? only.flatMap(slug => posts.filter(p => p.slug === slug)) : range ? posts.slice(range[0] - 1, range[1]) : posts;
-  const cards = selected.map((post, index) => {
+  let cardNumber = 0;
+  const cards = selected.map(post => {
     const art = projectArt[post.slug];
     const title = art?.title || post.metadata.title;
     const image = post.metadata.thumbnail;
@@ -21,7 +22,7 @@ export function Projects({ range, exclude = [], only, showcase = false, preview 
       const links = sourceLinks.length ? sourceLinks : [{ label: "View repository", href: post.metadata.link || "" }];
       return { slug: post.slug, category: "Learnings", card: <article className="learningEntry" key={post.slug}><h3><SiteAnchor href={href}>{post.metadata.title}</SiteAnchor></h3><p>{post.metadata.summary}</p><div className="learningLinks">{links.filter(link => link.href).map(link => <SiteAnchor key={link.href} href={link.href} target="_blank" rel="noopener noreferrer">{link.label}</SiteAnchor>)}</div></article> };
     }
-    const number = String(index + 1).padStart(2, "0");
+    const number = String(++cardNumber).padStart(2, "0");
     const category = post.metadata.tags?.[0] || "Project";
     const card = <article className={`folderProject ${preview ? "folderFeature" : "folderSmall"}`} key={post.slug} data-title={title}>
       <SiteAnchor href={href} className="projectPicture diagramPicture" aria-label={`View ${title} project`} tabIndex={-1}><Image src={image} alt={`System overview for ${title}`} {...(preview ? { width: 1672, height: 941 } : { fill: true })} sizes={preview ? "(max-width: 760px) 90vw, 45vw" : "(max-width: 760px) 90vw, 42vw"} /></SiteAnchor>

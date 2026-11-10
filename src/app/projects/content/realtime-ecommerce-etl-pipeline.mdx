@@ -21,7 +21,7 @@ images:
 thumbnail: "/images/projects/covers/realtime-ecommerce-etl-pipeline.png"
 link: "https://github.com/saaim12/ETL-Pipeline-with-Batch-Straming-Pipelines"
 article: "https://medium.com/@saymmalik08/building-a-real-time-e-commerce-etl-pipeline-with-kafka-spark-and-airflow-2baa9090ab3e"
-role: "Data engineer, streaming and analytics systems"
+role: "Freelance software engineer"
 seoTitle: "Streaming sales data pipeline"
 ---
 
@@ -30,6 +30,8 @@ seoTitle: "Streaming sales data pipeline"
 An e-commerce application can produce orders all day and still fail to answer a basic question: “What was net sales yesterday?” Events arrive more than once, consumers restart, products change names, and an event accepted at 11:59 might not reach the warehouse until after midnight. Analytics fails when those conditions are treated as exceptions rather than a normal property of data systems.
 
 I built this pipeline to connect **continuous event capture** with **repeatable analytical transformations**. Kafka receives order events, Spark Structured Streaming persists them into date-partitioned Parquet, and Airflow schedules downstream cleaning and warehouse loads. PostgreSQL hosts a sales star schema that reporting tools can query without reconstructing raw events for every chart.
+
+I first built this pipeline for a freelance client. That code is private, so the repository and article linked here are my own re-implementation of the same design, running on synthetic order events.
 
 The architectural goal was not to list popular technologies. It was to establish **where data can be replayed, where errors are rejected, when reporting becomes fresh, and which keys make totals consistent**.
 
@@ -40,12 +42,11 @@ The architectural goal was not to list popular technologies. It was to establish
 | Logical data quality layers | **3**: bronze, silver, gold | Preserve source, standardize records, publish reporting model |
 | Warehouse tables | **4** | One sales fact table and **3 dimensions** |
 | Dimension tables | **3**: customer, product, date | Consistent grouping axes for sales analysis |
-| Analytics fact tables | **1**: sales | Centralized quantitative event measures |
 | Batch orchestration cadence | **Hourly** | Reporting latency includes scheduled batch wait |
 | Continuous ingestion | Kafka + Spark Structured Streaming | Input acceptance is decoupled from batch reporting |
 | Columnar storage | Parquet, partitioned by date | Replayable intermediate event history |
 
-The four-table model and hourly schedule are implementation facts. No claimed event throughput, p99 latency, or cloud cost is being inferred from them.
+I have not measured event throughput, p99 latency, or cloud cost.
 
 ## End-to-end data path
 
@@ -69,7 +70,7 @@ This matters during change. If the silver deduplication key turns out to be wron
 
 Silver applies the validation and deduplication rules between raw input and reporting. The crucial design question is the deduplication grain: two records may represent a retransmission of one order event, two legitimate updates to an order, or two separate purchases. Those cases require domain-aware keys and ordering rules. A blanket `dropDuplicates` without a clear event identity would be an implementation detail, not a data quality strategy.
 
-For a production revision, I would publish a schema and expectations for required IDs, event timestamps, monetary precision, and allowed status changes. Invalid records should enter a quarantine or error table rather than silently disappearing from revenue calculations. The current case study claims the implemented validation/deduplication stage, not a measured defect-elimination rate.
+For a production revision, I would publish a schema and expectations for required IDs, event timestamps, monetary precision, and allowed status changes. Invalid records should enter a quarantine or error table rather than silently disappearing from revenue calculations. The validation and deduplication stage is implemented; I have not measured how many defects it removes.
 
 ### Stage 3: build the warehouse for questions, not storage convenience
 
@@ -109,7 +110,7 @@ Those choices have costs: more local services, checkpoints to manage, batch/stre
 
 ## What I delivered, and what I would benchmark
 
-**Delivered:** producer-to-Kafka event path, Spark/Parquet ingestion, three logical data layers, hourly Airflow-orchestrated batch transformations, validation/deduplication, and a PostgreSQL warehouse with one fact and three dimensions. The stack is documented for containerized execution and S3-compatible storage; this is **not presented as an unverified managed AWS/EMR production deployment**.
+**Delivered:** producer-to-Kafka event path, Spark/Parquet ingestion, three logical data layers, hourly Airflow-orchestrated batch transformations, validation/deduplication, and a PostgreSQL warehouse with one fact and three dimensions. The stack runs in containers with S3-compatible storage; it is not a managed AWS/EMR deployment.
 
 **Next validation plan:** replay **a fixed, published dataset** twice and confirm equal gold outputs; inject duplicates and late arrivals; interrupt Spark and Airflow mid-run; compare source/silver/gold counts; measure hourly freshness and job duration. Throughput and cost numbers belong in the final report only after environment, event size, partition counts, and hardware are recorded.
 

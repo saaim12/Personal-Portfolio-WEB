@@ -27,7 +27,7 @@ seoTitle: "Autoencoder for edge sensor data"
 
 Embedded devices are not smaller laptops. Their memory budgets, compute characteristics, wireless links, and firmware deployment model force architectural decisions that a server-side ML engineer can often ignore. I built this project to explore a **split autoencoder**: encode a sensor reading close to its source and reconstruct that representation on a cloud service.
 
-My responsibility spanned both halves of the system: model development in Python/TensorFlow, conversion for **TensorFlow Lite Micro**, ESP32-side integration, a **Flask decoder** running on **AWS EC2**, and **S3** integration for encoded payload artifacts. The important achievement is creating a connected edge-to-cloud inference contract, not making an unsupported claim that every autoencoder reduces energy or encrypts data.
+My responsibility spanned both halves of the system: model development in Python/TensorFlow, conversion for **TensorFlow Lite Micro**, ESP32-side integration, a **Flask decoder** running on **AWS EC2**, and **S3** integration for encoded payload artifacts. The result is a connected edge-to-cloud inference contract. I did not measure energy savings, and an autoencoder is not encryption.
 
 ## Architecture, in five accountable stages
 

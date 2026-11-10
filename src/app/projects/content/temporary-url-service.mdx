@@ -19,7 +19,7 @@ team: []
 
 A URL shortener looks like a one-table CRUD exercise until you ask what happens after an alias expires, whether a generated ID collides, how multiple servers find the same link, what a redirect is allowed to target, and whether a reboot should invalidate existing URLs. I built a small **Express/Node.js temporary-link service** and used its constrained design to make those questions explicit.
 
-The implementation is intentionally simple: a **JavaScript `Map`** stores aliases within one process; **Nano ID** generates short keys; and a timer removes each record at expiry. Its value is a complete request lifecycle with transparent trade-offs, not an invented claim of millions of requests per second.
+The implementation is intentionally simple: a **JavaScript `Map`** stores aliases within one process; **Nano ID** generates short keys; and a timer removes each record at expiry. Its value is a complete request lifecycle with transparent trade-offs.
 
 ## Numbers that are actually grounded
 
@@ -28,7 +28,7 @@ The implementation is intentionally simple: a **JavaScript `Map`** stores aliase
 | Alias length | **8 characters** | Short links with a defined identifier size |
 | Primary URL actions | **3**: create, redirect, fetch original | End-to-end link lifecycle and inspection |
 | Additional operational route | **1 health endpoint** | Basic process liveness check |
-| Persistence stores | **1 in-process Map** | Constant-time-style lookup without network database overhead |
+| Storage | In-process `Map` | Constant-time-style lookup without network database overhead |
 | Expiration scheduling | **1 timer per created link** | Simple lifecycle behavior, bounded by process lifetime |
 | Process durability | **0** after restart | Links do not survive a fresh process |
 

@@ -21,7 +21,7 @@ images:
 thumbnail: "/images/projects/covers/multilingual-rag-engine.png"
 link: "https://github.com/saaim12/Multi-Tenant-Multi-Lingual-Retrieval-Augmented-Generation-RAG-System"
 article: "https://medium.com/@saymmalik08/building-a-multilingual-multi-tenant-rag-engine-in-django-c975aecf599a"
-role: "Backend and ML systems engineer"
+role: "Freelance software engineer"
 seoTitle: "Multilingual RAG engine"
 ---
 
@@ -31,19 +31,21 @@ A multilingual knowledge assistant becomes a different engineering problem when 
 
 The outcome is a Django-backed retrieval system with local multilingual embeddings, PostgreSQL/pgvector storage, authenticated customer-scoped lookup, request quotas, and Gemini-based responses. It covers **six distinct text workflows** while keeping source ownership part of the data model rather than an optional query hint.
 
+I first built this system for a freelance client. That code is private, so the repository and article linked here are my own re-implementation of the same design.
+
 ## Delivery and scope in numbers
 
 | Design dimension | Implemented scope | What it demonstrates |
 | --- | --- | --- |
 | Supported prompt workflows | **6** | Q&A, summary, translation, glossary, extraction, explanation |
 | Knowledge ownership | **Tenant-associated** documents and chunks | Query scope belongs to authenticated identity |
-| Embedding provider type | **1 local multilingual E5 path** | Source text can be vectorized without an embedding API request |
-| Generation provider type | **1 external Gemini path** | Only selected context is passed to the generation dependency |
+| Embeddings | Local multilingual E5 | Source text can be vectorized without an embedding API request |
+| Generation | External Gemini API | Only selected context is passed to the generation dependency |
 | Principal security gates | **3**: identity, authorization, retrieval scope | Each protects a different part of the lifecycle |
 | Persistence | PostgreSQL plus pgvector | Metadata and vectors share a relational model |
 | Usage control | Per-tenant quotas | Limit consumption independently from data isolation |
 
-No client count, measured query latency, accuracy, or cross-language benchmark was supplied with the project, so none is invented here.
+On this public version, I have not yet measured query latency, answer accuracy, or cross-language retrieval quality.
 
 ## End-to-end architecture
 
@@ -82,7 +84,7 @@ The boundary matters for performance as well: embedding cost, database lookup, a
 | Information extraction | Pull named fields or facts | Missing fields are handled explicitly |
 | Explanation | Clarify technical source passages | Readability improves without fabricating claims |
 
-Six templates are a product capability, not evidence that all six tasks reached a particular BLEU, recall, or answer-quality score.
+All six templates are implemented; I have not yet scored their output quality.
 
 ## Threat model and design reasoning
 
@@ -104,9 +106,9 @@ I chose a familiar Django relational service rather than splitting ingestion, re
 
 ## What the implementation establishes
 
-The project joins authenticated retrieval, customer-linked data, multilingual embedding, six prompt workflows, and usage limits into one API-backed product prototype. The article and repository provide the architectural walkthrough. The public material does not establish a commercial deployment, a named number of customers, a measured zero-leak result, or a published multilingual accuracy score.
+The project joins authenticated retrieval, customer-linked data, multilingual embedding, six prompt workflows, and usage limits into one API-backed product. The article and repository provide the architectural walkthrough. I have not yet measured cross-tenant leak resistance or multilingual accuracy.
 
-**Acceptance criteria for the next hardening iteration:** 100% rejection in a deliberately constructed cross-tenant access test suite; documented retrieval Recall@K by language; bounded per-tenant concurrency; recorded p50/p95 stage latency; and a reviewed data-flow policy for the generation provider. These are proposed targets and tests, **not observed achievements**.
+**Acceptance criteria for the next hardening iteration:** 100% rejection in a deliberately constructed cross-tenant access test suite; documented retrieval Recall@K by language; bounded per-tenant concurrency; recorded p50/p95 stage latency; and a reviewed data-flow policy for the generation provider. These are targets for the next iteration; none has been run yet.
 
 Compare this tenant-aware architecture with my [smaller document Q&A backend](/projects/document-rag-backend), which focuses on ingestion, configured embeddings, retrieval, and a refusal boundary.
 

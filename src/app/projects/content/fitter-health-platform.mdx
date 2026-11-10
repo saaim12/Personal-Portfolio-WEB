@@ -8,7 +8,7 @@ seoDescription: "Fitter Health case study covering a 106-table Django platform, 
 summary: "Owned backend modernization, membership and booking workflows, cloud deployment, analytics foundations, notification recovery, and technical handover for a Spain-based health-tech business."
 tags:
   - "Client delivery"
-  - "Full stack"
+  - "Full-stack"
 stack:
   - "django"
   - "drf"
@@ -31,14 +31,14 @@ images:
   - "/images/projects/diagrams/fitter-health-platform-3.png"
 thumbnail: "/images/projects/covers/fitter-health-platform.png"
 link: "https://fitter.health/"
-role: "Software engineer (contract)"
+role: "Software engineer, full stack (contract)"
 ---
 
 ## A health-tech product is not just a set of endpoints
 
 A booking button looks simple until the product has to answer hard questions: Is the member entitled to this session? Has a credit already been used? Is the provider available? What happens if an invoice updates after a network timeout? Can the operations team identify a notification that failed yesterday? Fitter Health brought those questions together in one business-critical application.
 
-I joined the Spain-based health-tech startup as the **sole contract engineer responsible for turning interconnected product requirements into a maintainable system**. My remit extended beyond writing API endpoints: I worked on the domain model, Django backend, Next.js application, AWS deployment, asynchronous workflows, analytics data foundation, and the documentation needed for handover. The engagement ran from **May to July 2026**.
+I joined the Spain-based health-tech startup as the **sole contract engineer responsible for turning interconnected product requirements into a maintainable system**. My remit extended beyond writing API endpoints: I worked on the domain model, Django backend, Next.js application, AWS deployment, asynchronous workflows, analytics data foundation, and the documentation needed for handover. An earlier backend existed when I joined; I rebuilt it. The engagement ran from **May to July 2026**.
 
 My engineering priority was to make the business rules explicit. Memberships, booking, commerce, provider operations, and reporting could not be designed as isolated screens because a change in one domain has consequences elsewhere. The work required both implementation depth and architectural judgment: choosing where state lives, where an external system owns the truth, and how failures become visible.
 
@@ -54,7 +54,7 @@ My engineering priority was to make the business rules explicit. Memberships, bo
 | Data platform | **1 downstream PostgreSQL star-schema warehouse** | Separate operational transactions from analytics models |
 | Notification recovery | **SNS → SQS → consumer**, with dead-letter handling | A failed consumer no longer needs to mean uninspectable lost work |
 
-These are implementation and delivery figures, **not fabricated traffic, revenue, availability, or growth metrics**.
+These figures describe what was built and handed over, not traffic, revenue, or availability.
 
 ## What I actually delivered
 
@@ -72,7 +72,7 @@ The difficult part was not creating tables. It was deciding what constitutes a v
 | Commerce | Orders, payment/invoice status, and product entitlements | Explicit synchronization with **Odoo**, the invoice system |
 | Administration | Operational workflows and a usable view of records | Admin/coach interfaces backed by the same domain API |
 
-**Senior-level decision:** preserve one authoritative transactional data model before introducing distributed components. Splitting tightly related credit, booking, and membership rules across independent services would have multiplied consistency problems without creating corresponding business value.
+**Key decision:** preserve one authoritative transactional data model before introducing distributed components. Splitting tightly related credit, booking, and membership rules across independent services would have multiplied consistency problems without creating corresponding business value.
 
 ### 2. Application delivery from API to UI
 
@@ -108,7 +108,7 @@ A notification workflow was losing work without a dependable recovery path. I tr
 | Monitoring | Limited visibility into stalled processing | Queue-depth alarms exposed backlogs |
 | Delivery semantics | Unclear failure outcome | At-least-once processing boundary became explicit |
 
-That last line is important: **SQS is not an exactly-once guarantee**. Consumers still need idempotent handling, deduplication, and sensible retry behavior when the same event is delivered again. The measurable improvement recorded in the case study is a *change in failure handling and inspectability*, not a made-up “99.99% successful delivery” claim.
+That last line is important: **SQS is not an exactly-once guarantee**. Consumers still need idempotent handling, deduplication, and sensible retry behavior when the same event is delivered again. What changed is *failure handling and inspectability*; I did not measure a delivery success rate.
 
 ### 5. Reporting and analytics without overloading transactional workflows
 
@@ -128,13 +128,13 @@ This separation is an architectural decision, not just a data export. It reduces
 
 ## Verification, handover, and outcome
 
-The handover included documentation of architecture and API behavior, along with **135 passing automated tests**. Those tests are concrete evidence of a verification process; they should not be misread as 135 user journeys, complete branch coverage, or a production load benchmark. The signed founder recommendation provides independent context for the engineering ownership, cloud/backend work, communication, and transfer of responsibility.
+The handover included documentation of architecture and API behavior, along with **135 passing automated tests**. They are regression checks for the delivered behavior, not a coverage percentage or a load benchmark. The letter from Fitter Health’s Co-founder and CEO provides independent context for the engineering ownership, cloud/backend work, communication, and transfer of responsibility.
 
-**Business result:** Fitter Health received a connected member/booking/commerce/admin platform and a deployable infrastructure and data foundation, with a documented path for future engineers to operate it. **Reliability result:** the SNS-to-consumer workflow acquired buffering, inspectable failures, and operational visibility. **Engineering result:** one coherent architecture connected backend, frontend, cloud, integrations, and analytics rather than nine disconnected demos.
+**Business result:** Fitter Health received a connected member/booking/commerce/admin platform and a deployable infrastructure and data foundation, with a documented path for future engineers to operate it. **Reliability result:** the SNS-to-consumer workflow acquired buffering, inspectable failures, and operational visibility. **Engineering result:** one coherent architecture connected backend, frontend, cloud, integrations, and analytics rather than a set of disconnected demos.
 
 ## What I would measure next
 
-For the next operating phase, I would baseline **p50/p95 API latency**, booking error rate, **time-to-recover failed notifications**, SQS oldest-message age, payment-status reconciliation delay, deployment rollback time, and reporting freshness. Those are useful service-level measures precisely because they describe *user-visible outcomes* rather than arbitrary infrastructure activity. No values are claimed without telemetry.
+For the next operating phase, I would baseline **p50/p95 API latency**, booking error rate, **time-to-recover failed notifications**, SQS oldest-message age, payment-status reconciliation delay, deployment rollback time, and reporting freshness. Those are useful service-level measures precisely because they describe *user-visible outcomes* rather than arbitrary infrastructure activity.
 
 For the data-system side of my work, see the [streaming sales pipeline](/projects/realtime-ecommerce-etl-pipeline), which separates continuous ingestion from scheduled reporting.
 

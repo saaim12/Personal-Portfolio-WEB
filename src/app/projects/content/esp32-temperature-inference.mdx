@@ -19,7 +19,7 @@ team: []
 
 A TensorFlow model that behaves correctly in Python can fail on an ESP32 for reasons unrelated to predictive quality: incompatible operator sets, memory allocation, different preprocessing, wrong tensor dimensions, or a mismatch between the firmware and server decoder. I built this experiment to make those interfaces explicit using a **DHT11 temperature sensor**, TensorFlow Lite Micro, and a Flask reconstruction endpoint.
 
-This is a focused embedded-inference project, distinct from the broader edge compression case study. Its result is the **device-to-server model pipeline**, not an assertion that temperature data was efficiently compressed.
+This is a focused embedded-inference project, distinct from the broader edge compression case study. Its result is the **device-to-server model pipeline**; I did not measure compression efficiency.
 
 ## What the implementation contains
 
@@ -59,7 +59,7 @@ The firmware reads the sensor, applies the expected scale, invokes TFLite Micro,
 
 ### Reconstruction and contract checking
 
-The Flask service loads the matching decoder and scaler, validates the incoming latent shape, reconstructs the scaled value, then applies the inverse transform. Its published response is an acknowledgment rather than the reconstructed number. This is a conscious distinction in the case study: the code demonstrates the internal reconstruction path; publishing the numeric output in the response would require an API change.
+The Flask service loads the matching decoder and scaler, validates the incoming latent shape, reconstructs the scaled value, then applies the inverse transform. Its published response is an acknowledgment rather than the reconstructed number. The code demonstrates the internal reconstruction path; returning the numeric output would require an API change.
 
 ## The difficult engineering decisions
 

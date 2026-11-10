@@ -19,7 +19,7 @@ images:
   - "/images/projects/diagrams/movie-recommender-system.png"
 thumbnail: "/images/projects/covers/movie-recommender-system.png"
 link: "https://github.com/saaim12/Recommender-System"
-role: "ML systems and backend engineer"
+role: "Personal project"
 seoTitle: "Movie recommendation service"
 ---
 
@@ -35,12 +35,10 @@ I built a recommendation service that combines **three complementary signals** (
 | --- | --- | --- |
 | Ranking signals | **3**: content, co-occurrence, popularity | Different evidence for familiar items and cold starts |
 | Main API capabilities | **4 groups**: recommend, similar items, health, model reload | Clear serving and operational contracts |
-| Model lifecycles | **2**: offline training and online serving | Training failures do not block every live request |
 | Source families | Ratings, tags, links, and movie metadata | Join user behavior with item context |
-| Optional cache systems | **1**: Redis | Avoid repeat work where cache keys are safe |
 | Scheduling | Airflow workflow | Repeatable feature/model preparation |
 
-The counts describe components, **not measured precision, click-through, or online user activity**.
+These counts describe components. I have not measured precision, click-through, or online usage.
 
 ## How the system works, from file to response
 
@@ -71,7 +69,7 @@ Popularity provides a stable fallback when personalization evidence is missing. 
 
 The API includes recommendation and similar-item responses, health checking, and a model-reload operation. API-key protection creates a basic access boundary. Container configuration, test workflows, structured logging, and request tracing make this more than a notebook experiment. An optional Redis cache can reduce repeated calculations, but the cached result must be tied to the relevant model version and user/context inputs.
 
-A reload endpoint alone does not give atomic zero-downtime releases. In a stronger deployment, I would load the candidate into a separate object, validate schema and sample predictions, swap references atomically, and invalidate stale cache entries. Those are **operational acceptance criteria**, not undocumented claims about the current code.
+A reload endpoint alone does not give atomic zero-downtime releases. In a stronger deployment, I would load the candidate into a separate object, validate schema and sample predictions, swap references atomically, and invalidate stale cache entries. Those are **acceptance criteria for a future version**; the current code does not do this yet.
 
 ## Trade-offs and what they cost
 
@@ -97,13 +95,13 @@ An impressive recommender screenshot is not an evaluation. I would use **chronol
 | API p50/p95 latency | How quickly do users receive results? | Warm, cold, and cached separately |
 | Reload failure recovery | Does an invalid artifact disrupt requests? | Test outcome, rollback path |
 
-`@10` represents the **proposed evaluation cutoff**, not a published result. I would also run ablation tests: remove each signal and measure its marginal contribution instead of assuming all three deserve equal weight.
+`@10` is the **proposed evaluation cutoff**; I have not run this evaluation yet. I would also run ablation tests: remove each signal and measure its marginal contribution instead of assuming all three deserve equal weight.
 
 ## Result
 
 The implemented project demonstrates a **complete recommendation-serving shape**: multiple ranking signals, offline preparation, persistent artifacts, API access, reload hooks, and optional caching. It shows how I think about the boundary between a data-science experiment and a service that another application can integrate.
 
-It does **not** claim an unmeasured “30% better recommendations” or commercial deployment. The next improvement is an evaluation report tied to a reproducible dataset split, plus load/reload testing. That would turn the existing implementation into a quantitatively defensible ML case study.
+I have not measured recommendation quality yet. The next improvement is an evaluation report tied to a reproducible dataset split, plus load/reload testing. That would turn the existing implementation into a quantitatively defensible ML case study.
 
 For an ingestion and warehouse comparison, see my [e-commerce data pipeline](/projects/realtime-ecommerce-etl-pipeline).
 

@@ -33,7 +33,7 @@ export const home = {
   path: "/",
   image: "/images/social-preview.png",
   title: `${person.name}, Software Engineer`,
-  description: "Saaim Abdullah is a Lahore-based software engineer building backend APIs, Django and PostgreSQL systems, data pipelines, and AWS cloud applications.",
+  description: "Saaim Abdullah is a software engineer in Lahore building beautiful frontends, backend services, data pipelines, and AI features in JavaScript and Python.",
 };
 
 export const work = {

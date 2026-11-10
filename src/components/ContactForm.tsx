@@ -6,7 +6,7 @@ import { sitePath } from "@/utils/sitePath";
 // Static exports (GitHub Pages) have no server, so they keep the email-draft flow.
 const canSendDirectly = process.env.NEXT_PUBLIC_STATIC_EXPORT !== "true";
 type Status = "idle" | "sending" | "sent" | "error";
-const availability = "↳ Open to remote full-time and contract software engineering roles";
+const availability = "↳ Available now for full-time remote roles and contracts";
 
 export function ContactForm(){
  const [message,setMessage]=useState("");
@@ -36,9 +36,9 @@ export function ContactForm(){
  return <form className="contactForm" method="post" action={sitePath("/api/contact")} onSubmit={submit} aria-busy={status==="sending"}>
   <div className="formSheet">
    <p className="formNotice formIntro">{canSendDirectly?"Send a message from this page.":"This form opens a draft in your email app so you can review it before sending."}</p>
-   <label htmlFor="project-message">Your message <span className="formHint" id="message-hint">10–3,000 characters</span></label><textarea ref={messageRef} id="project-message" name="message" placeholder="Share the role, team, or job link." aria-describedby="message-hint" required minLength={10} maxLength={3000} value={message} onChange={e=>setMessage(e.target.value)}/>
    <label htmlFor="contact-name">Your name</label><input id="contact-name" name="name" autoComplete="name" placeholder="Your name" required maxLength={100} value={name} onChange={e=>setName(e.target.value)}/>
    <label htmlFor="contact-email">Your email</label><input id="contact-email" name="email" type="email" autoComplete="email" placeholder="you@company.com" required maxLength={254} value={email} onChange={e=>setEmail(e.target.value)}/>
+   <label htmlFor="project-message">Your message <span className="formHint" id="message-hint">10–3,000 characters</span></label><textarea ref={messageRef} id="project-message" name="message" placeholder="Share the role, team, or job link." aria-describedby="message-hint" required minLength={10} maxLength={3000} value={message} onChange={e=>setMessage(e.target.value)}/>
    {canSendDirectly&&<div className="formTrap" aria-hidden="true"><label htmlFor="contact-company">Leave this empty</label><input id="contact-company" name="contact_reference" tabIndex={-1} autoComplete="off" value={company} onChange={e=>setCompany(e.target.value)}/></div>}
    <div className="formActions"><span/><button type="submit" disabled={status==="sending"} data-ready={ready||undefined}>{canSendDirectly?(status==="sending"?"Sending…":"Send message"):"Open email draft"}</button></div>
   </div>{status==="error"&&<p className="formNotice formError" role="alert">{error} <button type="button" className="formFallback" onClick={openDraft}>Open an email draft instead</button> or email {person.email}.</p>}{opened&&<p className="formNotice" role="status">Your email draft is ready in your mail app. If it didn’t open, email {person.email} directly.</p>}<p className="handwritten">{availability}</p>

@@ -1,11 +1,11 @@
 export const roles = [
   {
     company: "Fitter Health",
-    title: "Software Engineer · Contract",
+    title: "Software Engineer, full stack · Contract",
     dates: "May 2026 to July 2026",
     location: "Remote · Team based in Spain",
     bullets: [
-      "Delivered a preventive health platform as the sole engineer, covering Django services, a Next.js frontend, PostgreSQL, AWS infrastructure, and a documented handover.",
+      "Rebuilt the backend of a preventive health platform as the sole engineer, working full stack across Django services, the Next.js frontend, PostgreSQL, AWS infrastructure, and a documented handover.",
       "Deployed containerized services on AWS ECS with RDS and S3, using IAM and VPC controls to scope access.",
       "Defined API contracts, built background workflows with Celery and Redis, and delivered 135 passing tests with documented services, migrations, and database integrity constraints.",
       "Modeled membership credits, session booking, commerce, and an admin CRM across 106 PostgreSQL tables. Integrated Odoo invoicing and synchronized payment status with platform records.",
@@ -18,12 +18,12 @@ export const roles = [
   },
   {
     company: "Expertflow",
-    title: "Software Engineer",
+    title: "Software Engineer, backend and data",
     dates: "June 2024 to February 2026",
     location: "Lahore · Cisco UCCE solution partner",
     bullets: [
-      "Built and maintained REST APIs serving 1,000 to 3,000 daily users, deployed as Docker containers on AWS EC2 behind an Application Load Balancer with rate limiting, scoped IAM, and VPC isolation.",
-      "Deployed the backend as a distributed system on AWS EKS with Horizontal Pod Autoscaler policies that scale replicas with request throughput.",
+      "Built and maintained REST APIs serving 1,000 to 3,000 daily users, with rate limiting. Developed and tested the services as Docker containers in AWS EC2 lab environments.",
+      "Pushed tested images and connected GitLab to AWS for delivery to the production EKS cluster, working with the DevOps team that set up and ran the cluster.",
       "Reduced admin-panel response time from 130 ms to 30 ms (77% lower) with Redis caching and database index tuning after profiling identified query cost.",
       "Designed and shipped event-driven batch and streaming ETL pipelines using AWS Lambda, MWAA, EMR, PySpark, Glue, and S3, producing Parquet datasets for BI and ML workflows.",
       "Developed a WebRTC SDK for customer voice, chat, and video interactions, connecting frontend clients and third-party APIs. Packaged, versioned, and published customer-js-sdk-expertflow npm modules.",

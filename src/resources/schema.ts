@@ -13,7 +13,7 @@ const authorNode = {
   "@type": "Person",
   "@id": PERSON_ID,
   name: person.name,
-  url: `${baseURL}/professional-experience`,
+  url: baseURL,
 };
 
 export const editorialArticleJsonLd = ({ title, description, path, image, dateModified, abstract, sections, citations }: {
@@ -155,7 +155,6 @@ export const personJsonLd = {
     "FastAPI",
     "PostgreSQL",
     "AWS Cloud",
-    "AWS Solutions Architecture",
     "Serverless",
     "AWS Lambda",
     "Amazon ECS",

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { person, social } from "@/resources/content";
 import { StudioClock } from "./StudioClock";
 import { RollText } from "./effects/RollText";
+import { ProfileButton } from "./ProfileButton";
 import { Scramble } from "./effects/Scramble";
 import { PixelBlocks } from "./effects/PixelBlocks";
 const links = [
@@ -44,7 +45,7 @@ export function Header({ name }: { name: string }) {
     <div className="navBar">
       <Link prefetch={false} href="/" className="brandMark" aria-label={`${name}, home`}><span>{name.replace(" ", "")}_LHR</span> <StudioClock className="brandClock" /></Link>
       <div className="navActions">
-        <Link prefetch={false} className="navUtility" href="/contact"><RollText>Email</RollText></Link>
+        <SiteAnchor className="navUtility" href={`mailto:${person.email}`}><RollText>Email</RollText></SiteAnchor>
         <SiteAnchor className="navUtility navResume" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer"><RollText>Resume</RollText></SiteAnchor>
         <Link prefetch={false} href="/contact" className="navContact"><RollText>Let’s talk</RollText></Link>
       </div>
@@ -60,9 +61,9 @@ export function Header({ name }: { name: string }) {
         </Link>)}
       </div>
       <div className="menuFooter">
-        <Link prefetch={false} className="mobileContact menuEmail" href="/contact" onClick={() => setOpen(false)}>Email</Link>
-        <SiteAnchor className="mobileContact" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer">Resume</SiteAnchor>
-        {profiles.map(item => <SiteAnchor key={item.name} href={item.link} target="_blank" rel="noopener noreferrer">{item.name}</SiteAnchor>)}
+        <SiteAnchor className="mobileContact menuEmail" href={`mailto:${person.email}`}><RollText>Email</RollText></SiteAnchor>
+        <SiteAnchor className="mobileContact" href="/SaaimCV.pdf" target="_blank" rel="noopener noreferrer"><RollText>Resume</RollText></SiteAnchor>
+        {profiles.map(item => <ProfileButton key={item.name} name={item.name} link={item.link} />)}
         <p className="menuMail">{person.email}</p>
       </div>
     </nav>

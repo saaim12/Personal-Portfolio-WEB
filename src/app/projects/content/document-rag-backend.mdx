@@ -97,7 +97,7 @@ Imagine a **20-row batch** where the embedding provider succeeds for some work b
 
 The delivered result is an **end-to-end, runnable retrieval-and-generation service** with explicit configuration and inspectable source context. The most valuable behavioral result is deterministic handling when retrieval finds no acceptable evidence: it can return a fallback without a generation call.
 
-I would evaluate it with at least four test groups: answerable in-category questions, semantically related but unanswerable questions, category mismatches, and provider failures. Report **Recall@5**, context precision, answer faithfulness, p50/p95 latency, and failed import recovery against a named dataset. Until those evaluations run, the project claims the implementation, not invented success percentages.
+I would evaluate it with at least four test groups: answerable in-category questions, semantically related but unanswerable questions, category mismatches, and provider failures. Report **Recall@5**, context precision, answer faithfulness, p50/p95 latency, and failed import recovery against a named dataset. I have not run these evaluations yet.
 
 For a broader ownership boundary, see my [multilingual, multi-tenant RAG engine](/projects/multilingual-rag-engine).
 

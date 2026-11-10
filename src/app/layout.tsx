@@ -39,7 +39,7 @@ export const viewport = { themeColor: "#F4F3EF", colorScheme: "light" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang={person.locale ?? "en"} className={`${fonts.body.variable} ${fonts.code.variable}`}>
+    <html lang={person.locale ?? "en"} data-scroll-behavior="smooth" className={`${fonts.body.variable} ${fonts.code.variable}`}>
       <head>
         <link rel="describedby" type="text/plain" href={`${baseURL}/llms.txt`} />
         <script {...jsonLd(webSiteJsonLd)} />
