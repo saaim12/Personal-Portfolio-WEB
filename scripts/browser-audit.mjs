@@ -96,7 +96,7 @@ const navigation=page.getByRole('navigation',{name:'Main navigation'});
 assert.equal(await page.locator('a:focus').getAttribute('href'),await navigation.getByRole('link').first().getAttribute('href'),'Opening the mobile menu focuses its first link');
 for(const [name,href]of [['Professional Experience','/professional-experience'],['Projects','/projects'],['Services','/services']])assert.equal(await navigation.getByRole('link',{name,exact:true}).getAttribute('href'),href);
 assert.equal(await navigation.getByRole('link',{name:/Journal|My Blog/}).getAttribute('href'),'/journal');
-for(const [name,href]of [[/Resume/,'/SaaimCV.pdf'],[/Email/,'/contact']]){
+for(const [name,href]of [[/Resume/,'/SaaimCV.pdf'],[/Email/,'mailto:']]){
  const link=page.locator('header').getByRole('link',{name}).filter({visible:true});
  assert.equal(await link.count(),1,'One visible mobile '+name+' link');
  assert.ok((await link.getAttribute('href')).startsWith(href),'Mobile '+name+' target');
